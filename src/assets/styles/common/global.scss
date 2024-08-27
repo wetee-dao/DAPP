@@ -1,0 +1,260 @@
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  /* //禁止用户复制黏贴 */
+  /* // user-select: none; */
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  // font-family: 'Montserrat',PingFang SC, HarmonyOS_Regular, Helvetica Neue, Microsoft YaHei, sans-serif !important;
+}
+
+body {
+  -webkit-overflow-scrolling: touch;
+}
+
+html.dark {
+  --el-button-bg-color: rgb(21, 26, 25) !important;
+  --el-color-primary-light-3: rgb(21, 26, 25) !important;
+  --el-color-primary-light-5: rgb(21, 26, 25) !important;
+  --el-color-primary-light-7: rgb(21, 26, 25) !important;
+  --el-color-primary-light-8: rgb(21, 26, 25) !important;
+  --el-color-primary-light-9: rgb(21, 26, 25) !important;
+  --el-color-primary-dark-2: rgb(21, 26, 25) !important;
+  --el-color-primary: var(--g-primary-text) !important;
+}
+html.light {
+  --el-button-bg-color: rgb(239, 239, 239);
+  --el-color-primary-light-3: rgb(239, 239, 239);
+  --el-color-primary-light-5: rgb(239, 239, 239);
+  --el-color-primary-light-7: rgb(239, 239, 239);
+  --el-color-primary-light-8: rgb(239, 239, 239);
+  --el-color-primary-light-9: rgb(239, 239, 239);
+  --el-color-primary-dark-2: rgb(239, 239, 239);
+  --el-bg-color-overlay: rgb(255, 255, 255);
+  --el-color-primary: var(--g-primary-text) !important;
+  .service,.login-pop-mask{
+    background-color: #000000a3;
+  }
+}
+
+
+body {
+  color: $secondary-text;
+
+  .el-input__wrapper,
+  .el-select .el-input.is-focus .el-input__wrapper,
+  .el-select .el-input:hover .el-input__wrapper,
+  .el-select .el-input .el-input__wrapper.is-focus,
+  .el-select__wrapper,
+  .el-select__wrapper.is-focused,
+  .el-textarea__inner {
+    background: transparent;
+    box-shadow: none !important;
+    border: 3px solid rgba($color: $secondary-text-rgb, $alpha: 0.2);
+  }
+
+  .el-input-group__prepend{
+    background: transparent;
+    box-shadow: none !important;
+    border: 3px solid rgba($color: $secondary-text-rgb, $alpha: 0.2);
+    border-right: none;
+    box-sizing: border-box;
+  }
+
+  .el-input-group__append{
+    background: transparent;
+    box-shadow: none !important;
+    border: 3px solid rgba($color: $secondary-text-rgb, $alpha: 0.2);
+    border-left: none;
+    box-sizing: border-box;
+  }
+
+  .el-button {
+    background: $primary-bg;
+    border: 2px solid rgba($color: $secondary-text-rgb, $alpha: 0.1);
+    color: $secondary-text;
+
+    &:hover {
+      border: 2px solid rgba($color: $primary-text-rgb, $alpha: 0.4);
+      color: $secondary-text;
+    }
+
+    &:focus {
+      background-color: none;
+    }
+  }
+
+  .el-button--primary {
+    background: rgba($primary-text-rgb, 0.6);
+    color: $primary-bg;
+    border: none;
+
+    &:hover {
+      background: $primary-text;
+      border: none;
+      color: $primary-bg;
+    }
+  }
+
+  .el-input,.el-select__wrapper {
+    height: 46px;
+  }
+
+  .el-input__inner {
+    border: none;
+    width: 80%;
+    height: 46px;
+    line-height: 46px;
+    font-size: 16px;
+  }
+
+  .el-popper {
+    border-radius: 0;
+  }
+
+  .el-input__inner {
+    outline: none;
+  }
+
+  .el-message {
+    padding: 12px 12px;
+  }
+
+  .login-input-text {
+    input::-webkit-input-placeholder {
+      color: #fff !important;
+    }
+
+    /*webkit 内核浏览器*/
+    input::-moz-placeholder {
+      color: #fff !important;
+    }
+
+    /*Mozilla Firefox 19+*/
+    input:-moz-placeholder {
+      color: #fff !important;
+    }
+
+    /*Mozilla Firefox 4 to 18*/
+    input:-ms-input-placeholder {
+      color: #fff !important;
+    }
+  }
+
+  .el-dropdown-menu__item:hover {
+    background-color: $secondary-bg !important;
+    color: $secondary-text !important;
+  }
+
+  .el-dropdown {
+    --el-dropdown-menu-box-shadow: none;
+    --el-dropdown-menuItem-hover-fill: none;
+    --el-dropdown-menuItem-hover-color: none;
+    --el-dropdown-menu-index: 10;
+  }
+
+  .el-popper__arrow {
+    display: none; 
+  }
+
+  .el-loading-spinner .el-loading-text{
+    font-weight: bold;
+  }
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 4px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  height: 30px;
+  background-color: rgba(59, 73, 70, 0.433);
+}
+
+@font-face {
+  font-family: 'iconfont';  /* Project id 2738227 */
+  src: url('//at.alicdn.com/t/c/font_2738227_2psgqibifv.woff2?t=1715942390979') format('woff2'),
+       url('//at.alicdn.com/t/c/font_2738227_2psgqibifv.woff?t=1715942390979') format('woff'),
+       url('//at.alicdn.com/t/c/font_2738227_2psgqibifv.ttf?t=1715942390979') format('truetype');
+}
+
+.icon {
+  font-family: "iconfont";
+}
+
+.space {
+  flex: 1;
+}
+
+.margin-end{
+  margin-bottom: 20px;
+}
+
+.margin-end-30{
+  margin-bottom: 30px;
+}
+
+.margin-end-40{
+  margin-bottom: 40px;
+}
+
+.no-border{
+  border: none !important;
+}
+
+i {
+  font-style: normal;
+}
+
+@media screen and (min-width: 1920px) {
+  html {
+    font-size: 18Px;
+    /*no*/
+  }
+}
+
+@media screen and (max-width: 1920px) and (min-width: 1200px) {
+  html {
+    font-size: 16Px;
+    /*no*/
+  }
+}
+
+@media screen and (max-width: 1200px) and (min-width: 992px) {
+  html {
+    font-size: 14Px;
+    /*no*/
+  }
+}
+
+@media screen and (max-width: 992px) and (min-width: 767px) {
+  html {
+    font-size: 14Px;
+    /*no*/
+  }
+}
+
+@media screen and (min-width: 576px) and (max-width: 767px) {
+  html {
+    font-size: 12Px;
+    /*no*/
+  }
+}
+
+@media (max-width: 576px) {
+  html {
+    font-size: 12Px;
+    /*no*/
+  }
+}

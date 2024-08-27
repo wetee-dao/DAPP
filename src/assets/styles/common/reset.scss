@@ -1,0 +1,61 @@
+body,
+ul,
+li,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+label,
+pre {
+  padding: 0;
+  margin: 0;
+  font-weight: normal;
+}
+
+ol,
+ul,
+li {
+  list-style-type: none;
+}
+
+input {
+  border: none;
+  box-shadow: none;
+  outline: none !important;
+}
+
+select {
+  outline: none;
+}
+
+img {
+  border: none;
+  outline-width: 0px;
+  vertical-align: top;
+  width: 100%;
+  height: 100%;
+}
+
+video {
+  height: 100%;
+  width: 100%;
+  object-fit: fill;
+}
+
+a {
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  color: inherit;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+:focus-visible,
+:focus-within {
+  outline: none;
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" style="font-size: 16px;">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WeTEE APP</title>
+  <script src="/config/apps.js"></script>
+  <style>
+    html.dark {
+      --g-primary-bg: #0f0f0f;
+      --g-secondary-bg: #131313;
+      --g-primary-text: #50fa82;
+      --g-secondary-text: #ffffffd2;
+
+      --g-primary-bg-rgb: 15, 15, 15;
+      --g-secondary-bg-rgb: 19, 19, 19;
+      --g-primary-text-rgb: 80, 250, 130;
+      --g-secondary-text-rgb: 255, 255, 255;
+    }
+
+    html.dark body {
+      background-image: linear-gradient(90deg, rgba(var(--g-secondary-text-rgb), 0.02) 3%, transparent 0),
+        linear-gradient(rgba(var(--g-secondary-text-rgb), 0.02) 3%, transparent 0);
+    }
+
+    html.light {
+      --g-primary-bg: #fafafa;
+      --g-secondary-bg: #ffffff;
+      --g-primary-text: #158436;
+      --g-secondary-text: #222222;
+
+      --g-primary-bg-rgb: 250, 250, 250;
+      --g-secondary-bg-rgb: 240, 240, 240;
+      --g-primary-text-rgb: 21, 132, 54;
+      --g-secondary-text-rgb: 34, 34, 34;
+    }
+
+    html.light body {
+      background-image: linear-gradient(90deg, rgba(var(--g-secondary-text-rgb), 0.03) 3%, transparent 0),
+        linear-gradient(rgba(var(--g-secondary-text-rgb), 0.03) 3%, transparent 0);
+    }
+
+    body {
+      background-size: 1.5rem 1.5rem;
+      background-position: 50%;
+      background-color: var(--g-primary-bg);
+    }
+
+    .loader-logo {
+      position: absolute;
+      top: calc(50vh - 40px);
+      width: 60px;
+      height: 60px;
+      left: calc(50vw - 35px);
+      color: var(--g-primary-text);
+      font-size: 30px;
+    }
+
+    .loader-logo:before,
+    .loader-logo:after {
+      content: '';
+      display: block;
+      position: absolute;
+      background-color: currentcolor;
+      left: 50%;
+      right: 0;
+      top: 0;
+      bottom: 50%;
+      box-shadow: -.5em 0 0 currentcolor;
+      -webkit-animation: loader-logo 1s linear infinite;
+      animation: loader-logo 1s linear infinite;
+    }
+
+    .loader-logo:after {
+      top: 50%;
+      bottom: 0;
+      -webkit-animation-delay: .25s;
+      animation-delay: .25s;
+    }
+
+    @-webkit-keyframes loader-logo {
+      0%,
+      100% {
+        box-shadow: -.5em 0 0 transparent;
+        background-color: currentcolor;
+      }
+
+      50% {
+        box-shadow: -.5em 0 0 currentcolor;
+        background-color: transparent;
+      }
+    }
+
+    @keyframes loader-logo {
+      0%,
+      100% {
+        box-shadow: -.5em 0 0 transparent;
+        background-color: currentcolor;
+      }
+
+      50% {
+        box-shadow: -.5em 0 0 currentcolor;
+        background-color: transparent;
+      }
+    }
+
+    body {
+      background-color: var(--g-primary-bg);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="mainApp"></div>
+  <div id="loader" class="loader-logo"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

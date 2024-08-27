@@ -1,0 +1,209 @@
+@import "./common/common";
+
+.back-box {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: -40px;
+}
+
+.back-icon {
+  cursor: pointer;
+}
+
+.back-label {
+  padding-left: 10px;
+  cursor: pointer;
+}
+
+.setting-wrap {
+  position: relative;
+  background-color: rgba($color: $secondary-bg-rgb, $alpha: 0.7);
+  margin: 60px 30px 30px;
+
+  :deep(.el-tabs__header) {
+    padding-top: 20px;
+    margin-right: 0;
+  }
+
+  :deep(.el-tabs__content) {
+    background-color: $secondary-bg;
+  }
+
+  :deep(.el-tabs__active-bar) {
+    background-color: $primary-text !important;
+  }
+
+}
+
+.setting-box {
+  height: 100%;
+
+  :deep(.el-tabs__item) {
+    font-size: 17px;
+    min-width: 180px;
+    text-align: left;
+  }
+
+  :deep(.el-tabs__item.is-active,
+    .el-tabs__item:hover) {
+    color: $secondary-text;
+    background-color: rgba($primary-text-rgb, $alpha: 0.07);
+  }
+
+  :deep(.el-tabs__active-bar) {
+    background-color: $primary-bg;
+  }
+
+  :deep(.el-tabs__active-bar) {
+    background-color: $primary-bg;
+  }
+
+  :deep(.el-tabs__header) {
+    height: 100%;
+  }
+
+  :deep(.el-input) {
+    width: 600px;
+  }
+
+}
+
+@media screen and (max-width: 768px) {
+  .setting-box {
+    :deep(.el-tabs__item) {
+      text-align: center;
+    }
+
+    :deep(.el-tabs__item.is-active,
+      .el-tabs__item:hover) {
+      background-color: transparent;
+    }
+  }
+}
+
+.setting-contain-box {
+  padding: 20px 40px;
+  height: 100%;
+}
+
+.setting-title {
+  margin-bottom: 24px;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.setting-base-box {
+  display: flex;
+}
+
+@media screen and (max-width: 992px) {
+  .setting-base-box {
+    flex-direction: column-reverse;
+  }
+
+  .setting-avatar-box {
+    padding: 20px;
+
+    .setting-sub-title {
+      display: none;
+    }
+  }
+}
+
+.setting-context-box {
+  flex: 0.6;
+}
+
+.setting-sub-title {
+  padding: 0 0 8px;
+  line-height: 1.5;
+  text-align: left;
+  font-size: 16px;
+}
+
+.setting-input-box {
+  width: 80%;
+  box-sizing: border-box;
+  margin-bottom: 24px;
+
+  :deep(.el-input .el-input__inner) {
+    height: 40px !important;
+    line-height: 40px;
+    font-size: 15px;
+  }
+}
+
+.setting-textarea-box {
+  margin-bottom: 24px;
+
+
+  :deep(.el-input .el-input__inner) {
+    height: 40px !important;
+    line-height: 40px;
+    font-size: 15px;
+  }
+
+  :deep(.el-textarea .el-textarea__inner) {
+    font-size: 15px;
+  }
+}
+
+.flex-box {
+  display: flex;
+}
+
+.padding-left {
+  padding-left: 10px;
+}
+
+.zone-box {
+  flex: 0.2;
+}
+
+.tel-box {
+  flex: 0.4;
+}
+
+.setting-avatar-box {
+  margin: 0 auto;
+}
+
+.setting-avatar-img {
+  width: 144px;
+  height: 144px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.avatar-uploader {
+  text-align: center;
+}
+
+.setting-avatar-btn {
+  height: 32px;
+  font-size: 16px;
+  line-height: 32px;
+  padding: 4px 10px;
+  text-align: center;
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+
+  span {
+    padding-right: 10px;
+  }
+}
+
+.submit {
+  height: 32px;
+  padding: 4px 15px;
+  font-size: 16px;
+  line-height: 32px;
+  text-align: center;
+  background-color: $primary-bg;
+  color: $primary-text;
+  width: 60px;
+  border: 1px solid $primary-text;
+}

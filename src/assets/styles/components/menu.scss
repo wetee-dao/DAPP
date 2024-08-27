@@ -1,0 +1,123 @@
+$size: 14;
+
+.menu-box {
+  border-right: 2px solid #ffffff0f;
+  width: #{$size*4}px;
+  padding: #{$size*1.8}px 15px #{$size*1.8}px 10px;
+  box-sizing: border-box;
+}
+
+.menu-item {
+  width: #{$size*2.2}px;
+  height: #{$size*0.2}px;
+  border-radius: #{$size*0.125}px;
+  background-color: $primary-text;
+  margin-bottom: #{$size*0.45}px;
+}
+
+.menu-item:last-child {
+  margin-bottom: 0;
+}
+
+.menu-item:nth-child(2) {
+  width: #{$size*1.9}px;
+}
+
+.menu-item-out:nth-child(1) {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+  animation-name: outfirst;
+}
+
+.menu-item-out:nth-child(2) {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+  animation-name: outsecond;
+}
+
+.menu-item-out:nth-child(3) {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+  animation-name: outthird;
+}
+
+@keyframes outfirst {
+  0% {
+    transform: translateY(#{$size*0.65}px) rotate(45deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+@keyframes outsecond {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes outthird {
+  0% {
+    transform: translateY(-#{$size*0.65}px) rotate(-45deg);
+  }
+
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+.menu-item-active:nth-child(1) {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+  animation-name: clickfirst;
+}
+
+.menu-item-active:nth-child(2) {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+  animation-name: clicksecond;
+}
+
+.menu-item-active:nth-child(3) {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+  animation-name: clickthird;
+}
+
+/*第一条线旋转动画*/
+@keyframes clickfirst {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  100% {
+    transform: translateY(#{$size*0.65}px) rotate(45deg);
+  }
+}
+
+/*第二条线淡入淡出动画动画*/
+@keyframes clicksecond {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/*第三条线旋转动画*/
+@keyframes clickthird {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  100% {
+    transform: translateY(-#{$size*0.65}px) rotate(-45deg);
+  }
+}

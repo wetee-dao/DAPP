@@ -1,0 +1,33 @@
+// color
+$primary-bg: var(--g-primary-bg); // 主色
+$secondary-bg: var(--g-secondary-bg); // 副色
+$primary-text: var(--g-primary-text); // 主文字
+$secondary-text: var(--g-secondary-text); // 副文字
+
+// rgb color
+$primary-bg-rgb: var(--g-primary-bg-rgb); // 主色
+$secondary-bg-rgb: var(--g-secondary-bg-rgb); // 副色
+$primary-text-rgb: var(--g-primary-text-rgb); // 主文字
+$secondary-text-rgb: var(--g-secondary-text-rgb); // 副文字
+
+// 黑色
+$block: #14172e; // 深黑
+$light-block: #444; // 淡黑
+$accent-color: #e42537; // 强调色红
+$tip-color: #8695a0; // 提示灰
+$line-color: #fff;
+
+$done-first: #b4516f; // 待办事项1
+$done-two: #fbaf84; // 待办事项2
+$done-three: #a93f75; // 待办事项3
+$done-fore: #e42537; // 待办事项4
+
+// 按钮色
+$btn-color: #0bafff; // 按钮蓝
+$btn-bg-color: #e6f7ff; // 按钮背景蓝
+
+// 背景色
+$gray-bg: #949494;
+
+// 圆角
+$radius-1: 0px
