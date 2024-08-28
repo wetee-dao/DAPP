@@ -337,13 +337,17 @@ const toAdd = async () => {
     return
   }
   try {
+    const none = new Option(client.registry, "Vec<u8>", null);
     const tx = client.tx.weTEEGpu.create(
       mainData.name,
       mainData.image,
+      "",
+      "",
       JSON.stringify(containers.value[0].meta),
       mainData.port,
       mainData.command,
       envs,
+      none,
       mainData.cpu,
       mainData.memory,
       mainData.disk,
