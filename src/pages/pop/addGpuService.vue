@@ -337,6 +337,7 @@ const toAdd = async () => {
     return
   }
   try {
+    //@ts-ignore
     const none = new Option(client.registry, "Vec<u8>", null);
     const tx = client.tx.weTEEGpu.create(
       mainData.name,

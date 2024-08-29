@@ -259,7 +259,7 @@
       .ssd-box{
         height: 40px;
         width: 100%;
-        margin-top: 16px;
+        margin-top: 13px;
         display: flex;
         flex-direction: row;
       }
@@ -503,14 +503,14 @@
   }
 }
 
-@media screen and (min-width: 729px) and (max-width: 901px) {
+@media screen and (min-width: 729px) and (max-width: 961px) {
   .pod {
     min-width: 100%;
     margin-right: 0;
   }
 }
 
-@media screen and (min-width: 900px) and (max-width: 1251px) {
+@media screen and (min-width: 960px) and (max-width: 1251px) {
   .data {
     .pod {
       min-width: calc(50% - 15px);
