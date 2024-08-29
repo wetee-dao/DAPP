@@ -306,6 +306,7 @@
         font-size: 13px;
         font-weight: bold;
         line-height: 1;
+        color: $secondary-text;
       }
 
       .code{
@@ -314,11 +315,10 @@
         align-items: center;
         margin-top: 5px;
         font-size: 14px;
-        font-weight: normal;
         line-height: 1;
+        color: rgba($secondary-text-rgb, 0.8);
         .icon{
           font-size: 14px;
-          // color: rgba($primary-text-rgb, 0.7);
           margin-right: 5px;
         }
       }

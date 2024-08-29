@@ -62,6 +62,7 @@ export function transformUserInput(
         if (type === 'Balance') {
             return registry.createType('Balance', value);
         }
+
         return value;
     });
 }

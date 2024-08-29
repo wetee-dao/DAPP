@@ -332,8 +332,18 @@ const toAdd = async () => {
     return
   }
 
-  const constructor = constructors.value[constructorIndex.value]
+  for (const k in argValues.value) {
+    if (argValues.value[k] == null) {
+      ElNotification({
+        title: 'call error',
+        message: "Contract call arg "+k+" is null",
+        type: 'error',
+      })
+      return
+    }
+  }
 
+  const constructor = constructors.value[constructorIndex.value]
   const params: InstantiateData = {
     accountId: accountId,
     argValues: argValues.value,

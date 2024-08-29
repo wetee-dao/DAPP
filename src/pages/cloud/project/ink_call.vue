@@ -169,6 +169,16 @@ const onSubmit = async () => {
   const api = chain.client;
   const contract = new ContractPromise(api, new Abi(props.inkInfo.Abi), props.inkInfo.ContractId);
   const message = messages.value[messageIndex.value]
+  for (const k in argValues.value) {
+    if (argValues.value[k] == null) {
+      ElNotification({
+        title: 'call error',
+        message: "Contract call arg "+k+" is null",
+        type: 'error',
+      })
+      return
+    }
+  }
   const transformed = transformUserInput(contract.registry, message.args, argValues.value);
 
   const option: ContractOptions = {
