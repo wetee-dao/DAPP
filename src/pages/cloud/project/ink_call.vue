@@ -10,7 +10,7 @@
                 <el-option :label="formatMessageMethod(c)" :value="index" v-for="(c, index) in messages" />
               </el-select>
               <div :class="index == 0 ? 'arg-input first-arg' : 'arg-input'" v-for="(arg, index) in args">
-                <ArgInput :arg="arg" :value="argValues[arg.name]" @input="setArg(index, $event)" />
+                <ArgInput :key="arg.name" :arg="arg" :value="argValues[arg.name]" @input="setArg(index, $event)" />
               </div>
             </div>
           </div>

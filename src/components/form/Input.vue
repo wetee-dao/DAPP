@@ -1,5 +1,6 @@
 <template>
-  <el-input :placeholder="'input '+props.arg.type.type" 
+  <el-input placeholder="type not supported"
+    disabled
     :model-value="value"
     @input="onInput"
   >
