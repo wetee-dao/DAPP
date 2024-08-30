@@ -11,7 +11,6 @@ import Cloud from "./cloud.vue";
 import Miner from "./miner.vue";
 const props = defineProps(["icon"])
 const icon = ref(props.icon);
-console.log(icon)
 </script>
 
 <style lang='scss' scoped>

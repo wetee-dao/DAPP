@@ -168,7 +168,7 @@ const GetTEEInfo = async (item: any) => {
     font-size: 18px;
     position: relative;
     right: -12px;
-    top: 3px;
+    top: 7px;
   }
 
   .service {

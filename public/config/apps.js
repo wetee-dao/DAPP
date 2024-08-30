@@ -366,7 +366,7 @@ const teeApps = [
         "type": "Language Template",
         "github": "https://github.com/wetee-dao/examples/tree/main/ego-http-server",
         "home": "https://go.dev/",
-        "docker": { "image": "registry.cn-hangzhou.aliyuncs.com/wetee_dao/ego-hello:2024-08-23-11-57", "port": [{ "key": "Tcp", "value": 8999 }] }
+        "docker": { "image": "registry.cn-hangzhou.aliyuncs.com/wetee_dao/ego-hello:2024-08-25-11-49", "port": [{ "key": "Tcp", "value": 8999 }] }
     }, {
         "name": "Rust",
         "create_type": "task",

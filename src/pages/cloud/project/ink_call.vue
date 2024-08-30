@@ -371,7 +371,7 @@ const onSubmit = async () => {
         padding: 8px 10px;
         background-color: rgba($color: $secondary-text-rgb, $alpha: 0.05);
         border-radius: 4px;
-        margin: 10px 0 10px 10px;
+        margin: 10px 0 10px 0;
 
         .t {
           width: 47%;

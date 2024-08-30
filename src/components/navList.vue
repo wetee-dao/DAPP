@@ -3,7 +3,10 @@
     <div class="left" @click="(e: any) => e.stopPropagation()">
       <ul v-for="(item, index) in lists">
         <li class="left_one" >
-          <a href="javascript:void(0);"><span class="icon" v-html="item.icon"></span>{{ item.name }}</a>
+          <a href="javascript:void(0);">
+            <!-- <span class="icon" v-html="item.icon"></span> -->
+            {{ item.name }}
+          </a>
         </li>
       </ul>
     </div>
@@ -20,8 +23,7 @@
           <div @click="toUri(sub.url)" :key="sub.name" v-for="sub in search(item.sub)">
             <div class="icon">
               <Picon :icon="sub.icon" />
-            </div>
-            
+            </div>        
             {{ sub.name }}
           </div>
         </div>
