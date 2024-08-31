@@ -21,16 +21,19 @@
           </div>
           <div class="row">
             <div class="row-item">
-              <el-progress type="dashboard" :percentage="strToNumber(crs[index][1].cpu) / strToNumber(crs[index][0].cpu) * 100" :width="120"
+              <el-progress type="dashboard"
+                :percentage="strToNumber(crs[index][1].cpu) / strToNumber(crs[index][0].cpu) * 100" :width="120"
                 color="#256437">
                 <template #default="{ percentage }">
-                  <span class="percentage-value">{{ cpuShow(crs[index][1].cpu) }}/{{ cpuShow(crs[index][0].cpu) }}</span>
+                  <span class="percentage-value">{{ cpuShow(crs[index][1].cpu) }}/{{ cpuShow(crs[index][0].cpu)
+                    }}</span>
                 </template>
               </el-progress>
               <span class="per-label">sgx cpu</span>
             </div>
             <div class="row-item">
-              <el-progress type="dashboard" :percentage="strToNumber(crs[index][1].mem) / strToNumber(crs[index][0].mem) * 100" :width="120"
+              <el-progress type="dashboard"
+                :percentage="strToNumber(crs[index][1].mem) / strToNumber(crs[index][0].mem) * 100" :width="120"
                 color="#256437">
                 <template #default="{ percentage }">
                   <span class="percentage-value">{{ storeShow(crs[index][1].mem) }}/{{ storeShow(crs[index][0].mem)
@@ -42,16 +45,19 @@
           </div>
           <div class="row bottom">
             <div class="row-item">
-              <el-progress type="dashboard" :percentage="strToNumber(crs[index][1].cvmCpu) / strToNumber(crs[index][0].cvmCpu) * 100" :width="120"
+              <el-progress type="dashboard"
+                :percentage="strToNumber(crs[index][1].cvmCpu) / strToNumber(crs[index][0].cvmCpu) * 100" :width="120"
                 color="#256437">
                 <template #default="{ percentage }">
-                  <span class="percentage-value">{{ cpuShow(crs[index][1].cvmCpu) }}/{{ cpuShow(crs[index][0].cvmCpu) }}</span>
+                  <span class="percentage-value">{{ cpuShow(crs[index][1].cvmCpu) }}/{{ cpuShow(crs[index][0].cvmCpu)
+                    }}</span>
                 </template>
               </el-progress>
               <span class="per-label">cvm cpu</span>
             </div>
             <div class="row-item">
-              <el-progress type="dashboard" :percentage="strToNumber(crs[index][1].cvmMem) / strToNumber(crs[index][0].cvmMem) * 100" :width="120"
+              <el-progress type="dashboard"
+                :percentage="strToNumber(crs[index][1].cvmMem) / strToNumber(crs[index][0].cvmMem) * 100" :width="120"
                 color="#256437">
                 <template #default="{ percentage }">
                   <span class="percentage-value">{{ storeShow(crs[index][1].cvmMem) }}/{{
@@ -100,22 +106,23 @@ const getClusters = async (user: string) => {
   const cList = await wetee().client.query.weTEEWorker.k8sClusters.entries();
   let cs: any[] = [];
   cList.forEach((c: any) => {
-    console.log(c[1].toHuman());
     cs.push(c[1].toHuman());
   });
 
   const crList = await wetee().client.query.weTEEWorker.crs.entries();
   let crsCur: any[] = [];
   crList.forEach((c: any) => {
-    console.log(c[1].toHuman());
     crsCur.push(c[1].toHuman());
   });
 
   let contractCur: any[] = [];
-  for (let i = 0; i < crList.length; i++) {
-    // const contract = await wetee().client.query.weTEEWorker.clusterContracts.entries(ckeys[i]);
-    // console.log(contract.toHuman());
-    contractCur.push([]);
+  for (let i = 0; i < cList.length; i++) {
+    const contractWrap = await wetee().client.query.weTEEWorker.clusterContracts.entries(cs[i].id);
+    let  clusterContracts = []
+    for (let j = 0; j < contractWrap.length; j++) {
+      clusterContracts.push(contractWrap[j][1].toHuman())
+    }
+    contractCur.push(clusterContracts);
   }
 
   crs.value = crsCur;
@@ -263,12 +270,12 @@ onMounted(async () => {
         }
       }
 
-      &.top{
+      &.top {
         border-top-right-radius: 6px;
         border-top-left-radius: 6px;
       }
 
-      &.bottom{
+      &.bottom {
         border-bottom-right-radius: 6px;
         border-bottom-left-radius: 6px;
       }

@@ -44,11 +44,11 @@ import { GetClusterInfo, GetServices } from "@/apis/detail";
 import Metrics from "./metrics.vue"
 import Report from "./report.vue"
 import Log from "./log.vue"
-import InkCall from "./ink_call.vue"
-import InkMeta from "./ink_meta.vue"
+import InkCall from "./inkCall.vue"
+import InkMeta from "./inkMeta.vue"
 
 const props = defineProps(["info", "openTag", "close"])
-const activeName = ref(props.openTag ?? "metrics")
+const activeName = ref(props.openTag ?? "")
 const info = ref(props.info)
 const inkInfo = ref(null)
 const clusterInfo = ref(null)
@@ -77,9 +77,18 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 }
 
 onMounted(() => {
-  GetInfo(info.value)
-  if (info.value.Type == "INK") {
-    activeName.value = "inkCall"
+  let item = JSON.parse(JSON.stringify(info.value))
+  if (props.openTag == "") {
+    if (info.value.Type == "INK") {
+      activeName.value = "inkCall"
+    } else {
+      activeName.value = "metrics"
+    }
+  }
+  if (item.Type == "INK") {
+    inkInfo.value = item
+  }else{
+    GetTEEInfo(item)
   }
 })
 

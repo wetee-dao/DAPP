@@ -17,7 +17,18 @@ const props = defineProps(["router", "store", "close", "params"])
 const closeClick = () => {
   props.close();
 };
-const mlist = ref([
+const mlist = ref(props.params.item.Type == "INK" ? [
+  {
+    title: "Ink! contract meta",
+    icon: "&#xe6b6;",
+    cmd: "inkMeta"
+  },
+  {
+    title: "Ink! contract call",
+    icon: "&#xe64d;",
+    cmd: "inkCall"
+  },
+] : [
   {
     title: "View Metrics",
     icon: "&#xe60d;",
@@ -67,8 +78,6 @@ const doAction = (item: any) => {
 </script>
 
 <style lang="scss" scoped>
-
-
 .menu-box {
   width: 100%;
   position: fixed;

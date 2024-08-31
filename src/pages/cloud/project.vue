@@ -147,7 +147,7 @@ const textStatus = ref<any>({
 });
 
 const OpenDetail = (item: any, t: string) => {
-  tag.value = t == "" ? "metrics" : t;
+  tag.value = t;
   currentProject.value = item;
   nextTick(() => {
     document.getElementById('project-' + item.Id)!.scrollIntoView({ behavior: 'smooth', block: "center" });
@@ -168,18 +168,20 @@ const showPenu = (e: MouseEvent, item: any) => {
   e.preventDefault();
   e.stopPropagation();
   global.$OpenProjectMenu(router, store, e, item, async (cmd: string) => {
-    const ty = wetee().client.createType('WorkType', item.Type);
-    const wid = { id: item.Nid, wtype: ty }
     const chain = global.$getChain();
     const signer = store.state.userInfo.addr;
 
     switch (cmd) {
       case "settings":
       case "metrics":
+      case "inkCall":
+      case "inkMeta":
         OpenDetail(item, cmd)
         break;
       case "stop":
-        const tx = wetee().client.tx.weTEEWorker.workStop(wid)
+        const sty = wetee().client.createType('WorkType', item.Type);
+        const swid = { id: item.Nid, wtype: sty }
+        const tx = wetee().client.tx.weTEEWorker.workStop(swid)
         await chain.ProxySignAndSend(tx, projectid, signer, () => {
           ElNotification({
             title: 'Notice',
@@ -191,6 +193,8 @@ const showPenu = (e: MouseEvent, item: any) => {
         })
         break;
       case "restart":
+        const ty = wetee().client.createType('WorkType', item.Type);
+        const wid = { id: item.Nid, wtype: ty }
         let txre = null
         if (item.Type == "APP") {
           txre = wetee().client.tx.weTEEApp.restart(wid.id)
@@ -208,6 +212,7 @@ const showPenu = (e: MouseEvent, item: any) => {
           getList(pid)
         }, () => {
         })
+        break;
       default:
         break;
     }
