@@ -222,7 +222,7 @@ const showPenu = (e: MouseEvent, item: any) => {
 let timerId = setInterval(() => {
   getList(pid)
   getEvent(pid)
-}, 6000);
+}, 60000);
 
 onMounted(async () => {
   getList(pid)

@@ -6,9 +6,7 @@
     <div id="log">
       <div class="log-item" v-for="item in log" :key="item.BlockNumber">
         <div class="log-texts">
-          <div class="log-text" v-for="i in item.Logs" :key="i">
-            {{ i }}
-          </div>
+          <div class="log-text"  v-for="l in item.Logs" v-html="l"></div>
         </div>
         <div class="log-block">
           <span># {{ item.BlockNumber }}</span>
@@ -20,6 +18,7 @@
 
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from 'vue';
+import { AnsiUp } from 'ansi_up';
 import { GetLogs } from '@/apis/detail';
 import { scrollToBottom } from '@/utils/dom';
 
@@ -29,6 +28,13 @@ const log = ref<any>(null)
 
 onMounted(() => {
   GetLogs(props.clusterInfo.id, info.value).then((res: any) => {
+    const ansiUp = new AnsiUp()
+    res.map((item: any) => {
+      item.Logs = item.Logs.map((m: string) => {
+        let msg = ansiUp.ansi_to_html(m)
+        return msg
+      });
+    })
     log.value = res
     nextTick(() => {
       scrollToBottom("#project-detail-tabs .el-tabs__content")
@@ -56,8 +62,9 @@ onMounted(() => {
     .log-texts {
       flex: 1;
       padding: 10Px;
-      margin-right: 5px;
       border-right: 2Px solid rgba($primary-bg-rgb, 0.8);
+      width: calc(100% - 80px);
+      overflow-x: auto;
     }
 
     .log-text{
@@ -65,6 +72,9 @@ onMounted(() => {
       overflow: hidden;
       font-size: 14px;
       line-height: 20px;
+      white-space: pre;
+      display: flex;
+      font-family: "Courier New", monospace;
     }
 
     .log-block {
