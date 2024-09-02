@@ -35,6 +35,8 @@ declare module 'vue' {
     Identicon: typeof import('./src/components/identicon.vue')['default']
     Input: typeof import('./src/components/form/Input.vue')['default']
     InputBytes: typeof import('./src/components/form/InputBytes.vue')['default']
+    InputHash: typeof import('./src/components/form/InputHash.vue')['default']
+    InputHex: typeof import('./src/components/form/InputHex.vue')['default']
     InputNumber: typeof import('./src/components/form/InputNumber.vue')['default']
     InsList: typeof import('./src/components/insList.vue')['default']
     Loading: typeof import('./src/components/loading.vue')['default']

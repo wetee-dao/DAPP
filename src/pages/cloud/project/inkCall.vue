@@ -18,7 +18,7 @@
           <div class="form-table-box">
             <div class="form-sub-title">RefTime Limit</div>
             <div class="form-input-box">
-              <el-input disabled v-model="form.refTime" placeholder="for example:  /usr/sbin/httpd -f httpd.conf">
+              <el-input v-model="form.refTime">
               </el-input>
             </div>
           </div>
@@ -26,7 +26,7 @@
           <div class="form-table-box">
             <div class="form-sub-title">ProofSize Limit</div>
             <div class="form-input-box">
-              <el-input disabled v-model="form.proofSize" placeholder="for example:  /usr/sbin/httpd -f httpd.conf">
+              <el-input v-model="form.proofSize">
               </el-input>
             </div>
           </div>
@@ -123,7 +123,7 @@ const onMessageChange = (index: number) => {
 
 const dryTry = async () => {
   const api = wetee().client;
-  const accountId = "5FhHywUv7W4pMMXQdm48cm6tiaAEGMikXHoMtu7wnptVLQX4"
+  const accountId = store.state.userInfo.addr;
   const { freeBalance } = await api.derive.balances.account(accountId)
   const message = messages.value[messageIndex.value]
   const inputData = message?.toU8a(transformUserInput(api.registry, message.args, argValues.value));
@@ -173,7 +173,7 @@ const onSubmit = async () => {
     if (argValues.value[k] == null) {
       ElNotification({
         title: 'call error',
-        message: "Contract call arg "+k+" is null",
+        message: "Contract call arg " + k + " is null",
         type: 'error',
       })
       return
@@ -181,8 +181,9 @@ const onSubmit = async () => {
   }
   const transformed = transformUserInput(contract.registry, message.args, argValues.value);
 
+  new BN(form.value.refTime)
   const option: ContractOptions = {
-    gasLimit: getGasLimit(true, dryRunBN[2], dryRunBN[3], api.registry)!,
+    gasLimit: getGasLimit(true, new BN(form.value.refTime), new BN(form.value.proofSize), api.registry)!,
     // storageDepositLimit: getStorageDepositLimit(
     //   false,
     //   userInput,
@@ -231,20 +232,16 @@ const onSubmit = async () => {
       );
     }
     if (result.result!.isOk) {
-      console.log('Success', result.output!.toHuman());
-      // ElNotification({
-      //   title: 'Contract read successfully',
-      //   message: "Result: " + (result.output!.toHuman() as any)["Ok"],
-      //   type: 'success',
-      // })
       ElMessageBox.alert("Read result: " + (result.output!.toHuman() as any)["Ok"], 'Contract read successfully', {
         confirmButtonText: "Close",
-        callback: (action: Action) => {
-
-        },
+        callback: (action: Action) => {},
       })
     } else {
-      console.log('Error', JSON.stringify(result!.result.asErr.toHuman()));
+      ElNotification({
+        title: 'Contract call error',
+        message: "Error: " + JSON.stringify(result!.result.asErr.toHuman()),
+        type: 'error',
+      })
     }
   }
 }

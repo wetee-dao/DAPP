@@ -14,7 +14,7 @@ import Bool from './Bool.vue';
 // import { InputBalance } from './InputBalance';
 import InputNumber from './InputNumber.vue';
 import InputBytes from './InputBytes.vue';
-// import { InputHash } from './InputHash';
+import InputHash from './InputHash.vue';
 // import { Option } from './Option';
 // import { Struct } from './Struct';
 // import { SubForm } from './SubForm';
@@ -34,7 +34,6 @@ watch(() => props.value, (val) => {
 })
 
 onMounted(() => {
-  console.log("=================================================")
   cname.value = renderSubComponent()
 })
 
@@ -133,8 +132,8 @@ const renderSubComponent = () => {
     // case 'Balance':
     //   return InputBalance;
 
-    // case 'Hash':
-    //   return InputHash;
+    case 'Hash':
+      return InputHash;
 
     case "Bytes":
       return InputBytes;

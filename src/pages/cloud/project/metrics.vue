@@ -48,7 +48,7 @@ const options = ref({
 onMounted(() => {
   const ty = wetee().client.createType('WorkType', info.value.Type);
   const wid = { id: info.value.Nid, wtype: ty }
-  if (info.value.Status == 1) {
+  if (info.value.Status == 3) {
     GetWetrics(props.clusterInfo.id, info.value).then((res: any) => {
       let labels: string[] = []
       let cpuData: number[] = []
@@ -176,9 +176,9 @@ const resetChart = () => {
   let w = aw / (aw > 600 ? 2 : 1)
   let h = w / 1.5
   document.getElementById('cpu')!.style.minHeight = h + 'px'
-  document.getElementById('cpu')!.style.minWidth = w + 'px'
+  document.getElementById('cpu')!.style.minWidth = (w-5) + 'px'
   document.getElementById('mem')!.style.minHeight = h + 'px'
-  document.getElementById('mem')!.style.minWidth = w + 'px'
+  document.getElementById('mem')!.style.minWidth = (w-5) + 'px'
   document.getElementById('metrics')!.style.display = aw > 600 ? "flex" : "block"
 }
 </script>

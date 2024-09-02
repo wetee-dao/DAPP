@@ -71,7 +71,7 @@ onMounted(() => {
       word-break: break-all;
       overflow: hidden;
       font-size: 14px;
-      line-height: 20px;
+      line-height: 1.2;
       white-space: pre;
       display: flex;
       font-family: "Courier New", monospace;
