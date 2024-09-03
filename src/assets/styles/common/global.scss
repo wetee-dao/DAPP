@@ -166,6 +166,14 @@ body {
   .el-loading-spinner .el-loading-text{
     font-weight: bold;
   }
+
+  .arg-form-item__error {
+    color: var(--el-color-danger);
+    font-size: 0.75rem;
+    left: 0;
+    line-height: 1;
+    padding-top: 2px;
+  }
 }
 
 /* Works on Chrome, Edge, and Safari */

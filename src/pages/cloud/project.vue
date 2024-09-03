@@ -19,7 +19,7 @@
           <p>{{ item.Name }}</p>
           <p>
             <i class="icon">&#xf18e;</i>
-            <div class="text" :alt="item.Image" >{{ shortImage(item.Image) }}</div>
+          <div class="text" :alt="item.Image">{{ shortImage(item.Image) }}</div>
           </p>
           <div class="ssd-box" v-if="item.Cr.disk.length > 0">
             <el-tooltip v-for="(disk, index) in item.Cr.disk" effect="light" placement="top-start"
@@ -72,7 +72,7 @@
           <i class="icon">&#xe981;</i>Events
         </div>
         <div class="event-list">
-          <div class="event" :key="item.work_type + '-' + item.work_id" v-for="(item, index) in events">
+          <div class="event" v-for="(item, index) in events">
             <div class="work" v-if="item.work_type == 'ink!'">
               <Identicon class="identicon" :stroke="2"
                 :foreground="theme == 'dark' ? [255, 250, 255, 180] : [0, 0, 0, 180]" :background="[255, 255, 255, 0]"
@@ -235,7 +235,7 @@ onUnmounted(() => {
 
 const getList = async (projectId: string) => {
   let appsNew: any[] = [];
-  
+
   try {
     const contractRes = await getContracts(projectId)
     contractRes.list_contract.forEach((c: any) => {
@@ -319,12 +319,11 @@ const getList = async (projectId: string) => {
 };
 
 const getEvent = async (projectId: string) => {
-  try {
-    const eventRes = await getEvents(projectId)
-    events.value = eventRes.list_event;
-  } catch (e) {
-
+  const eventRes = await getEvents(projectId)
+  if (events.value.length > 0 && eventRes.list_event.length == events.value.length) {
+    getList(projectId)
   }
+  events.value = eventRes.list_event;
 };
 
 const shortImage = (image: string) => {

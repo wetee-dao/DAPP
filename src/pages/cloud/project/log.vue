@@ -47,10 +47,9 @@ onMounted(() => {
 .log-box {
   padding: 10px 42px;
 
-  #log {
-    margin: 0 -10Px;
-
-  }
+  // #log {
+  //   margin: 0 -10Px;
+  // }
 
   .log-item {
     background-color: rgba($gray-bg, 0.06);

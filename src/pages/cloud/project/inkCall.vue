@@ -69,7 +69,7 @@ import { inject, onMounted, ref } from 'vue';
 import { Action, ElMessageBox, ElNotification, FormInstance } from 'element-plus';
 import { deepCopy } from '@/utils/object';
 import { formatProofSize, formatRefTime, getGasLimit, getStorageDepositLimit, transformUserInput } from '@/utils/ink';
-import { BN, BN_ZERO } from '@polkadot/util';
+import { BN, BN_ZERO, hexToString } from '@polkadot/util';
 import { Abi, ContractPromise } from '@polkadot/api-contract';
 import { AbiMessage, AbiParam, ContractCallOutcome, ContractOptions } from '@polkadot/api-contract/types';
 import { SubmittableExtrinsic } from '@polkadot/api/types';
@@ -103,8 +103,13 @@ onMounted(() => {
 })
 
 const setArg = (index: number, value: any) => {
-  argValues.value[messages.value[messageIndex.value].args[index].name] = value
-
+  let name = messages.value[messageIndex.value].args[index].name
+  if (value == undefined) {
+    delete argValues.value[name]
+    return
+  }
+  
+  argValues.value[name] = value
   dryTry()
 }
 
@@ -232,9 +237,16 @@ const onSubmit = async () => {
       );
     }
     if (result.result!.isOk) {
-      ElMessageBox.alert("Read result: " + (result.output!.toHuman() as any)["Ok"], 'Contract read successfully', {
+      let r = (result.output!.toHuman() as any)["Ok"]
+      if (/^0x[A-F0-9]+$/i.test(r)) {
+        try {
+          let s = hexToString(r)
+          r = s
+        } catch (e) { }
+      }
+      ElMessageBox.alert("Read result: " + r, 'Contract read successfully', {
         confirmButtonText: "Close",
-        callback: (action: Action) => {},
+        callback: (action: Action) => { },
       })
     } else {
       ElNotification({
@@ -337,13 +349,8 @@ const onSubmit = async () => {
 
     .first-arg {
       &>::before {
-        content: ' ';
-        width: 2px;
-        height: 33px;
-        background-color: rgba($color: $secondary-text-rgb, $alpha: 0.2);
-        left: -20px;
+        height: 32px;
         top: -10px;
-        position: absolute;
       }
     }
 

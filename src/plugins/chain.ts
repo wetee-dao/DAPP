@@ -8,6 +8,7 @@ import { formatBalance, isNumber } from "@polkadot/util";
 let client: ApiPromise | null = null
 export let chainUrl = 'wss://xiaobai.asyou.me:30001/'
 export let chainIndexer = 'https://xiaobai.asyou.me:30006/gql'
+export let dkgUrl = 'http://xiaobai.asyou.me:31001/gql'
 
 // 链对象
 let chain: any = {
