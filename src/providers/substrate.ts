@@ -5,6 +5,7 @@ import { ApiPromise } from "@polkadot/api";
 import { SubmittableExtrinsic } from "@polkadot/api/types";
 import { Wallet, getWallets } from "@talismn/connect-wallets/dist";
 import store from "@/store";
+import { checkMetaData } from "@/plugins/chain";
 
 // Substrate 交易对象
 export class SubstrateProvider {
@@ -23,6 +24,7 @@ export class SubstrateProvider {
       // @ts-ignore
       const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === store.state.userInfo.wallet);
       await wallet!.enable("WeTEE");
+      await checkMetaData(wallet!.extension);
       const account = (await wallet!.getAccounts()).find(account => account.address === signer);
       if (!account) {
         ElNotification({

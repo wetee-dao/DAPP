@@ -70,7 +70,6 @@ if (props.params!.event.y > document.documentElement.clientHeight - itemHeight *
 const x = ref(cx + "px");
 const y = ref(cy + "px");
 
-
 const doAction = (item: any) => {
   props.close(item.cmd);
 };
@@ -97,7 +96,6 @@ const doAction = (item: any) => {
     flex-direction: column;
     padding: 10px 0;
     color: rgba($secondary-text-rgb, 0.7);
-
     .menu-item {
       padding: 8px 15px;
       height: 20px;

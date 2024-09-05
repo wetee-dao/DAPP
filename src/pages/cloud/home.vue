@@ -68,8 +68,6 @@ const ss58toIcon = (item: any) => {
 }
 
 onMounted(async () => {
-  console.log(store.state.userInfo.name)
-  console.log(store.state.userInfo)
   getProjectList(store.state.userInfo.addr).then((datas: any) => {
     projects.value = datas
   })

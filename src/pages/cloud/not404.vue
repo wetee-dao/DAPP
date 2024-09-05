@@ -3,8 +3,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, toRefs, watch } from 'vue';
-import { useStore } from 'vuex';
+import { defineComponent, onMounted, reactive, toRefs } from 'vue';
 
 export default defineComponent({
   name: 'not404',

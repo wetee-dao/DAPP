@@ -52,13 +52,12 @@ onMounted(async () => {
         try {
           const MataMaskSnap = await Metamask.enable!("WeTEE")
 
-          const meta = await getMetaData()
-          const config = await setCustomChain(chainUrl, meta)
-          console.log(config)
-
-          const metaAccounts = await MataMaskSnap.accounts.get()
-
+          // const meta = await getMetaData()
+          // const config = await setCustomChain(chainUrl, meta)
+          // console.log(config)
+          // const metaAccounts = await MataMaskSnap.accounts.get()
           // await checkMetaData(MataMaskSnap)
+
           const chain = new MetaMaskProvider(MataMaskSnap)
           chain.snap = MataMaskSnap
           global.$setChain(chain)
@@ -73,10 +72,10 @@ onMounted(async () => {
           try {
             for (let i = 0; i < 10; i++) {
               await sleep(800)
-              const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === store.state.userInfo.wallet);
-              await wallet!.enable("WeTEE");
+              // const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === store.state.userInfo.wallet);
+              // await wallet!.enable("WeTEE");
+              // await checkMetaData(wallet!.extension)
 
-              await checkMetaData(wallet!.extension)
               global.$setChain(new SubstrateProvider())
               i = 10
             }

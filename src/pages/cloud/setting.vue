@@ -105,14 +105,12 @@ import {
   codeToName,
 } from "../../utils/zmRegion";
 import { ElMessage } from "element-plus";
-import { useStore } from "vuex";
 
 export default defineComponent({
   name: "Home",
   components: {},
   setup() {
     const router = useRouter();
-    const store = useStore();
     const {
       appContext: {
         config: { globalProperties },

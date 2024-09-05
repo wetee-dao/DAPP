@@ -8,7 +8,7 @@ import { formatBalance, isNumber } from "@polkadot/util";
 let client: ApiPromise | null = null
 export let chainUrl = 'wss://xiaobai.asyou.me:30001/'
 export let chainIndexer = 'https://xiaobai.asyou.me:30006/gql'
-export let dkgUrl = 'http://xiaobai.asyou.me:31001/gql'
+export let dkgUrl = 'https://xiaobai.asyou.me:31001/gql'
 
 // 链对象
 let chain: any = {
@@ -38,7 +38,7 @@ export async function checkMetaData(ext: Injected): Promise<boolean> {
 }
 
 // 获取元数据
-export async function  getMetaData() {
+export async function  getMetaData():Promise<MetadataDef> {
   const api = client!
   let chainInfo = await api.rpc.system.chain()
   const chainName = chainInfo.toHuman()
