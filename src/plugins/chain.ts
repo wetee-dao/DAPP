@@ -16,7 +16,7 @@ let chain: any = {
 }
 
 // 获取链对象
-export const getChainExt = () => {
+export const getChainExt = (): ApiPromise | null => {
   return chain
 }
 

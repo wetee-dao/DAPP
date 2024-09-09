@@ -74,6 +74,7 @@ import { Abi, ContractPromise } from '@polkadot/api-contract';
 import { AbiMessage, AbiParam, ContractCallOutcome, ContractOptions } from '@polkadot/api-contract/types';
 import { SubmittableExtrinsic } from '@polkadot/api/types';
 import { useStore } from 'vuex';
+import { ApiPromise } from '@polkadot/api';
 
 const props = defineProps(["inkInfo"])
 const store = useStore();
@@ -127,7 +128,7 @@ const onMessageChange = (index: number) => {
 }
 
 const dryTry = async () => {
-  const api = wetee().client;
+  const api:ApiPromise = wetee().client;
   const accountId = store.state.userInfo.addr;
   const { freeBalance } = await api.derive.balances.account(accountId)
   const message = messages.value[messageIndex.value]
@@ -145,6 +146,9 @@ const dryTry = async () => {
   ]
 
   const dryRunResult: any = await api.call.contractsApi.call(...params);
+
+  // TODO 处理调用错误消息
+
   form.value.refTime = dryRunResult?.gasRequired.refTime.toString()
   form.value.proofSize = dryRunResult?.gasRequired.proofSize.toString()
 

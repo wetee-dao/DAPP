@@ -11,7 +11,6 @@
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useStore } from "vuex";
-import { Wallet, getWallets } from '@talismn/connect-wallets';
 
 import GHeader from "./components/header.vue";
 import useGlobelProperties from "./store/globel";
@@ -23,6 +22,7 @@ import { Metamask, setCustomChain } from "./providers/MetaSnap";
 import { sleep } from "@/utils/time";
 import { chainType } from "./utils/chain"
 import { chainUrl, checkMetaData, getMetaData } from "./plugins/chain";
+import { getWallets, Wallet } from "@talismn/connect-wallets";
 
 const store = useStore();
 const global = useGlobelProperties()
@@ -51,14 +51,8 @@ onMounted(async () => {
       if (store.state.userInfo.provider == "metamask") {
         try {
           const MataMaskSnap = await Metamask.enable!("WeTEE")
-
-          // const meta = await getMetaData()
-          // const config = await setCustomChain(chainUrl, meta)
-          // console.log(config)
-          // const metaAccounts = await MataMaskSnap.accounts.get()
-          // await checkMetaData(MataMaskSnap)
-
           const chain = new MetaMaskProvider(MataMaskSnap)
+          
           chain.snap = MataMaskSnap
           global.$setChain(chain)
         } catch (e) {
@@ -69,19 +63,21 @@ onMounted(async () => {
         if (store.state.userInfo.type == "keyring") {
           global.$setChain(new SubstrateProvider())
         } else {
-          try {
-            for (let i = 0; i < 10; i++) {
-              await sleep(800)
-              // const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === store.state.userInfo.wallet);
-              // await wallet!.enable("WeTEE");
-              // await checkMetaData(wallet!.extension)
-
+          const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === store.state.userInfo.wallet);
+          if (!wallet) {
+            ElMessage.warning("插件 "+store.state.userInfo.wallet+" 未安装");
+            return;
+          }
+          
+          for (let i = 0; i < 10; i++) {
+            await sleep(800)
+            try {
               global.$setChain(new SubstrateProvider())
               i = 10
+            } catch (e) {
+              ElMessage.warning("请安装 polkadot 插件,错误 => " + JSON.stringify(e));
+              return;
             }
-          } catch (e) {
-            ElMessage.warning("请安装 polkadot 插件,错误 => " + JSON.stringify(e));
-            return;
           }
         }
       }
