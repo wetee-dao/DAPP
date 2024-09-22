@@ -55,6 +55,15 @@
               BaseSetting
             </div>
             <div class="form-context-box">
+              <div class="form-sub-title">TEE type &nbsp;<span class="sgx-warning">{{ form.teeVersion == "SGX"?"Notice: SGX only supports Ego and Gramine":"" }}</span></div>
+              <div class="form-input-box">
+                <el-select v-model="form.teeVersion" placeholder="Select tee version">
+                  <el-option label="Intel SGX" value="SGX" />
+                  <el-option label="Intel TDX/AMD SEV" value="CVM" />
+                </el-select>
+              </div>
+            </div>
+            <div class="form-context-box">
               <div class="form-sub-title">Docker image</div>
               <div class="form-input-box">
                 <el-input v-model="form.image" placeholder="Docker image">
@@ -223,7 +232,7 @@ const handleClick = (e: MouseEvent) => {
 const temps = (window as any).extTemps().filter((v: any) => v.create_type == "service")
 const curTemp = ref<string>("")
 const defaultContainer = {
-  teeVersion: "CVM",
+  teeVersion: "",
   image: "",
   cpu: 1000,
   memory: 800,
@@ -324,7 +333,15 @@ const toAdd = async () => {
   }
 
   const signer = props.store.state.userInfo.addr;
-  if(mainData.name == ""){
+  if (mainData.teeVersion == "") {
+    ElNotification({
+      title: "Error",
+      message: "TEE version is required",
+      type: "error",
+    })
+    return
+  }
+  if (mainData.name == "") {
     ElNotification({
       title: "Error",
       message: "Container name is required",
@@ -332,7 +349,7 @@ const toAdd = async () => {
     })
     return
   }
-  
+
   try {
     const none = new Option(client.registry, "Vec<u8>", null);
     const tx = client.tx.weTEEApp.create(

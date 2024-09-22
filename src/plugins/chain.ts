@@ -16,12 +16,12 @@ let chain: any = {
 }
 
 // 获取链对象
-export const getChainExt = (): ApiPromise | null => {
+export const getChainExt = () => {
   return chain
 }
 
 // 获取区块链连接
-export const getChainClient = () => {
+export const getChainClient = (): ApiPromise | null => {
   return client
 }
 
