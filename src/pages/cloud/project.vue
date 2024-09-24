@@ -135,7 +135,7 @@ const eventStatus = ref<Record<string, string>>({
 const eventMsg = ref<Record<string, string>>({
   "start": "start",
   "stop": "stop",
-  "work_contract_updated": "work verified",
+  "work_contract_updated": "TEE verified",
 });
 
 const textStatus = ref<Record<number, string>>({

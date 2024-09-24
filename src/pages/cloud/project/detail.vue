@@ -10,7 +10,7 @@
       </span>
       <i class="icon right" @click="closeClick">&#xe604;</i>
     </div>
-    <div v-if="clusterInfo" class="box" :key="info.Id">
+    <div v-if="loader==1" class="box" :key="info.Id">
       <el-tabs v-model="activeName" id="project-detail-tabs" class="tabs" @tab-click="handleClick">
         <el-tab-pane label="Metrics" name="metrics" lazy>
           <Metrics :info="info" :clusterInfo="clusterInfo" />
@@ -24,7 +24,7 @@
         <el-tab-pane label="Settings" name="settings" lazy></el-tab-pane>
       </el-tabs>
     </div>
-    <div v-if="inkInfo" class="box" :key="info.Id">
+    <div v-if="loader==2" class="box" :key="info.Id">
       <el-tabs v-model="activeName" id="project-ink-tabs" class="tabs" @tab-click="handleClick">
         <el-tab-pane label="Ink! contract meta" name="inkMeta" lazy>
           <InkMeta :inkInfo="inkInfo" />
@@ -34,6 +34,7 @@
         </el-tab-pane>
       </el-tabs>
     </div>
+    <loadingBox class="loader-wrapper" v-if="loader==0"/>
   </div>
 </template>
 
@@ -46,12 +47,14 @@ import Report from "./report.vue"
 import Log from "./log.vue"
 import InkCall from "./inkCall.vue"
 import InkMeta from "./inkMeta.vue"
+import loadingBox from "@/components/loading-box.vue";
 
 const props = defineProps(["info", "openTag", "close"])
 const activeName = ref(props.openTag ?? "")
 const info = ref(props.info)
 const inkInfo = ref(null)
 const clusterInfo = ref(null)
+const loader = ref(0)
 const service = ref<any[]>([])
 const ddns = ref<any>("")
 const wetee: any = inject('wetee')
@@ -65,6 +68,7 @@ const workType: any = {
 watch(() => props.info, (val: any, oldVal: any) => {
   if (val.Nid != oldVal.Nid) {
     info.value = val
+    loader.value = 0
     GetInfo(val)
   }
 })
@@ -99,6 +103,7 @@ const GetInfo = async (item: any) => {
     service.value = []
     inkInfo.value = item
     activeName.value = "inkCall"
+    loader.value = 2
   } else {
     activeName.value = "metrics"
     inkInfo.value = null
@@ -116,6 +121,7 @@ const GetTEEInfo = async (item: any) => {
   const cinfo = await GetClusterInfo(parseInt(cid[1]))
   ddns.value = cinfo.ip[0].domain
   clusterInfo.value = cinfo
+  loader.value = 1
 
   GetServices(parseInt(cid[1]), item).then((d) => {
     service.value = d as any[]
@@ -192,6 +198,11 @@ const GetTEEInfo = async (item: any) => {
     position: relative;
     bottom: 2px;
   }
+}
+
+.loader-wrapper{
+  margin-top: 20px;
+  border-top: 2px solid rgba($gray-bg, 0.1);
 }
 
 .box {

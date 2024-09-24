@@ -54,7 +54,6 @@ onMounted(async () => {
 
 const verifyTeeReport = async () => {
   const reportV = await GetTeeReport(reportHash.value)
-  console.log(reportV)
   report.value = reportV
 }
 
