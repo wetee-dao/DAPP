@@ -3,9 +3,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, toRefs, watch } from "vue";
+import { defineComponent } from "vue";
 // @ts-ignore
-import Identicon from "../utils/identicon/identicon.js";
+import Identicon from "@/utils/identicon/identicon.js";
 
 export default defineComponent({
   name: "identicon",

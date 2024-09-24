@@ -199,4 +199,4 @@ const resetChart = () => {
     padding: 10Px;
   }
 }
-</style>@/apis/detail
+</style>

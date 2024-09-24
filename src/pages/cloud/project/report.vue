@@ -11,7 +11,7 @@
           </el-button>
         </div>
         <div class="body" v-if="report != null">
-          <div class="body-item">TEE TYPE<span></span> {{ TEEType[report.report.TeeType] }}</div>
+          <div class="body-item">TEE TYPE<span></span> {{ TEEType[report.param.TeeType] }}</div>
           <div class="body-item">Report Time<span></span> {{ dateTime(report.param.Time) }}</div>
           <div class="body-item">Report Signer<span></span> {{ report.param.Address }}</div>
           <div class="body-item">Code Signature<span></span> {{ report.report.CodeSignature }}</div>
@@ -122,4 +122,4 @@ const dateTime = (value: any) => {
     }
   }
 }
-</style>@/apis/detail
+</style>

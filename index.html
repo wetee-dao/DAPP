@@ -8,14 +8,22 @@
   <title>WeTEE APP</title>
   <script src="/config/apps.js"></script>
   <style>
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+      /* //禁止用户复制黏贴 */
+      /* // user-select: none; */
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    }
     html.dark {
       --g-primary-bg: #10110f;
       --g-secondary-bg: #141512;
       --g-primary-text: #50fa82;
       --g-secondary-text: #ffffffd2;
 
-      --g-primary-bg-rgb: 15, 15, 15;
-      --g-secondary-bg-rgb: 19, 19, 19;
+      --g-primary-bg-rgb: 16, 17, 15;
+      --g-secondary-bg-rgb: 20, 21, 18;
       --g-primary-text-rgb: 80, 250, 130;
       --g-secondary-text-rgb: 255, 255, 255;
     }
@@ -48,14 +56,29 @@
       background-color: var(--g-primary-bg);
     }
 
-    .loader-logo {
+    #loader{
       position: absolute;
-      top: calc(50vh - 40px);
-      width: 60px;
-      height: 60px;
-      left: calc(50vw - 35px);
+      top: calc(50vh - 50Px);
+      left: calc(50vw - 150Px);
+      text-align: center;
+      display: flex;
+    }
+
+    .loader-logo {
+      width: 60Px;
+      height: 60Px;
       color: var(--g-primary-text);
       font-size: 30px;
+      position: relative;
+      left: -6px;
+    }
+
+    .loading-text{
+      margin-left: 10Px;
+      font-size: 28Px;
+      font-weight: bold;
+      line-height: 56Px;
+      color: rgba(var(--g-primary-text-rgb), 0.7);
     }
 
     .loader-logo:before,
@@ -114,7 +137,10 @@
 
 <body>
   <div id="mainApp"></div>
-  <div id="loader" class="loader-logo"></div>
+  <div id="loader">
+    <div class="loader-logo"></div>
+    <div class="loading-text">Connecting to WeTEE</div>
+  </div>
   <script type="module" src="/src/main.ts"></script>
 </body>
 

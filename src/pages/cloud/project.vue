@@ -59,7 +59,7 @@
         <el-button size="large" plain @click="AddPop()">
           <el-icon class="el-icon--left">
             <Plus />
-          </el-icon>&nbsp;New
+          </el-icon>&nbsp;New  
         </el-button>
         <el-button size="large" plain @click="SettingPop()">
           <el-icon class="el-icon--left">
@@ -118,7 +118,7 @@ const events = ref<any[]>([]);
 const currentProject = ref<any>(null);
 const tag = ref("metrics");
 const pid = route.params.id.toString();
-const iconStatus = ref<any>({
+const iconStatus = ref<Record<number, string>>({
   0: "&#xe60b;",
   1: "&#xe60b;",
   2: "&#xe623;",
@@ -126,19 +126,19 @@ const iconStatus = ref<any>({
   4: "&#xe60b;",
 });
 
-const eventStatus = ref<any>({
+const eventStatus = ref<Record<string, string>>({
   "start": "&#xe64d;",
   "stop": "&#xe641;",
   "work_contract_updated": "&#xe62a;",
 });
 
-const eventMsg = ref<any>({
+const eventMsg = ref<Record<string, string>>({
   "start": "start",
   "stop": "stop",
-  "work_contract_updated": "verify work",
+  "work_contract_updated": "work verified",
 });
 
-const textStatus = ref<any>({
+const textStatus = ref<Record<number, string>>({
   0: "waiting",
   1: "deploying",
   2: "stoped",

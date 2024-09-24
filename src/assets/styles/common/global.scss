@@ -3,17 +3,6 @@
   align-items: center;
 }
 
-
-html,
-body {
-  height: 100%;
-  width: 100%;
-  /* //禁止用户复制黏贴 */
-  /* // user-select: none; */
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-  // font-family: 'Montserrat',PingFang SC, HarmonyOS_Regular, Helvetica Neue, Microsoft YaHei, sans-serif !important;
-}
-
 body {
   -webkit-overflow-scrolling: touch;
 }
