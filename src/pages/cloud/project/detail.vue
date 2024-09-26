@@ -91,6 +91,7 @@ onMounted(() => {
   }
   if (item.Type == "INK") {
     inkInfo.value = item
+    loader.value = 2
   }else{
     GetTEEInfo(item)
   }

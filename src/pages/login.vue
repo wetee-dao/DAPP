@@ -6,9 +6,7 @@
           <Logo :showName="true" />
         </div>
         <div class="login-img-desc">
-          Secure and easy Computational power. Utilizing decentralized trusted
-          computing power in a cloud-like manner, providing hardware-level
-          security assurance for Web3 applications and DeAI.
+          WeTEE provides 100% decentralized trusted computing power. All Web2 applications can be deployed to a decentralized privacy computing environment without modifying code and at zero cost. WeTEE offers highly secure off-chain computation solutions, saving 90% of off-chain computation development costs
         </div>
       </div>
       <div class="login-right-box">

@@ -54,7 +54,7 @@
               <i class="icon">&#xe6bc;</i>
               BaseSetting
             </div>
-            <div class="form-context-box">
+            <div class="form-context-box" v-show="curContainer == 0">
               <div class="form-sub-title">TEE type &nbsp;<span class="sgx-warning">{{ form.teeVersion == "SGX"?"Notice: SGX only supports Ego and Gramine":"" }}</span></div>
               <div class="form-input-box">
                 <el-select v-model="form.teeVersion" placeholder="Select tee version">
