@@ -16,7 +16,7 @@
           <Metrics :info="info" :clusterInfo="clusterInfo" />
         </el-tab-pane>
         <el-tab-pane label="Log" name="log" lazy>
-          <Log :info="info" :clusterInfo="clusterInfo" />
+          <Log :activeName="activeName" :info="info" :clusterInfo="clusterInfo" />
         </el-tab-pane>
         <el-tab-pane label="TEE report" name="sgxReport" lazy>
           <Report :info="info" :service="service" :clusterInfo="clusterInfo" />

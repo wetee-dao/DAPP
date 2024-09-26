@@ -9,9 +9,9 @@ import { AbiMessageParam } from '@polkadot/api-contract/types';
 import { onMounted, ref, shallowRef, watch } from 'vue';
 import Input from './Input.vue';
 import Bool from './Bool.vue';
-// import { AddressSelect } from './account/Select';
+import InputAccount from './InputAccount.vue';
 // import { Enum } from './Enum';
-// import { InputBalance } from './InputBalance';
+import InputBalance from './InputBalance.vue';
 import InputNumber from './InputNumber.vue';
 import InputBytes from './InputBytes.vue';
 import InputHash from './InputHash.vue';
@@ -125,12 +125,12 @@ const renderSubComponent = () => {
   // }
 
   switch (type.type) {
-    // case 'AccountId':
-    // case 'Address':
-    //   return AddressSelect;
+    case 'AccountId':
+    case 'Address':
+      return InputAccount;
 
-    // case 'Balance':
-    //   return InputBalance;
+    case 'Balance':
+      return InputBalance;
 
     case 'Hash':
       return InputHash;

@@ -6,7 +6,7 @@
     <div id="log">
       <div class="log-item" v-for="item in log" :key="item.BlockNumber">
         <div class="log-texts">
-          <div class="log-text"  v-for="l in item.Logs" v-html="l"></div>
+          <div class="log-text" v-for="l in item.Logs" v-html="l"></div>
         </div>
         <div class="log-block">
           <span># {{ item.BlockNumber }}</span>
@@ -17,14 +17,22 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 import { AnsiUp } from 'ansi_up';
 import { GetLogs } from '@/apis/detail';
 import { scrollToBottom } from '@/utils/dom';
 
-const props = defineProps(["info","clusterInfo"])
+const props = defineProps(["info", "clusterInfo", "activeName"])
 const info = ref<any>(props.info)
 const log = ref<any>(null)
+
+watch(() => props.activeName, (newValue, oldValue) => {
+  if (newValue == "log") {
+    nextTick(() => {
+      scrollToBottom("#project-detail-tabs .el-tabs__content")
+    })
+  }
+})
 
 onMounted(() => {
   GetLogs(props.clusterInfo.id, info.value).then((res: any) => {
@@ -66,7 +74,7 @@ onMounted(() => {
       overflow-x: auto;
     }
 
-    .log-text{
+    .log-text {
       word-break: break-all;
       overflow: hidden;
       font-size: 14px;

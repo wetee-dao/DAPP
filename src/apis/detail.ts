@@ -9,7 +9,7 @@ export async function GetLogs(cluster: number, c: any) {
 				work_type: "`+ c.Type + `",
 				work_id: `+ c.Nid + `,
 				page: 1,
-				size: 60,
+				size: 10,
 			)
     }
   `
