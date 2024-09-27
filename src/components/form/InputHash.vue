@@ -1,5 +1,5 @@
 <template>
-  <el-input placeholder="input string or hex" :model-value="inputValue" @input="onInput">
+  <el-input :disabled="props.disabled" placeholder="type: string or hex" :model-value="inputValue" @input="onInput">
     <template #prepend>{{ props.arg.name || props.arg.label }}</template>
   </el-input>
 </template>
@@ -8,7 +8,7 @@
 import { inject, ref, watch } from 'vue';
 const wetee: any = inject('wetee')
 
-const props = defineProps(["arg", "value"])
+const props = defineProps(["arg","value","disabled"])
 const emit = defineEmits(['input'])
 const inputValue = ref<any>(props.value)
 const api = wetee().client;

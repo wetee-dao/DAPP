@@ -2,6 +2,7 @@
   <el-select 
     :placeholder="'Select '+props.arg.type.type"
     :model-value="value"
+    :disabled="props.disabled"
     @change="onInput"
   >
     <el-option label="True" :value="true"/>
@@ -17,7 +18,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 
-const props = defineProps(["arg","value"])
+const props = defineProps(["arg","value","disabled"])
 const emit = defineEmits(['input'])
 const value = ref<any>(props.value)
 watch(() => props.value, (val) => {
@@ -28,13 +29,13 @@ const onInput = (value:any) => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .label{
-  // background-color: red;
-  width: 53px;
-  text-align: center;
+  text-align: left;
   border-right: 3px solid rgba($color: $secondary-text-rgb, $alpha: 0.2);
-  margin: -18px 0 -18px -18px;
+  margin: -18px 0 -18px 0px;
+  padding-left: 8px;
+  padding-right: 19px;
   height: 42px;
   line-height: 42px;
 }

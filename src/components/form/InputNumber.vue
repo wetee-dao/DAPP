@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-input :placeholder="'input '+props.arg.type.type" 
+    <el-input :disabled="props.disabled" :placeholder="'type: '+props.arg.type.type" 
       :model-value="value"
       @input="onInput"
     >
@@ -11,10 +11,10 @@
 </template>
 
 <script setup lang="ts">
-import { BN } from '@polkadot/util';
+import { BN, nToU8a } from '@polkadot/util';
 import { ref, watch } from 'vue';
 
-const props = defineProps(["arg","value"])
+const props = defineProps(["arg","value","disabled"])
 const emit = defineEmits(['input'])
 const value = ref<any>(props.value)
 const errmsg = ref('')
@@ -31,6 +31,36 @@ const onInput = (val:any) => {
     emit('input',undefined)
     return;
   }
+
+  let n = new BN(val)
+  console.log(props.arg.type.type)
+  if (props.arg.type.type.includes('u32')) {
+    if (n.gtn(4294967295)) {
+      errmsg.value = "Invalid u32 input";
+      value.value = '';
+      emit('input',undefined)
+      return;
+    }
+  }
+  
+  if (props.arg.type.type.includes('u8')) {
+    if (n.gtn(255)) {
+      errmsg.value = "Invalid u8 input";
+      value.value = ""
+      emit('input',undefined)
+      return;
+    }
+  }
+  
+  if (props.arg.type.type.includes('u16')) {
+    if (n.gtn(65535)) {
+      errmsg.value = "Invalid input";
+      value.value = '';
+      emit('input',undefined)
+      return;
+    }
+  }
+  
   errmsg.value = '';
   value.value = val
 

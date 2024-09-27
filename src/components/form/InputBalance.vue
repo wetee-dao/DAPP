@@ -1,34 +1,53 @@
 <template>
-    <el-input placeholder="input string or hex" :model-value="inputValue" @input="onInput">
-      <template #prepend>{{ props.arg.name || props.arg.label }}</template>
-    </el-input>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref, watch } from 'vue';
-  
-  const props = defineProps(["arg", "value"])
-  const emit = defineEmits(['input'])
-  const inputValue = ref<any>(props.value)
-  
-  const onInput = (value: any) => {
-    inputValue.value = value
-    const { isValid, message } = validate(value);
-    if (!isValid) {
-      return;
-    }
-    emit('input', value)
+  <el-input :disabled="props.disabled" placeholder="type: balance" :model-value="inputValue" @input="onInput">
+    <template #prepend>{{ props.arg.name || props.arg.label }}</template>
+  </el-input>
+  <div v-if="errmsg" class="arg-form-item__error">{{ errmsg }}</div>
+</template>
+
+<script setup lang="ts">
+import { fromBalance, fromSats, toBalance } from '@/utils/bn';
+import { ApiPromise } from '@polkadot/api';
+import { BN, BN_ZERO } from '@polkadot/util';
+import { ref, watch, inject } from 'vue';
+const wetee: any = inject('wetee')
+
+const props = defineProps(["arg","value","disabled"])
+const emit = defineEmits(['input'])
+const errmsg = ref('')
+const inputValue = ref<any>(props.value)
+const api = wetee().client;
+export type OrFalsy<T> = T | null | undefined;
+
+const onInput = (value: any) => {
+  const val = value;
+  const isValid = isNumber(val);
+  if (!isValid) {
+    errmsg.value = "Invalid input";
+    value.value = '';
+    emit('input',undefined)
+    return;
   }
   
-  const isHexRegex = /^0x[A-F0-9]+$/i;
-  const validate = (value: string) => {
-    if (!isHexRegex.test(value)) {
-      return { isValid: false, message: 'Not a valid hex string' };
-    }
-  
-    return {
-      isValid: true,
-      message: '',
-    };
+  if (val.length < 26) {
+    const bn = toBalance(api, val);
+    emit('input', bn)
+    inputValue.value = getStringValue(api, bn);
+  }else{
+    inputValue.value = val
   }
-  </script>
+}
+
+function isNumber(value:string) {
+  return /^[1-9]\d*$/.test(value);
+}
+
+function getStringValue(api: ApiPromise, value: OrFalsy<BN>) {
+  if (!value) {
+    return '';
+  }
+
+  return fromBalance(fromSats(api, value || BN_ZERO));
+}
+
+</script>

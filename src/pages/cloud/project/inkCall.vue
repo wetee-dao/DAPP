@@ -165,7 +165,7 @@ const formatMessageMethod = (c: any) => {
   let args = ""
   for (let i = 0; i < c.args.length; i++) {
     const arg = c.args[i];
-    args += (arg as any).name + ':' + arg.type.type
+    args += (arg as any).name
     if (i != c.args.length - 1) {
       args += ','
     }
