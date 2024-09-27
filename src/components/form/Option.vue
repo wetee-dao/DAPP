@@ -11,8 +11,8 @@
             v-model="bool"
             size="large"
             inline-prompt
-            style="--el-switch-on-color: #13ce66; --el-switch-off-color: #ff4949"
-            active-text="enable "
+            style="--el-switch-on-color: #233e2f;"
+            active-text=" enable "
             inactive-text="disable"
         />
     </div>
@@ -29,7 +29,7 @@ const emit = defineEmits(['input'])
 const arg: AbiMessageParam = props.arg
 const cname = shallowRef<any>(null)
 const value = ref<any>(props.value)
-const bool = ref(true)
+const bool = ref(false)
 
 watch(() => bool.value, (val) => {
     if (!val) {
@@ -47,8 +47,7 @@ watch(() => props.value, (val) => {
 })
 
 onMounted(() => {
-    // @ts-ignore
-    cname.value = renderSubComponent(arg.type.sub!)
+    emit('input', null)
 })
 
 const onInput = (val: any) => {
@@ -58,20 +57,30 @@ const onInput = (val: any) => {
 <style lang="scss" scoped>
 .option {
     display: flex;
-    align-items: baseline;
+    align-items: start;
     .input{
         flex: 1;
-        margin-right: 10px;
+        // margin-right: 10px;
     }
     .switch{
-        opacity: 0.6;
-        height: 40px;
+        margin-left: -4px;
+        margin-top: 3px;
         :deep(.el-switch__core){
-            height: 45px;
-            border-radius: 8px;
+            height: 48px;
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            border-top-left-radius: 2px;
+            border-bottom-left-radius: 2px;
             .el-switch__action{
-                border-radius: 8px;
-                height: 40px;
+                height: 25px;
+                background-color: transparent;
+                &::before{
+                    content: " ";
+                    background-color: var(--el-color-white);
+                    height: 100%;
+                    width: 70%;
+                    border-radius: 5px;
+                }
             }
         }
     }

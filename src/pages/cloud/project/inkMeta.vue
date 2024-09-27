@@ -17,7 +17,7 @@
             <div class="abi">
                 <span>{{ item.label }}(</span>
                 <span v-for="(arg, index) in item.args">
-                    {{ arg.label }}: {{ arg.type.displayName[0] }}
+                    {{ arg.label }}: {{ arg.type.displayName[0] }}{{ index==item.args.length-1 ? "" : ", " }}
                 </span>
                 <span>)</span>&nbsp;&nbsp;
                 <el-icon class="database" v-if="item.mutates">

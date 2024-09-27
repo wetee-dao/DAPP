@@ -1,11 +1,15 @@
 import { ApiPromise } from "@polkadot/api";
 import { BN } from "@polkadot/util";
 
+export const BN_ZERO = new BN(0);
+export const BN_TEN = new BN(10);
+
 export function isNumber(value: unknown): value is number {
     return typeof value === 'number';
 }
-
-export const BN_TEN = new BN(10);
+export function isBn(value: unknown): value is typeof BN_ZERO {
+    return BN.isBN(value);
+}
 
 export function toSats(api: ApiPromise, balance: BN | number): BN {
     let bn: BN;
