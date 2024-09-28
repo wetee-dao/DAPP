@@ -42,8 +42,8 @@
           <div style="display: flex; align-items: center">
             <div class="header-user-img">
               <Identicon :hash="ss58toHex(user.addr)" :padding="0.1"
-                :foreground="theme == 'dark' ? [80, 250, 130, 255] : [21, 132, 54, 255]"
-                :background="[80, 255, 130, 0]" :size="16" />
+                :foreground="theme == 'dark' ? [80, 250, 130, 255] : [21, 132, 54, 255]" :background="[80, 255, 130, 0]"
+                :size="16" />
             </div>
             <div class="header-user-info">
               <div class="header-user-name">
@@ -72,11 +72,11 @@
   <NavList v-show="menuShow && isShow" @closeClick="closeClick" />
   <div class="logo-bg" v-show="isShow" :showName="true">
     <div class="header-logo" @click="home">
-        <Logo />
-      </div>
-      <div class="cur-service">
-        {{ LogoText }}
-      </div>
+      <Logo />
+    </div>
+    <!-- <div class="cur-service">
+      {{ LogoText }}
+    </div> -->
   </div>
 </template>
 
@@ -128,7 +128,7 @@ const computePath = async (p: string) => {
 
   if (ps[0] == "project") {
     LogoText.value = "Cloud"
-  }else if (ps[0] == "miner") {
+  } else if (ps[0] == "miner") {
     LogoText.value = "Miner"
   }
 
@@ -169,7 +169,7 @@ const home = () => {
 const nextOut = () => {
   let theme = window.localStorage.getItem("theme");
   window.localStorage.clear();
-  window.localStorage.setItem("theme",theme||"dark")
+  window.localStorage.setItem("theme", theme || "dark")
   router.push("/login");
 };
 
@@ -204,8 +204,9 @@ const setTheme = (t: string) => {
 
 .header-logo {
   height: 24px;
-  margin-left: 25px;
-  margin-right: 4px;
+  margin-left: 20px;
+  margin-right: 10px;
+  position: relative;
 }
 
 .header-space {
@@ -237,10 +238,9 @@ const setTheme = (t: string) => {
   text-transform: uppercase;
   margin-left: -5px;
   font-size: 24px;
-  font-weight: bold;
   height: 22px;
   line-height: 22px;
-  color: $primary-text;
+  color: rgba($primary-text-rgb, 0.9);
 
   .select-icon {
     font-size: 14px;
@@ -431,19 +431,10 @@ const setTheme = (t: string) => {
 
 .logo-bg {
   position: fixed !important;
-  top: 23px !important;
-  left: 34px !important;
+  top: 24px !important;
+  left: 0px !important;
   display: flex;
   align-items: flex-end;
   transform: scale(1.3);
-  .header-logo{
-    margin-left: 5px;
-  }
-}
-
-@media screen and (max-width: 450px) {
-  .logo-bg {
-    left: 22px !important;
-  }
 }
 </style>

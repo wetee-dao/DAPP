@@ -10,9 +10,10 @@
             :strokeColor="theme == 'dark' ? [0, 0, 0, 225] : [255, 255, 255, 150]" :padding="0.2"
             :hash="ss58toHex(item.Nid)" />
           <div class="title">
-            {{ item.Nid }}
+            {{ item.Abi.contract.name }}
             <div class="code">
-              <i class="icon">&#xe663;</i> {{ item.Abi.contract.name }}
+              <!-- <i class="icon">&#xe663;</i> -->
+              {{ item.Nid }}
             </div>
           </div>
         </div>
@@ -20,7 +21,7 @@
           <p>{{ item.Name }}</p>
           <p>
             <i class="icon">&#xf18e;</i>
-          <div class="text" :alt="item.Image">{{ shortImage(item.Image) }}</div>
+            <div class="text" :alt="item.Image">{{ shortImage(item.Image) }}</div>
           </p>
           <div class="ssd-box" v-if="item.Cr.disk.length > 0">
             <el-tooltip v-for="(disk, index) in item.Cr.disk" effect="light" placement="top-start"

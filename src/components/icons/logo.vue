@@ -1,33 +1,16 @@
 <template>
-    <svg class="logo-icon" :style="'border-radius: ' + radius + 'px;'" :viewBox="showName ? '0 0 132 29' : '0 0 29 29'" version="1.1"
-        xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-        <title>logo</title>
-        <g id="home" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <g id="Dashboard" transform="translate(-82.000000, -24.000000)" fill="#50FA82" fill-rule="nonzero">
-                <g id="header" transform="translate(0.000000, -2.000000)">
-                    <g id="编组-2" transform="translate(82.000000, 26.000000)">
-                        <g v-show="showName" id="ETEE" transform="translate(39.134957, 4.260000)">
-                            <path
-                                d="M0,0 L19.8803478,0 L19.8803478,2.64 L2.64,2.64 L2.64,21.12 L19.8803478,21.12 L19.8803478,23.76 L0,23.76 L0,0 Z M3.60417391,10.56 L19.8573913,10.56 L19.8573913,13.2 L5.14226087,13.2 L3.60417391,10.56 Z"
-                                id="形状"></path>
-                            <polygon id="路径"
-                                points="24.1273043 2.64 24.1273043 0 43.9158261 0 42.3777391 2.64 35.330087 2.64 35.330087 23.76 32.690087 23.76 32.690087 2.64">
-                            </polygon>
-                            <path
-                                d="M48.2546087,0 L68.1349565,0 L68.1349565,2.64 L50.8946087,2.64 L50.8946087,21.12 L68.1349565,21.12 L68.1349565,23.76 L48.2546087,23.76 L48.2546087,0 Z M51.8587826,10.56 L68.112,10.56 L68.112,13.2 L53.3968696,13.2 L51.8587826,10.56 Z"
-                                id="形状"></path>
-                            <path
-                                d="M72.3130435,0 L92.1933913,0 L92.1933913,2.64 L74.9530435,2.64 L74.9530435,21.12 L92.1933913,21.12 L92.1933913,23.76 L72.3130435,23.76 L72.3130435,0 Z M75.9172174,10.56 L92.1704348,10.56 L92.1704348,13.2 L77.4553043,13.2 L75.9172174,10.56 Z"
-                                id="形状"></path>
+    <svg class="logo-icon" viewBox="0 0 570 383" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="画板" transform="translate(-417.000000, -526.000000)" fill="#50FA82">
+                <g id="dtc-logo" transform="translate(202.000000, 231.000000)">
+                    <g id="logo" transform="translate(215.000000, 295.000000)">
+                        <g id="dc" transform="translate(1.000000, 28.000000)" fill-rule="nonzero">
+                            <path d="M474.65,282 L402,282 L402,354.65 L474.65,354.65 L474.65,282 Z M380.51,94 L307.86,94 L307.86,166.65 L380.51,166.65 L380.51,94 Z M380.37,187.65 L307.72,187.65 L307.72,260.65 L380.37,260.65 L380.37,187.65 Z M380.37,282.65 L307.72,282.65 L307.72,325.65 L380.37,325.65 L380.37,282.65 Z M568.94,0 L496.29,0 L496.29,72.65 L568.94,72.65 L568.94,0 Z M568.65,282.24 L496,282.24 L496,354.89 L568.65,354.89 L568.65,282.24 Z M380.51,0.24 L307.86,0.24 L307.86,72.89 L380.51,72.89 L380.51,0.24 Z M474.51,0.47 L401.86,0.47 L401.86,73.12 L474.51,73.12 L474.51,0.47 Z" id="形状"></path>
+                            <path d="M72.8,188 L0.15,188 L0.15,260.65 L72.8,260.65 L72.8,188 Z M166.65,282 L94,282 L94,354.65 L166.65,354.65 L166.65,282 Z M260.51,188 L187.86,188 L187.86,260.65 L260.51,260.65 L260.51,188 Z M260.37,282 L187.72,282 L187.72,323 L260.37,323 L260.37,282 Z M72.94,0 L0.29,0 L0.29,72.65 L72.94,72.65 L72.94,0 Z M72.8,94.24 L0.15,94.24 L0.15,166.89 L72.8,166.89 L72.8,94.24 Z M72.65,282.24 L0,282.24 L0,354.89 L72.65,354.89 L72.65,282.24 Z M260.51,94.24 L187.86,94.24 L187.86,166.89 L260.51,166.89 L260.51,94.24 Z M260.51,0.24 L187.86,0.24 L187.86,72.89 L260.51,72.89 L260.51,0.24 Z M166.51,0.47 L93.86,0.47 L93.86,73.12 L166.51,73.12 L166.51,0.47 Z" id="形状"></path>
                         </g>
-                        <g id="编组">
-                            <polygon id="路径-2" opacity="0.666480655"
-                                points="22.9182073 17.1632653 25.2627451 19.4875696 22.7445378 21.8979592 20.4 19.831911">
-                            </polygon>
-                            <polygon id="三角形" points="2.73867811e-17 15.3877551 16.4117647 29 0 29"></polygon>
-                            <polygon id="路径"
-                                points="0 0 7.25981776e-16 10.6278409 20.637883 29 31 29 31 14.0880682 23.0557103 21.5028409 20.896936 19.4431818 31 9.5568182 31 0.247159091 15.5431755 14.5">
-                            </polygon>
+                        <g id="T">
+                            <rect id="矩形" x="285" y="1" width="4" height="382"></rect>
+                            <rect id="矩形" x="0" y="0" width="569" height="3"></rect>
                         </g>
                     </g>
                 </g>
@@ -37,11 +20,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+// import { ref } from 'vue';
 
-const props = defineProps(["showName","radius"])
-const showName = ref(props.showName)
-const radius = ref(props.radius)
+// const props = defineProps(["showName","radius"])
+// const showName = ref(props.showName)
+// const radius = ref(props.radius)
 </script>
 
 <style lang='scss' scoped>
@@ -49,7 +32,7 @@ const radius = ref(props.radius)
     display: inline-block;
     height: 100%;
     position: relative;
-    top: -2px;
+    top: -1px;
 
     path {
         fill: $primary-text;

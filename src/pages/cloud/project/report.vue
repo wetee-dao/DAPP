@@ -116,16 +116,16 @@ const dateTime = (value: any) => {
       }
 
       .report-data {
+        word-break: break-all;
+        padding: 10px 0;
+        line-height: 20px;
+        color: rgba($primary-text-rgb, $alpha: 0.3);
         .report-title{
           display: block;
           font-size: 14px;
           margin: 10px 0 0 0;
           color: $secondary-text;
         }
-        word-break: break-all;
-        padding: 10px 0;
-        line-height: 20px;
-        color: rgba($primary-text-rgb, $alpha: 0.3);
       }
     }
   }
