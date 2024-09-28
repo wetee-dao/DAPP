@@ -20,7 +20,7 @@ const value = ref<any>(props.value)
 const errmsg = ref('')
 
 function isNumber(value:string) {
-  return /^[1-9]\d*$/.test(value);
+  return value=="0" || /^[1-9]\d*$/.test(value);
 }
 
 const onInput = (val:any) => {

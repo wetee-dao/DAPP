@@ -36,7 +36,7 @@ const onInput = (value:any) => {
   margin: -18px 0 -18px 0px;
   padding-left: 8px;
   padding-right: 19px;
-  height: 42px;
-  line-height: 42px;
+  height: 100%;
+  line-height: 41px;
 }
 </style>

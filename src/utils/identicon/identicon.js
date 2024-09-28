@@ -17,6 +17,7 @@ var Identicon = function (hash, options) {
 
     this.defaults = {
         background: [240, 240, 240, 255],
+        strokeColor: [240, 240, 240, 255],
         margin: 0.08,
         size: 64,
         saturation: 0.7,
@@ -34,6 +35,7 @@ var Identicon = function (hash, options) {
 
     this.hash = hash
     this.background = this.options.background || this.defaults.background;
+    this.strokeColor = this.options.strokeColor || this.defaults.strokeColor;
     this.size = this.options.size || this.defaults.size;
     this.format = this.options.format || this.defaults.format;
     this.margin = this.options.margin !== undefined ? this.options.margin : this.defaults.margin;
@@ -58,7 +60,7 @@ Identicon.prototype = {
     format: null,
 
     image: function () {
-        return new Svg(this.size, this.radius, this.stroke, this.foreground, this.background)
+        return new Svg(this.size, this.radius, this.stroke, this.foreground, this.background, this.strokeColor)
     },
 
     render: function () {
@@ -135,12 +137,13 @@ Identicon.prototype = {
     }
 };
 
-var Svg = function (size, radius, stroke, foreground, background) {
+var Svg = function (size, radius, stroke, foreground, background, strokeColor) {
     this.size = size;
     this.stroke = stroke;
     this.radius = radius;
     this.foreground = this.color.apply(this, foreground);
     this.background = this.color.apply(this, background);
+    this.strokeColor = strokeColor;
     this.rectangles = [];
 };
 
@@ -170,7 +173,8 @@ Svg.prototype = {
 
         let strokeStr = "";
         if (stroke > 0) {
-            strokeStr = "stroke:" + bg + "; stroke-width:" + stroke + "; ";
+            let sbg = "rgba(" + this.strokeColor[0] + "," + this.strokeColor[1] + "," + this.strokeColor[2] + ")"
+            strokeStr = "stroke:" + sbg + "; stroke-width:" + stroke + "; stroke-opacity: "+this.strokeColor[3]/255+";";
         }
 
         let radiuStr = "";

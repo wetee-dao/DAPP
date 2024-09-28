@@ -5,9 +5,10 @@
         :class="(currentProject != null && item.Id == currentProject.Id) ? 'pod active' : 'pod'"
         @click="OpenDetail(item, '')" @click.right.native="showPenu($event, item)">
         <div class="contact" v-if="item.Type == 'INK'">
-          <Identicon class="identicon" :stroke="2"
+          <Identicon class="identicon" :stroke="0.1"
             :foreground="theme == 'dark' ? [80, 250, 130, 255] : [21, 132, 54, 255]" :background="[255, 255, 255, 0]"
-            :padding="0.2" :hash="ss58toHex(item.Nid)" />
+            :strokeColor="theme == 'dark' ? [0, 0, 0, 225] : [255, 255, 255, 150]" :padding="0.2"
+            :hash="ss58toHex(item.Nid)" />
           <div class="title">
             {{ item.Nid }}
             <div class="code">
@@ -59,7 +60,7 @@
         <el-button size="large" plain @click="AddPop()">
           <el-icon class="el-icon--left">
             <Plus />
-          </el-icon>&nbsp;New  
+          </el-icon>&nbsp;New
         </el-button>
         <el-button size="large" plain @click="SettingPop()">
           <el-icon class="el-icon--left">

@@ -20,11 +20,15 @@
 
 <script setup lang="ts">
 import { AbiMessageParam } from '@polkadot/api-contract/types';
-import { onMounted, ref, shallowRef, watch } from 'vue';
+import { inject, onMounted, ref, shallowRef, watch } from 'vue';
 import { renderSubComponent } from './utils';
+import { getInitValue } from '@/utils/initValue';
+import { TypeDef } from '@polkadot/types/types';
 
 const props = defineProps(["arg", "value"])
 const emit = defineEmits(['input'])
+const wetee: any = inject('wetee')
+const api = wetee().client;
 
 const arg: AbiMessageParam = props.arg
 const cname = shallowRef<any>(null)
@@ -38,7 +42,9 @@ watch(() => bool.value, (val) => {
     }else{
         // @ts-ignore
         cname.value = renderSubComponent(arg.type.sub!)
-        emit('input', value.value)
+        let v = getInitValue(api, [], arg.type.sub! as TypeDef)
+        value.value = v
+        emit('input', v)
     }
 })
 
@@ -66,7 +72,7 @@ const onInput = (val: any) => {
         margin-left: -4px;
         margin-top: 3px;
         :deep(.el-switch__core){
-            height: 48px;
+            height: 46px;
             border-top-right-radius: 6px;
             border-bottom-right-radius: 6px;
             border-top-left-radius: 2px;

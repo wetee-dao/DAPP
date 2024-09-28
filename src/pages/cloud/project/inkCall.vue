@@ -332,7 +332,7 @@ const onSubmit = async () => {
 
       &>::after {
         content: ' ';
-        width: 20px;
+        width: 19px;
         height: 2px;
         background-color: rgba($color: $secondary-text-rgb, $alpha: 0.2);
         left: -20px;
@@ -343,17 +343,17 @@ const onSubmit = async () => {
       &>::before {
         content: ' ';
         width: 2px;
-        height: 54px;
+        height: calc(100% + 10px);
         background-color: rgba($color: $secondary-text-rgb, $alpha: 0.2);
         left: -20px;
-        top: -32px;
+        top: -32.5px;
         position: absolute;
       }
     }
 
     .first-arg {
       &>::before {
-        height: 32px;
+        height: 33px;
         top: -10px;
       }
     }

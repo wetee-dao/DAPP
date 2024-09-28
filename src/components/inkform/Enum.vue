@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { TypeDef } from '@polkadot/types/types';
-import { inject, ref, shallowRef, watch } from 'vue';
+import { inject, ref, shallowRef } from 'vue';
 import { renderSubComponent } from './utils';
 import { getInitValue } from '@/utils/initValue';
 
@@ -41,7 +41,7 @@ const onInput = (index: any) => {
         emit('input', {[subs[index].name as string]: null})
     }else{
         farg.value = {
-            name: "status",
+            name: "->",
             type: subs[index],
         }
         let v = getInitValue(api, [], subs[index] as TypeDef)
@@ -65,8 +65,8 @@ const onFInput = (v: any) => {
     margin: -18px 0 -18px 0px;
     padding-left: 8px;
     padding-right: 19px;
-    height: 42px;
-    line-height: 42px;
+    height: 40px;
+    line-height: 40px;
 }
 
 .enum{

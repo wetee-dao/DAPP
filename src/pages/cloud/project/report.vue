@@ -16,7 +16,10 @@
           <div class="body-item">Report Signer<span></span> {{ report.param.Address }}</div>
           <div class="body-item">Code Signature<span></span> {{ report.report.CodeSignature }}</div>
           <div class="body-item">Code Signer<span></span> {{ report.report.CodeSigner }}</div>
-          <div class="report-data">Report Body<span></span> {{ report.param.Report }}</div>
+          <div class="report-data">
+            <span class="report-title">Report Body:</span>
+            <div class="body-item">{{ report.param.Report }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -113,6 +116,12 @@ const dateTime = (value: any) => {
       }
 
       .report-data {
+        .report-title{
+          display: block;
+          font-size: 14px;
+          margin: 10px 0 0 0;
+          color: $secondary-text;
+        }
         word-break: break-all;
         padding: 10px 0;
         line-height: 20px;

@@ -5,8 +5,9 @@
         @click="GotoProject(item)">
         <div class="projectItem">
           <div class="dataImg">
-            <Identicon class="identicon" :stroke="2"
+            <Identicon class="identicon" :stroke="0.2"
               :foreground="theme == 'dark' ? [80, 250, 130, 255] : [21, 132, 54, 255]" :background="[255, 255, 255, 0]"
+              :strokeColor="theme == 'dark' ? [0, 0, 0, 100]:[255, 255, 255, 100]"
               :padding="0.28" :hash="ss58toIcon(item)" />
           </div>
           <div class="dataText">
