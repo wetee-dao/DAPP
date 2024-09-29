@@ -21,7 +21,9 @@
         <el-tab-pane label="TEE report" name="sgxReport" lazy>
           <Report :info="info" :service="service" :clusterInfo="clusterInfo" />
         </el-tab-pane>
-        <el-tab-pane label="Settings" name="settings" lazy></el-tab-pane>
+        <el-tab-pane label="Settings" name="settings" lazy>
+          <TEESetting :info="info" :clusterInfo="clusterInfo" />
+        </el-tab-pane>
       </el-tabs>
     </div>
     <div v-if="loader==2" class="box" :key="info.Id">
@@ -47,6 +49,7 @@ import Report from "./report.vue"
 import Log from "./log.vue"
 import InkCall from "./inkCall.vue"
 import InkMeta from "./inkMeta.vue"
+import TEESetting from "./teeSetting.vue";
 import loadingBox from "@/components/loading-box.vue";
 
 const props = defineProps(["info", "openTag", "close"])

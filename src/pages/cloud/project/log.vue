@@ -51,7 +51,7 @@ onMounted(() => {
 })
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 .log-box {
   padding: 10px 42px;
 

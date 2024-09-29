@@ -183,9 +183,7 @@ const resetChart = () => {
 }
 </script>
 
-<style lang='scss'>
-
-
+<style lang='scss' scoped>
 .metrics-box {
   padding: 10px 42px;
 

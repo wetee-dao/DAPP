@@ -5,9 +5,9 @@
         :class="(currentProject != null && item.Id == currentProject.Id) ? 'pod active' : 'pod'"
         @click="OpenDetail(item, '')" @click.right.native="showPenu($event, item)">
         <div class="contact" v-if="item.Type == 'INK'">
-          <Identicon class="identicon" :stroke="0.1"
+          <Identicon :key="theme+item.Id" class="identicon" :stroke="0.1"
             :foreground="theme == 'dark' ? [80, 250, 130, 255] : [21, 132, 54, 255]" :background="[255, 255, 255, 0]"
-            :strokeColor="theme == 'dark' ? [0, 0, 0, 225] : [255, 255, 255, 150]" :padding="0.2"
+            :strokeColor="theme == 'dark' ? [0, 0, 0, 225] : [255, 255, 255, 220]" :padding="0.2"
             :hash="ss58toHex(item.Nid)" />
           <div class="title">
             {{ item.Abi.contract.name }}
@@ -95,7 +95,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, nextTick, onMounted, onUnmounted, ref } from "vue";
+import { inject, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { Setting, Plus } from '@element-plus/icons-vue'
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
@@ -110,7 +110,6 @@ import { ss58toHex } from "@/utils/chain";
 const global = useGlobelProperties()
 const wetee: any = inject('wetee')
 const projectid = getUrlParams("project_id");
-const theme = ref(document.documentElement.getAttribute("class"));
 
 const router = useRouter();
 const route = useRoute();
@@ -120,6 +119,11 @@ const events = ref<any[]>([]);
 const currentProject = ref<any>(null);
 const tag = ref("metrics");
 const pid = route.params.id.toString();
+const theme = ref(store.state.theme);
+watch(() => store.state.theme, (newVal, _) => {
+  theme.value = newVal
+})
+
 const iconStatus = ref<Record<number, string>>({
   0: "&#xe60b;",
   1: "&#xe60b;",

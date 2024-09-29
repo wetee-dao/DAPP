@@ -183,7 +183,7 @@ Svg.prototype = {
         }
 
         xml = "<svg xmlns='http://www.w3.org/2000/svg'"
-            + " width='" + this.size + "' height='" + this.size + "'"
+            + " viewBox='0 0 "+this.size+" "+this.size+"'"
             + " style='background-color:" + bg + ";'>"
             + "<g style='fill:" + fg + "; " + strokeStr + "'>";
 

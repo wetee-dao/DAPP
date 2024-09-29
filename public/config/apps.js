@@ -1,4 +1,4 @@
-var theme = localStorage.getItem("theme") || "dark"
+const theme = localStorage.getItem("theme") || "dark"
 document.documentElement.setAttribute("class", theme)
 
 window.apps = [

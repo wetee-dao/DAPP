@@ -1,38 +1,41 @@
 <template>
-    <div class="loading-box" >
-        <div class="loader">
-            <div class="loader-logo"></div>
-            <div class="text">{{ title }}</div>
-        </div>
+    <div class="loading-box">
+        <div class="loader"></div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps,ref } from "vue";
-const props = defineProps(["title"])
-const title = ref(props.title || "Loading");
 </script>
 
-<style lang='scss'>
-.loading-box{
+<style lang='scss' scoped>
+.loading-box {
     width: 100%;
     height: 100%;
-    .loader{
-        margin: 35vh auto auto auto;
-        display: flex;
-        justify-content: center;
-        .loader-logo{
-            position: relative;
-            top: 0;
-            left: 0;
-        }
-        .text{
-            text-align: center;
-            color: rgba($primary-text-rgb, 0.6) ;
-            font-size: 22px;
-            font-weight: 600;
-            margin-left: 20px;
-            line-height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .loader {
+        width: fit-content;
+        font-family: "letter-font",Serif;
+        font-size: 20px;
+        background: linear-gradient(90deg, rgba($secondary-text-rgb, 0.05) 50%, #0000 0) right/200% 100%;
+        animation: l21 2s infinite linear;
+        height: 45px;
+        line-height: 45px;
+    }
+
+    .loader::before {
+        content: "Loading...";
+        color: $primary-text;
+        padding: 0 5px;
+        -webkit-background-clip: text;
+        background-clip: text;
+    }
+
+    @keyframes l21 {
+        100% {
+            background-position: left
         }
     }
 }

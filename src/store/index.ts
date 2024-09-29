@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 let userInfo = {}
 let keypair: any = {}
 let token: string = "";
+let theme: string = "";
 if (window.localStorage.getItem("userInfo")) {
   userInfo = JSON.parse(window.localStorage.getItem("userInfo") || "{}")
 }
@@ -11,12 +12,16 @@ if (window.localStorage.getItem("keypair")) {
 if (window.localStorage.getItem("token")) {
   token = window.localStorage.getItem("token") || "";
 }
+if (window.localStorage.getItem("theme")) {
+  theme = window.localStorage.getItem("theme") || "";
+}
 
 export default createStore({
   state: {
     currentPath: '',
     userInfo: userInfo,
     token: token,
+    theme: theme,
     account: [],
     isLoginShow: false,
     keypair: keypair,
@@ -27,6 +32,9 @@ export default createStore({
     // 第二个参数：组件中commit传入的第二个参数
     setPath(state, payload) {
       state.currentPath = payload
+    },
+    setTheme(state, payload) {
+      state.theme = payload
     },
     setToken(state, payload) {
       state.token = payload
@@ -78,6 +86,10 @@ export default createStore({
       window.localStorage.setItem("keypair", JSON.stringify(keypair));
       context.commit('setKeypair', keypair)
     },
+    setTheme(context, param) {
+      window.localStorage.setItem("theme", param);
+      context.commit('setTheme', param)
+    }
   },
   modules: {
   }

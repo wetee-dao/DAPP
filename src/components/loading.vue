@@ -10,10 +10,10 @@
 <script setup lang="ts">
 import { defineProps,ref } from "vue";
 const props = defineProps(["params"])
-const title = ref(props.params.title || "Send transaction to WeTEE chain");
+const title = ref(props.params.title || "Send transaction to chain");
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 .loading-box{
     position: fixed;
     top: 0;
@@ -26,6 +26,7 @@ const title = ref(props.params.title || "Send transaction to WeTEE chain");
         margin: 35vh auto auto auto;
         display: flex;
         justify-content: center;
+        font-family: "letter-font",Serif;
         .loader-logo{
             position: relative;
             top: 0;

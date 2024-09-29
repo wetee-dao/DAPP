@@ -39,13 +39,13 @@ const props = defineProps(["inkInfo"])
 const spec = ref<any>(props.inkInfo.Abi.spec)
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 .meta-box {
     padding-bottom: 20px;
 
     .meta-item {
         background-color: rgba($secondary-text-rgb, 0.03);
-        margin: 20px 45px 0px 45px;
+        margin: 20px 43px 0px 43px;
         border-radius: 4px;
     }
 

@@ -29,7 +29,6 @@
       <div :class="theme == 'light' ? 'active' : ''" @click="setTheme('light')"><i class="icon select-icon">&#xe6bd;</i>
       </div>
     </div>
-
     <div class="header-box flex network-box">
       <div class="node-name">MAIN
         <Network class="network" />
@@ -41,8 +40,11 @@
         <div class="header-user-box flex">
           <div style="display: flex; align-items: center">
             <div class="header-user-img">
-              <Identicon :hash="ss58toHex(user.addr)" :padding="0.1"
-                :foreground="theme == 'dark' ? [80, 250, 130, 255] : [21, 132, 54, 255]" :background="[80, 255, 130, 0]"
+              <Identicon :key="theme" :hash="ss58toHex(user.addr)" :padding="0.1"
+                :foreground="theme == 'dark' ? [80, 250, 130, 255] : [21, 132, 54, 255]"
+                :background="[80, 255, 130, 0]"
+                :strokeColor="theme == 'dark' ? [0, 0, 0, 225] : [255, 255, 255, 220]" 
+                :stroke="0.2"
                 :size="16" />
             </div>
             <div class="header-user-info">
@@ -99,9 +101,12 @@ const isFirst = ref(true);
 const pkey = ref(0);
 const user = ref(store.state.userInfo);
 const isShow = ref(store.state.currentPath != "/login");
-const theme = ref(document.documentElement.getAttribute("class"));
+const theme = ref(store.state.theme);
 const paths = ref<any[]>([]);
 const LogoText = ref("");
+watch(() => store.state.theme, (newVal, _) => {
+  theme.value = newVal
+})
 
 // 计算路径
 const computePath = async (p: string) => {
@@ -174,9 +179,8 @@ const nextOut = () => {
 };
 
 const setTheme = (t: string) => {
+  store.dispatch("setTheme", t);
   document.documentElement.setAttribute("class", t);
-  theme.value = t;
-  window.localStorage.setItem("theme", t);
 };
 </script>
 
@@ -218,6 +222,7 @@ const setTheme = (t: string) => {
   display: flex;
   align-items: center;
   cursor: pointer;
+  border-right: 2px solid rgba($secondary-text-rgb, 0.03);
 }
 
 .header-box {
@@ -236,15 +241,16 @@ const setTheme = (t: string) => {
   align-items: center;
   text-align: center;
   text-transform: uppercase;
-  margin-left: -5px;
+  margin-left: -3px;
+  margin-right: 3px;
   font-size: 24px;
   height: 22px;
   line-height: 22px;
-  color: rgba($primary-text-rgb, 0.9);
+  color: rgba($primary-text-rgb, 1);
 
   .select-icon {
     font-size: 14px;
-    line-height: 12px;
+    line-height: 14px;
     display: flex;
     height: 12px;
     margin-left: 4px;

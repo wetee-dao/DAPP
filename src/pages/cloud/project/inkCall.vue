@@ -263,7 +263,7 @@ const onSubmit = async () => {
 }
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 .play-box {
   padding-bottom: 20px;
 

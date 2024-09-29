@@ -8,6 +8,13 @@
   <title>DTC DAPP</title>
   <script src="/config/apps.js"></script>
   <style>
+    @font-face {
+      font-family: "letter-font";
+      src: url('/fonts/DatDot-Light.woff2') format('woff2'),
+           url('/fonts/DatDot-Light.woff') format('woff'),
+           url('/fonts/DatDot-Light.ttf') format('truetype');
+    }
+    
     html,
     body {
       height: 100%;
@@ -16,6 +23,7 @@
       /* // user-select: none; */
       font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     }
+    
     html.dark {
       --g-primary-bg: #10110f;
       --g-secondary-bg: #141512;
@@ -78,7 +86,8 @@
       font-size: 28Px;
       font-weight: bold;
       line-height: 56Px;
-      color: rgba(var(--g-primary-text-rgb), 0.3);
+      color: rgba(var(--g-primary-text-rgb), 1);
+      font-family: "letter-font",Serif;
     }
 
     .loader-logo:before,

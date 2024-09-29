@@ -65,7 +65,7 @@ const dateTime = (value: any) => {
 };
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
 .report-box {
   padding: 10px 42px;
 

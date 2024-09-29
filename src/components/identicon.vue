@@ -1,6 +1,6 @@
 <template>
-  <img class="identicon" :src="'data:image/svg+xml;base64,' + data" />
-  <!-- <div v-html="data" /> -->
+  <!-- <img class="identicon" :src="'data:image/svg+xml;base64,' + data" /> -->
+  <div class="identicon" v-html="data" />
 </template>
 
 <script lang="ts">
@@ -23,7 +23,7 @@ export default defineComponent({
       stroke: props.stroke ?? 0,
     };
 
-    let data = new Identicon(props.hash, options).toString(false);
+    let data = new Identicon(props.hash, options).toString(true);
     return {
       data,
     };
@@ -34,5 +34,10 @@ export default defineComponent({
 <style scoped>
 .identicon {
   height: 100%;
+  width: 100%;
+  svg{
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
