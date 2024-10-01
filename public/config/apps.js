@@ -103,23 +103,23 @@ const temps = [
             {
                 "name": "SSL Proxy",
                 "port": [
-                    { "key": "Tcp", "value": 443 },
+                    { "key": "Tcp", "value": 433 },
                 ],
                 "env": [
                     { "key": "TO", "value": "127.0.0.1:7860" },
                     { "key": "KEY", "value": "{{.gen_ssl}}" },
-                    { "key": "PORT", "value": "443" },
+                    { "key": "PORT", "value": "433" },
                 ],
             },
             {
                 "name": "SSL Proxy",
                 "port": [
-                    { "key": "Tcp", "value": 433 },
+                    { "key": "Tcp", "value": 443 },
                 ],
                 "env": [
                     { "key": "TO", "value": "127.0.0.1:3000" },
                     { "key": "KEY", "value": "{{.gen_ssl}}" },
-                    { "key": "PORT", "value": "433" },
+                    { "key": "PORT", "value": "443" },
                 ],
             },
         ]

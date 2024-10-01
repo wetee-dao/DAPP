@@ -1,11 +1,10 @@
 <template>
-    <div class="setting-box">
-        
-    </div>
+    <Service/>
 </template>
 
 <script setup lang="ts">
 import { inject, onMounted, ref } from 'vue';
+import Service from "./teeUpdate/service.vue"
 
 import useGlobelProperties from "@/store/globel";
 const props = defineProps(["info"])
@@ -20,13 +19,10 @@ onMounted(() => {
         accountData.value = res.toHuman().data
     })
 })
-
-
 </script>
 
 <style lang='scss' scoped>
 .setting-box {
-    padding: 10px 42px;
-
+    
 }
 </style>

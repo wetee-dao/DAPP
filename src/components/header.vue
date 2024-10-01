@@ -222,7 +222,7 @@ const setTheme = (t: string) => {
   display: flex;
   align-items: center;
   cursor: pointer;
-  border-right: 2px solid rgba($secondary-text-rgb, 0.03);
+  // border-right: 2px solid rgba($secondary-text-rgb, 0.03);
 }
 
 .header-box {

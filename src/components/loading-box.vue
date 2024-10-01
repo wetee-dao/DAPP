@@ -19,10 +19,12 @@
         width: fit-content;
         font-family: "letter-font",Serif;
         font-size: 20px;
-        background: linear-gradient(90deg, rgba($secondary-text-rgb, 0.05) 50%, #0000 0) right/200% 100%;
+        letter-spacing: 5px;
+        background: linear-gradient(90deg, rgba($secondary-text-rgb, 0.04) 50%, #0000 0) right/200% 100%;
         animation: l21 2s infinite linear;
-        height: 45px;
-        line-height: 45px;
+        height: 50px;
+        line-height: 50px;
+        padding: 0 5px;
     }
 
     .loader::before {

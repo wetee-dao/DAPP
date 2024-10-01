@@ -1,10 +1,12 @@
 import { createApp, defineAsyncComponent } from "vue"
+import AddPop from '../pages/pop/addPop.vue'
+import LoadingBox from '../components/loading.vue'
+import ProjectMenu from '../pages/pop/projectMenu.vue'
 
 export default {
   install: function (app: any) {
     app.config.globalProperties.$AddPop = (router: Object, store: Object, close: Function) => {
-      const c = defineAsyncComponent(() => import('../pages/pop/addPop.vue'));
-      return openPop(app, router, store, c, "addPop", {}, close)
+      return openPop(app, router, store, AddPop, "addPop", {}, close)
     };
 
     app.config.globalProperties.$AddService = (router: Object, store: Object, close: Function) => {
@@ -38,20 +40,17 @@ export default {
     };
 
     app.config.globalProperties.$OpenProjectMenu = (router: Object, store: Object, event: MouseEvent, item: any, close: Function) => {
-      const c = defineAsyncComponent(() => import('../pages/pop/projectMenu.vue'));
-      return openPop(app, router, store, c, "projectSetting", { "event": event, "item": item }, close)
+      return openPop(app, router, store, ProjectMenu, "projectSetting", { "event": event, "item": item }, close)
     };
 
     app.config.globalProperties.$Loading = (router: Object, store: Object, ps:any, close: Function) => {
-      const c = defineAsyncComponent(() => import('../components/loading.vue'));
-      return openPop(app, router, store, c, "Loading", ps, close)
+      return openPop(app, router, store, LoadingBox, "Loading", ps, close)
     };
   }
 }
 
 export const Loading = (title:string|null): any => {
-  const c = defineAsyncComponent(() => import('../components/loading.vue'));
-  return openPop(null, {}, {}, c, "xLoading", {title:title}, () => {
+  return openPop(null, {}, {}, LoadingBox, "xLoading", {title:title}, () => {
 
   })
 };
@@ -84,6 +83,7 @@ function openPop(app: any, router: Object, store: Object, pop: any, popid: strin
     document.body.removeChild(div)
     delete pops[popid]
   };
+  
   let message = createApp(pop, {
     close: closeFn,
     router,
@@ -91,6 +91,7 @@ function openPop(app: any, router: Object, store: Object, pop: any, popid: strin
     app,
     params
   })
+  
   div.id = popid
   document.body.appendChild(div)
   messageInstance = message.mount("#" + popid)

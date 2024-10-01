@@ -278,6 +278,7 @@ const getList = async (projectId: string) => {
       Name: item.name,
       Image: item.image,
       StartBlock: item.startBlock,
+      SideContainer: item.sideContainer,
       Status: parseInt(item.status),
     });
   });
@@ -296,6 +297,7 @@ const getList = async (projectId: string) => {
       Name: item.name,
       Image: item.image,
       StartBlock: item.startBlock,
+      SideContainer: item.sideContainer,
       Status: parseInt(item.status),
     });
   });

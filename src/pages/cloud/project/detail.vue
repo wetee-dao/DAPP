@@ -3,14 +3,15 @@
     <div class="title">
       {{ info.Name }} <span>{{ workType[info.Type as string] }} &nbsp;#{{ info.Nid }}</span>
       <span :key="ser.id" v-for="ser in service.filter(s => s.Type == 'NodePort')">
-        <a target="_blank" :key="port.NodePort" :href="'http://' + ddns + ':' + port.NodePort + ''" class="service"
+        <a target="_blank" :key="port.NodePort"
+          :href="(port.Port == 443 ? 'https://' : 'http://') + ddns + ':' + port.NodePort" class="service"
           v-for="port in ser.Ports" v-show="port.Port != 65535">
           Server: {{ port.Port }}({{ port.Protocol }})
         </a>
       </span>
       <i class="icon right" @click="closeClick">&#xe604;</i>
     </div>
-    <div v-if="loader==1" class="box" :key="info.Id">
+    <div v-if="loader == 1" class="box" :key="info.Id">
       <el-tabs v-model="activeName" id="project-detail-tabs" class="tabs" @tab-click="handleClick">
         <el-tab-pane label="Metrics" name="metrics" lazy>
           <Metrics :info="info" :clusterInfo="clusterInfo" />
@@ -26,7 +27,7 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div v-if="loader==2" class="box" :key="info.Id">
+    <div v-if="loader == 2" class="box" :key="info.Id">
       <el-tabs v-model="activeName" id="project-ink-tabs" class="tabs" @tab-click="handleClick">
         <el-tab-pane label="Ink! contract meta" name="inkMeta" lazy>
           <InkMeta :inkInfo="inkInfo" />
@@ -36,7 +37,7 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <loadingBox class="loader-wrapper" v-if="loader==0"/>
+    <loadingBox class="loader-wrapper" v-if="loader == 0" />
   </div>
 </template>
 
@@ -72,6 +73,7 @@ watch(() => props.info, (val: any, oldVal: any) => {
   if (val.Nid != oldVal.Nid) {
     info.value = val
     loader.value = 0
+    console.log(info)
     GetInfo(val)
   }
 })
@@ -95,7 +97,7 @@ onMounted(() => {
   if (item.Type == "INK") {
     inkInfo.value = item
     loader.value = 2
-  }else{
+  } else {
     GetTEEInfo(item)
   }
 })
@@ -204,7 +206,7 @@ const GetTEEInfo = async (item: any) => {
   }
 }
 
-.loader-wrapper{
+.loader-wrapper {
   margin-top: 20px;
   border-top: 2px solid rgba($gray-bg, 0.1);
 }
@@ -249,5 +251,9 @@ const GetTEEInfo = async (item: any) => {
   .content {
     flex: 1;
   }
+}
+
+:deep(#pane-settings) {
+  height: 100%;
 }
 </style>
