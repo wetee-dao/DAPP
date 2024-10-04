@@ -1,38 +1,3 @@
-const theme = localStorage.getItem("theme") || "dark"
-document.documentElement.setAttribute("class", theme)
-
-window.apps = [
-    // {
-    //   name: 'app_chain', // app name registered
-    //   entry: 'http://baas-api.tc.asyou.me:31003/',
-    //   container: '#subview',
-    //   activeRule: '/app_chain',
-    //   props: {
-    //     routerBase: "/app_chain",
-    //     // globalState: initialState,
-    //   },
-    // },
-    // {
-    //   name: 'app_contract',
-    //   entry: 'http://asyoume-contract-ui.oss-cn-hangzhou.aliyuncs.com/',
-    //   container: '#subview',
-    //   activeRule: '/app_contract',
-    //   props: {
-    //     routerBase: "/app_contract",
-    //   },
-    // }
-]
-
-window.config = {
-    uri: 'http://192.168.111.105:9085/baas_api/v1',
-    _uri: 'http://baas-api.tc.asyou.me/graphql',
-    logo: "./img/logo.svg",
-    login_bg: "",
-    login_bg_style: "background-color:rgb(10, 18, 36);background-position: center;background-size: 1300px;background-repeat: no-repeat;",
-    header_bg: "http://www.asyou.me/custom/temp/images/dao3.png?x-oss-process=image/resize,h_250,m_lfit",
-    header_bg_style: "background-position: left center;background-size: 362px;background-repeat: no-repeat;background-color: rgb(5 5 5);",
-}
-
 const temps = [
     {
         "name": "Hummingbot",
