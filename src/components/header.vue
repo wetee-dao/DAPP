@@ -13,8 +13,8 @@
         <Logo />
       </div>
       <div class="cur-service">
-        {{ LogoText }}
-        <i class="icon select-icon">&#xe809;</i>
+        <div>{{ LogoText }}</div>
+        <i class="icon select-icon">&#xe600;</i>
       </div>
     </div>
 
@@ -76,9 +76,9 @@
     <div class="header-logo" @click="home">
       <Logo />
     </div>
-    <!-- <div class="cur-service">
-      {{ LogoText }}
-    </div> -->
+    <div class="cur-service">
+      {{ LogoText }} <div class="block">I</div>
+    </div>
   </div>
 </template>
 
@@ -207,10 +207,8 @@ const setTheme = (t: string) => {
 }
 
 .header-logo {
-  height: 24px;
-  margin-left: 20px;
-  margin-right: 10px;
-  position: relative;
+  height: 23px;
+  margin-left: 24px;
 }
 
 .header-space {
@@ -222,7 +220,7 @@ const setTheme = (t: string) => {
   display: flex;
   align-items: center;
   cursor: pointer;
-  // border-right: 2px solid rgba($secondary-text-rgb, 0.03);
+  border-right: 2px solid rgba($secondary-text-rgb, 0.03);
 }
 
 .header-box {
@@ -239,21 +237,22 @@ const setTheme = (t: string) => {
   display: flex;
   flex-direction: row;
   align-items: center;
-  text-align: center;
   text-transform: uppercase;
-  margin-left: -3px;
+  margin-left: 1px;
   margin-right: 3px;
-  font-size: 24px;
-  height: 22px;
-  line-height: 22px;
+  font-size: 27px;
+  font-family: "pixel-font";
+  letter-spacing: 2px;
   color: rgba($primary-text-rgb, 1);
 
   .select-icon {
-    font-size: 14px;
-    line-height: 14px;
+    font-size: 19px;
+    line-height: 33px;
+    height: 30px;
     display: flex;
-    height: 12px;
-    margin-left: 4px;
+    fill: $primary-text;
+    margin-left: -3px;
+    display: block;
   }
 }
 
@@ -339,7 +338,6 @@ const setTheme = (t: string) => {
   font-size: 14px;
   line-height: 12px;
   font-family: monospace;
-  // text-transform: uppercase;
   word-break: break-all;
 }
 
@@ -401,7 +399,6 @@ const setTheme = (t: string) => {
 
 @media screen and (max-width: 992px) {
   .header-box {
-    // justify-content: center;
     max-width: 288px;
     flex: none;
   }
@@ -437,10 +434,18 @@ const setTheme = (t: string) => {
 
 .logo-bg {
   position: fixed !important;
-  top: 24px !important;
-  left: 0px !important;
+  top: 19px !important;
+  left: 6px !important;
   display: flex;
-  align-items: flex-end;
-  transform: scale(1.3);
+  align-items: center;
+  transform: scale(1.18);
+  height: 34px;
+  .cur-service{
+    letter-spacing: -2px;
+    align-items: center;
+  }
+  .block{
+    margin-left: 4px;
+  }
 }
 </style>

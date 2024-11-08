@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" href="/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DTC DAPP</title>
+  <title>WeTEE Cloud</title>
   <script>
     const theme = localStorage.getItem("theme") || "dark"
     document.documentElement.setAttribute("class", theme)
@@ -18,6 +18,12 @@
            url('/fonts/DatDot-Light.woff') format('woff'),
            url('/fonts/DatDot-Light.ttf') format('truetype');
     }
+
+    @font-face {
+      font-family: "pixel-font";
+      src: url('/fonts/fusion-pixel-10px-monospaced-zh_hans.woff2') format('woff2'),
+           url('/fonts/fusion-pixel-10px-monospaced-zh_hans.ttf') format('truetype');
+    }
     
     html,
     body {
@@ -26,7 +32,7 @@
       overflow: hidden;
       /* //禁止用户复制黏贴 */
       /* // user-select: none; */
-      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji","Ubuntu";
     }
     
     html.dark {
@@ -67,6 +73,7 @@
       background-size: 1.5rem 1.5rem;
       background-position: 50%;
       background-color: var(--g-primary-bg);
+      color: var(--g-primary-text);
     }
 
     #loader{
@@ -87,12 +94,12 @@
     }
 
     .loading-text{
-      margin-left: 10Px;
       font-size: 28Px;
       font-weight: bold;
-      line-height: 56Px;
+      line-height: 1;
       color: rgba(var(--g-primary-text-rgb), 1);
       font-family: "letter-font",Serif;
+      width: 180Px;
     }
 
     .loader-logo:before,
