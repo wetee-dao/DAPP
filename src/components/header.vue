@@ -207,7 +207,7 @@ const setTheme = (t: string) => {
 }
 
 .header-logo {
-  height: 23px;
+  height: 20px;
   margin-left: 24px;
 }
 
@@ -220,7 +220,7 @@ const setTheme = (t: string) => {
   display: flex;
   align-items: center;
   cursor: pointer;
-  border-right: 2px solid rgba($secondary-text-rgb, 0.03);
+  // border-right: 2px solid rgba($secondary-text-rgb, 0.03);
 }
 
 .header-box {
@@ -240,14 +240,15 @@ const setTheme = (t: string) => {
   text-transform: uppercase;
   margin-left: 1px;
   margin-right: 3px;
-  font-size: 27px;
+  font-size: 24px;
   font-family: "pixel-font";
+  font-weight: bold;
   letter-spacing: 2px;
   color: rgba($primary-text-rgb, 1);
 
   .select-icon {
-    font-size: 19px;
-    line-height: 33px;
+    font-size: 18px;
+    line-height: 32px;
     height: 30px;
     display: flex;
     fill: $primary-text;

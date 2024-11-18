@@ -103,13 +103,13 @@ const contracts = ref<any[]>([]);
 const crs = ref<any[]>([]);
 
 const getClusters = async (user: string) => {
-  const cList = await wetee().client.query.weTEEWorker.k8sClusters.entries();
+  const cList = await wetee().client.query.worker.k8sClusters.entries();
   let cs: any[] = [];
   cList.forEach((c: any) => {
     cs.push(c[1].toHuman());
   });
 
-  const crList = await wetee().client.query.weTEEWorker.crs.entries();
+  const crList = await wetee().client.query.worker.crs.entries();
   let crsCur: any[] = [];
   crList.forEach((c: any) => {
     crsCur.push(c[1].toHuman());
@@ -117,7 +117,7 @@ const getClusters = async (user: string) => {
 
   let contractCur: any[] = [];
   for (let i = 0; i < cList.length; i++) {
-    const contractWrap = await wetee().client.query.weTEEWorker.clusterContracts.entries(cs[i].id);
+    const contractWrap = await wetee().client.query.worker.clusterContracts.entries(cs[i].id);
     let  clusterContracts = []
     for (let j = 0; j < contractWrap.length; j++) {
       clusterContracts.push(contractWrap[j][1].toHuman())

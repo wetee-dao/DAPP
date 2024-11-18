@@ -51,7 +51,7 @@ onMounted(async () => {
   const ty = wetee().client.createType('WorkType', info.value.Type);
   const wid = { id: info.value.Nid, wtype: ty }
 
-  const reportC = await wetee().client.query.weTEEWorker.reportOfWork(wid)
+  const reportC = await wetee().client.query.worker.reportOfWork(wid)
   reportHash.value = reportC.toHuman()
 })
 

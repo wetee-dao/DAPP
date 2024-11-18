@@ -102,7 +102,7 @@ onMounted(() => {
       }
     })
   } else {
-    wetee().client.query.weTEEWorker.proofsOfWork.entries(wid).then((res: any) => {
+    wetee().client.query.worker.proofsOfWork.entries(wid).then((res: any) => {
       let labels: string[] = []
       let cpuData: number[] = []
       let memData: number[] = []

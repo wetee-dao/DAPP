@@ -36,20 +36,20 @@
     }
     
     html.dark {
-      --g-primary-bg: #10110f;
-      --g-secondary-bg: #141512;
+      --g-primary-bg: #040406;
+      --g-secondary-bg: #121212;
       --g-primary-text: #50fa82;
       --g-secondary-text: #ffffffd2;
 
-      --g-primary-bg-rgb: 16, 17, 15;
-      --g-secondary-bg-rgb: 20, 21, 18;
+      --g-primary-bg-rgb: 4, 4, 6;
+      --g-secondary-bg-rgb: 18, 18, 18;
       --g-primary-text-rgb: 80, 250, 130;
       --g-secondary-text-rgb: 255, 255, 255;
     }
 
     html.dark body {
-      background-image: linear-gradient(90deg, rgba(var(--g-secondary-text-rgb), 0.02) 3%, transparent 0),
-        linear-gradient(rgba(var(--g-secondary-text-rgb), 0.02) 3%, transparent 0);
+      background-image: linear-gradient(90deg, rgba(var(--g-secondary-text-rgb), 0.04) 3%, transparent 0),
+        linear-gradient(rgba(var(--g-secondary-text-rgb), 0.04) 3%, transparent 0);
     }
 
     html.light {
@@ -70,8 +70,8 @@
     }
 
     body {
+      background-position: 0 0;
       background-size: 1.5rem 1.5rem;
-      background-position: 50%;
       background-color: var(--g-primary-bg);
       color: var(--g-primary-text);
     }

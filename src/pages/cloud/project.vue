@@ -187,7 +187,7 @@ const showPenu = (e: MouseEvent, item: any) => {
       case "stop":
         const sty = wetee().client.createType('WorkType', item.Type);
         const swid = { id: item.Nid, wtype: sty }
-        const tx = wetee().client.tx.weTEEWorker.workStop(swid)
+        const tx = wetee().client.tx.worker.workStop(swid)
         await chain.ProxySignAndSend(tx, projectid, signer, () => {
           ElNotification({
             title: 'Notice',
@@ -203,11 +203,11 @@ const showPenu = (e: MouseEvent, item: any) => {
         const wid = { id: item.Nid, wtype: ty }
         let txre = null
         if (item.Type == "APP") {
-          txre = wetee().client.tx.weTEEApp.restart(wid.id)
+          txre = wetee().client.tx.app.restart(wid.id)
         } else if (item.Type == "TASK") {
-          txre = wetee().client.tx.weTEETask.rerun(wid.id)
+          txre = wetee().client.tx.task.rerun(wid.id)
         } else {
-          txre = wetee().client.tx.weTEEGpu.restart(wid.id)
+          txre = wetee().client.tx.gpu.restart(wid.id)
         }
         await chain.ProxySignAndSend(txre, projectid, signer, () => {
           ElNotification({
@@ -264,7 +264,7 @@ const getList = async (projectId: string) => {
 
   }
 
-  const gappsList = await wetee().client.query.weTEEGpu.gpuApps.entries(projectId);
+  const gappsList = await wetee().client.query.gpu.gpuApps.entries(projectId);
   gappsList.forEach((d: any) => {
     const [_, exposure] = d;
     const item = exposure.toHuman();
@@ -283,7 +283,7 @@ const getList = async (projectId: string) => {
     });
   });
 
-  const appsList = await wetee().client.query.weTEEApp.teeApps.entries(projectId);
+  const appsList = await wetee().client.query.app.teeApps.entries(projectId);
   appsList.forEach((d: any) => {
     const [_, exposure] = d;
     const item = exposure.toHuman();
@@ -302,7 +302,7 @@ const getList = async (projectId: string) => {
     });
   });
 
-  const tasksList = await wetee().client.query.weTEETask.teeTasks.entries(projectId);
+  const tasksList = await wetee().client.query.task.teeTasks.entries(projectId);
   tasksList.forEach((d: any) => {
     const [_, exposure] = d;
     const item = exposure.toHuman();

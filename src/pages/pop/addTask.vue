@@ -317,7 +317,7 @@ const toAdd = async (item: any) => {
   }
 
   try {
-    const tx = client.tx.weTEETask.create(
+    const tx = client.tx.task.create(
       form.name,
       form.image,
       "{}",

@@ -120,7 +120,7 @@ const GetInfo = async (item: any) => {
 const GetTEEInfo = async (item: any) => {
   const ty = wetee().client.createType('WorkType', item.Type);
   const wid = { id: item.Nid, wtype: ty }
-  const cidList = await wetee().client.query.weTEEWorker.workContractState.entries(wid)
+  const cidList = await wetee().client.query.worker.workContractState.entries(wid)
   const [key, _] = cidList[0];
   const cid = key.toHuman();
 

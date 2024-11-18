@@ -22,7 +22,7 @@ export const getProjectList = async (user: string, refresh: boolean = false) => 
         }
     }
 
-    const pList = await getChainClient()!.query.weTEEProject.proxyProjects.entries(user);
+    const pList = await getChainClient()!.query.project.proxyProjects.entries(user);
     let datas = [
         {
             ...deepCopy(defaultProject),

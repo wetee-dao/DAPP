@@ -352,7 +352,7 @@ const toAdd = async () => {
 
   try {
     const none = new Option(client.registry, "Vec<u8>", null);
-    const tx = client.tx.weTEEApp.create(
+    const tx = client.tx.app.create(
       mainData.name,
       mainData.image,
       "",

@@ -81,7 +81,7 @@ const toAdd = async () => {
   const signer = props.store.state.userInfo.addr;
 
   try {
-    const tx = client.tx.weTEEProject.createProxyProject(form.name,form.desc,form.deposit*Math.pow(10,client.registry.chainDecimals[0]))
+    const tx = client.tx.project.createProxyProject(form.name,form.desc,form.deposit*Math.pow(10,client.registry.chainDecimals[0]))
     await chain.SignAndSend(tx, signer, () => {
       props.close();
     }, () => {
