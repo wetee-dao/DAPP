@@ -13,7 +13,7 @@ import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 
 import GHeader from "./components/header.vue";
-import useGlobelProperties from "./store/globel";
+import useGlobelProperties from "./plugins/globel";
 import { ApiPromise, WsProvider } from "@polkadot/api";
 import { SubstrateProvider } from "./providers/substrate";
 import { ElMessage } from "element-plus";

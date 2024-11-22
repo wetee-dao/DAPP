@@ -99,7 +99,7 @@ import { inject, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { Setting, Plus } from '@element-plus/icons-vue'
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
-import useGlobelProperties from "@/store/globel";
+import useGlobelProperties from "@/plugins/globel";
 import Detail from "./project/detail.vue";
 import { ElNotification } from "element-plus";
 import { getUrlParams } from "@/utils/pop";

@@ -32,7 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-import useGlobelProperties from "@/store/globel";
+import useGlobelProperties from "@/plugins/globel";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";

@@ -85,16 +85,17 @@
 .wallet-box {
   padding: 10px 10px;
   display: inline-flex;
-  background: rgba($secondary-text-rgb, 0.04);
+  background: transparent;
   align-items: center;
   width: 196px;
   border-radius: 10px;
   margin: 8px 8px 0px auto;
   cursor: pointer;
-  border: 2px solid rgba($secondary-text-rgb, 0.04);
+  border: 2px solid rgba($secondary-text-rgb, 0.2);
 
   .wlogo {
     width: 30px;
+    height: 30px;
     display: block;
     margin-right: 10px;
   }
@@ -111,8 +112,8 @@
 }
 
 .wallet-box-disabled{
-  background-color: transparent !important;
-  border-color: rgba($secondary-text-rgb, 0.04);
+  background-color: rgba($secondary-text-rgb, 0.08) !important;
+  border-color: rgba($secondary-text-rgb, 0.08);
 }
 
 

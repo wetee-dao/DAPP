@@ -18,7 +18,7 @@
     "@polkadot/ui-shared": "^3.9.1",
     "@polkadot/util": "^13.0.2",
     "@polkadot/util-crypto": "^13.0.2",
-    "@talismn/connect-wallets": "^1.2.5",
+    "@talismn/connect-wallets": "^1.2.8",
     "ansi_up": "^6.0.2",
     "axios": "^1.6.7",
     "browser-md5-file": "^1.1.1",

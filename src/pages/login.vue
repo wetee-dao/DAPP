@@ -91,13 +91,13 @@ import { ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import { Wallet, getWallets } from "@talismn/connect-wallets/dist";
+import { Wallet, getWallets } from "@talismn/connect-wallets";
 
 import { SubstrateProvider } from "@/providers/substrate";
 import { MetaMaskProvider } from "@/providers/metamask";
 import { Metamask, setCustomChain } from "@/providers/MetaSnap";
 import { Loading } from "@/plugins/pop";
-import useGlobelProperties from "@/store/globel";
+import useGlobelProperties from "@/plugins/globel";
 import { chainUrl, checkMetaData, getMetaData } from "@/plugins/chain";
 import { ss58toHex } from "@/utils/chain";
 import { keyring, shortAddress } from "@/utils/chain";

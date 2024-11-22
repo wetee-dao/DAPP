@@ -3,7 +3,7 @@ import { Loading } from "@/plugins/pop";
 import { keyring } from "@/utils/chain";
 import { ApiPromise } from "@polkadot/api";
 import { SubmittableExtrinsic } from "@polkadot/api/types";
-import { Wallet, getWallets } from "@talismn/connect-wallets/dist";
+import { Wallet, getWallets } from "@talismn/connect-wallets";
 import store from "@/store";
 import { checkMetaData } from "@/plugins/chain";
 

@@ -6,7 +6,7 @@
 import { inject, onMounted, ref } from 'vue';
 import Service from "./teeUpdate/service.vue"
 
-import useGlobelProperties from "@/store/globel";
+import useGlobelProperties from "@/plugins/globel";
 const props = defineProps(["info"])
 
 const global = useGlobelProperties()
