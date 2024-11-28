@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getChainExt } from "@/plugins/chain";
+import { getChainExt, getHttpApi } from "@/plugins/chain";
 import { ss58toHex } from "@/utils/chain";
 
 export async function GetLogs(cluster: number, c: any) {
@@ -83,7 +83,7 @@ export async function GetClusterInfo(cluster: number) {
     return JSON.parse(clusterInfo)
   }
 
-  const info = await getChainExt()!.client.query.worker.k8sClusters(cluster)
-  window.localStorage.setItem("cluster_" + cluster, JSON.stringify(info.toHuman()))
-  return info.toHuman()
+  const info = await getHttpApi().query("worker","k8sClusters",[cluster])
+  window.localStorage.setItem("cluster_" + cluster, JSON.stringify(info))
+  return info
 }

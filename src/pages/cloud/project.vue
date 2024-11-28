@@ -106,6 +106,7 @@ import { getUrlParams } from "@/utils/pop";
 import { getContracts } from "@/apis/contract_indexer";
 import { getEvents } from "@/apis/event_indexer";
 import { ss58toHex } from "@/utils/chain";
+import { getHttpApi } from "@/plugins/chain";
 
 const global = useGlobelProperties()
 const wetee: any = inject('wetee')
@@ -264,48 +265,43 @@ const getList = async (projectId: string) => {
 
   }
 
-  const gappsList = await wetee().client.query.gpu.gpuApps.entries(projectId);
-  gappsList.forEach((d: any) => {
-    const [_, exposure] = d;
-    const item = exposure.toHuman();
+  const gappsList = await getHttpApi().entries("gpu","gpuApps",[projectId])
+  gappsList.forEach(({ keys, value }: any) => {
     appsNew.push({
-      Id: "GPU-" + item.id,
-      Nid: item.id,
+      Id: "GPU-" + value.id,
+      Nid: value.id,
       Type: "GPU",
-      Cr: item.cr,
-      ContractId: item.contractId,
-      ProjectId: item.creator,
-      Name: item.name,
-      Image: item.image,
-      StartBlock: item.startBlock,
-      SideContainer: item.sideContainer,
-      Status: parseInt(item.status),
+      Cr: value.cr,
+      ContractId: value.contractId,
+      ProjectId: value.creator,
+      Name: value.name,
+      Image: value.image,
+      StartBlock: value.startBlock,
+      SideContainer: value.sideContainer,
+      Status: parseInt(value.status),
     });
   });
 
-  const appsList = await wetee().client.query.app.teeApps.entries(projectId);
-  appsList.forEach((d: any) => {
-    const [_, exposure] = d;
-    const item = exposure.toHuman();
+  const appsList = await getHttpApi().entries("app","teeApps",[projectId])
+  appsList.forEach(({ keys, value }: any) => {
     appsNew.push({
-      Id: "APP-" + item.id,
-      Nid: item.id,
+      Id: "APP-" + value.id,
+      Nid: value.id,
       Type: "APP",
-      Cr: item.cr,
-      ContractId: item.contractId,
-      ProjectId: item.creator,
-      Name: item.name,
-      Image: item.image,
-      StartBlock: item.startBlock,
-      SideContainer: item.sideContainer,
-      Status: parseInt(item.status),
+      Cr: value.cr,
+      ContractId: value.contractId,
+      ProjectId: value.creator,
+      Name: value.name,
+      Image: value.image,
+      StartBlock: value.startBlock,
+      SideContainer: value.sideContainer,
+      Status: parseInt(value.status),
     });
   });
 
-  const tasksList = await wetee().client.query.task.teeTasks.entries(projectId);
-  tasksList.forEach((d: any) => {
-    const [_, exposure] = d;
-    const item = exposure.toHuman();
+  const tasksList = await getHttpApi().entries("task","teeTasks",[projectId])
+  tasksList.forEach(({ keys, value }: any) => {
+    const item = value;
     appsNew.push({
       Id: "TASK—" + item.id,
       Nid: item.id,

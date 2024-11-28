@@ -1,4 +1,4 @@
-import { getChainClient } from "@/plugins/chain";
+import { getChainClient, getHttpApi } from "@/plugins/chain";
 import { deepCopy } from "@/utils/object";
 import { ChainHexToString } from "@/utils/strings";
 
@@ -22,7 +22,7 @@ export const getProjectList = async (user: string, refresh: boolean = false) => 
         }
     }
 
-    const pList = await getChainClient()!.query.project.proxyProjects.entries(user);
+    const pList = await getHttpApi().entries("project","proxyProjects",[user])
     let datas = [
         {
             ...deepCopy(defaultProject),
@@ -30,14 +30,12 @@ export const getProjectList = async (user: string, refresh: boolean = false) => 
         }
     ]
 
-    pList.forEach((d: any) => {
-        const [key, exposure] = d;
-        const item = exposure.toHuman();
+    pList.forEach(({ keys, value }: any) => {
         datas.push({
-            id: key.toHuman()[1],
-            name: ChainHexToString(item.name),
-            desc: ChainHexToString(item.description),
-            addr: item.daoAccountId,
+            id: keys[1],
+            name: ChainHexToString(value.name),
+            desc: ChainHexToString(value.description),
+            addr: value.daoAccountId,
         })
     });
 

@@ -52,6 +52,7 @@ import InkCall from "./inkCall.vue"
 import InkMeta from "./inkMeta.vue"
 import TEESetting from "./teeSetting.vue";
 import loadingBox from "@/components/loading-box.vue";
+import { getHttpApi } from "@/plugins/chain";
 
 const props = defineProps(["info", "openTag", "close"])
 const activeName = ref(props.openTag ?? "")
@@ -120,18 +121,19 @@ const GetInfo = async (item: any) => {
 const GetTEEInfo = async (item: any) => {
   const ty = wetee().client.createType('WorkType', item.Type);
   const wid = { id: item.Nid, wtype: ty }
-  const cidList = await wetee().client.query.worker.workContractState.entries(wid)
-  const [key, _] = cidList[0];
-  const cid = key.toHuman();
+  const cidList = await getHttpApi().entries("worker","workContractState",[wid])
+  console.log(cidList)
+  // const {keys, _} = cidList[0];
+  // const cid = keys;
 
-  const cinfo = await GetClusterInfo(parseInt(cid[1]))
-  ddns.value = cinfo.ip[0].domain
-  clusterInfo.value = cinfo
-  loader.value = 1
+  // const cinfo = await GetClusterInfo(parseInt(cid[1]))
+  // ddns.value = cinfo.ip[0].domain
+  // clusterInfo.value = cinfo
+  // loader.value = 1
 
-  GetServices(parseInt(cid[1]), item).then((d) => {
-    service.value = d as any[]
-  })
+  // GetServices(parseInt(cid[1]), item).then((d) => {
+  //   service.value = d as any[]
+  // })
 }
 </script>
 

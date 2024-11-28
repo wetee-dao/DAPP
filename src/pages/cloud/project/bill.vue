@@ -11,17 +11,15 @@
 <script setup lang="ts">
 import { inject, onMounted, ref } from 'vue';
 
-import useGlobelProperties from "@/plugins/globel";
+import { getHttpApi } from '@/plugins/chain';
 const props = defineProps(["info"])
 
-const global = useGlobelProperties()
-const wetee: any = inject('wetee')
 const info = ref<any>(props.info)
 const accountData = ref<any>({})
 
 onMounted(() => {
-  wetee().client.query.system.account(info.value.ContractId).then((res: any) => {
-    accountData.value = res.toHuman().data
+  getHttpApi().query("system","account",[info.value.ContractId]).then((res: any) => {
+    accountData.value = res.data
   })
 })
 

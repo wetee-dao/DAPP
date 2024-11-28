@@ -289,10 +289,8 @@ const toAdd = async (item: any) => {
   if (!chain.client) {
     return;
   }
-  await chain.client.query.timestamp.now();
+  
   const client = chain.client;
-
-
   const validData = validFormArray(client, form, 0)
   if (!validData.ok) return;
 

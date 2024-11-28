@@ -148,7 +148,6 @@ const dryTry = async () => {
   const dryRunResult: any = await api.call.contractsApi.call(...params);
 
   // TODO 处理调用错误消息
-
   form.value.refTime = dryRunResult?.gasRequired.refTime.toString()
   form.value.proofSize = dryRunResult?.gasRequired.proofSize.toString()
 

@@ -37,6 +37,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import { ElNotification } from "element-plus";
+import { getHttpApi } from "@/plugins/chain";
 
 const props = defineProps(["router", "store", "close", "app"])
 
@@ -74,8 +75,6 @@ const toAdd = async () => {
     })
     return;
   }
-
-  await chain.client.query.timestamp.now();
 
   const client = chain.client;
   const signer = props.store.state.userInfo.addr;

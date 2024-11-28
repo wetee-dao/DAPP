@@ -3,12 +3,40 @@ import { base64Encode } from "@polkadot/util-crypto";
 import { getSpecTypes } from '@polkadot/types-known';
 import type { Injected, MetadataDef } from '@polkadot/extension-inject/types';
 import { formatBalance, isNumber } from "@polkadot/util";
+import axios from "axios";
+//@ts-ignore
+import qs from "qs";
 
 // 区块链链接
 let client: ApiPromise | null = null
-export let chainUrl = 'wss://xiaobai.asyou.me:30001/'
+export let chainUrl = 'wss://xiaobai.asyou.me:30001/ws'
 export let chainIndexer = 'https://xiaobai.asyou.me:30006/gql'
 export let dkgUrl = 'https://xiaobai.asyou.me:31001/gql'
+
+export let getChainHttpApi = () => {
+  return chainUrl.replace('ws', 'http').replace("ws", "")
+}
+
+const chainHttpClient = {
+  query: async (pallet: string, storageItem: string, keys: unknown[]) => {
+    const response = await axios.get(getChainHttpApi() + "pallets/" + pallet + "/storage/" + storageItem, {
+      params: { keys: keys },
+      paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
+    })
+    return response.data.value
+  },
+  entries: async (pallet: string, storageItem: string, keys: unknown[]) => {
+    const response = await axios.get(getChainHttpApi() + "pallets/" + pallet + "/storage/entries/" + storageItem, {
+      params: { keys: keys },
+      paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
+    })
+    return response.data.values
+  }
+}
+
+export const getHttpApi = () => {
+  return chainHttpClient
+}
 
 // 链对象
 let chain: any = {

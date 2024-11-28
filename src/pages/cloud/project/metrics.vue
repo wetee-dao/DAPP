@@ -19,6 +19,7 @@ import { inject, onMounted, onUnmounted, ref } from 'vue';
 import { Line } from 'vue-chartjs'
 import { debounce } from '@/utils/debounce';
 import { GetWetrics } from '@/apis/detail';
+import { getHttpApi } from '@/plugins/chain';
 const props = defineProps(["info","clusterInfo"])
 
 const wetee: any = inject('wetee')
@@ -49,111 +50,111 @@ onMounted(() => {
   const ty = wetee().client.createType('WorkType', info.value.Type);
   const wid = { id: info.value.Nid, wtype: ty }
   if (info.value.Status == 3) {
-    GetWetrics(props.clusterInfo.id, info.value).then((res: any) => {
-      let labels: string[] = []
-      let cpuData: number[] = []
-      let memData: number[] = []
+    // GetWetrics(props.clusterInfo.id, info.value).then((res: any) => {
+    //   let labels: string[] = []
+    //   let cpuData: number[] = []
+    //   let memData: number[] = []
 
-      if (res.length >= 30) {
-        res = res.slice(-30)
-      }
+    //   if (res.length >= 30) {
+    //     res = res.slice(-30)
+    //   }
 
-      for (let i = 0; i < res.length; i++) {
-        const item = res[i].Cr;
-        let cpu = 0;
-        let mem = 0;
-        for (var key in item) {
-          cpu = cpu + item[key][0]
-          mem = mem + item[key][1]
-        }
+    //   for (let i = 0; i < res.length; i++) {
+    //     const item = res[i].Cr;
+    //     let cpu = 0;
+    //     let mem = 0;
+    //     for (var key in item) {
+    //       cpu = cpu + item[key][0]
+    //       mem = mem + item[key][1]
+    //     }
 
-        labels.push(res[i].BlockNumber);
-        cpuData.push(cpu)
-        memData.push(mem / 1000)
-      }
+    //     labels.push(res[i].BlockNumber);
+    //     cpuData.push(cpu)
+    //     memData.push(mem / 1000)
+    //   }
 
-      cpu.value = {
-        labels: labels,
-        datasets: [
-          {
-            label: 'CPU(1 Unit = 1/1000 Core)',
-            borderColor: "#50fa82",
-            borderWidth: 1,
-            pointStyle: 'false',
-            backgroundColor: '#50fa82',
-            stepped: true,
-            data: cpuData
-          }
-        ]
-      }
-      mem.value = {
-        labels: labels,
-        datasets: [
-          {
-            label: 'MEM(GB)',
-            borderColor: "#b46d2e",
-            borderWidth: 1,
-            pointStyle: 'false',
-            backgroundColor: '#b46d2e',
-            stepped: true,
-            data: memData
-          }
-        ]
-      }
-    })
+    //   cpu.value = {
+    //     labels: labels,
+    //     datasets: [
+    //       {
+    //         label: 'CPU(1 Unit = 1/1000 Core)',
+    //         borderColor: "#50fa82",
+    //         borderWidth: 1,
+    //         pointStyle: 'false',
+    //         backgroundColor: '#50fa82',
+    //         stepped: true,
+    //         data: cpuData
+    //       }
+    //     ]
+    //   }
+    //   mem.value = {
+    //     labels: labels,
+    //     datasets: [
+    //       {
+    //         label: 'MEM(GB)',
+    //         borderColor: "#b46d2e",
+    //         borderWidth: 1,
+    //         pointStyle: 'false',
+    //         backgroundColor: '#b46d2e',
+    //         stepped: true,
+    //         data: memData
+    //       }
+    //     ]
+    //   }
+    // })
   } else {
-    wetee().client.query.worker.proofsOfWork.entries(wid).then((res: any) => {
-      let labels: string[] = []
-      let cpuData: number[] = []
-      let memData: number[] = []
+    getHttpApi().entries("worker","proofsOfWork",[wid]).then((res: any) => {
+      // let labels: string[] = []
+      // let cpuData: number[] = []
+      // let memData: number[] = []
 
-      res.sort((a: any, b: any) => {
-        const k = a[0].toHuman();
-        const k2 = b[0].toHuman();
-        return parseInt(k[1].replaceAll(",", "")) - parseInt(k2[1].replaceAll(",", ""));
-      });
+      // res.sort((a: any, b: any) => {
+      //   const k = a[0].toHuman();
+      //   const k2 = b[0].toHuman();
+      //   return parseInt(k[1].replaceAll(",", "")) - parseInt(k2[1].replaceAll(",", ""));
+      // });
 
-      if (res.length >= 30) {
-        res = res.slice(-30)
-      }
+      // if (res.length >= 30) {
+      //   res = res.slice(-30)
+      // }
 
-      for (let i = 0; i < res.length; i++) {
-        const [key, exposure] = res[i];
-        const k = key.toHuman();
-        const item = exposure.toHuman();
-        labels.push(k[1]);
-        cpuData.push(item.cr.cpu)
-        memData.push(item.cr.mem / 1000)
-      }
+      // for (let i = 0; i < res.length; i++) {
+      //   const [key, exposure] = res[i];
+      //   const k = key.toHuman();
+      //   const item = exposure.toHuman();
+      //   labels.push(k[1]);
+      //   cpuData.push(item.cr.cpu)
+      //   memData.push(item.cr.mem / 1000)
+      // }
       
-      cpu.value = {
-        labels: labels,
-        datasets: [
-          {
-            label: 'CPU(1 Unit = 1/1000 Core)',
-            borderColor: "#50fa82",
-            borderWidth: 1,
-            pointStyle: 'false',
-            backgroundColor: '#50fa82',
-            stepped: true,
-            data: cpuData
-          }
-        ]
-      }
-      mem.value = {
-        labels: labels,
-        datasets: [
-          {
-            label: 'MEM(GB)',
-            borderColor: "#b46d2e",
-            borderWidth: 1,
-            pointStyle: 'false',
-            backgroundColor: '#b46d2e',
-            stepped: true,
-            data: memData
-          }
-        ]
-      }
+      // cpu.value = {
+      //   labels: labels,
+      //   datasets: [
+      //     {
+      //       label: 'CPU(1 Unit = 1/1000 Core)',
+      //       borderColor: "#50fa82",
+      //       borderWidth: 1,
+      //       pointStyle: 'false',
+      //       backgroundColor: '#50fa82',
+      //       stepped: true,
+      //       data: cpuData
+      //     }
+      //   ]
+      // }
+      // mem.value = {
+      //   labels: labels,
+      //   datasets: [
+      //     {
+      //       label: 'MEM(GB)',
+      //       borderColor: "#b46d2e",
+      //       borderWidth: 1,
+      //       pointStyle: 'false',
+      //       backgroundColor: '#b46d2e',
+      //       stepped: true,
+      //       data: memData
+      //     }
+      //   ]
+      // }
     })
   }
 

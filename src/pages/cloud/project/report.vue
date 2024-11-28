@@ -30,6 +30,7 @@
 import { inject, onMounted, ref } from 'vue';
 import dayjs from "dayjs";
 import { GetTeeReport } from "@/apis/dkg";
+import { getHttpApi } from '@/plugins/chain';
 
 const props = defineProps(["info", "service", "clusterInfo"])
 const wetee: any = inject('wetee')
@@ -51,7 +52,7 @@ onMounted(async () => {
   const ty = wetee().client.createType('WorkType', info.value.Type);
   const wid = { id: info.value.Nid, wtype: ty }
 
-  const reportC = await wetee().client.query.worker.reportOfWork(wid)
+  const reportC = await getHttpApi().entries("worker","reportOfWork",[wid])
   reportHash.value = reportC.toHuman()
 })
 

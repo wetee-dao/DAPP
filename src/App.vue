@@ -2,7 +2,7 @@
   <div id="mainNav">
     <GHeader />
     <!-- 主应用入口 -->
-    <router-view v-if="inited" />
+    <router-view />
     <!-- 子应用入口 -->
     <div v-show="$route.fullPath.indexOf('app_') > -1" id="subview" />
   </div>
@@ -26,7 +26,6 @@ import { getWallets, Wallet } from "@talismn/connect-wallets";
 
 const store = useStore();
 const global = useGlobelProperties()
-const inited = ref(false);
 if (window.devicePixelRatio) {
   let scale = (window.devicePixelRatio - 1) * 1.4
   store.dispatch("setScale", (scale + 16) / 16);
@@ -37,6 +36,8 @@ if (window.devicePixelRatio) {
 }
 
 onMounted(async () => {
+  document.getElementById('loader')!.style.display = "none";
+  document.getElementById('mainApp')!.style.visibility = "visible";
   try {
     const wsProvider = new WsProvider(chainUrl);
     const api = await ApiPromise.create({
@@ -81,10 +82,6 @@ onMounted(async () => {
         }
       }
     }
-
-    inited.value = true;
-    document.getElementById('loader')!.style.display = "none";
-    document.getElementById('mainApp')!.style.visibility = "visible";
   } catch {
 
   }
