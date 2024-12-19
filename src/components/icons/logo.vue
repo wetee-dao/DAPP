@@ -25,8 +25,7 @@
     display: inline-block;
     height: 100%;
     position: relative;
-    border-radius: 3px;
-
+    
     path {
         fill: $primary-text;
     }

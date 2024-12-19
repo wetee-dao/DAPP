@@ -72,7 +72,6 @@ const active = (index: number) => {
 </script>
 
 <style lang="scss" scoped>
-
 i {
   font-style: normal;
 }

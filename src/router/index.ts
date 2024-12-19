@@ -8,7 +8,7 @@ const routes: Array<RouteRecordRaw> = [
         path: '/project',
         name: 'project',
         meta: { needLogin: true },
-        component: () => import('../pages/cloud/home.vue')
+        component: () => import('../pages/cloud/list.vue')
     },
     {
         path: '/project/:id',

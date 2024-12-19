@@ -15,7 +15,7 @@
             <p>{{ item.desc }}</p>
           </div>
         </div>
-      </el-col>
+      </el-col>      
       <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" :key="100000" @click="add()">
         <div class="projectItem add">
           <div class="dataImg gray-icon">

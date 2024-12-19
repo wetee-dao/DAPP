@@ -2,7 +2,8 @@
   <div class="service" @click="closeClick">
     <div @click="(e: any) => e.stopPropagation()">
       <div class="title">
-        <i class="icon">&#xe675;</i>Create Project
+        <!-- <i class="icon">&#xe675;</i> -->
+        Create Project
         <i class="icon right" @click="closeClick">&#xe604;</i>
       </div>
       <el-form :model="form" class="form simple-form">
