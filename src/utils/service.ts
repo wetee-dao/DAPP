@@ -14,7 +14,7 @@ export default [{
     { 
       name: "Confidential Cloud", 
       icon: "cloud",
-      url: "/project", 
+      url: "/cloud", 
     },
     { 
       name: "Confidential Miner", 

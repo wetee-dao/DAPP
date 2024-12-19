@@ -47,7 +47,7 @@ const theme = ref(document.documentElement.getAttribute("class"));
 const projects = ref<any[]>([]);
 
 const GotoProject = (item: any) => {
-  router.push("/project/" + getSS5842(item.addr) + "?project_id=" + item.id!)
+  router.push("/cloud/" + getSS5842(item.addr) + "?project_id=" + item.id!)
 };
 
 const add = () => {

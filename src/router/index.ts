@@ -3,34 +3,34 @@ import store from '../store/index'
 import _ from 'lodash';
 
 const routes: Array<RouteRecordRaw> = [
-    { path: '/', redirect: '/project' },
+    { path: '/', redirect: '/cloud' },
     {
-        path: '/project',
-        name: 'project',
+        path: '/cloud',
+        name: 'Cloud',
         meta: { needLogin: true },
         component: () => import('../pages/cloud/list.vue')
     },
     {
-        path: '/project/:id',
-        name: 'Project',
+        path: '/cloud/:id',
+        name: 'CloudDetail',
         meta: { needLogin: true },
         component: () => import('../pages/cloud/project.vue')
     },
     {
-        path: '/login',
+        path: '/utils/login',
         name: 'Login',
         component: () => import('../pages/login.vue')
     },
-    {
-        path: '/not404',
-        name: 'Not404',
-        component: () => import('../pages/cloud/not404.vue')
-    },
-    {
-        path: '/imgMask',
-        name: 'Not404',
-        component: () => import('../pages/cloud/imgMask.vue')
-    },
+    // {
+    //     path: '/not404',
+    //     name: 'Not404',
+    //     component: () => import('../pages/cloud/not404.vue')
+    // },
+    // {
+    //     path: '/imgMask',
+    //     name: 'Not404',
+    //     component: () => import('../pages/cloud/imgMask.vue')
+    // },
     {
         path: '/miner',
         name: 'Not404',
@@ -45,7 +45,7 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-    if (to.path == "/login") {
+    if (to.path == "/utils/login") {
         store.dispatch("setLoginShow", true);
     } else {
         store.dispatch("setLoginShow", false);

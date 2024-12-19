@@ -8,5 +8,5 @@ export function getUrlParams(key:string) {
 
 export function getProjectAccount() {
 	const pathString = window.location.pathname;
-	return pathString.replace("/project/","");
+	return pathString.replace("/cloud/","");
 }

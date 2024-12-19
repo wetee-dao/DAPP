@@ -100,7 +100,7 @@ const menuShow = ref(false);
 const isFirst = ref(true);
 const pkey = ref(0);
 const user = ref(store.state.userInfo);
-const isShow = ref(store.state.currentPath != "/login");
+const isShow = ref(store.state.currentPath != "/utils/login");
 const theme = ref(store.state.theme);
 const paths = ref<any[]>([]);
 const LogoText = ref("");
@@ -117,7 +117,7 @@ const computePath = async (p: string) => {
   for (let i = 0; i < ps.length; i++) {
     let path = ps[i];
     let name = path
-    if (pathPre == "/project") {
+    if (pathPre == "/cloud") {
       const p = await getProject(user.value.addr, path)
       if (p != null) {
         name = p.name.toLowerCase()
@@ -131,7 +131,7 @@ const computePath = async (p: string) => {
     pathPre = pathPre + "/" + path
   }
 
-  if (ps[0] == "project") {
+  if (ps[0] == "cloud") {
     LogoText.value = "Cloud"
   } else if (ps[0] == "miner") {
     LogoText.value = "Miner"
@@ -147,7 +147,7 @@ watch(store.state, async (newQuestion, oldQuestion) => {
   user.value = newQuestion.userInfo;
   await computePath(p)
   menuShow.value = false;
-  if (newQuestion.currentPath != "/login") {
+  if (newQuestion.currentPath != "/utils/login") {
     isShow.value = true;
   } else {
     isShow.value = false;
@@ -175,7 +175,7 @@ const nextOut = () => {
   let theme = window.localStorage.getItem("theme");
   window.localStorage.clear();
   window.localStorage.setItem("theme", theme || "dark")
-  router.push("/login");
+  router.push("/utils/login");
 };
 
 const setTheme = (t: string) => {
@@ -207,7 +207,7 @@ const setTheme = (t: string) => {
 }
 
 .header-logo {
-  height: 20px;
+  height: 19.5px;
   margin-left: 24px;
 }
 
