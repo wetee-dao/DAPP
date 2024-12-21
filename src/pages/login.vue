@@ -25,12 +25,11 @@
           </div>
           <i class="icon">&#xe614;</i>
         </div>
-        <div class="wallet-box" @click="loginDemo">
+        <!-- <div class="wallet-box" @click="loginDemo">
           <img src="/imgs/test.png" alt="MetaMask Logo" class="wlogo" />
           <div class="wtext">Demo Login</div>
           <i class="icon">&#xe614;</i>
-        </div>
-
+        </div> -->
         <div class="login-title">Ethereum Wallet</div>
         <div class="wallet-box" @click="showWallet('MetaMask', null)">
           <img src="/imgs/metamask.svg" alt="MetaMask Logo" class="wlogo" />

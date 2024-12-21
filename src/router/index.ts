@@ -17,7 +17,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/cloud/project.vue')
     },
     {
-        path: '/utils/login',
+        path: '/cloud/login',
         name: 'Login',
         component: () => import('../pages/login.vue')
     },
@@ -45,7 +45,7 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-    if (to.path == "/utils/login") {
+    if (to.path == "/cloud/login") {
         store.dispatch("setLoginShow", true);
     } else {
         store.dispatch("setLoginShow", false);

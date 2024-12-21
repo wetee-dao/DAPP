@@ -126,9 +126,10 @@
   left: calc(50vw - 200px);
   margin-top: 10vh;
   z-index: 100;
-  border-radius: 10px;
+  border-radius: 4px;
   display: flex;
   flex-direction: column;
+  border: 2px solid rgba($secondary-text-rgb, 0.1);
 
   .title {
     padding: 20px 20px;

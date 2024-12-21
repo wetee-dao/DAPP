@@ -100,7 +100,7 @@ const menuShow = ref(false);
 const isFirst = ref(true);
 const pkey = ref(0);
 const user = ref(store.state.userInfo);
-const isShow = ref(store.state.currentPath != "/utils/login");
+const isShow = ref(store.state.currentPath != "/cloud/login");
 const theme = ref(store.state.theme);
 const paths = ref<any[]>([]);
 const LogoText = ref("");
@@ -147,7 +147,7 @@ watch(store.state, async (newQuestion, oldQuestion) => {
   user.value = newQuestion.userInfo;
   await computePath(p)
   menuShow.value = false;
-  if (newQuestion.currentPath != "/utils/login") {
+  if (newQuestion.currentPath != "/cloud/login") {
     isShow.value = true;
   } else {
     isShow.value = false;
@@ -175,7 +175,7 @@ const nextOut = () => {
   let theme = window.localStorage.getItem("theme");
   window.localStorage.clear();
   window.localStorage.setItem("theme", theme || "dark")
-  router.push("/utils/login");
+  router.push("/cloud/login");
 };
 
 const setTheme = (t: string) => {
@@ -207,8 +207,11 @@ const setTheme = (t: string) => {
 }
 
 .header-logo {
-  height: 19.5px;
-  margin-left: 24px;
+  height: 22px;
+  margin-left: 27px;
+  margin-bottom: 1.8px;
+  border-radius: 2px;
+  overflow: hidden;
 }
 
 .header-space {
@@ -238,7 +241,7 @@ const setTheme = (t: string) => {
   flex-direction: row;
   align-items: center;
   text-transform: uppercase;
-  margin-left: 1px;
+  margin-left: 0px;
   margin-right: 3px;
   font-size: 24px;
   font-family: "pixel-font";

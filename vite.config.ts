@@ -7,6 +7,7 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
+  base: '/cloud/',
   resolve: {
     alias: {
       '~/': `${path.resolve(__dirname, 'src')}/`,
@@ -37,7 +38,6 @@ export default defineConfig({
       useSource: true,
       defaultLocale: 'zh-tw',
     }),
-    // svgBuilder('./src/icons/svg/')
   ],
 })
 

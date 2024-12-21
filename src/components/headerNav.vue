@@ -29,8 +29,7 @@ const closeClick = (i:number) => {
 .headerNav {
   border-radius: 4px;
   color: $secondary-text;
-  padding: 0 20px;
-  // height: 27px;
+  padding: 0 10px;
   align-items: center;
 
   &>div {
@@ -41,18 +40,17 @@ const closeClick = (i:number) => {
   .px{
     line-height: 17px;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 15px;
     height: 16px;
     line-height: 16px;
   }
 
   .p {
     cursor: pointer;
-    font-size: 14px;
+    font-size: 15px;
     height: 12px;
     line-height: 12px;
-    margin: 0px 6px;
-    border-radius: 4px;
+    margin: 0px 7px;
     &:hover{
       text-decoration: underline;
       color: $primary-text;

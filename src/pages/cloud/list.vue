@@ -114,7 +114,7 @@ onMounted(async () => {
 
   .projectItem {
     height: 108px;
-    background-color: $secondary-bg;
+    background-color: rgba($secondary-bg-rgb, 0.8);
     border-radius: 10px;
     display: flex;
     align-items: center;
