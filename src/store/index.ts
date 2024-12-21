@@ -9,9 +9,6 @@ if (window.localStorage.getItem("userInfo")) {
 if (window.localStorage.getItem("keypair")) {
   keypair = JSON.parse(window.localStorage.getItem("keypair") || "{}")
 }
-if (window.localStorage.getItem("token")) {
-  token = window.localStorage.getItem("token") || "";
-}
 if (window.localStorage.getItem("theme")) {
   theme = window.localStorage.getItem("theme") || "";
 }
@@ -20,7 +17,6 @@ export default createStore({
   state: {
     currentPath: '',
     userInfo: userInfo,
-    token: token,
     theme: theme,
     account: [],
     isLoginShow: false,
@@ -35,9 +31,6 @@ export default createStore({
     },
     setTheme(state, payload) {
       state.theme = payload
-    },
-    setToken(state, payload) {
-      state.token = payload
     },
     setLoginShow(state, payload) {
       state.isLoginShow = payload
@@ -62,9 +55,6 @@ export default createStore({
     // actions中的方法再调用store.commit(mutations中的方法，数据)修改state
     setPath(context, param) {
       context.commit('setPath', param)
-    },
-    setToken(context, param) {
-      context.commit('setToken', param)
     },
     setLoginShow(context, param) {
       context.commit('setLoginShow', param)

@@ -125,7 +125,6 @@ watch(
 const loginDemo = async () => {
   const mnemonic = "pilot nurse frost vote fantasy then hello rookie member rhythm radar urban";
   const pair = keyring.addFromUri(mnemonic, { name: "first pair" }, "sr25519");
-  window.localStorage.setItem("token", "presign");
   let userInfo = {
     addr: pair.address,
     name: "Demo Account",
@@ -176,8 +175,6 @@ const showWallet = async (name: string, wallet: Wallet | null) => {
 
       // 获取账户信息
       const ac = metaAccounts[0];
-      window.localStorage.setItem("token", "presign");
-
       const userInfo = {
         addr: ac.address,
         name: ac.name!,
@@ -221,7 +218,6 @@ const PolkadotLoginIn = async () => {
 
   const wallet = LoginShow.value;
   await checkMetaData(wallet!.extension);
-  window.localStorage.setItem("token", "presign");
   let userInfo = {
     addr: ac.address,
     name: ac.name,
@@ -242,7 +238,7 @@ watch(store.state, (newS, oldS) => {
 });
 
 onMounted(async () => {
-  if (window.localStorage.getItem("token")) {
+  if (window.localStorage.getItem("userInfo")) {
     enabled.value = true;
     router.push("/");
     return;

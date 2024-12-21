@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import store from '../store/index'
 import _ from 'lodash';
 
@@ -17,7 +17,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/cloud/project.vue')
     },
     {
-        path: '/cloud/login',
+        path: '/utils/login',
         name: 'Login',
         component: () => import('../pages/login.vue')
     },
@@ -39,13 +39,13 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes
 })
 
 
 router.beforeEach((to, from, next) => {
-    if (to.path == "/cloud/login") {
+    if (to.path == "/utils/login") {
         store.dispatch("setLoginShow", true);
     } else {
         store.dispatch("setLoginShow", false);
@@ -59,7 +59,7 @@ router.beforeEach((to, from, next) => {
     //页面是否需要登录
     if (to.meta.needLogin) {
         //页面是否登录
-        if (localStorage.getItem("token")) {
+        if (localStorage.getItem("userInfo")) {
             //本地存储中是否有token(uid)数据
             next();
         } else {

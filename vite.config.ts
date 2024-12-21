@@ -7,7 +7,7 @@ import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig({
-  base: '/cloud/',
+  base: '/dapp/',
   resolve: {
     alias: {
       '~/': `${path.resolve(__dirname, 'src')}/`,
