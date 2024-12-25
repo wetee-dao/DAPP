@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import { getHttpApi } from '@/plugins/chain';
 const props = defineProps(["info"])

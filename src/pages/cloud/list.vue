@@ -184,7 +184,6 @@ onMounted(async () => {
   }
 
   .add {
-    background-color: transparent;
     box-shadow: unset;
     border-color: transparent;
 

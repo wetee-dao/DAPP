@@ -44,7 +44,6 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref, watch } from "vue";
 import { TabsPaneContext } from "element-plus";
-import { GetClusterInfo, GetServices } from "@/apis/detail";
 import Metrics from "./metrics.vue"
 import Report from "./report.vue"
 import Log from "./log.vue"

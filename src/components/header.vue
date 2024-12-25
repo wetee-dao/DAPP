@@ -100,7 +100,7 @@ const menuShow = ref(false);
 const isFirst = ref(true);
 const pkey = ref(0);
 const user = ref(store.state.userInfo);
-const isShow = ref(store.state.currentPath != "/utils/login");
+const isShow = ref(store.state.currentPath != "/login");
 const theme = ref(store.state.theme);
 const paths = ref<any[]>([]);
 const LogoText = ref("");
@@ -147,7 +147,7 @@ watch(store.state, async (newQuestion, oldQuestion) => {
   user.value = newQuestion.userInfo;
   await computePath(p)
   menuShow.value = false;
-  if (newQuestion.currentPath != "/utils/login") {
+  if (newQuestion.currentPath != "/login") {
     isShow.value = true;
   } else {
     isShow.value = false;
@@ -175,7 +175,7 @@ const nextOut = () => {
   let theme = window.localStorage.getItem("theme");
   window.localStorage.clear();
   window.localStorage.setItem("theme", theme || "dark")
-  router.push("/utils/login");
+  router.push("/login");
 };
 
 const setTheme = (t: string) => {

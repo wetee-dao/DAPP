@@ -100,13 +100,15 @@ import { Setting, Plus } from '@element-plus/icons-vue'
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
 import useGlobelProperties from "@/plugins/globel";
-import Detail from "./project/detail.vue";
 import { ElNotification } from "element-plus";
+
 import { getUrlParams } from "@/utils/pop";
 import { getContracts } from "@/apis/contract_indexer";
 import { getEvents } from "@/apis/event_indexer";
 import { ss58toHex } from "@/utils/chain";
 import { getHttpApi } from "@/plugins/chain";
+
+import Detail from "./project/detail.vue";
 
 const global = useGlobelProperties()
 const wetee: any = inject('wetee')

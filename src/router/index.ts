@@ -17,7 +17,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/cloud/project.vue')
     },
     {
-        path: '/utils/login',
+        path: '/login',
         name: 'Login',
         component: () => import('../pages/login.vue')
     },
@@ -25,11 +25,6 @@ const routes: Array<RouteRecordRaw> = [
     //     path: '/not404',
     //     name: 'Not404',
     //     component: () => import('../pages/cloud/not404.vue')
-    // },
-    // {
-    //     path: '/imgMask',
-    //     name: 'Not404',
-    //     component: () => import('../pages/cloud/imgMask.vue')
     // },
     {
         path: '/miner',
@@ -45,7 +40,7 @@ const router = createRouter({
 
 
 router.beforeEach((to, from, next) => {
-    if (to.path == "/utils/login") {
+    if (to.path == "/login") {
         store.dispatch("setLoginShow", true);
     } else {
         store.dispatch("setLoginShow", false);
