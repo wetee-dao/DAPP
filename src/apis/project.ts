@@ -2,7 +2,7 @@ import { getChainClient, getHttpApi } from "@/plugins/chain";
 import { deepCopy } from "@/utils/object";
 import { ChainHexToString } from "@/utils/strings";
 
-const defaultProject = {
+export const defaultProject = {
     id: "-1",
     name: "Default project",
     desc: "Default project, cannot be deleted.",

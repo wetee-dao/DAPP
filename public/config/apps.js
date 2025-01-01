@@ -798,6 +798,7 @@ function deepCopy(obj) {
 function extTemps() {
     return deepCopy(temps).map((temp) => {
         let mainData = null
+        
         temp.containers = temp.containers.map((c, i) => {
             let item = deepCopy(teeApps).find((a) => a.name === c.name)
             if (!item) {

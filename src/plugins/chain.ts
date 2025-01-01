@@ -9,7 +9,7 @@ import qs from "qs";
 
 // 区块链链接
 let client: ApiPromise | null = null
-export let chainUrl = 'wss://xiaobai.asyou.me:30001/ws'
+export let chainUrl = 'wss://paseo.asyou.me/ws'
 export let chainIndexer = 'https://xiaobai.asyou.me:30006/gql'
 export let dkgUrl = 'https://xiaobai.asyou.me:31001/gql'
 

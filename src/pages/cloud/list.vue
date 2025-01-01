@@ -38,13 +38,13 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { stringToHex } from "@polkadot/util";
 import { getSS5842, ss58toHex } from "@/utils/chain";
-import { getProjectList } from "@/apis/project";
+import { defaultProject, getProjectList } from "@/apis/project";
 const global = useGlobelProperties()
 
 const store = useStore();
 const router = useRouter();
 const theme = ref(document.documentElement.getAttribute("class"));
-const projects = ref<any[]>([]);
+const projects = ref<any[]>([defaultProject]);
 
 const GotoProject = (item: any) => {
   router.push("/cloud/" + getSS5842(item.addr) + "?project_id=" + item.id!)
@@ -114,7 +114,8 @@ onMounted(async () => {
 
   .projectItem {
     height: 108px;
-    background-color: rgba($secondary-bg-rgb, 0.8);
+    background-color: rgba($secondary-bg-rgb, 0.5);
+    border: 2px solid rgba($secondary-text-rgb, 0.05);
     border-radius: 10px;
     display: flex;
     align-items: center;
@@ -185,7 +186,6 @@ onMounted(async () => {
 
   .add {
     box-shadow: unset;
-    border-color: transparent;
 
     .dataImg {
       border-radius: 50%

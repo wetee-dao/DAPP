@@ -207,9 +207,9 @@ const setTheme = (t: string) => {
 }
 
 .header-logo {
-  height: 22px;
-  margin-left: 27px;
-  margin-bottom: 1.8px;
+  height: 19px;
+  margin-left: 29px;
+  // margin-bottom: 1.8px;
   border-radius: 2px;
   overflow: hidden;
 }
@@ -228,7 +228,7 @@ const setTheme = (t: string) => {
 
 .header-box {
   padding: 10px 12px;
-  margin: 0px 20px 0px 0px;
+  margin: 0px 21px 0px 0px;
   background-color: rgba($secondary-bg-rgb, 0.8);
   border-radius: 4px;
   height: 20px;
@@ -241,22 +241,23 @@ const setTheme = (t: string) => {
   flex-direction: row;
   align-items: center;
   text-transform: uppercase;
-  margin-left: 0px;
+  margin-left: 1px;
   margin-right: 3px;
-  font-size: 24px;
+  font-size: 22px;
   font-family: "pixel-font";
-  font-weight: bold;
+  // font-weight: bold;
   letter-spacing: 2px;
   color: rgba($primary-text-rgb, 1);
 
   .select-icon {
-    font-size: 18px;
+    font-size: 16px;
     line-height: 32px;
     height: 30px;
     display: flex;
     fill: $primary-text;
     margin-left: -3px;
     display: block;
+    opacity: 0.7;
   }
 }
 
@@ -442,7 +443,7 @@ const setTheme = (t: string) => {
   left: 6px !important;
   display: flex;
   align-items: center;
-  transform: scale(1.18);
+  transform: scale(1.2);
   height: 34px;
   .cur-service{
     letter-spacing: -2px;
