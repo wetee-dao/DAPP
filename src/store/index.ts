@@ -13,7 +13,7 @@ if (window.localStorage.getItem("theme")) {
   theme = window.localStorage.getItem("theme") || "";
 }
 
-export default createStore({
+const store = createStore({
   state: {
     currentPath: '',
     userInfo: userInfo,
@@ -84,3 +84,5 @@ export default createStore({
   modules: {
   }
 })
+
+export default store;

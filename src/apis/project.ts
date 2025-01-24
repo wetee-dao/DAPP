@@ -1,4 +1,4 @@
-import { getChainClient, getHttpApi } from "@/plugins/chain";
+import { getHttpApi } from "@/plugins/chain";
 import { deepCopy } from "@/utils/object";
 import { ChainHexToString } from "@/utils/strings";
 
@@ -14,12 +14,6 @@ let projectList: any[] | undefined = undefined;
 export const getProjectList = async (user: string, refresh: boolean = false) => {
     if (projectList && !refresh && projectList[0].addr == user) {
         return projectList!;
-    }
-
-    for (let i = 0; i < 20; i++) {
-        if (getChainClient() == null) {
-            await new Promise(resolve => setTimeout(resolve, 500));
-        }
     }
 
     const pList = await getHttpApi().entries("project","proxyProjects",[user])

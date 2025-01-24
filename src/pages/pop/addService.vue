@@ -220,6 +220,7 @@ import { Option } from '@polkadot/types';
 import { getUrlParams } from "@/utils/pop";
 import { validFormArray } from "./utils";
 import { deepCopy } from "@/utils/object";
+import { $getChainProvider } from "@/plugins/chain";
 
 const pid = getUrlParams("project_id");
 const props = defineProps(["router", "store", "close", "app"])
@@ -303,95 +304,94 @@ const closeClick = () => {
 };
 
 const toAdd = async () => {
-  containers.value[curContainer.value] = form.value
-  const g = props.app!.config.globalProperties;
-  const chain = g.$getChain();
-  if (!chain.client) {
-    return;
-  }
-  const client = chain.client;
-
-  let mainData: any = {}
-  let validDatas: any[] = []
-  let envs: any[] = []
-  for (var i = 0; i < containers.value.length; i++) {
-    const c = containers.value[i]
-    const validData = validFormArray(client, c, i)
-    if (!validData.ok) return;
-    if (i == 0) {
-      mainData = {
-        name: c.name,
-        level: c.level,
-        teeVersion: c.teeVersion,
-        ...validData.data,
-      }
-    } else {
-      validDatas.push(validData.data)
+  await $getChainProvider(async (chain): Promise<void> => {
+    if (!chain.client) {
+      return;
     }
-    envs.push(...validData.data.env)
-    console.log(envs)
-  }
+    const client = chain.client;
 
-  const signer = props.store.state.userInfo.addr;
-  if (mainData.teeVersion == "") {
-    ElNotification({
-      title: "Error",
-      message: "TEE version is required",
-      type: "error",
-    })
-    return
-  }
-  if (mainData.name == "") {
-    ElNotification({
-      title: "Error",
-      message: "Container name is required",
-      type: "error",
-    })
-    return
-  }
-
-  try {
-    const none = new Option(client.registry, "Vec<u8>", null);
-    const tx = client.tx.app.create(
-      mainData.name,
-      mainData.image,
-      "",
-      "",
-      "{}",
-      mainData.port,
-      mainData.command,
-      envs,
-      none,
-      mainData.cpu,
-      mainData.memory,
-      mainData.disk,
-      validDatas.map((v: any) => {
-        return {
-          image: v.image,
-          command: v.command,
-          port: v.port,
-          cr: {
-            cpu: v.cpu,
-            mem: v.memory,
-            disk: v.disk,
-            gpu: 0
-          }
+    let mainData: any = {}
+    let validDatas: any[] = []
+    let envs: any[] = []
+    for (var i = 0; i < containers.value.length; i++) {
+      const c = containers.value[i]
+      const validData = validFormArray(client, c, i)
+      if (!validData.ok) return;
+      if (i == 0) {
+        mainData = {
+          name: c.name,
+          level: c.level,
+          teeVersion: c.teeVersion,
+          ...validData.data,
         }
-      }),
-      mainData.level,
-      client.createType('TEEVersion', mainData.teeVersion),
-    )
+      } else {
+        validDatas.push(validData.data)
+      }
+      envs.push(...validData.data.env)
+      console.log(envs)
+    }
 
-    await chain.ProxySignAndSend(tx, pid, signer, () => {
-      props.close();
-    }, () => { })
-  } catch (e: any) {
-    ElNotification({
-      title: 'Error',
-      message: "" + e.toString(),
-      type: 'error',
-    })
-  }
+    const signer = props.store.state.userInfo.addr;
+    if (mainData.teeVersion == "") {
+      ElNotification({
+        title: "Error",
+        message: "TEE version is required",
+        type: "error",
+      })
+      return
+    }
+    if (mainData.name == "") {
+      ElNotification({
+        title: "Error",
+        message: "Container name is required",
+        type: "error",
+      })
+      return
+    }
+
+    try {
+      const none = new Option(client.registry, "Vec<u8>", null);
+      const tx = client.tx.app.create(
+        mainData.name,
+        mainData.image,
+        "",
+        "",
+        "{}",
+        mainData.port,
+        mainData.command,
+        envs,
+        none,
+        mainData.cpu,
+        mainData.memory,
+        mainData.disk,
+        validDatas.map((v: any) => {
+          return {
+            image: v.image,
+            command: v.command,
+            port: v.port,
+            cr: {
+              cpu: v.cpu,
+              mem: v.memory,
+              disk: v.disk,
+              gpu: 0
+            }
+          }
+        }),
+        mainData.level,
+        client.createType('TEEVersion', mainData.teeVersion),
+      )
+
+      await chain.proxysignAndSend(tx, pid!, signer, () => {
+        props.close();
+      }, () => { })
+    } catch (e: any) {
+      ElNotification({
+        title: 'Error',
+        message: "" + e.toString(),
+        type: 'error',
+      })
+    }
+  });
 };
 
 const addItem = (t: string) => {

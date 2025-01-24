@@ -15,12 +15,8 @@
             <div class="form-context-box">
               <div class="form-sub-title">Docker image</div>
               <div class="form-input-box">
-                <el-autocomplete 
-                  @select="handleSelectApp"
-                  v-model="form.image"
-                  :fetch-suggestions="querySearch"
-                  placeholder="Docker image"
-                >
+                <el-autocomplete @select="handleSelectApp" v-model="form.image" :fetch-suggestions="querySearch"
+                  placeholder="Docker image">
                   <template #prefix>
                     <i class="icon">&#xf18e;</i>
                   </template>
@@ -32,7 +28,7 @@
                         <span class="app-desc">{{ item.desc }}</span>
                       </div>
                     </div>
-                   
+
                   </template>
                 </el-autocomplete>
               </div>
@@ -187,6 +183,7 @@ import { ElNotification, FormInstance } from "element-plus";
 import { getUrlParams } from "@/utils/pop";
 import { Delete } from '@element-plus/icons-vue'
 import { validFormArray } from "./utils";
+import { $getChainProvider } from "@/plugins/chain";
 
 const pid = getUrlParams("project_id");
 
@@ -197,7 +194,7 @@ const handleClick = (e: MouseEvent) => {
   e.preventDefault()
 }
 
-const images = ref<any[]>((window as any).teeApps.filter( (v:any) => v.create_type=="task" ).map( (v:any) => { 
+const images = ref<any[]>((window as any).teeApps.filter((v: any) => v.create_type == "task").map((v: any) => {
   v.cpu = 1000;
   v.memory = 3000;
   return v
@@ -219,26 +216,26 @@ const handleSelectApp = (item: any) => {
   form.image = item.docker.image;
   form.name = item.name;
   form.teeVersion = item.runtime;
-  if(item.docker.cmd){
+  if (item.docker.cmd) {
     form.command = item.docker.cmd;
   }
-  
-  if(item.docker.port){
+
+  if (item.docker.port) {
     let ports = []
-    for(let i=0;i<item.docker.port.length;i++){
+    for (let i = 0; i < item.docker.port.length; i++) {
       ports.push({
         prefix: item.docker.port[i].key,
         value: item.docker.port[i].value
       })
     }
     form.port = ports;
-  }else{
+  } else {
     form.port = []
   }
-  
-  if(item.docker.disk){
+
+  if (item.docker.disk) {
     let disks = []
-    for(let i=0;i<item.docker.disk.length;i++){
+    for (let i = 0; i < item.docker.disk.length; i++) {
       disks.push({
         prefix: "SSD",
         key: item.docker.disk[i].key,
@@ -246,13 +243,13 @@ const handleSelectApp = (item: any) => {
       })
     }
     form.disk = disks;
-  }else{
+  } else {
     form.disk = []
   }
 
-  if(item.docker.env){
+  if (item.docker.env) {
     let envs = []
-    for(let i=0;i<item.docker.env.length;i++){
+    for (let i = 0; i < item.docker.env.length; i++) {
       envs.push({
         prefix: "Env",
         key: item.docker.env[i].key,
@@ -260,20 +257,20 @@ const handleSelectApp = (item: any) => {
       })
     }
     form.env = envs;
-  }else{
+  } else {
     form.env = []
   }
 }
 
-const querySearch = (queryString: string, cb:any) => {
+const querySearch = (queryString: string, cb: any) => {
   const results = queryString
     ? images.value.filter(createFilter(queryString))
     : images.value
   cb(results)
 }
 
-const createFilter = (queryString:string) => {
-  return (restaurant:any) => {
+const createFilter = (queryString: string) => {
+  return (restaurant: any) => {
     return (
       restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0
     )
@@ -285,62 +282,63 @@ const closeClick = () => {
 };
 
 const toAdd = async (item: any) => {
-  const chain = props.app!.config.globalProperties.$getChain();
-  if (!chain.client) {
-    return;
-  }
-  
-  const client = chain.client;
-  const validData = validFormArray(client, form, 0)
-  if (!validData.ok) return;
+  await $getChainProvider(async (chain): Promise<void> => {
+    if (!chain.client) {
+      return;
+    }
 
-  const signer = props.store.state.userInfo.addr;
+    const client = chain.client;
+    const validData = validFormArray(client, form, 0)
+    if (!validData.ok) return;
 
-  if(form.name == ""){
-    ElNotification({
-      title: "Error",
-      message: "Container name is required",
-      type: "error",
-    })
-    return
-  }
+    const signer = props.store.state.userInfo.addr;
 
-  if(form.image == ""){
-    ElNotification({
-      title: "Error",
-      message: "Container image is required",
-      type: "error",
-    })
-    return
-  }
+    if (form.name == "") {
+      ElNotification({
+        title: "Error",
+        message: "Container name is required",
+        type: "error",
+      })
+      return
+    }
 
-  try {
-    const tx = client.tx.task.create(
-      form.name,
-      form.image,
-      "{}",
-      validData.port,
-      validData.command,
-      validData.env,
-      form.cpu,
-      form.memory,
-      validData.disk,
-      form.level,
-      client.createType('TEEVersion', 'SGX'),
-    )
+    if (form.image == "") {
+      ElNotification({
+        title: "Error",
+        message: "Container image is required",
+        type: "error",
+      })
+      return
+    }
 
-    await chain.ProxySignAndSend(tx, pid, signer, () => {
-      props.close();
-    }, () => {
-      props.close();
-    })
-  } catch (e: any) {
-    ElNotification({
-      title: 'Error',
-      message: "" + e.toString(),
-      type: 'error',
-    })
-  }
+    try {
+      const tx = client.tx.task.create(
+        form.name,
+        form.image,
+        "{}",
+        validData.port,
+        validData.command,
+        validData.env,
+        form.cpu,
+        form.memory,
+        validData.disk,
+        form.level,
+        client.createType('TEEVersion', 'SGX'),
+      )
+
+      await chain.proxysignAndSend(tx, pid!, signer, () => {
+        props.close();
+      }, () => {
+        props.close();
+      })
+    } catch (e: any) {
+      ElNotification({
+        title: 'Error',
+        message: "" + e.toString(),
+        type: 'error',
+      })
+    }
+  })
 };
 
 const addItem = (t: string) => {
@@ -373,7 +371,6 @@ const removeItem = (t: string, i: number) => {
 };
 </script>
 
-<style lang="scss"scoped>
-
+<style lang="scss" scoped>
 @import "../../assets/styles/components/pop.scss";
 </style>

@@ -97,7 +97,6 @@ import { getHttpApi } from "@/plugins/chain";
 import { ref, onMounted, inject } from "vue";
 import { useStore } from "vuex";
 
-const wetee: any = inject("wetee");
 const store = useStore();
 const clusterList = ref<any[]>([]);
 const contracts = ref<any[]>([]);
@@ -105,15 +104,16 @@ const crs = ref<any[]>([]);
 
 const getClusters = async (user: string) => {
   const cList = await getHttpApi().entries("worker","k8sClusters",[]);
+  console.log(cList);
   let cs: any[] = [];
   cList.forEach((c: any) => {
-    cs.push(c[1].toHuman());
+    cs.push(c.value);
   });
 
   const crList = await getHttpApi().entries("worker","crs",[]);
   let crsCur: any[] = [];
   crList.forEach((c: any) => {
-    crsCur.push(c[1].toHuman());
+    crsCur.push(c.value);
   });
 
   let contractCur: any[] = [];

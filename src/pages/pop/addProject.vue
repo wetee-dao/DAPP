@@ -38,7 +38,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import { ElNotification } from "element-plus";
-import { getHttpApi } from "@/plugins/chain";
+import { $getChainProvider, getHttpApi } from "@/plugins/chain";
 
 const props = defineProps(["router", "store", "close", "app"])
 
@@ -53,52 +53,55 @@ const closeClick = () => {
 };
 
 const toAdd = async () => {
-  const g = props.app!.config.globalProperties;
-  const chain = g.$getChain();
-  if (!chain.client) {
-    return;
-  }
+  await $getChainProvider(async (chain): Promise<void> => {
+    if (!form.name) {
+      ElNotification({
+        title: 'Error',
+        message: "Please input name",
+        type: 'error',
+      })
+      return;
+    }
 
-  if (!form.name) {
-    ElNotification({
-      title: 'Error',
-      message: "Please input name",
-      type: 'error',
-    })
-    return;
-  }
+    if (!form.desc) {
+      ElNotification({
+        title: 'Error',
+        message: "Please input description",
+        type: 'error',
+      })
+      return;
+    }
 
-  if (!form.desc) {
-    ElNotification({
-      title: 'Error',
-      message: "Please input description",
-      type: 'error',
-    })
-    return;
-  }
+    const client = chain.client;
+    if (!client) {
+      ElNotification({
+        title: 'Error',
+        message: "Please connect to the chain",
+        type: 'error',
+      })
+      return;
+    }
+    const signer = props.store.state.userInfo.addr;
 
-  const client = chain.client;
-  const signer = props.store.state.userInfo.addr;
-
-  try {
-    const tx = client.tx.project.createProxyProject(form.name,form.desc,form.deposit*Math.pow(10,client.registry.chainDecimals[0]))
-    await chain.SignAndSend(tx, signer, () => {
-      props.close();
-    }, () => {
-      props.close();
-    })
-  } catch (e: any) {
-    ElNotification({
-      title: 'Error',
-      message: "" + e.toString(),
-      type: 'error',
-    })
-  }
+    try {
+      const tx = client.tx.project.createProxyProject(form.name, form.desc, form.deposit * Math.pow(10, client.registry.chainDecimals[0]))
+      await chain.signAndSend(tx, signer, () => {
+        props.close();
+      }, () => {
+        props.close();
+      })
+    } catch (e: any) {
+      ElNotification({
+        title: 'Error',
+        message: "" + e.toString(),
+        type: 'error',
+      })
+    }
+  })
 };
 
 </script>
 
 <style lang="scss" scoped>
-
 @import "../../assets/styles/components/pop.scss";
 </style>

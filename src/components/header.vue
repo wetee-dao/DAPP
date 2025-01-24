@@ -168,7 +168,7 @@ const closeClick = () => {
 };
 
 const home = () => {
-  router.push("/");
+  // router.push("/");
 };
 
 const nextOut = () => {

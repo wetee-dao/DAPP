@@ -112,13 +112,21 @@
             <div class="dry-run-title">Dry-run outcome</div>
             <div class="dry-run-item">
               -&nbsp; GasConsumed
-              <div class="dry-run-tag"><div class="t">refTime</div> {{ dryRun[0] }}</div>
-              <div class="dry-run-tag"><div class="t">proofSize</div> {{ dryRun[1] }}</div>
+              <div class="dry-run-tag">
+                <div class="t">refTime</div> {{ dryRun[0] }}
+              </div>
+              <div class="dry-run-tag">
+                <div class="t">proofSize</div> {{ dryRun[1] }}
+              </div>
             </div>
             <div class="dry-run-item">
               -&nbsp; GasRequired
-              <div class="dry-run-tag"><div class="t">refTime</div> {{ dryRun[2] }}</div>
-              <div class="dry-run-tag"><div class="t">proofSize</div> {{ dryRun[3] }}</div>
+              <div class="dry-run-tag">
+                <div class="t">refTime</div> {{ dryRun[2] }}
+              </div>
+              <div class="dry-run-tag">
+                <div class="t">proofSize</div> {{ dryRun[3] }}
+              </div>
             </div>
           </div>
         </div>
@@ -143,6 +151,7 @@ import { BN_ZERO } from "@polkadot/util";
 import { InstantiateData, createInstantiateTx, formatProofSize, formatRefTime, getGasLimit, getStorageDepositLimit, transformUserInput } from "@/utils/ink";
 import { Balance } from "@polkadot/types/interfaces";
 import { randomAsHex } from "@polkadot/util-crypto";
+import { $getChainProvider } from "@/plugins/chain";
 
 const pid = getUrlParams("project_id");
 const props = defineProps(["router", "store", "close", "app"])
@@ -186,8 +195,11 @@ const uploadFile = async (options: UploadRequestOptions): Promise<XMLHttpRequest
     abi: data
   })
 
-  const api = getApi();
-  const cabi = new Abi(data, api.registry.getChainProperties());
+  let api: ApiPromise | undefined = undefined;
+  await $getChainProvider(async (chain): Promise<void> => {
+    api = chain.client
+  }, undefined, true);
+  const cabi = new Abi(data, api!.registry.getChainProperties());
 
   const name = cabi.info.contract.name.toString();
   const source: any = cabi.json.source
@@ -237,37 +249,40 @@ const onConstructorChange = (index: number) => {
 }
 
 const dryTry = async () => {
-  const api = getApi();
-  const accountId = props.store.state.userInfo.addr
-  const { freeBalance } = await api.derive.balances.account(accountId)
-  const constructor = constructors.value[constructorIndex.value]
-  const inputData = constructor?.toU8a(transformUserInput(api.registry, constructor.args, argValues.value));
+  await $getChainProvider(async (chain): Promise<void> => {
+    const api = chain.client!
 
-  const isUsingSalt = true
-  const params = [
-    accountId,
-    constructor?.isPayable
-      ? api.registry.createType('Balance', 100)
-      : api.registry.createType('Balance', BN_ZERO),
-    getGasLimit(false, form.value.refTime, form.value.proofSize, api.registry),
-    getStorageDepositLimit(false, freeBalance, api.registry),
-    codeHashUrlParam.value ? { Existing: codeHashUrlParam.value } : { Upload: abi.value!.info.source.wasm },
-    inputData ?? '',
-    isUsingSalt ? salt.value : '',
-  ]
+    const accountId = props.store.state.userInfo.addr
+    const { freeBalance } = await api.derive.balances.account(accountId)
+    const constructor = constructors.value[constructorIndex.value]
+    const inputData = constructor?.toU8a(transformUserInput(api.registry, constructor.args, argValues.value));
 
-  const dryRunResult: any = await api.call.contractsApi.instantiate(...params);
-  form.value.refTime = dryRunResult?.gasRequired.refTime.toString()
-  form.value.proofSize = dryRunResult?.gasRequired.proofSize.toString()
+    const isUsingSalt = true
+    const params = [
+      accountId,
+      constructor?.isPayable
+        ? api.registry.createType('Balance', 100)
+        : api.registry.createType('Balance', BN_ZERO),
+      getGasLimit(false, form.value.refTime, form.value.proofSize, api.registry),
+      getStorageDepositLimit(false, freeBalance, api.registry),
+      codeHashUrlParam.value ? { Existing: codeHashUrlParam.value } : { Upload: abi.value!.info.source.wasm },
+      inputData ?? '',
+      isUsingSalt ? salt.value : '',
+    ]
 
-  const refTime = formatRefTime(dryRunResult?.gasConsumed.refTime, "ms")
-  const proofSize = formatProofSize(dryRunResult.gasConsumed.proofSize, 'kb');
-  console.log("gasConsumed ", refTime, proofSize)
-  const refTime2 = formatRefTime(dryRunResult?.gasRequired.refTime, "ms")
-  const proofSize2 = formatProofSize(dryRunResult.gasRequired.proofSize, 'kb');
-  console.log("gasRequired ", refTime2, proofSize2)
+    const dryRunResult: any = await api.call.contractsApi.instantiate(...params);
+    form.value.refTime = dryRunResult?.gasRequired.refTime.toString()
+    form.value.proofSize = dryRunResult?.gasRequired.proofSize.toString()
 
-  dryRun.value = [refTime, proofSize, refTime2, proofSize2]
+    const refTime = formatRefTime(dryRunResult?.gasConsumed.refTime, "ms")
+    const proofSize = formatProofSize(dryRunResult.gasConsumed.proofSize, 'kb');
+    console.log("gasConsumed ", refTime, proofSize)
+    const refTime2 = formatRefTime(dryRunResult?.gasRequired.refTime, "ms")
+    const proofSize2 = formatProofSize(dryRunResult.gasRequired.proofSize, 'kb');
+    console.log("gasRequired ", refTime2, proofSize2)
+
+    dryRun.value = [refTime, proofSize, refTime2, proofSize2]
+  }, undefined, true);
 }
 
 // export function createConstructorOptions(registry: Registry, data?: AbiConstructor[]): DropdownOption<number>[] {
@@ -277,12 +292,12 @@ const dryTry = async () => {
 //   }));
 // }
 
-const getApi = (): ApiPromise => {
-  const g = props.app!.config.globalProperties;
-  const chain = g.$getChain();
-  const client = chain.client;
-  return client
-}
+// const getApi = (): ApiPromise => {
+//   const g = props.app!.config.globalProperties;
+//   const chain = g.$getChain();
+//   const client = chain.client;
+//   return client
+// }
 
 const handleTempApp = (item: any) => {
   curTemp.value = item.name
@@ -311,74 +326,76 @@ const closeClick = () => {
 };
 
 const toAdd = async () => {
-  const api = getApi();
-  const accountId = props.store.state.userInfo.addr
+  await $getChainProvider(async (chain): Promise<void> => {
+    const api = chain.client!
+    const accountId = props.store.state.userInfo.addr
 
-  if(abi.value == null){
-    ElNotification({
+    if (abi.value == null) {
+      ElNotification({
         title: 'Error',
         message: "Please upload the ink! smart contract",
-        type: 'error',
-    })
-    return
-  }
-
-  if(constructors.value.length == 0){
-    ElNotification({
-        title: 'Error',
-        message: "Constructor not validable",
-        type: 'error',
-    })
-    return
-  }
-
-  for (const k in argValues.value) {
-    if (argValues.value[k] == null) {
-      ElNotification({
-        title: 'call error',
-        message: "Contract call arg "+k+" is null",
         type: 'error',
       })
       return
     }
-  }
 
-  const constructor = constructors.value[constructorIndex.value]
-  const params: InstantiateData = {
-    accountId: accountId,
-    argValues: argValues.value,
-    value: constructor?.isPayable
-      ? api.registry.createType('Balance', 100) as Balance
-      : api.registry.createType('Balance', BN_ZERO) as Balance,
-    metadata: abi.value! as Abi,
-    name: form.value.name,
-    constructorIndex: constructorIndex.value,
-    salt: salt.value,
-    storageDepositLimit: null,
-    gasLimit: getGasLimit(true, form.value.refTime, form.value.proofSize, api.registry)!,
-    codeHash: codeHashUrlParam.value,
-  };
-
-  try {
-    const tx = createInstantiateTx(api, params);
-    if (!tx) return;
-
-    const g = props.app!.config.globalProperties;
-    const chain = g.$getChain();
-    await chain.ProxySignAndSend(tx, pid, accountId, (result: any) => {
-      console.log(result)
-      props.close();
-    }, () => { })
-
-    if (codeHashUrlParam.value) {
-
-    } else {
-
+    if (constructors.value.length == 0) {
+      ElNotification({
+        title: 'Error',
+        message: "Constructor not validable",
+        type: 'error',
+      })
+      return
     }
-  } catch (e) {
-    console.error(e);
-  }
-  salt.value = randomAsHex(32);
+
+    for (const k in argValues.value) {
+      if (argValues.value[k] == null) {
+        ElNotification({
+          title: 'call error',
+          message: "Contract call arg " + k + " is null",
+          type: 'error',
+        })
+        return
+      }
+    }
+
+    const constructor = constructors.value[constructorIndex.value]
+    const params: InstantiateData = {
+      accountId: accountId,
+      argValues: argValues.value,
+      value: constructor?.isPayable
+        ? api.registry.createType('Balance', 100) as Balance
+        : api.registry.createType('Balance', BN_ZERO) as Balance,
+      metadata: abi.value! as Abi,
+      name: form.value.name,
+      constructorIndex: constructorIndex.value,
+      salt: salt.value,
+      storageDepositLimit: null,
+      gasLimit: getGasLimit(true, form.value.refTime, form.value.proofSize, api.registry)!,
+      codeHash: codeHashUrlParam.value,
+    };
+
+    try {
+      const tx = createInstantiateTx(api, params);
+      if (!tx) return;
+
+      const g = props.app!.config.globalProperties;
+      const chain = g.$getChain();
+      await chain.ProxySignAndSend(tx, pid, accountId, (result: any) => {
+        console.log(result)
+        props.close();
+      }, () => { })
+
+      if (codeHashUrlParam.value) {
+
+      } else {
+
+      }
+    } catch (e) {
+      console.error(e);
+    }
+    salt.value = randomAsHex(32);
+  });
 };
 </script>
 

@@ -44,7 +44,7 @@ const global = useGlobelProperties()
 const store = useStore();
 const router = useRouter();
 const theme = ref(document.documentElement.getAttribute("class"));
-const projects = ref<any[]>([defaultProject]);
+const projects = ref<any[]>([]);
 
 const GotoProject = (item: any) => {
   router.push("/cloud/" + getSS5842(item.addr) + "?project_id=" + item.id!)

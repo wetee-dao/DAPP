@@ -105,40 +105,21 @@ export const bytesSignWithoutSigner = async (account: any, token: string, signRa
 
 // export const web3FromSource = dapp.web3FromSource;
 // export const wrapBytes = dapp.wrapBytes;
-
-export const chainType = {
-  WorkType: {
-    _enum: ["APP", "TASK", "GPU"]
+export const chainJson = {
+  "WorkType": {
+    "_enum": ["APP", "TASK", "GPU"]
   },
-  DiskClass: {
-    _enum: {
-      SSD: "Vec<u8>"
-    }
+  "DiskClass": {
+    "_enum": { "SSD": "Vec<u8>" }
   },
-  EnvKey: {
-    _enum: {
-      Env: "Vec<u8>",
-      File: "Vec<u8>",
-    }
+  "EnvKey": {
+    "_enum": { "Env": "Vec<u8>", "File": "Vec<u8>" }
   },
-  Service: {
-    _enum: {
-      Tcp: "u16",
-      Https: "u16",
-      Udp: "u16",
-      ProjectTcp: "u16",
-      ProjectUdp: "u16",
-    }
+  "Service": {
+    "_enum": { "Tcp": "u16", "Https": "u16", "Udp": "u16", "ProjectTcp": "u16", "ProjectUdp": "u16" }
   },
-  Command: {
-    _enum: {
-      SH: "Vec<u8>",
-      BASH: "Vec<u8>",
-      ZSH: "Vec<u8>",
-      NONE: null,
-    }
+  "Command": {
+    "_enum": { "SH": "Vec<u8>", "BASH": "Vec<u8>", "ZSH": "Vec<u8>", "NONE": null }
   },
-  TEEVersion:{
-    _enum: ["SGX", "CVM"]
-  }
+  "TEEVersion": { "_enum": ["SGX", "CVM"] }
 }
