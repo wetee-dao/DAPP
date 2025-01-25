@@ -1,6 +1,7 @@
 import axios from "axios";
-import { getChainExt, getHttpApi } from "@/plugins/chain";
+import { getHttpApi } from "@/plugins/chain";
 import { ss58toHex } from "@/utils/chain";
+import { hexToString } from "@polkadot/util";
 
 export async function GetLogs(cluster: number, c: any) {
   let params = `
@@ -74,7 +75,7 @@ export async function GetServices(cluster: number, c: any) {
 
 export async function GetClusterDns(cluster: number) {
   const cinfo = await GetClusterInfo(cluster)
-  return cinfo.ip[0].domain + ':' + cinfo.port.replaceAll(",", "")
+  return hexToString(cinfo.ip[0].domain) + ':' + cinfo.port.replaceAll(",", "")
 }
 
 export async function GetClusterInfo(cluster: number) {

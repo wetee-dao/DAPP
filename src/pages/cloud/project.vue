@@ -107,6 +107,7 @@ import { getContracts } from "@/apis/contract_indexer";
 import { getEvents } from "@/apis/event_indexer";
 import { ss58toHex } from "@/utils/chain";
 import { getHttpApi } from "@/plugins/chain";
+import { $getChainProvider } from "@/plugins/chain";
 
 import Detail from "./project/detail.vue";
 
@@ -177,7 +178,6 @@ const showPenu = (e: MouseEvent, item: any) => {
   e.preventDefault();
   e.stopPropagation();
   global.$OpenProjectMenu(router, store, e, item, async (cmd: string) => {
-    const chain = global.$getChain();
     const signer = store.state.userInfo.addr;
 
     switch (cmd) {
@@ -188,39 +188,43 @@ const showPenu = (e: MouseEvent, item: any) => {
         OpenDetail(item, cmd)
         break;
       case "stop":
-        const sty = wetee().client.createType('WorkType', item.Type);
-        const swid = { id: item.Nid, wtype: sty }
-        const tx = wetee().client.tx.worker.workStop(swid)
-        await chain.ProxySignAndSend(tx, projectid, signer, () => {
-          ElNotification({
-            title: 'Notice',
-            message: "Application stop successfully",
-            type: 'success',
+        await $getChainProvider(async (chain): Promise<void> => {
+          const sty = chain.client!.createType('WorkType', item.Type);
+          const swid = { id: item.Nid, wtype: sty }
+          const tx = chain.client!.tx.worker.workStop(swid)
+          await chain.proxysignAndSend(tx, projectid!, signer, () => {
+            ElNotification({
+              title: 'Notice',
+              message: "Application stop successfully",
+              type: 'success',
+            })
+            getList(pid)
+          }, () => {
           })
-          getList(pid)
-        }, () => {
-        })
+        });
         break;
       case "restart":
-        const ty = wetee().client.createType('WorkType', item.Type);
-        const wid = { id: item.Nid, wtype: ty }
-        let txre = null
-        if (item.Type == "APP") {
-          txre = wetee().client.tx.app.restart(wid.id)
-        } else if (item.Type == "TASK") {
-          txre = wetee().client.tx.task.rerun(wid.id)
-        } else {
-          txre = wetee().client.tx.gpu.restart(wid.id)
-        }
-        await chain.ProxySignAndSend(txre, projectid, signer, () => {
-          ElNotification({
-            title: 'Notice',
-            message: "Application restart successfully",
-            type: 'success',
+        await $getChainProvider(async (chain): Promise<void> => {
+          const ty = chain.client!.createType('WorkType', item.Type);
+          const wid = { id: item.Nid, wtype: ty }
+          let txre = null
+          if (item.Type == "APP") {
+            txre = chain.client!.tx.app.restart(wid.id)
+          } else if (item.Type == "TASK") {
+            txre = chain.client!.tx.task.rerun(wid.id)
+          } else {
+            txre = chain.client!.tx.gpu.restart(wid.id)
+          }
+          await chain.proxysignAndSend(txre, projectid!, signer, () => {
+            ElNotification({
+              title: 'Notice',
+              message: "Application restart successfully",
+              type: 'success',
+            })
+            getList(pid)
+          }, () => {
           })
-          getList(pid)
-        }, () => {
-        })
+        });
         break;
       default:
         break;

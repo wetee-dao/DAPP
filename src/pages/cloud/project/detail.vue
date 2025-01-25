@@ -51,7 +51,9 @@ import InkCall from "./inkCall.vue"
 import InkMeta from "./inkMeta.vue"
 import TEESetting from "./teeSetting.vue";
 import loadingBox from "@/components/loading-box.vue";
-import { getHttpApi } from "@/plugins/chain";
+import { $getChainProvider, chainUrl, getChainHttp } from "@/plugins/chain";
+import { GetClusterInfo, GetServices } from "@/apis/detail";
+import { hexToString } from "@polkadot/util";
 
 const props = defineProps(["info", "openTag", "close"])
 const activeName = ref(props.openTag ?? "")
@@ -61,7 +63,6 @@ const clusterInfo = ref(null)
 const loader = ref(0)
 const service = ref<any[]>([])
 const ddns = ref<any>("")
-const wetee: any = inject('wetee')
 const workType: any = {
   "APP": "TEE Service",
   "TASK": "TEE Task",
@@ -118,21 +119,26 @@ const GetInfo = async (item: any) => {
 }
 
 const GetTEEInfo = async (item: any) => {
-  const ty = wetee().client.createType('WorkType', item.Type);
-  const wid = { id: item.Nid, wtype: ty }
-  const cidList = await getHttpApi().entries("worker","workContractState",[wid])
-  console.log(cidList)
-  // const {keys, _} = cidList[0];
-  // const cid = keys;
+  await $getChainProvider(async (chain): Promise<void> => {
+    const api = chain.client!
+    const ty = api.createType('WorkType', item.Type); 
+    const wid = { id: item.Nid, wtype: ty }
+    const cidList = await api.query.worker.workContractState.entries(wid)
+    let cid:any = null;
+    cidList.forEach(async ([key, _]) => {
+      cid = key.toHuman()
+    })
 
-  // const cinfo = await GetClusterInfo(parseInt(cid[1]))
-  // ddns.value = cinfo.ip[0].domain
-  // clusterInfo.value = cinfo
-  // loader.value = 1
+    let cinfo = await GetClusterInfo(parseInt(cid[1]))
+    cinfo.ip[0].domain = hexToString(cinfo.ip[0].domain)
+    ddns.value = cinfo.ip[0].domain
+    clusterInfo.value = cinfo
+    loader.value = 1
 
-  // GetServices(parseInt(cid[1]), item).then((d) => {
-  //   service.value = d as any[]
-  // })
+    GetServices(parseInt(cid[1]), item).then((d) => {
+      service.value = d as any[]
+    })
+  },getChainHttp(chainUrl()),true);
 }
 </script>
 

@@ -103,7 +103,7 @@ export class SubstrateProvider {
   // 提交代理交易
   proxysignAndSend = async (tx: SubmittableExtrinsic<'promise'>, ProjectId: string, signer: string, onSeccess: onCallFn, onError: onCallFn) => {
     // 构建代理交易
-    const proxyTx = ProjectId != "-1" ? this.client!.tx.weTEEProject.proxyCall(
+    const proxyTx = ProjectId&&ProjectId != "-1" ? this.client!.tx.project.proxyCall(
       parseInt(ProjectId),
       tx,
     ) : tx;

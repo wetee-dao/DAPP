@@ -379,9 +379,7 @@ const toAdd = async () => {
       const tx = createInstantiateTx(api, params);
       if (!tx) return;
 
-      const g = props.app!.config.globalProperties;
-      const chain = g.$getChain();
-      await chain.ProxySignAndSend(tx, pid, accountId, (result: any) => {
+      await chain.proxysignAndSend(tx, pid!, accountId, (result: any) => {
         console.log(result)
         props.close();
       }, () => { })

@@ -16,7 +16,6 @@ import { SubstrateProvider } from "@/providers/substrate";
 import store from '../store';
 
 // 区块链链接
-let client: ApiPromise | null = null
 export let chainIndexer = 'https://xiaobai.asyou.me:30006/gql'
 export let dkgUrl = 'https://xiaobai.asyou.me:31001/gql'
 
@@ -125,15 +124,15 @@ export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>
 
   let chain = undefined;
   const curl = url || chainUrl();
-  console.log("chain url :", curl);
+  console.log("chain url:", curl);
   try {
-    const wsProvider = curl.includes("ws") ? new WsProvider(curl) : new HttpProvider(curl);
+    const provider = curl.startsWith("ws") ? new WsProvider(curl) : new HttpProvider(curl);
     const api = await ApiPromise.create({
-      provider: wsProvider,
+      provider: provider,
       types: chainJson,
     });
 
-    await api.rpc.chain.getFinalizedHead();
+    // await api.rpc.chain.getFinalizedHead();
     if (userInfo && userInfo.provider) {
       if (userInfo.provider == "metamask") {
         try {
@@ -163,11 +162,11 @@ export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>
     loading.close();
 
     await run(chain!);
-    chain!.close();
+    chain?.close();
   } catch (e) {
     loading.close();
-    chain!.close();
-    console.error("chain connect error :", e);
+    chain?.close();
+    console.log("chain connect error :", e);
   }
 }
 

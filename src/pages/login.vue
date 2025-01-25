@@ -134,8 +134,6 @@ const loginDemo = async () => {
     wallet: "polkadot-js",
   };
 
-  let chain = new SubstrateProvider();
-  global.$setChain(chain);
   store.dispatch("setUserInfo", userInfo);
   store.dispatch("setKeypair", { address: pair.address, mnemonic: mnemonic });
 
@@ -164,8 +162,6 @@ const showWallet = async (name: string, wallet: Wallet | null) => {
     try {
       // 安装启动snap
       const MataMaskSnap = await Metamask.enable!("WeTEE");
-      const meta = await getMetaData();
-      const _config = await setCustomChain(chainUrl, meta);
 
       const metaAccounts = await MataMaskSnap.accounts.get();
       if (metaAccounts.length == 0) {
@@ -180,9 +176,6 @@ const showWallet = async (name: string, wallet: Wallet | null) => {
         name: ac.name!,
         provider: "metamask",
       };
-
-      const chain = new MetaMaskProvider(MataMaskSnap);
-      global.$setChain(chain);
 
       window.localStorage.setItem("userInfo", JSON.stringify(userInfo));
       store.dispatch("setUserInfo", userInfo);
@@ -217,16 +210,12 @@ const PolkadotLoginIn = async () => {
   }
 
   const wallet = LoginShow.value;
-  await checkMetaData(wallet!.extension);
   let userInfo = {
     addr: ac.address,
     name: ac.name,
     provider: "substrate",
     wallet: wallet.extensionName,
   };
-
-  let chain = new SubstrateProvider();
-  global.$setChain(chain);
 
   window.localStorage.setItem("userInfo", JSON.stringify(userInfo));
   store.dispatch("setUserInfo", userInfo);

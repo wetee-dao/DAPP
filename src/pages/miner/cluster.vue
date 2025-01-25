@@ -12,7 +12,7 @@
             </div>
             <div class="row-item">
               <div class="key">Total revenue</div>
-              <div class="num"><i class="icon">&#xe706;</i> 0</div>
+              <div class="num"><i class="icon">&#xe64a;</i> 0</div>
             </div>
             <div class="row-item">
               <div class="key">GPU</div>
