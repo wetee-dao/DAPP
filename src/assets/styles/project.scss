@@ -1,4 +1,4 @@
-@import "../../assets/styles/common/common";
+@use "../../assets/styles/common/theme"  as *;
 
 .project {
   box-sizing: border-box;

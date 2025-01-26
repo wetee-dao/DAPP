@@ -41,5 +41,5 @@ const toAdd = (item: any) => {
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/styles/components/pop.scss";
+@use "../../assets/styles/components/pop.scss";
 </style>

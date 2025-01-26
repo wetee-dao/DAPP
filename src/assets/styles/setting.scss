@@ -1,4 +1,4 @@
-@import "./common/common";
+@use "./common/theme"  as *;
 
 .back-box {
   display: flex;

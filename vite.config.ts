@@ -17,7 +17,8 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@use "~/assets/styles/common/theme.scss" as *;`,
+        api: "modern-compiler",
+        additionalData: `@use "~/assets/styles/common/theme" as *;`,
       },
     },
   },

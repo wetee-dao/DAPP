@@ -185,7 +185,7 @@ const setTheme = (t: string) => {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/styles/components/menu.scss";
+@use "../assets/styles/components/menu.scss"  as *;
 
 .header-wrap {
   width: 100%;

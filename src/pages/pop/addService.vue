@@ -425,5 +425,5 @@ const removeItem = (t: string, i: number) => {
 </script>
 
 <style lang="scss" scoped>
-@import "../../assets/styles/components/pop.scss";
+@use "../../assets/styles/components/pop.scss";
 </style>
