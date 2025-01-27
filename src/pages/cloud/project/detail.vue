@@ -22,9 +22,9 @@
         <el-tab-pane label="TEE report" name="sgxReport" lazy>
           <Report :info="info" :service="service" :clusterInfo="clusterInfo" />
         </el-tab-pane>
-        <el-tab-pane label="Settings" name="settings" lazy>
+        <!-- <el-tab-pane label="Settings" name="settings" lazy>
           <TEESetting :info="info" :clusterInfo="clusterInfo" />
-        </el-tab-pane>
+        </el-tab-pane> -->
       </el-tabs>
     </div>
     <div v-if="loader == 2" class="box" :key="info.Id">

@@ -19,10 +19,10 @@
         </div>
         <div class="dataText" v-if="item.Type != 'INK'">
           <p>{{ item.Name }}</p>
-          <p>
+          <div class="image">
             <i class="icon">&#xf18e;</i>
             <div class="text" :alt="item.Image">{{ shortImage(item.Image) }}</div>
-          </p>
+          </div>
           <div class="ssd-box" v-if="item.Cr.disk.length > 0">
             <el-tooltip v-for="(disk, index) in item.Cr.disk" effect="light" placement="top-start"
               :content="'Mounted on ' + disk.path.SSD + ' - ' + (parseInt(disk.size_.replace(',', '')) / 1024) + ' GB'">

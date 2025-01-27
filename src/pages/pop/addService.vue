@@ -304,6 +304,8 @@ const closeClick = () => {
 };
 
 const toAdd = async () => {
+  containers.value[curContainer.value] = deepCopy(form.value)
+
   await $getChainProvider(async (chain): Promise<void> => {
     if (!chain.client) {
       return;
