@@ -39,6 +39,11 @@ export default {
       return openPop(app, router, store, c, "projectSetting", {}, close)
     };
 
+    app.config.globalProperties.$Build = (router: Object, store: Object, ps:any, close: Function) => {
+      const c = defineAsyncComponent(() => import('../pages/pop/build.vue'));
+      return openPop(app, router, store, c, "Build", ps, close)
+    };
+
     app.config.globalProperties.$OpenProjectMenu = (router: Object, store: Object, event: MouseEvent, item: any, close: Function) => {
       return openPop(app, router, store, ProjectMenu, "projectSetting", { "event": event, "item": item }, close)
     };

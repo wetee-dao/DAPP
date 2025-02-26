@@ -21,15 +21,20 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Login',
         component: () => import('../pages/login.vue')
     },
-    // {
-    //     path: '/not404',
-    //     name: 'Not404',
-    //     component: () => import('../pages/cloud/not404.vue')
-    // },
+    {
+        path: '/not404',
+        name: 'Not404',
+        component: () => import('../pages/not404.vue')
+    },
     {
         path: '/miner',
-        name: 'Not404',
+        name: 'Miner',
         component: () => import('../pages/miner/cluster.vue')
+    },
+    {
+        path: '/builder',
+        name: 'Builder',
+        component: () => import('../pages/builder/list.vue')
     },
 ]
 

@@ -40,5 +40,9 @@ export default defineConfig({
       defaultLocale: 'zh-tw',
     }),
   ],
+  server: {
+    host: true,
+    allowedHosts: ["*.asyou.me"],
+  },
 })
 

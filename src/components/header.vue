@@ -24,7 +24,7 @@
     <!-- <div class="balance">Balance: 1000WTE</div> -->
 
     <div class="theme">
-      <div :class="theme == 'dark' ? 'active' : ''" @click="setTheme('dark')"><i class="icon select-icon">&#xe60f;</i>
+      <div  :class="theme == 'dark'|| theme == ''? 'active' : ''" @click="setTheme('dark')"><i class="icon select-icon">&#xe60f;</i>
       </div>
       <div :class="theme == 'light' ? 'active' : ''" @click="setTheme('light')"><i class="icon select-icon">&#xe6bd;</i>
       </div>
@@ -135,6 +135,8 @@ const computePath = async (p: string) => {
     LogoText.value = "Cloud"
   } else if (ps[0] == "miner") {
     LogoText.value = "Miner"
+  } else if (ps[0] == "builder") {
+    LogoText.value = "Builder"
   }
 
   paths.value = cpaths;
@@ -189,7 +191,7 @@ const setTheme = (t: string) => {
 
 .header-wrap {
   width: 100%;
-  height: 75px;
+  height: 65px;
   box-sizing: border-box;
   position: fixed;
   top: 0;
@@ -208,7 +210,7 @@ const setTheme = (t: string) => {
 
 .header-logo {
   height: 19px;
-  margin-left: 29px;
+  margin-left: 27px;
   // margin-bottom: 1.8px;
   border-radius: 2px;
   overflow: hidden;
@@ -439,7 +441,7 @@ const setTheme = (t: string) => {
 
 .logo-bg {
   position: fixed !important;
-  top: 19px !important;
+  top: 14px !important;
   left: 6px !important;
   display: flex;
   align-items: center;

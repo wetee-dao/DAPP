@@ -15,9 +15,8 @@
     overflow: hidden;
     background-color: $secondary-bg;
     width: calc(100vw - 50px);
-    height: calc(100vh - 100px);
+    height: calc(100vh - 80px);
     margin-left: 20px;
-    margin-right: 20px;
     bottom: 0;
     position: absolute;
     border: 6px solid rgba($gray-bg, 0.1);
@@ -28,7 +27,7 @@
 }
 
 .title {
-  padding: 40px 42px;
+  padding: 30px 35px;
   border-bottom: 2px solid rgba($gray-bg, 0.1);
   font-size: 22px;
   line-height: 1;

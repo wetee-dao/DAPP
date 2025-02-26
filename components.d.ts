@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     ArgInput: typeof import('./src/components/inkform/ArgInput.vue')['default']
     Bool: typeof import('./src/components/inkform/Bool.vue')['default']
+    Builder: typeof import('./src/components/icons/builder.vue')['default']
     Cloud: typeof import('./src/components/icons/cloud.vue')['default']
     ElAnchor: typeof import('element-plus/es')['ElAnchor']
     ElAnchorLink: typeof import('element-plus/es')['ElAnchorLink']

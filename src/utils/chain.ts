@@ -1,11 +1,14 @@
 // 区块链
 import { encodeAddress, decodeAddress } from '@polkadot/keyring';
-import { u8aToHex, hexToU8a, u8aWrapBytes } from '@polkadot/util';
+import { u8aToHex, hexToU8a, u8aWrapBytes, BN } from '@polkadot/util';
 import { Keyring } from '@polkadot/keyring';
 import { web3FromSource } from '@polkadot/extension-dapp';
+import { getWallets, type Wallet } from '@talismn/connect-wallets';
 
 export const keyring = new Keyring({ type: 'sr25519', ss58Format: 2 });
 keyring.setSS58Format(42)
+
+export const WTE = 1_000_000_000_000
 
 export const shortAddress = (address: string) => {
   if (!address) return ""
@@ -23,9 +26,26 @@ export const hexToSS58 = (address: string) => {
 }
 
 export const getSS5842 = (address: string) => {
-  console.log(ss58toHex(address))
   return hexToSS58(ss58toHex(address));
 }
+
+export const getBnFromChain = (str: string) => {
+  return new BN(str.split(",").join(""))
+}
+
+export const getNumstrfromChain = (str: string) => {
+  return str.split(",").join("")
+}
+
+export const showWTE = (b: BN) => {
+  return b.div(new BN(WTE / 1000)).toNumber() / 1000
+}
+
+export const showToken = (b: BN, decimals: number) => {
+  let unit = new BN(10).pow(new BN(decimals));
+  return b.mul(new BN(1000)).div(unit).toNumber() / 1000
+}
+
 
 // export const web3Accounts = (cb: (accounts: any[]) => void) => {
 //   if ((window as any).electronWeb3) {

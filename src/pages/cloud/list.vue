@@ -38,7 +38,7 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { stringToHex } from "@polkadot/util";
 import { getSS5842, ss58toHex } from "@/utils/chain";
-import { defaultProject, getProjectList } from "@/apis/project";
+import { getProjectList } from "@/apis/project";
 const global = useGlobelProperties()
 
 const store = useStore();

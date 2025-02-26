@@ -2,6 +2,7 @@
 <div class="picon">
     <Cloud v-if="icon === 'cloud'" class="logo-icon"/>
     <Miner v-if="icon === 'miner'" class="logo-icon" />
+    <Builder v-if="icon === 'builder'" class="logo-icon" />
 </div>
 </template>
 

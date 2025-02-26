@@ -35,7 +35,6 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
-import Picon from "./icons/picon.vue";
 import service from "../utils/service";
 
 export default defineComponent({

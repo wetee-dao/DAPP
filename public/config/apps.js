@@ -424,9 +424,9 @@ const teeApps = [{
     "github": "https://github.com/wetee-dao/examples/tree/main/ego-http-server",
     "home": "https://go.dev/",
     "docker": {
-        "image": "wetee/ego-hello:2025-01-25-14-36",
+        "image": "wetee/ego-hello:2025-02-19-17-20",
         "port": [{
-            "key": "Tcp",
+            "key": "Http",
             "value": 8999
         }]
     }

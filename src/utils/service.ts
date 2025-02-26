@@ -9,7 +9,6 @@ export interface insType {
 export default [{
   name: "DAPPS",
   icon: "&#xe613;",
-  listUri: "/app_chain/blockInfo",
   sub: <insType[]>[
     { 
       name: "Confidential Cloud", 
@@ -20,6 +19,11 @@ export default [{
       name: "Confidential Miner", 
       icon: "miner",
       url: "/miner", 
+    },
+    { 
+      name: "TEE App Builder", 
+      icon: "builder",
+      url: "/builder", 
     },
   ],
 }]
