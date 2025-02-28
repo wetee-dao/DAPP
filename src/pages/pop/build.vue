@@ -5,27 +5,61 @@
           <i class="icon">&#xe645;</i>Build Application Template
           <i class="icon right" @click="closeClick">&#xe604;</i>
         </div>
+        <div class="form-context-box name-box">
+          <div class="form-input-box">
+            <el-input v-model="name" placeholder="Application Template Name">
+              <template #prefix>
+                <i class="icon">&#xe695;</i>
+              </template>
+            </el-input>
+          </div>
+        </div>
         <div class="toolbar">
           <ul class="tabs">
-            <li class="tab-item template">
-              <el-autocomplete @select="handleTempApp" v-model="curTemp" :fetch-suggestions="querySearch"
-                placeholder="Select app template">
+            <li class="tab-item template tee-select">
+              <el-select v-model="TeeVersion" @change="TeeVersionChange" placeholder="Select TEE type">
                 <template #prefix>
-                  <i class="icon">&#xe680;</i>
+                  <i class="icon">&#xe7f5;</i>
                 </template>
-                <template #default="{ item }">
-                  <div class="input-app" :key="item.name">
-                    <img class="icon" :src="item.icon" />
-                    <div class="app-box">
-                      <div class="app-title">{{ item.name }}</div>
-                      <span class="app-desc">{{ item.desc }}</span>
-                    </div>
-                  </div>
-                </template>
+                <el-option
+                  key="CVM"
+                  label="CVM(TDX/SEV-SNP)"
+                  value="CVM"
+                />
+                <el-option
+                  key="SGX"
+                  label="SGX(Ego/Gramine)"
+                  value="SGX"
+                />
                 <template #suffix>
                   <i class="icon select">&#xe809;</i>
                 </template>
-              </el-autocomplete>
+              </el-select>
+            </li>
+            <li class="tab-item template type-select">
+              <el-select v-model="AppType" placeholder="Select template type">
+                <template #prefix>
+                  <i class="icon">&#xe629;</i>
+                </template>
+                <el-option
+                  key="Ai"
+                  label="Ai"
+                  value="Ai"
+                />
+                <el-option
+                  key="Service"
+                  label="Service"
+                  value="Service"
+                />
+                <el-option
+                  key="Task"
+                  label="Task"
+                  value="Task"
+                />
+                <template #suffix>
+                  <i class="icon select">&#xe809;</i>
+                </template>
+              </el-select>
             </li>
             <li :class="curContainer == 0 ? 'tab-item active' : 'tab-item'" @click="activeContainer(0)">Main container
             </li>
@@ -36,13 +70,13 @@
                 <Close />
               </el-icon>
             </li>
-            <li class="tab-item no-border" v-if="containers[0].teeVersion == 'CVM'" @click="addContainer">
+            <li class="tab-item no-border" v-if="TeeVersion == 'CVM'" @click="addContainer">
               <span class="icon">&#xe604;</span>&nbsp;Add container
             </li>
           </ul>
           <div class="space"></div>
           <el-button size="large" type="primary" @click="toAdd()">
-            Deploy Now &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
+            Build Now &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
           </el-button>
         </div>
   
@@ -63,12 +97,6 @@
                   </el-input>
                 </div>
               </div>
-              <div class="form-context-box" v-show="curContainer == 0">
-                <div class="form-sub-title">Name</div>
-                <div class="form-input-box">
-                  <el-input v-model="form.name" placeholder="Service name"></el-input>
-                </div>
-              </div>
               <div class="form-context-box">
                 <div class="form-sub-title">CPU （1 unit is 1/1000 core）</div>
                 <div class="form-input-box">
@@ -81,10 +109,10 @@
                   <el-slider v-model="form.memory" :step="100" :max="32000" show-input />
                 </div>
               </div>
-              <div class="form-context-box">
+              <div class="form-context-box" v-if="AppType=='Ai'">
                 <div class="form-sub-title">GPU device</div>
                 <div class="form-input-box">
-                  <el-slider v-model="form.gpu" :max="3" show-input show-stops />
+                  <el-slider v-model="form.gpu" :max="8" show-input show-stops />
                 </div>
               </div>
               <div class="form-context-box" v-show="curContainer == 0">
@@ -213,7 +241,7 @@
   import { ElNotification, FormInstance } from "element-plus";
   import { Delete, Close } from '@element-plus/icons-vue';
   import { getUrlParams } from "@/utils/pop";
-  import { validFormArray } from "./utils";
+  import { validAppArray } from "./utils";
   import { deepCopy } from "@/utils/object";
   import { $getChainProvider } from "@/plugins/chain";
   
@@ -225,10 +253,8 @@
     e.preventDefault()
   }
   
-  const temps = (window as any).extTemps().filter((v: any) => v.create_type == "gpu")
-  const curTemp = ref<string>("")
   const defaultContainer = {
-    teeVersion: "CVM",
+    TeeVersion: "CVM",
     image: "",
     cpu: 1000,
     memory: 800,
@@ -242,7 +268,18 @@
   const curContainer = ref<any>(0)
   const containers = ref<any[]>([deepCopy(defaultContainer)])
   const form = ref<any>(deepCopy(defaultContainer))
-  
+  const name = ref<string>("")
+  const TeeVersion = ref<string>("SGX")
+  const AppType = ref<string>("Service")
+
+  const TeeVersionChange = () => {
+    if (TeeVersion.value == "SGX") {
+      form.value = deepCopy(containers.value[0])
+      containers.value = [deepCopy(containers.value[0])]
+      curContainer.value = 0
+    }
+  }
+
   const addContainer = () => {
     let oldCs = deepCopy(containers.value)
     oldCs.push(deepCopy(defaultContainer))
@@ -269,23 +306,6 @@
     curContainer.value = 0
   }
   
-  const handleTempApp = (item: any) => {
-    curTemp.value = item.name
-    console.log(deepCopy(item.containers))
-  
-    containers.value = deepCopy(item.containers)
-    activeContainer(0)
-  }
-  
-  const querySearch = (queryString: string, cb: any) => {
-    let results = queryString
-      ? temps.filter(createFilter(queryString))
-      : temps
-  
-    if (results.length == 0) results = temps
-    cb(results)
-  }
-  
   const createFilter = (queryString: string) => {
     return (restaurant: any) => {
       return (
@@ -300,74 +320,36 @@
   
   const toAdd = async () => {
     containers.value[curContainer.value] = deepCopy(form.value)
+    if (name.value == "") {
+      ElNotification({
+        title: "Error",
+        message: "Container name is required",
+        type: "error",
+      })
+      return
+    }
     await $getChainProvider(async (chain): Promise<void> => {
       if (!chain.client) {
         return;
       }
       const client = chain.client;
-  
-      let mainData: any = {}
+
       let validDatas: any[] = []
-      let envs: any[] = []
       for (var i = 0; i < containers.value.length; i++) {
         const c = containers.value[i]
-        const validData = validFormArray(client, c, i)
+        const validData = validAppArray(client, c, AppType.value)
         if (!validData.ok) return;
-        if (i == 0) {
-          mainData = {
-            name: c.name,
-            level: c.level,
-            teeVersion: c.teeVersion,
-            ...validData.data,
-          }
-        } else {
-          validDatas.push(validData.data)
-        }
-        envs.push(...validData.data.env)
-        console.log(envs)
+        validDatas.push(validData.data)
       }
-  
+
       const signer = props.store.state.userInfo.addr;
-      if (mainData.name == "") {
-        ElNotification({
-          title: "Error",
-          message: "Container name is required",
-          type: "error",
-        })
-        return
-      }
       try {
-        //@ts-ignore
-        const none = new Option(client.registry, "Vec<u8>", null);
-        const tx = client.tx.gpu.create(
-          mainData.name,
-          mainData.image,
-          "",
-          "",
-          JSON.stringify(containers.value[0].meta),
-          mainData.port,
-          mainData.command,
-          envs,
-          none,
-          mainData.cpu,
-          mainData.memory,
-          mainData.disk,
-          mainData.gpu,
-          validDatas.map((v: any) => {
-            return {
-              image: v.image,
-              command: v.command,
-              port: v.port,
-              cr: {
-                cpu: v.cpu,
-                mem: v.mem,
-                disk: v.disk,
-                gpu: 0
-              }
-            }
-          }),
-          mainData.level,
-          client.createType('TEEVersion', mainData.teeVersion),
+        const tx = client.tx.store.registerApp(
+          name.value,
+          "{}",
+          client.createType('AppType', AppType.value),
+          validDatas,
+          client.createType('TEEVersion', TeeVersion.value),
         )
   
         await chain.proxysignAndSend(tx, pid!, signer, () => {
@@ -415,4 +397,31 @@
   
   <style lang="scss" scoped>
   @use "../../assets/styles/components/pop.scss";
+  .name-box{
+    padding:0px 25px 15px 25px;
+    .icon{
+      font-size: 15px;
+    }
+  }
+
+  .tee-select{
+    width: 200px !important;
+    .icon{
+      font-size: 16px !important;
+    }
+
+    :deep(.el-select__wrapper) {
+      border: none;
+    }
+  }
+
+  .type-select{
+    width: 115px !important;
+    .icon{
+      font-size: 16px !important;
+    }
+    :deep(.el-select__wrapper) {
+      border: none;
+    }
+  }
   </style>

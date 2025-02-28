@@ -77,7 +77,7 @@
       <Logo />
     </div>
     <div class="cur-service">
-      {{ LogoText }} <div class="block">I</div>
+      {{ LogoText }} <div class="block">IE</div>
     </div>
   </div>
 </template>
@@ -209,7 +209,7 @@ const setTheme = (t: string) => {
 }
 
 .header-logo {
-  height: 19px;
+  height: 21px;
   margin-left: 27px;
   // margin-bottom: 1.8px;
   border-radius: 2px;
@@ -225,14 +225,13 @@ const setTheme = (t: string) => {
   display: flex;
   align-items: center;
   cursor: pointer;
-  // border-right: 2px solid rgba($secondary-text-rgb, 0.03);
 }
 
 .header-box {
   padding: 10px 12px;
   margin: 0px 21px 0px 0px;
   background-color: rgba($secondary-bg-rgb, 0.8);
-  border-radius: 4px;
+  border-radius: 3px;
   height: 20px;
   justify-content: space-between;
 }
@@ -257,7 +256,7 @@ const setTheme = (t: string) => {
     height: 30px;
     display: flex;
     fill: $primary-text;
-    margin-left: -3px;
+    margin-left: 0px;
     display: block;
     opacity: 0.7;
   }
@@ -441,7 +440,7 @@ const setTheme = (t: string) => {
 
 .logo-bg {
   position: fixed !important;
-  top: 14px !important;
+  top: 13px !important;
   left: 6px !important;
   display: flex;
   align-items: center;

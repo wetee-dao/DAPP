@@ -141,5 +141,6 @@ export const chainJson = {
   "Command": {
     "_enum": { "SH": "Vec<u8>", "BASH": "Vec<u8>", "ZSH": "Vec<u8>", "NONE": null }
   },
-  "TEEVersion": { "_enum": ["SGX", "CVM"] }
+  "TEEVersion": { "_enum": ["SGX", "CVM"] },
+  "AppType": { "_enum": ["Service", "Task","Ai"] },
 }

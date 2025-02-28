@@ -9,10 +9,10 @@
           </div>
 
           <div class="dataText">
-            <p>{{ item.name }} - v{{ versions[item.id]?versions[item.id][0].version:'0' }}</p>
+            <p>{{ item.name }} - v{{ versions[item.id]&&versions[item.id][0]?versions[item.id][0].version:'0' }}</p>
             <p>{{ item.meta.desc }}</p>
             <div class="images" v-if="versions[item.id]">
-              <div class="image" v-for="(image, index) in versions[item.id][0].value">{{ image.i}}</div>
+              <div class="image" v-for="(image, index) in versions[item.id]">{{ image.value.i}}</div>
             </div>
           </div>
 
@@ -50,14 +50,12 @@ import useGlobelProperties from "@/plugins/globel";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { stringToHex } from "@polkadot/util";
-import { getNumstrfromChain, getSS5842, ss58toHex } from "@/utils/chain";
+import { getNumstrfromChain, getSS5842 } from "@/utils/chain";
 import { getHttpApi } from "@/plugins/chain";
 const global = useGlobelProperties()
 
 const store = useStore();
 const router = useRouter();
-const theme = ref(document.documentElement.getAttribute("class"));
 const apps = ref<any[]>([]);
 const versions = ref<any>({});
 
@@ -70,16 +68,6 @@ const add = () => {
 
   })
 };
-
-const ss58toIcon = (item: any) => {
-  let address = item.addr
-  let addr: string = ss58toHex(address)
-  if (addr.indexOf("0x6d6f646c776574656564616f") > -1) {
-    addr = addr.replace("0x6d6f646c776574656564616f", "").replace(/^0+/, '').slice(0, -22)
-    addr = parseInt(addr, 16).toString(2) + stringToHex("project").replace(/^0x/, '');
-  }
-  return addr
-}
 
 onMounted(async () => {
   getList()
@@ -102,13 +90,13 @@ const getList = async () => {
   let cversions: any = {}
   for (let i = 0; i < ids.length; i++){
     const item = ids[i]
-    const appsVersion = await getHttpApi().entries("store", "appVerions", item)
+    const appsVersion = await getHttpApi().entries("store", "versionLists", [item])
     cversions[item] = appsVersion.map((version: any) => {
       let v = version.value
       return {
         version: version.keys[1],
         block: getNumstrfromChain(v[1]),
-        value: v[0]
+        value: v[0][0],
       };
     })
   }
@@ -119,9 +107,8 @@ const getList = async () => {
 <style lang="scss" scoped>
 .home {
   box-sizing: border-box;
-  padding-top: 75px;
   width: 100%;
-  padding: 75px 20px 0;
+  padding: 65px 20px 0;
 }
 
 .page-title {
@@ -155,12 +142,10 @@ const getList = async () => {
 
   .projectItem {
     background-color: rgba($primary-bg-rgb, 1);
-    border: 1px solid rgba($secondary-text-rgb, 0.07);
-    // box-shadow: 0 0 10px rgba($primary-text-rgb, 0.03);
-    border-radius: 4px;
+    border: 1Px solid rgba($secondary-text-rgb, 0.09);
     display: flex;
     align-items: center;
-    padding: 25px 20px;
+    padding: 15px 15px;
     cursor: pointer;
     margin-bottom: 20px;
     position: relative;
@@ -199,6 +184,8 @@ const getList = async () => {
       margin-left: 20px;
       flex: 1;
       overflow: hidden;
+      position: relative;
+      z-index: 10;
 
       p:first-of-type {
         color: $secondary-text;
@@ -228,10 +215,10 @@ const getList = async () => {
     .images{
       .image{
         display: inline-block;
-        background-color: rgba($secondary-text-rgb, 0.07);
-        padding: 5px 6px;
         border-radius: 3px;
         font-size: 14px;
+        font-weight: 600;
+        color: rgba($secondary-text-rgb,0.5);
       }
     }
 
@@ -244,7 +231,7 @@ const getList = async () => {
       font-weight: bold;
       font-size: 15px;
       text-align: right;
-      z-index: 0;
+      z-index: 1;
 
       &::after {
         content: " ";
@@ -267,10 +254,6 @@ const getList = async () => {
         text-align: right;
       }
     }
-  }
-
-  .add {
-    box-shadow: unset;
   }
 }
 
@@ -312,9 +295,5 @@ const getList = async () => {
 <style lang="scss">
 .light .projectItem {
   border: 2px solid rgba($secondary-text-rgb, 0.05) !important;
-}
-
-.dark .projectItem.add {
-  box-shadow: none;
 }
 </style>

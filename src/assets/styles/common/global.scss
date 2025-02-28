@@ -45,13 +45,13 @@ body {
   .el-textarea__inner {
     background: transparent;
     box-shadow: none !important;
-    border: 3px solid rgba($color: $secondary-text-rgb, $alpha: 0.2);
+    border: 2Px solid rgba($color: $secondary-text-rgb, $alpha: 0.2);
   }
 
   .el-input-group__prepend{
     background: transparent;
     box-shadow: none !important;
-    border: 3px solid rgba($color: $secondary-text-rgb, $alpha: 0.2);
+    border: 2Px solid rgba($color: $secondary-text-rgb, $alpha: 0.2);
     border-right: none;
     box-sizing: border-box;
   }
@@ -59,7 +59,7 @@ body {
   .el-input-group__append{
     background: transparent;
     box-shadow: none !important;
-    border: 3px solid rgba($color: $secondary-text-rgb, $alpha: 0.2);
+    border: 2Px solid rgba($color: $secondary-text-rgb, $alpha: 0.2);
     border-left: none;
     box-sizing: border-box;
   }

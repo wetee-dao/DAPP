@@ -203,8 +203,7 @@ onMounted(async () => {
   justify-content: flex-start;
 
   .clusterItem {
-    border: 3px solid rgba($primary-text-rgb, 0.1);
-    border-radius: 10px;
+    border: 1Px solid rgba($primary-text-rgb, 0.3);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -237,7 +236,6 @@ onMounted(async () => {
       padding: 8px 0;
       margin-bottom: 2px;
       background-color: $secondary-bg;
-      // border-radius: 6px;
       display: flex;
       align-items: center;
 
@@ -272,13 +270,13 @@ onMounted(async () => {
       }
 
       &.top {
-        border-top-right-radius: 6px;
-        border-top-left-radius: 6px;
+        border-top-right-radius: 4px;
+        border-top-left-radius: 4px;
       }
 
       &.bottom {
-        border-bottom-right-radius: 6px;
-        border-bottom-left-radius: 6px;
+        border-bottom-right-radius: 4px;
+        border-bottom-left-radius: 4px;
       }
     }
 

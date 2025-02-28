@@ -78,9 +78,8 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .home {
   box-sizing: border-box;
-  padding-top: 75px;
   width: 100%;
-  padding: 75px 20px 0;
+  padding: 65px 20px 0;
 }
 
 .page-title {
@@ -113,13 +112,12 @@ onMounted(async () => {
   margin: 0 -20px;
 
   .projectItem {
-    height: 108px;
-    background-color: rgba($secondary-bg-rgb, 0.5);
-    border: 2px solid rgba($secondary-text-rgb, 0.05);
-    border-radius: 10px;
+    height: 96px;
+    background-color: rgba($primary-bg-rgb, 0.9);
+    border: 1Px solid rgba($secondary-text-rgb, 0.09);
     display: flex;
     align-items: center;
-    padding: 0 18px;
+    padding: 0 12px;
     cursor: pointer;
     margin-bottom: 20px;
 
@@ -146,7 +144,6 @@ onMounted(async () => {
 
     .gray-icon {
       font-size: 60px;
-      border: 4px solid rgba($secondary-text-rgb, 0.15);
 
       .icon {
         font-size: 35px;
@@ -185,8 +182,6 @@ onMounted(async () => {
   }
 
   .add {
-    box-shadow: unset;
-
     .dataImg {
       border-radius: 50%
     }
@@ -231,9 +226,5 @@ onMounted(async () => {
 <style lang="scss">
 .light .projectItem {
   border: 3px solid rgba($secondary-text-rgb, 0.08);
-}
-
-.dark .projectItem.add {
-  box-shadow: none;
 }
 </style>
