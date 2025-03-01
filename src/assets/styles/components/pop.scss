@@ -10,13 +10,13 @@
   z-index: 100;
 
   >div {
-    border-top-right-radius: 10px;
-    border-top-left-radius: 10px;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
     overflow: hidden;
     background-color: $secondary-bg;
-    width: calc(100vw - 50px);
+    width: calc(100vw - 55px);
     height: calc(100vh - 80px);
-    left: 15px;
+    left: 25px;
     bottom: 0;
     position: absolute;
     border: 6px solid rgba($gray-bg, 0.1);

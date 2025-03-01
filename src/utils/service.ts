@@ -11,12 +11,12 @@ export default [{
   icon: "&#xe613;",
   sub: <insType[]>[
     { 
-      name: "Confidential Cloud", 
+      name: "TEE Cloud", 
       icon: "cloud",
       url: "/cloud", 
     },
     { 
-      name: "Confidential Miner", 
+      name: "TEE Miner", 
       icon: "miner",
       url: "/miner", 
     },

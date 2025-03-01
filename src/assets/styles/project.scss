@@ -368,8 +368,8 @@
   .avtive {
     flex: 1;
     border: 2px solid rgba($secondary-text-rgb, 0.1);
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
     background-color: rgba($primary-bg-rgb, 0.9);
     box-shadow: 0 0 5px rgba($secondary-text-rgb, 0.08);
     border-bottom: none;

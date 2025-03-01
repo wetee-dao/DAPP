@@ -96,7 +96,7 @@ i {
   z-index: 101;
 
   >div {
-    border-radius: 10px;
+    border-radius: 4px;
     overflow: hidden;
     background-color: $secondary-bg;
     max-width: 500px;
@@ -130,7 +130,7 @@ i {
   >div {
     display: flex;
     padding: 16px 15px;
-    border-radius: 10px;
+    border-radius: 4px;
     font-size: 18px;
     cursor: pointer;
     align-items: center;

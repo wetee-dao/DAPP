@@ -13,7 +13,7 @@
         <Logo />
       </div>
       <div class="cur-service">
-        <div>{{ LogoText }}</div>
+        <div class="t" v-for="item in LogoText.split(' ')">{{ item }}</div>
         <i class="icon select-icon">&#xe600;</i>
       </div>
     </div>
@@ -77,7 +77,7 @@
       <Logo />
     </div>
     <div class="cur-service">
-      {{ LogoText }} <div class="block">IE</div>
+      <div class="t" v-for="item in LogoText.split(' ')">{{ item }}</div> <div class="block">IE</div>
     </div>
   </div>
 </template>
@@ -132,11 +132,11 @@ const computePath = async (p: string) => {
   }
 
   if (ps[0] == "cloud") {
-    LogoText.value = "Cloud"
+    LogoText.value = "TEE Cloud"
   } else if (ps[0] == "miner") {
-    LogoText.value = "Miner"
+    LogoText.value = "TEE Miner"
   } else if (ps[0] == "builder") {
-    LogoText.value = "Builder"
+    LogoText.value = "TEE Builder"
   }
 
   paths.value = cpaths;
@@ -210,9 +210,7 @@ const setTheme = (t: string) => {
 
 .header-logo {
   height: 21px;
-  margin-left: 27px;
-  // margin-bottom: 1.8px;
-  border-radius: 2px;
+  margin-left: 25px;
   overflow: hidden;
 }
 
@@ -237,7 +235,7 @@ const setTheme = (t: string) => {
 }
 
 .cur-service {
-  padding: 0px 6px;
+  padding: 0px 5px 0px 1px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -246,9 +244,12 @@ const setTheme = (t: string) => {
   margin-right: 3px;
   font-size: 22px;
   font-family: "pixel-font";
-  // font-weight: bold;
   letter-spacing: 2px;
   color: rgba($primary-text-rgb, 1);
+
+  .t{
+    margin-left: 4px;
+  }
 
   .select-icon {
     font-size: 16px;
@@ -256,9 +257,10 @@ const setTheme = (t: string) => {
     height: 30px;
     display: flex;
     fill: $primary-text;
-    margin-left: 0px;
+    margin-left: -2px;
     display: block;
-    opacity: 0.7;
+    position: relative;
+    top: 0.5px;
   }
 }
 
@@ -441,14 +443,16 @@ const setTheme = (t: string) => {
 .logo-bg {
   position: fixed !important;
   top: 13px !important;
-  left: 6px !important;
+  left: 11px !important;
   display: flex;
   align-items: center;
-  transform: scale(1.2);
+  transform: scale(1.25);
   height: 34px;
   .cur-service{
     letter-spacing: -2px;
     align-items: center;
+    position: relative;
+    top: 0.5px;
   }
   .block{
     margin-left: 4px;

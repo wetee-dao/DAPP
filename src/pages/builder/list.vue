@@ -224,12 +224,12 @@ const getList = async () => {
 
     .mask-bg {
       position: absolute;
-      bottom: 2px;
-      right: 6px;
+      bottom: 1px;
+      right: 2px;
       padding: 5px 5px 3px;
-      color: rgba($primary-text-rgb,0.6);
+      color: rgba($primary-text-rgb,1);
       font-weight: bold;
-      font-size: 15px;
+      font-size: 13px;
       text-align: right;
       z-index: 1;
 
@@ -239,7 +239,7 @@ const getList = async () => {
         width: 100%;
         height: 101%;
         right: 2px;
-        bottom: 0px;
+        top: -1px;
         background-image: radial-gradient(transparent 1px, $primary-bg 1px);
         background-size: 4px 4px;
         backdrop-filter: saturate(50%) blur(4px);
@@ -248,8 +248,8 @@ const getList = async () => {
       .mask-text {
         position: absolute;
         z-index: 3;
-        font-size: 14px;
-        top: 5px;
+        font-size: 12px;
+        top: 6.5px;
         left: 7px;
         text-align: right;
       }

@@ -76,7 +76,7 @@
           </ul>
           <div class="space"></div>
           <el-button size="large" type="primary" @click="toAdd()">
-            Build Now &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
+            Upload Now &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
           </el-button>
         </div>
   

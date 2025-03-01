@@ -117,7 +117,7 @@ onMounted(async () => {
     border: 1Px solid rgba($secondary-text-rgb, 0.09);
     display: flex;
     align-items: center;
-    padding: 0 12px;
+    padding: 0 16px;
     cursor: pointer;
     margin-bottom: 20px;
 
@@ -128,18 +128,15 @@ onMounted(async () => {
       display: flex;
       justify-content: center;
       align-items: center;
-      border-radius: 50%;
+      border-radius: 2px;
       overflow: hidden;
-      border: 4px solid rgba($secondary-text-rgb, 0.05);
+      // border: 4px solid rgba($secondary-text-rgb, 0.05);
+      background-color: rgba($secondary-text-rgb, 0.045);
 
       .icon {
         font-size: 28px;
         color: $secondary-text;
       }
-    }
-
-    .identicon {
-      opacity: 0.8;
     }
 
     .gray-icon {
@@ -153,7 +150,7 @@ onMounted(async () => {
     }
 
     .dataText {
-      margin-left: 10px;
+      margin-left: 15px;
       flex: 1;
       overflow: hidden;
 
@@ -178,12 +175,6 @@ onMounted(async () => {
         font-size: 13px;
         word-break: break-all;
       }
-    }
-  }
-
-  .add {
-    .dataImg {
-      border-radius: 50%
     }
   }
 }
