@@ -95,7 +95,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
+import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { Setting, Plus } from '@element-plus/icons-vue'
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
@@ -112,7 +112,6 @@ import { $getChainProvider } from "@/plugins/chain";
 import Detail from "./project/detail.vue";
 
 const global = useGlobelProperties()
-const wetee: any = inject('wetee')
 const projectid = getUrlParams("project_id");
 
 const router = useRouter();

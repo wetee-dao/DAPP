@@ -3,7 +3,6 @@ import { encodeAddress, decodeAddress } from '@polkadot/keyring';
 import { u8aToHex, hexToU8a, u8aWrapBytes, BN } from '@polkadot/util';
 import { Keyring } from '@polkadot/keyring';
 import { web3FromSource } from '@polkadot/extension-dapp';
-import { getWallets, type Wallet } from '@talismn/connect-wallets';
 
 export const keyring = new Keyring({ type: 'sr25519', ss58Format: 2 });
 keyring.setSS58Format(42)

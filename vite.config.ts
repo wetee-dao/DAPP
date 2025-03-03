@@ -37,7 +37,7 @@ export default defineConfig({
     }),
     ElementPlus({
       useSource: true,
-      defaultLocale: 'zh-tw',
+      defaultLocale: 'en',
     }),
   ],
   server: {

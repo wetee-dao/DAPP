@@ -1,16 +1,19 @@
 <template>
-  <div id="mainNav">
-    <GHeader />
-    <!-- 主应用入口 -->
-    <router-view />
-    <!-- 子应用入口 -->
-    <div v-show="$route.fullPath.indexOf('app_') > -1" id="subview" />
-  </div>
+  <el-config-provider :locale="en">
+    <div id="mainNav">
+      <GHeader />
+      <!-- 主应用入口 -->
+      <router-view />
+      <!-- 子应用入口 -->
+      <div v-show="$route.fullPath.indexOf('app_') > -1" id="subview" />
+    </div>
+  </el-config-provider>
 </template>
 
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted, ref } from "vue";
 import { useStore } from "vuex";
+import en from 'element-plus/es/locale/lang/en'
 
 import GHeader from "./components/header.vue";
 

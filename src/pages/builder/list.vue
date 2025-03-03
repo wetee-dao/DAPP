@@ -1,18 +1,17 @@
 <template>
   <div class="home">
     <el-row class="data" :gutter="20">
-      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" :key="item.addr" v-for="(item, index) in apps"
-        @click="GotoProject(item)">
+      <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" :key="item.addr" v-for="(item, index) in apps" @click="GotoApp(item)">
         <div class="projectItem">
           <div class="dataImg">
             {{ item.id }}
           </div>
 
           <div class="dataText">
-            <p>{{ item.name }} - v{{ versions[item.id]&&versions[item.id][0]?versions[item.id][0].version:'0' }}</p>
-            <p>{{ item.meta.desc }}</p>
-            <div class="images" v-if="versions[item.id]">
-              <div class="image" v-for="(image, index) in versions[item.id]">{{ image.value.i}}</div>
+            <p>{{ item.name }} - v{{ versions[item.id] && versions[item.id][0] ? versions[item.id][0].version : '0' }}
+            </p>
+            <div class="images" v-if="versions[item.id] && versions[item.id][0]">
+              <div class="image">{{ versions[item.id][0].value.i }}</div>
             </div>
           </div>
 
@@ -59,12 +58,12 @@ const router = useRouter();
 const apps = ref<any[]>([]);
 const versions = ref<any>({});
 
-const GotoProject = (item: any) => {
-  router.push("/cloud/" + getSS5842(item.addr) + "?project_id=" + item.id!)
+const GotoApp = (item: any) => {
+  router.push("/builder/" + item.id)
 };
 
 const add = () => {
-  global.$Build(router, store, () => {
+  global.$Build(router, store, {}, () => {
 
   })
 };
@@ -88,7 +87,7 @@ const getList = async () => {
   apps.value = appsList;
 
   let cversions: any = {}
-  for (let i = 0; i < ids.length; i++){
+  for (let i = 0; i < ids.length; i++) {
     const item = ids[i]
     const appsVersion = await getHttpApi().entries("store", "versionLists", [item])
     cversions[item] = appsVersion.map((version: any) => {
@@ -98,7 +97,7 @@ const getList = async () => {
         block: getNumstrfromChain(v[1]),
         value: v[0][0],
       };
-    })
+    }).reverse()
   }
   versions.value = cversions
 }
@@ -145,7 +144,7 @@ const getList = async () => {
     border: 1Px solid rgba($secondary-text-rgb, 0.09);
     display: flex;
     align-items: center;
-    padding: 15px 15px;
+    padding: 0px 15px;
     cursor: pointer;
     margin-bottom: 20px;
     position: relative;
@@ -164,6 +163,7 @@ const getList = async () => {
       border: 3px dotted rgba($secondary-text-rgb, 0.25);
       font-weight: bold;
       color: rgba($secondary-text-rgb, 0.5);
+      margin: 15px 0;
     }
 
     .identicon {
@@ -212,24 +212,24 @@ const getList = async () => {
       }
     }
 
-    .images{
-      .image{
+    .images {
+      .image {
         display: inline-block;
         border-radius: 3px;
         font-size: 14px;
         font-weight: 600;
-        color: rgba($secondary-text-rgb,0.5);
+        color: rgba($secondary-text-rgb, 0.5);
       }
     }
 
     .mask-bg {
       position: absolute;
-      bottom: 1px;
-      right: 2px;
+      bottom: 4px;
+      right: 4px;
       padding: 5px 5px 3px;
-      color: rgba($primary-text-rgb,1);
+      color: rgba($primary-text-rgb, 1);
       font-weight: bold;
-      font-size: 13px;
+      font-size: 14px;
       text-align: right;
       z-index: 1;
 
@@ -248,11 +248,19 @@ const getList = async () => {
       .mask-text {
         position: absolute;
         z-index: 3;
-        font-size: 12px;
+        font-size: 13px;
         top: 6.5px;
         left: 7px;
         text-align: right;
       }
+    }
+
+    .dropdown-icon {
+      font-size: 19px;
+      color: $secondary-text;
+      display: inline-block;
+      padding: 8px 3px;
+      margin-right: 5px;
     }
   }
 }
@@ -260,28 +268,6 @@ const getList = async () => {
 @media screen and (max-width: 570px) {
   .data {
     justify-content: center;
-
-    >div {
-      max-width: 1000px;
-    }
-  }
-}
-
-@media screen and (max-width: 729px) and (min-width: 570px) {
-  .data {
-
-    >div {
-      max-width: 500px;
-    }
-  }
-}
-
-@media screen and (max-width: 1005px) and (min-width: 729px) {
-  .data {
-
-    >div {
-      max-width: 500px;
-    }
   }
 }
 

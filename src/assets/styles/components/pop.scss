@@ -72,7 +72,7 @@
 
     .tab-item {
       padding: 0 15px;
-      height: 45px;
+      height: 100%;
       font-size: 14px;
       border-right: 1PX solid rgba($color: $secondary-text-rgb, $alpha: 0.1);
       cursor: pointer;
@@ -132,6 +132,10 @@
 
     .split.icon {
       font-size: 25px;
+    }
+
+    :deep(.el-select__wrapper){
+      border-radius: 0;
     }
   }
 }

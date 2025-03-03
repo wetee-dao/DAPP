@@ -5,11 +5,19 @@
           <i class="icon">&#xe645;</i>Build Application Template
           <i class="icon right" @click="closeClick">&#xe604;</i>
         </div>
-        <div class="form-context-box name-box">
-          <div class="form-input-box">
-            <el-input v-model="name" placeholder="Application Template Name">
+        <div class="form-context-box name-box flex">
+          <div class="form-input-box w-50">
+            <el-input v-model="name" :disabled="mod!=''" placeholder="Application Template Name">
               <template #prefix>
                 <i class="icon">&#xe695;</i>
+              </template>
+            </el-input>
+          </div>
+
+          <div class="form-input-box w-50" v-if="mod!=''">
+            <el-input v-model="version" :disabled='true' placeholder="Application Template Vesion">
+              <template #prefix>
+                <i class="icon">&#xe66e;</i>
               </template>
             </el-input>
           </div>
@@ -17,7 +25,7 @@
         <div class="toolbar">
           <ul class="tabs">
             <li class="tab-item template tee-select">
-              <el-select v-model="TeeVersion" @change="TeeVersionChange" placeholder="Select TEE type">
+              <el-select v-model="TeeVersion"  :disabled="mod!=''" @change="TeeVersionChange" placeholder="Select TEE type">
                 <template #prefix>
                   <i class="icon">&#xe7f5;</i>
                 </template>
@@ -37,7 +45,7 @@
               </el-select>
             </li>
             <li class="tab-item template type-select">
-              <el-select v-model="AppType" placeholder="Select template type">
+              <el-select v-model="AppType"  :disabled="mod!=''" placeholder="Select template type">
                 <template #prefix>
                   <i class="icon">&#xe629;</i>
                 </template>
@@ -113,12 +121,6 @@
                 <div class="form-sub-title">GPU device</div>
                 <div class="form-input-box">
                   <el-slider v-model="form.gpu" :max="8" show-input show-stops />
-                </div>
-              </div>
-              <div class="form-context-box" v-show="curContainer == 0">
-                <div class="form-sub-title">Level</div>
-                <div class="form-input-box">
-                  <el-slider v-model="form.level" :max="8" show-input show-stops />
                 </div>
               </div>
             </div>
@@ -237,16 +239,20 @@
   </template>
   
   <script lang="ts" setup>
-  import { ref } from "vue";
+  import { onMounted, ref } from "vue";
   import { ElNotification, FormInstance } from "element-plus";
   import { Delete, Close } from '@element-plus/icons-vue';
   import { getUrlParams } from "@/utils/pop";
-  import { validAppArray } from "./utils";
+  import { chainToContainer, validAppArray } from "./utils";
   import { deepCopy } from "@/utils/object";
-  import { $getChainProvider } from "@/plugins/chain";
+  import { $getChainProvider, getHttpApi } from "@/plugins/chain";
+  import { getNumstrfromChain } from "@/utils/chain";
+import { hexToString } from "@polkadot/util";
   
   const pid = getUrlParams("project_id");
-  const props = defineProps(["router", "store", "close", "app"])
+  const props = defineProps(["router", "store", "close", "ps", "app"])
+  const params = props.ps
+  const mod = params.mod;
   const containerRef = ref<HTMLElement | null>(null)
   const formRef = ref<FormInstance>()
   const handleClick = (e: MouseEvent) => {
@@ -254,21 +260,20 @@
   }
   
   const defaultContainer = {
-    TeeVersion: "CVM",
     image: "",
     cpu: 1000,
     memory: 800,
-    disk: [],
-    port: [],
     commandPrefix: "SH",
     command: "",
     env: [],
-    level: 1,
+    disk: [],
+    port: [],
   }
   const curContainer = ref<any>(0)
   const containers = ref<any[]>([deepCopy(defaultContainer)])
   const form = ref<any>(deepCopy(defaultContainer))
   const name = ref<string>("")
+  const version = ref<number>(1)
   const TeeVersion = ref<string>("SGX")
   const AppType = ref<string>("Service")
 
@@ -306,14 +311,6 @@
     curContainer.value = 0
   }
   
-  const createFilter = (queryString: string) => {
-    return (restaurant: any) => {
-      return (
-        restaurant.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0
-      )
-    }
-  }
-  
   const closeClick = () => {
     props.close();
   };
@@ -328,6 +325,7 @@
       })
       return
     }
+
     await $getChainProvider(async (chain): Promise<void> => {
       if (!chain.client) {
         return;
@@ -344,14 +342,22 @@
 
       const signer = props.store.state.userInfo.addr;
       try {
-        const tx = client.tx.store.registerApp(
-          name.value,
-          "{}",
-          client.createType('AppType', AppType.value),
-          validDatas,
-          client.createType('TEEVersion', TeeVersion.value),
-        )
-  
+        let tx:any = null;
+        if (mod){
+          tx = client.tx.store.addAppVersion(
+            parseInt(mod),
+            version.value,
+            validDatas
+          )
+        }else{
+          tx = client.tx.store.registerApp(
+            name.value,
+            "{}",
+            client.createType('AppType', AppType.value),
+            validDatas,
+            client.createType('TEEVersion', TeeVersion.value),
+          )
+        }
         await chain.proxysignAndSend(tx, pid!, signer, () => {
           props.close();
         }, () => { })
@@ -393,14 +399,60 @@
   const removeItem = (t: string, i: number) => {
     form.value[t].splice(i, 1);
   };
+
+
+  onMounted(async () => {
+      getInfo()
+  });
+
+  const getInfo = async () => {
+    if (!mod){
+      return
+    }
+    let id = parseInt(mod)
+    const app = await getHttpApi().query("store", "apps", [id])
+    name.value =  hexToString(app.name)
+
+    const appsVersion = await getHttpApi().entries("store", "versionLists", [id])
+    const versions = appsVersion.map((version: any) => {
+        let v = version.value
+        return {
+            version: version.keys[1],
+            block: getNumstrfromChain(v[1]),
+            value: v[0],
+        };
+    }).reverse()
+
+    if(versions.length>0){
+      const last = versions[0]
+      version.value = parseInt(last.version)+1
+
+      const cs = last.value.map((c: any) => {
+        return chainToContainer(c)
+      })
+
+      console.log(cs)
+      containers.value = cs
+      form.value = cs[0]
+    }
+  }
   </script>
   
   <style lang="scss" scoped>
   @use "../../assets/styles/components/pop.scss";
   .name-box{
     padding:0px 25px 15px 25px;
+    border-radius: 4px;
     .icon{
       font-size: 15px;
+    }
+
+    &>div:nth-child(2){
+      margin-left: 20px;
+    }
+
+    .w-50{
+      flex: 1;
     }
   }
 

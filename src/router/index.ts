@@ -36,6 +36,11 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Builder',
         component: () => import('../pages/builder/list.vue')
     },
+    {
+        path: '/builder/:id',
+        name: 'Builder app',
+        component: () => import('../pages/builder/app.vue')
+    },
 ]
 
 const router = createRouter({

@@ -13,11 +13,11 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
-const props = defineProps(["router", "store", "close", "params"])
+const props = defineProps(["router", "store", "close", "ps"])
 const closeClick = () => {
   props.close();
 };
-const mlist = ref(props.params.item.Type == "INK" ? [
+const mlist = ref(props.ps.item.Type == "INK" ? [
   {
     title: "Ink! contract meta",
     icon: "&#xe6b6;",
@@ -50,7 +50,7 @@ const mlist = ref(props.params.item.Type == "INK" ? [
     cmd: "stop",
     color: "#e42537",
     display: () => {
-      return props.params!.item.Status != 2;
+      return props.ps!.item.Status != 2;
     }
   },
 ]);
@@ -59,13 +59,13 @@ const itemLength = mlist.value.filter((item) => item.display == null || item.dis
 const itemHeight = itemLength.length * 36 + 20;
 
 const store = props.store!;
-let cx = props.params!.event.x;
-if (props.params!.event.x > document.documentElement.clientWidth - 150 * store.state.scale) {
+let cx = props.ps!.event.x;
+if (props.ps!.event.x > document.documentElement.clientWidth - 150 * store.state.scale) {
   cx = document.documentElement.clientWidth - 150 * store.state.scale;
 }
-let cy = props.params!.event.y;
-if (props.params!.event.y > document.documentElement.clientHeight - itemHeight * store.state.scale) {
-  cy = props.params!.event.y - itemHeight * store.state.scale;
+let cy = props.ps!.event.y;
+if (props.ps!.event.y > document.documentElement.clientHeight - itemHeight * store.state.scale) {
+  cy = props.ps!.event.y - itemHeight * store.state.scale;
 }
 const x = ref(cx + "px");
 const y = ref(cy + "px");

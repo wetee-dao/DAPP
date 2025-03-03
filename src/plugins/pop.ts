@@ -94,7 +94,7 @@ function openPop(app: any, router: Object, store: Object, pop: any, popid: strin
     router,
     store,
     app,
-    params
+    ps:params
   })
   
   div.id = popid

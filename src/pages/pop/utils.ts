@@ -1,3 +1,4 @@
+import { getNumstrfromChain } from "@/utils/chain";
 import { ElNotification } from "element-plus";
 
 export function isValidDiskPath(path: string) {
@@ -262,4 +263,25 @@ export function validAppArray(client: any, form: any, appType: string): any {
             disk: disk,
         }
     };
+}
+
+export function chainToContainer(form: any): any {
+    // image: "",
+    // cpu: 1000,
+    // memory: 800,
+    // commandPrefix: "SH",
+    // command: "",
+    // env: [],
+    // disk: [],
+    // port: [],
+    return {
+        image: form.i,
+        cpu:  parseInt(getNumstrfromChain(form.cpu)),
+        memory: parseInt(getNumstrfromChain(form.memory)),
+        commandPrefix: "SH",
+        command: "",
+        disk: form.disk,
+        env: form.e,
+        port: form.p,
+    }
 }

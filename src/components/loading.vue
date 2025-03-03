@@ -9,8 +9,8 @@
 
 <script setup lang="ts">
 import { defineProps,ref } from "vue";
-const props = defineProps(["params"])
-const title = ref(props.params.title || "Send transaction to chain");
+const props = defineProps(["ps"])
+const title = ref(props.ps.title || "Send transaction to chain");
 </script>
 
 <style lang='scss' scoped>
