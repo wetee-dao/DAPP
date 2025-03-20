@@ -170,7 +170,7 @@ onMounted(async () => {
   box-sizing: border-box;
   padding-top: 75px;
   width: 100%;
-  padding: 75px 20px 0;
+  padding: 55px 20px 0;
 }
 
 .page-title {

@@ -42,7 +42,7 @@ li {
   position: absolute;
   bottom: 0;
   border-radius: 1em;
-  background: $primary-text;
+  background: rgba($primary-text-rgb, 1);
 }
 
 ul li:nth-child(1) {

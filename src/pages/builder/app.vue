@@ -19,9 +19,9 @@
                 </div>
             </div>
 
-            <div class="btn btn__primary" @click="deploy()">
+            <!-- <div class="btn btn__primary" @click="deploy()">
                 Deploy
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -149,7 +149,7 @@ const getInfo = async () => {
         color: rgba($primary-bg-rgb, 1);
         margin: 0 5px;
         font-size: 14px;
-        width: 85px;
+        width: 88px;
         text-align: center;
         font-weight: bold;
         cursor: pointer;

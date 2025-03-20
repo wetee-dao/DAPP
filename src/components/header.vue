@@ -191,7 +191,7 @@ const setTheme = (t: string) => {
 
 .header-wrap {
   width: 100%;
-  height: 65px;
+  height: 60px;
   box-sizing: border-box;
   position: fixed;
   top: 0;
@@ -209,7 +209,7 @@ const setTheme = (t: string) => {
 }
 
 .header-logo {
-  height: 21px;
+  height: 17px;
   margin-left: 25px;
   overflow: hidden;
 }
@@ -226,10 +226,9 @@ const setTheme = (t: string) => {
 }
 
 .header-box {
-  padding: 10px 12px;
+  padding: 5px 5px;
   margin: 0px 21px 0px 0px;
-  background-color: rgba($secondary-bg-rgb, 0.8);
-  border-radius: 3px;
+  // background-color: rgba($secondary-bg-rgb, 1);
   height: 20px;
   justify-content: space-between;
 }
@@ -242,17 +241,18 @@ const setTheme = (t: string) => {
   text-transform: uppercase;
   margin-left: 1px;
   margin-right: 3px;
-  font-size: 22px;
+  font-size: 18px;
   font-family: "pixel-font";
   letter-spacing: 2px;
-  color: rgba($primary-text-rgb, 1);
+  // color: rgba($secondary-text-rgb, 0.8);
+  color: $primary-text;
 
   .t{
     margin-left: 4px;
   }
 
   .select-icon {
-    font-size: 16px;
+    font-size: 15px;
     line-height: 32px;
     height: 30px;
     display: flex;
@@ -278,7 +278,7 @@ const setTheme = (t: string) => {
 }
 
 .network {
-  margin-left: 10px;
+  margin-left: 6px;
 }
 
 // 改原有框架样式
@@ -384,15 +384,19 @@ const setTheme = (t: string) => {
 .theme {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  // border: 2Px solid rgba($primary-text-rgb, 1);
+  // border-radius: 20px;
+  margin-right: 10px;
 
   >div {
-    margin-right: 15px;
-    padding: 2px;
-    border-radius: 50%;
+    padding: 3px;
+    // border-radius: 50%;
     width: 22px;
     height: 22px;
     cursor: pointer;
     text-align: center;
+    background-color: rgba($secondary-text-rgb, 0.05);
 
     i {
       font-size: 16px;
@@ -442,8 +446,8 @@ const setTheme = (t: string) => {
 
 .logo-bg {
   position: fixed !important;
-  top: 13px !important;
-  left: 11px !important;
+  top: 10px !important;
+  left: 8.5px !important;
   display: flex;
   align-items: center;
   transform: scale(1.25);

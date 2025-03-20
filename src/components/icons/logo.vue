@@ -27,10 +27,12 @@
     position: relative;
     
     path {
+        // fill: rgba($secondary-text-rgb, 0.8);
         fill: $primary-text;
     }
 
     polygon {
+        // fill: rgba($secondary-text-rgb, 0.8);
         fill: $primary-text;
     }
 }

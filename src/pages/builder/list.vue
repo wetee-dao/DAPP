@@ -8,7 +8,7 @@
           </div>
 
           <div class="dataText">
-            <p>{{ item.name }} - v{{ versions[item.id] && versions[item.id][0] ? versions[item.id][0].version : '0' }}
+            <p class="name">{{ item.name }} - v{{ versions[item.id] && versions[item.id][0] ? versions[item.id][0].version : '0' }}
             </p>
             <div class="images" v-if="versions[item.id] && versions[item.id][0]">
               <div class="image">{{ versions[item.id][0].value.i }}</div>
@@ -35,8 +35,8 @@
             <span class="icon">&#xe610;</span>
           </div>
           <div class="dataText">
-            <p>Build a application</p>
-            <p>Upload application and start mint</p>
+            <p class="name">Build a application</p>
+            <p class="desc">Upload application and start mint</p>
           </div>
         </div>
       </el-col>
@@ -63,8 +63,10 @@ const GotoApp = (item: any) => {
 };
 
 const add = () => {
-  global.$Build(router, store, {}, () => {
-
+  global.$Build(router, store, {
+    mod:""
+  }, () => {
+    getList()
   })
 };
 
@@ -107,7 +109,7 @@ const getList = async () => {
 .home {
   box-sizing: border-box;
   width: 100%;
-  padding: 65px 20px 0;
+  padding: 60px 20px 0;
 }
 
 .page-title {
@@ -144,7 +146,7 @@ const getList = async () => {
     border: 1Px solid rgba($secondary-text-rgb, 0.09);
     display: flex;
     align-items: center;
-    padding: 0px 15px;
+    padding: 0px 20px;
     cursor: pointer;
     margin-bottom: 20px;
     position: relative;
@@ -163,7 +165,7 @@ const getList = async () => {
       border: 3px dotted rgba($secondary-text-rgb, 0.25);
       font-weight: bold;
       color: rgba($secondary-text-rgb, 0.5);
-      margin: 15px 0;
+      margin: 22px 0;
     }
 
     .identicon {
@@ -187,11 +189,11 @@ const getList = async () => {
       position: relative;
       z-index: 10;
 
-      p:first-of-type {
+      .name {
         color: $secondary-text;
         font-size: 16px;
         font-weight: bold;
-        line-height: 1.3;
+        line-height: 1.2;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -201,7 +203,7 @@ const getList = async () => {
         }
       }
 
-      p:last-of-type {
+      .desc {
         color: $block;
         font-weight: bolder;
         color: $secondary-text;
@@ -219,17 +221,24 @@ const getList = async () => {
         font-size: 14px;
         font-weight: 600;
         color: rgba($secondary-text-rgb, 0.5);
+        word-break: break-all;
+        max-height: 34px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
       }
     }
 
     .mask-bg {
       position: absolute;
-      bottom: 4px;
+      bottom: 5px;
       right: 4px;
       padding: 5px 5px 3px;
       color: rgba($primary-text-rgb, 1);
       font-weight: bold;
-      font-size: 14px;
+      font-size: 13px;
       text-align: right;
       z-index: 1;
 
@@ -248,7 +257,7 @@ const getList = async () => {
       .mask-text {
         position: absolute;
         z-index: 3;
-        font-size: 13px;
+        font-size: 12px;
         top: 6.5px;
         left: 7px;
         text-align: right;

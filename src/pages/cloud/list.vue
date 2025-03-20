@@ -11,8 +11,8 @@
               :padding="0.28" :hash="ss58toIcon(item)" />
           </div>
           <div class="dataText">
-            <p>{{ item.name }}</p>
-            <p>{{ item.desc }}</p>
+            <p class="name">{{ item.name }}</p>
+            <p class="desc">{{ item.desc }}</p>
           </div>
         </div>
       </el-col>      
@@ -22,8 +22,8 @@
             <span class="icon">&#xe604;</span>
           </div>
           <div class="dataText">
-            <p>Create a Project</p>
-            <p>Init and start project</p>
+            <p class="name">Create a Project</p>
+            <p  class="desc">Init and start project</p>
           </div>
         </div>
       </el-col>
@@ -79,7 +79,7 @@ onMounted(async () => {
 .home {
   box-sizing: border-box;
   width: 100%;
-  padding: 65px 20px 0;
+  padding: 60px 20px 0;
 }
 
 .page-title {
@@ -117,7 +117,7 @@ onMounted(async () => {
     border: 1Px solid rgba($secondary-text-rgb, 0.09);
     display: flex;
     align-items: center;
-    padding: 0 16px;
+    padding: 0 18px;
     cursor: pointer;
     margin-bottom: 20px;
 
@@ -150,13 +150,14 @@ onMounted(async () => {
     }
 
     .dataText {
-      margin-left: 15px;
+      margin-left: 18px;
       flex: 1;
       overflow: hidden;
 
-      p:first-of-type {
+      .name {
         color: $secondary-text;
         font-size: 16px;
+        font-weight: bold;
         line-height: 1.3;
         overflow: hidden;
         white-space: nowrap;
@@ -166,7 +167,7 @@ onMounted(async () => {
         }
       }
 
-      p:last-of-type {
+      .desc {
         color: $block;
         font-weight: bolder;
         color: $secondary-text;
