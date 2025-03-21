@@ -24,7 +24,8 @@
     <!-- <div class="balance">Balance: 1000WTE</div> -->
 
     <div class="theme">
-      <div  :class="theme == 'dark'|| theme == ''? 'active' : ''" @click="setTheme('dark')"><i class="icon select-icon">&#xe60f;</i>
+      <div :class="theme == 'dark' || theme == '' ? 'active' : ''" @click="setTheme('dark')"><i
+          class="icon select-icon">&#xe60f;</i>
       </div>
       <div :class="theme == 'light' ? 'active' : ''" @click="setTheme('light')"><i class="icon select-icon">&#xe6bd;</i>
       </div>
@@ -35,17 +36,14 @@
       </div>
     </div>
 
-    <el-dropdown placement="bottom-end" :teleported="false" v-if="user.addr != null && isShow">
+    <el-dropdown class="account" placement="bottom-end" :teleported="false" v-if="user.addr != null && isShow">
       <div class="header-box flex">
         <div class="header-user-box flex">
           <div style="display: flex; align-items: center">
             <div class="header-user-img">
               <Identicon :key="theme" :hash="ss58toHex(user.addr)" :padding="0.1"
-                :foreground="theme == 'dark' ? [80, 250, 130, 255] : [21, 132, 54, 255]"
-                :background="[80, 255, 130, 0]"
-                :strokeColor="theme == 'dark' ? [0, 0, 0, 225] : [255, 255, 255, 220]" 
-                :stroke="0.2"
-                :size="16" />
+                :foreground="theme == 'dark' ? [80, 250, 130, 255] : [21, 132, 54, 255]" :background="[80, 255, 130, 0]"
+                :strokeColor="theme == 'dark' ? [0, 0, 0, 225] : [255, 255, 255, 220]" :stroke="0.2" :size="16" />
             </div>
             <div class="header-user-info">
               <div class="header-user-name">
@@ -77,7 +75,8 @@
       <Logo />
     </div>
     <div class="cur-service">
-      <div class="t" v-for="item in LogoText.split(' ')">{{ item }}</div> <div class="block">IE</div>
+      <div class="t" v-for="item in LogoText.split(' ')">{{ item }}</div>
+      <div class="block">IE</div>
     </div>
   </div>
 </template>
@@ -187,7 +186,7 @@ const setTheme = (t: string) => {
 </script>
 
 <style lang="scss" scoped>
-@use "../assets/styles/components/menu.scss"  as *;
+@use "../assets/styles/components/menu.scss" as *;
 
 .header-wrap {
   width: 100%;
@@ -197,7 +196,7 @@ const setTheme = (t: string) => {
   top: 0;
   left: 0;
   z-index: 100;
-  border-bottom: 2px solid rgba($secondary-text-rgb, 0.05);
+  border-bottom: 2Px solid rgba($secondary-text-rgb, 0.08);
   background-image: radial-gradient(transparent 1px, $primary-bg 1px);
   background-size: 4px 4px;
   backdrop-filter: saturate(50%) blur(4px);
@@ -209,7 +208,8 @@ const setTheme = (t: string) => {
 }
 
 .header-logo {
-  height: 17px;
+  height: 16px;
+  width: 16px;
   margin-left: 25px;
   overflow: hidden;
 }
@@ -227,9 +227,9 @@ const setTheme = (t: string) => {
 
 .header-box {
   padding: 5px 5px;
-  margin: 0px 21px 0px 0px;
+  // margin: 0px 21px 0px 0px;
   // background-color: rgba($secondary-bg-rgb, 1);
-  height: 20px;
+  height: 22px;
   justify-content: space-between;
 }
 
@@ -247,7 +247,7 @@ const setTheme = (t: string) => {
   // color: rgba($secondary-text-rgb, 0.8);
   color: $primary-text;
 
-  .t{
+  .t {
     margin-left: 4px;
   }
 
@@ -265,8 +265,10 @@ const setTheme = (t: string) => {
 }
 
 .network-box {
-  margin-right: 10px;
+  margin-right: 0px;
   align-items: center;
+  background-color: rgba($secondary-text-rgb, 0.06);
+  margin-right: 4Px;
 }
 
 .node-name {
@@ -319,8 +321,8 @@ const setTheme = (t: string) => {
 }
 
 .header-user-img {
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   flex: none;
 }
@@ -336,7 +338,7 @@ const setTheme = (t: string) => {
 }
 
 .header-user-info {
-  padding-left: 7px;
+  padding-left: 4px;
   min-width: 30px;
   max-width: 110px;
   overflow: hidden;
@@ -347,6 +349,8 @@ const setTheme = (t: string) => {
   line-height: 12px;
   font-family: monospace;
   word-break: break-all;
+  color: rgba($secondary-text-rgb, 0.7);
+  font-weight: bold;
 }
 
 .header-user-role {
@@ -385,18 +389,15 @@ const setTheme = (t: string) => {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  // border: 2Px solid rgba($primary-text-rgb, 1);
-  // border-radius: 20px;
-  margin-right: 10px;
+  margin-right: 4Px;
 
   >div {
-    padding: 3px;
-    // border-radius: 50%;
+    padding: 5px;
     width: 22px;
     height: 22px;
     cursor: pointer;
     text-align: center;
-    background-color: rgba($secondary-text-rgb, 0.05);
+    background-color: rgba($secondary-text-rgb, 0.06);
 
     i {
       font-size: 16px;
@@ -406,6 +407,33 @@ const setTheme = (t: string) => {
 
   >div.active {
     background-color: rgba($secondary-text-rgb, 0.15);
+  }
+}
+
+.account {
+  background-color: rgba($secondary-text-rgb, 0.06);
+  margin-right: 21px;
+  padding: 0 4px;
+}
+
+.logo-bg {
+  position: fixed !important;
+  top: 10px !important;
+  left: 8.5px !important;
+  display: flex;
+  align-items: center;
+  transform: scale(1.25);
+  height: 34px;
+
+  .cur-service {
+    letter-spacing: -2px;
+    align-items: center;
+    position: relative;
+    top: 0.5px;
+  }
+
+  .block {
+    margin-left: 4px;
   }
 }
 
@@ -441,25 +469,6 @@ const setTheme = (t: string) => {
 @media screen and (max-width: 700px) {
   .network-box {
     display: none !important;
-  }
-}
-
-.logo-bg {
-  position: fixed !important;
-  top: 10px !important;
-  left: 8.5px !important;
-  display: flex;
-  align-items: center;
-  transform: scale(1.25);
-  height: 34px;
-  .cur-service{
-    letter-spacing: -2px;
-    align-items: center;
-    position: relative;
-    top: 0.5px;
-  }
-  .block{
-    margin-left: 4px;
   }
 }
 </style>

@@ -74,10 +74,10 @@ export default defineComponent({
   position: fixed;
   left: 0;
   display: flex;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.8);
   height: calc(100% - 75px);
   z-index: 99;
-  top: 75px;
+  top: 55px;
 }
 
 .left {
@@ -91,8 +91,10 @@ export default defineComponent({
       width: 100%;
 
       a {
-        display: inline-block;
+        display: block;
         padding: 15px 20px;
+        color: rgba($secondary-text-rgb, 0.9);
+        text-align: center;
       }
     }
 
@@ -130,8 +132,8 @@ export default defineComponent({
       >div {
         border: 0;
         display: flex;
-        font-size: 18px;
-        line-height: 18px;
+        font-size: 17px;
+        line-height: 17px;
         cursor: pointer;
         margin-bottom: 10px;
         padding: 15px;
@@ -139,11 +141,13 @@ export default defineComponent({
         border-radius: 4px;
         flex-direction: row;
         align-items: center;
+        color: rgba($secondary-text-rgb, 0.8);
 
         .icon{
-          width: 30px;
-          height: 30px;
+          width: 26px;
+          height: 26px;
           margin-right: 8px;
+          opacity: 0.9;
         }
       }
     }

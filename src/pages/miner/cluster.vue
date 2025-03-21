@@ -203,7 +203,7 @@ onMounted(async () => {
   justify-content: flex-start;
 
   .clusterItem {
-    border: 1Px solid rgba($primary-text-rgb, 0.3);
+    border: 2Px solid rgba($primary-text-rgb, 0.3);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -269,15 +269,15 @@ onMounted(async () => {
         }
       }
 
-      &.top {
-        border-top-right-radius: 2px;
-        border-top-left-radius: 2px;
-      }
+      // &.top {
+      //   border-top-right-radius: 2px;
+      //   border-top-left-radius: 2px;
+      // }
 
-      &.bottom {
-        border-bottom-right-radius: 2px;
-        border-bottom-left-radius: 2px;
-      }
+      // &.bottom {
+      //   border-bottom-right-radius: 2px;
+      //   border-bottom-left-radius: 2px;
+      // }
     }
 
     .gray-icon {

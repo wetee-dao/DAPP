@@ -143,7 +143,7 @@ const getList = async () => {
 
   .projectItem {
     background-color: rgba($primary-bg-rgb, 1);
-    border: 1Px solid rgba($secondary-text-rgb, 0.09);
+    border: 1Px solid rgba($secondary-text-rgb, 0.17);
     display: flex;
     align-items: center;
     padding: 0px 20px;
@@ -226,14 +226,14 @@ const getList = async () => {
         overflow: hidden;
         text-overflow:ellipsis;
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
       }
     }
 
     .mask-bg {
       position: absolute;
-      bottom: 5px;
+      bottom: 4px;
       right: 4px;
       padding: 5px 5px 3px;
       color: rgba($primary-text-rgb, 1);

@@ -37,26 +37,26 @@
     
     html.dark {
       --g-primary-bg: rgb(5, 4, 6);
-      --g-secondary-bg: #0a0a0a;
-      --g-primary-text: #50fa82;
-      --g-secondary-text: #ffffffd2;
+      --g-secondary-bg: rgb(15, 15, 15);
+      --g-primary-text: rgb(80, 250, 130);
+      --g-secondary-text: rgba(220, 220, 220);
 
       --g-primary-bg-rgb: 5, 4, 6;
-      --g-secondary-bg-rgb: 18, 18, 18;
+      --g-secondary-bg-rgb: 15, 15, 15;
       --g-primary-text-rgb: 80, 250, 130;
-      --g-secondary-text-rgb: 255, 255, 255;
+      --g-secondary-text-rgb: 220, 220, 220;
     }
 
     html.dark body {
-      background-image: linear-gradient(90deg, rgba(var(--g-secondary-text-rgb), 0.04) 3%, transparent 0),
-        linear-gradient(rgba(var(--g-secondary-text-rgb), 0.04) 3%, transparent 0);
+      background-image: linear-gradient(90deg, rgba(var(--g-secondary-text-rgb), 0.09) 3%, transparent 0),
+        linear-gradient(rgba(var(--g-secondary-text-rgb), 0.09) 3%, transparent 0);
     }
 
     html.light {
-      --g-primary-bg: #fafafa;
-      --g-secondary-bg: #ffffff;
-      --g-primary-text: #158436;
-      --g-secondary-text: #222222;
+      --g-primary-bg: rgb(250, 250, 250);
+      --g-secondary-bg: rgb(255, 255, 255);
+      --g-primary-text: rgb(21, 132, 54);
+      --g-secondary-text: rgb(34, 34, 34);
 
       --g-primary-bg-rgb: 250, 250, 250;
       --g-secondary-bg-rgb: 240, 240, 240;
@@ -71,7 +71,7 @@
 
     body {
       background-position: 0 12px;
-      background-size: 1.5rem 1.5rem;
+      background-size: 1.4rem 1.4rem;
       background-color: var(--g-primary-bg);
       color: var(--g-primary-text);
     }

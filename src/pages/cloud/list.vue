@@ -114,7 +114,7 @@ onMounted(async () => {
   .projectItem {
     height: 96px;
     background-color: rgba($primary-bg-rgb, 0.9);
-    border: 1Px solid rgba($secondary-text-rgb, 0.09);
+    border: 1Px solid rgba($secondary-text-rgb, 0.17);
     display: flex;
     align-items: center;
     padding: 0 18px;

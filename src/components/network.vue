@@ -32,7 +32,7 @@ const strength = computed(() => {
 <style lang="scss" scoped>
 ul {
   position: relative;
-  width: 3.5em;
+  width: 3.8em;
   height: 2em;
   font-size: 5px;
 }
