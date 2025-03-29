@@ -190,7 +190,7 @@ const resetChart = () => {
 
 <style lang='scss' scoped>
 .metrics-box {
-  padding: 10px 42px;
+  padding: 10px 32px;
 
   #metrics {
     margin: 0 -10Px;

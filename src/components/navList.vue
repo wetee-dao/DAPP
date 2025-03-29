@@ -137,8 +137,7 @@ export default defineComponent({
         cursor: pointer;
         margin-bottom: 10px;
         padding: 15px;
-        border: 2px solid rgba($secondary-text-rgb, 0.03);
-        border-radius: 4px;
+        border: 1Px solid rgba($secondary-text-rgb, 0.15);
         flex-direction: row;
         align-items: center;
         color: rgba($secondary-text-rgb, 0.8);

@@ -42,8 +42,8 @@
   display: block;
   overflow-x: visible;
   overflow-y: auto;
-  height: calc(100vh - 95px);
-  padding-top: 95px;
+  height: calc(100vh - 85px);
+  padding-top: 85px;
   padding-right: 20px !important;
   text-align: left;
   flex: 1;
@@ -69,15 +69,15 @@
     display: inline-flex;
     float: left;
     height: 125px;
-    border-radius: 10px;
     align-items: flex-start;
     padding: 10px 10px 0 10px;
-    border: 3px solid rgba($primary-text-rgb, 0.1);
+    background-color: rgba($primary-bg-rgb, 0.9);
+    border: 2Px solid rgba($primary-text-rgb, 0.3);
     position: relative;
     text-align: left;
 
     &.active {
-      border: 3px solid rgba($primary-text-rgb, 0.7);
+      border: 2Px solid rgba($primary-text-rgb, 0.7);
     }
 
     .teeApp {
@@ -218,7 +218,7 @@
 
     .dataText {
       flex: 1;
-      max-width: calc(100% - 50px);
+      max-width: calc(100% - 55px);
 
       p:first-of-type {
         color: $secondary-text;
@@ -356,20 +356,19 @@
   margin-right: 20px;
   display: flex;
   flex-direction: column;
-  padding-top: 75px;
-  height: calc(100vh - 75px);
-  // overflow: hidden;
+  padding-top: 65px;
+  height: calc(100vh - 65px);
 
   .btns {
-    margin: 30px 0;
+    margin: 20px 0;
     text-align: right;
   }
 
   .avtive {
     flex: 1;
     border: 2px solid rgba($secondary-text-rgb, 0.1);
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
+    // border-top-left-radius: 2px;
+    // border-top-right-radius: 2px;
     background-color: rgba($primary-bg-rgb, 0.9);
     box-shadow: 0 0 5px rgba($secondary-text-rgb, 0.08);
     border-bottom: none;

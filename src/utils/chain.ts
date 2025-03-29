@@ -135,11 +135,11 @@ export const chainJson = {
     "_enum": { "Env": "Vec<u8>", "File": "Vec<u8>" }
   },
   "Service": {
-    "_enum": { "Tcp": "u16", "Https": "u16", "Udp": "u16", "ProjectTcp": "u16", "ProjectUdp": "u16" }
+    "_enum": { "Tcp": "u16", "Udp": "u16", "Http": "u16", "Https": "u16", "ProjectTcp": "u16", "ProjectUdp": "u16" }
   },
   "Command": {
     "_enum": { "SH": "Vec<u8>", "BASH": "Vec<u8>", "ZSH": "Vec<u8>", "NONE": null }
   },
   "TEEVersion": { "_enum": ["SGX", "CVM"] },
-  "AppType": { "_enum": ["Service", "Task","Ai"] },
+  "AppType": { "_enum": ["Service", "Task", "Ai"] },
 }

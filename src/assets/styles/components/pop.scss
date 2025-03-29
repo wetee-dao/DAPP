@@ -13,13 +13,13 @@
     border-top-right-radius: 6px;
     border-top-left-radius: 6px;
     overflow: hidden;
-    background-color: $secondary-bg;
-    width: calc(100vw - 55px);
+    background-color: $primary-bg;
+    border: 6px solid rgba($gray-bg, 0.15);
+    width: calc(100vw - 52px);
     height: calc(100vh - 80px);
-    left: 25px;
+    left: 20px;
     bottom: 0;
     position: absolute;
-    border: 6px solid rgba($gray-bg, 0.1);
     border-bottom: 0;
     display: flex;
     flex-direction: column;
@@ -56,7 +56,7 @@
   flex-direction: row;
   align-items: center;
   border: 2PX solid rgba($secondary-text-rgb, 0.2);
-  border-radius: 4px;
+  border-radius: 0px;
   margin: 0px 24px 0px 24px;
   padding-right: 2px;
   height: 45px;
@@ -173,7 +173,7 @@
     right: 40px;
     background: rgba($color: $primary-bg-rgb, $alpha: 1);
     padding: 15px;
-    border-radius: 4px;
+    border-radius: 0px;
 
     .dry-run-title {
       font-size: 17px;
@@ -188,7 +188,7 @@
     .dry-run-tag {
       padding: 8px 10px;
       background-color: rgba($color: $secondary-text-rgb, $alpha: 0.05);
-      border-radius: 4px;
+      border-radius: 0px;
       margin: 10px 0 10px 0px;
 
       .t {
@@ -235,7 +235,7 @@
       background-color: rgba($color: $secondary-text-rgb, $alpha: 0.1);
       position: absolute;
       left: 45px;
-      top: 69px;
+      top: 55px;
     }
   }
 
@@ -258,7 +258,7 @@
       text-align: center;
       line-height: 40px;
       border: 2PX solid rgba($color: $secondary-text-rgb, $alpha: 0.1);
-      border-radius: 4px;
+      border-radius: 0px;
       margin-right: 10px;
       background-color: $secondary-bg;
     }
@@ -303,7 +303,7 @@
   .icon {
     width: 30px;
     margin-right: 10px;
-    border-radius: 4px;
+    border-radius: 0px;
   }
 
   .app-box {

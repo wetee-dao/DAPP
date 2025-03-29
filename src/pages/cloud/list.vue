@@ -7,15 +7,15 @@
           <div class="dataImg">
             <Identicon class="identicon" :stroke="0.2"
               :foreground="theme == 'dark' ? [80, 250, 130, 255] : [21, 132, 54, 255]" :background="[255, 255, 255, 0]"
-              :strokeColor="theme == 'dark' ? [0, 0, 0, 100]:[255, 255, 255, 100]"
-              :padding="0.28" :hash="ss58toIcon(item)" />
+              :strokeColor="theme == 'dark' ? [0, 0, 0, 100] : [255, 255, 255, 100]" :padding="0.28"
+              :hash="ss58toIcon(item)" />
           </div>
           <div class="dataText">
             <p class="name">{{ item.name }}</p>
             <p class="desc">{{ item.desc }}</p>
           </div>
         </div>
-      </el-col>      
+      </el-col>
       <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" :key="100000" @click="add()">
         <div class="projectItem add">
           <div class="dataImg gray-icon">
@@ -23,7 +23,7 @@
           </div>
           <div class="dataText">
             <p class="name">Create a Project</p>
-            <p  class="desc">Init and start project</p>
+            <p class="desc">Init and start project</p>
           </div>
         </div>
       </el-col>
@@ -131,7 +131,7 @@ onMounted(async () => {
       border-radius: 2px;
       overflow: hidden;
       // border: 4px solid rgba($secondary-text-rgb, 0.05);
-      background-color: rgba($secondary-text-rgb, 0.045);
+      background-color: rgba($secondary-text-rgb, 0.065);
 
       .icon {
         font-size: 28px;
@@ -162,6 +162,7 @@ onMounted(async () => {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+
         &::first-letter {
           text-transform: uppercase;
         }
@@ -180,34 +181,6 @@ onMounted(async () => {
   }
 }
 
-@media screen and (max-width: 570px) {
-  .data {
-    justify-content: center;
-
-    >div {
-      max-width: 1000px;
-    }
-  }
-}
-
-@media screen and (max-width: 729px) and (min-width: 570px) {
-  .data {
-
-    >div {
-      max-width: 500px;
-    }
-  }
-}
-
-@media screen and (max-width: 1005px) and (min-width: 729px) {
-  .data {
-
-    >div {
-      max-width: 500px;
-    }
-  }
-}
-
 @media screen and (max-width: 1010px) {
   .data {
     flex-wrap: wrap;
@@ -217,6 +190,6 @@ onMounted(async () => {
 
 <style lang="scss">
 .light .projectItem {
-  border: 3px solid rgba($secondary-text-rgb, 0.08);
+  border: 1Px solid rgba($secondary-text-rgb, 0.09) !important;
 }
 </style>

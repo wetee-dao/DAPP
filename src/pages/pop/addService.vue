@@ -57,7 +57,7 @@
             <div class="form-context-box" v-show="curContainer == 0">
               <div class="form-sub-title">TEE type &nbsp;<span class="sgx-warning">{{ form.teeVersion == "SGX"?"Notice: SGX only supports Ego and Gramine":"" }}</span></div>
               <div class="form-input-box">
-                <el-select v-model="form.teeVersion" placeholder="Select tee version">
+                <el-select v-model="form.teeVersion" @change="TeeVersionChange" placeholder="Select tee version">
                   <el-option label="Intel SGX" value="SGX" />
                   <el-option label="Intel TDX/AMD SEV" value="CVM" />
                 </el-select>
@@ -248,6 +248,10 @@ const curContainer = ref<any>(0)
 const containers = ref<any[]>([deepCopy(defaultContainer)])
 const form = ref<any>(deepCopy(defaultContainer))
 
+const TeeVersionChange = () => {
+  containers.value[curContainer.value] = deepCopy(form.value)
+}
+
 const addContainer = () => {
   let oldCs = deepCopy(containers.value)
   oldCs.push(deepCopy(defaultContainer))
@@ -276,7 +280,6 @@ const deleteContainer = (i: number) => {
 
 const handleTempApp = (item: any) => {
   curTemp.value = item.name
-  console.log(deepCopy(item.containers))
 
   containers.value = deepCopy(item.containers)
   activeContainer(0)
@@ -353,8 +356,10 @@ const toAdd = async () => {
 
     try {
       const none = new Option(client.registry, "Vec<u8>", null);
+      const u128None = new Option(client.registry, "u128", null);
       const tx = client.tx.app.create(
         mainData.name,
+        u128None,
         mainData.image,
         "",
         "",

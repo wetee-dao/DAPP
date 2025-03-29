@@ -28,7 +28,7 @@ onMounted(() => {
 
 <style lang='scss' scoped>
 .bill-box {
-  padding: 10px 42px;
+  padding: 10px 32px;
 
   .item {
     font-size: 16px;

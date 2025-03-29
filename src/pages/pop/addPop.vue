@@ -96,16 +96,16 @@ i {
   z-index: 101;
 
   >div {
-    border-radius: 4px;
+    border-radius: 2px;
     overflow: hidden;
-    background-color: $secondary-bg;
+    background-color: $primary-bg;
+    border: 6px solid rgba($gray-bg, 0.08);
     max-width: 500px;
     width: 80%;
     position: absolute;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 6px solid rgba($gray-bg, 0.1);
   }
 }
 
@@ -124,19 +124,19 @@ i {
 
 .list {
   display: flex;
-  padding: 10px 15px;
+  padding: 18px 15px;
   flex-direction: column;
 
   >div {
     display: flex;
     padding: 16px 15px;
-    border-radius: 4px;
+    border-radius: 2px;
     font-size: 18px;
     cursor: pointer;
     align-items: center;
 
     &.active {
-      background-color: rgba($gray-bg, 0.2);
+      background-color: rgba($gray-bg, 0.1);
     }
 
     .icon {

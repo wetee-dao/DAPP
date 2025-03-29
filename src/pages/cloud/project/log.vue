@@ -53,11 +53,7 @@ onMounted(() => {
 
 <style lang='scss' scoped>
 .log-box {
-  padding: 10px 42px;
-
-  // #log {
-  //   margin: 0 -10Px;
-  // }
+  padding: 10px 32px;
 
   .log-item {
     background-color: rgba($gray-bg, 0.06);

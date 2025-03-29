@@ -144,16 +144,14 @@ const GetTEEInfo = async (item: any) => {
 
 <style lang="scss" scoped>
 .detail {
-  border-top-left-radius: 10px;
   overflow: hidden;
   background-color: $secondary-bg;
   min-width: calc(100vw - 350px);
   max-width: calc(100vw - 350px);
-  height: calc(100vh - 100px);
+  height: calc(100vh - 89px);
   position: relative;
-  margin-top: 96px;
-  margin-left: 20px;
-  border: 3px solid rgba($gray-bg, 0.1);
+  margin-top: 85px;
+  border: 3Px solid rgba($gray-bg, 0.1);
   border-bottom: 0;
   border-right: 0;
   display: flex;
@@ -172,7 +170,7 @@ const GetTEEInfo = async (item: any) => {
 }
 
 .title {
-  padding: 40px 42px 10px 42px;
+  padding: 35px 32px 10px 32px;
   font-size: 28px;
   font-weight: bold;
   text-transform: uppercase;
@@ -225,7 +223,7 @@ const GetTEEInfo = async (item: any) => {
   height: calc(100% - 90px);
 
   :deep(.el-tabs__nav-wrap) {
-    padding: 0 43px;
+    padding: 0 33px;
 
     &::after {
       background-color: rgba($gray-bg, 0.1);

@@ -182,6 +182,7 @@ const nextOut = () => {
 const setTheme = (t: string) => {
   store.dispatch("setTheme", t);
   document.documentElement.setAttribute("class", t);
+  window.location.reload();
 };
 </script>
 
@@ -227,14 +228,12 @@ const setTheme = (t: string) => {
 
 .header-box {
   padding: 5px 5px;
-  // margin: 0px 21px 0px 0px;
-  // background-color: rgba($secondary-bg-rgb, 1);
   height: 22px;
   justify-content: space-between;
 }
 
 .cur-service {
-  padding: 0px 5px 0px 1px;
+  padding: 0px 5px 0px 0px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -244,7 +243,6 @@ const setTheme = (t: string) => {
   font-size: 18px;
   font-family: "pixel-font";
   letter-spacing: 2px;
-  // color: rgba($secondary-text-rgb, 0.8);
   color: $primary-text;
 
   .t {
@@ -252,7 +250,7 @@ const setTheme = (t: string) => {
   }
 
   .select-icon {
-    font-size: 15px;
+    font-size: 14px;
     line-height: 32px;
     height: 30px;
     display: flex;
@@ -260,7 +258,7 @@ const setTheme = (t: string) => {
     margin-left: -2px;
     display: block;
     position: relative;
-    top: 0.5px;
+    top: 0.5Px;
   }
 }
 
@@ -418,12 +416,11 @@ const setTheme = (t: string) => {
 
 .logo-bg {
   position: fixed !important;
-  top: 10px !important;
+  top: 18px !important;
   left: 8.5px !important;
   display: flex;
   align-items: center;
   transform: scale(1.25);
-  height: 34px;
 
   .cur-service {
     letter-spacing: -2px;

@@ -34,7 +34,7 @@ const title = ref(props.ps.title || "Send transaction to chain");
         }
         .text{
             text-align: center;
-            color: rgba($primary-text-rgb, 0.6) ;
+            color: rgba($primary-text-rgb, 1) ;
             font-size: 22px;
             font-weight: 600;
             margin-left: 20px;

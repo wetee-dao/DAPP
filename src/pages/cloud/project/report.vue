@@ -69,7 +69,7 @@ const dateTime = (value: any) => {
 
 <style lang='scss' scoped>
 .report-box {
-  padding: 10px 42px;
+  padding: 10px 32px;
 
   .title {
     margin-top: 15px;

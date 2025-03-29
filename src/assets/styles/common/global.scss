@@ -46,6 +46,7 @@ body {
     background: transparent;
     box-shadow: none !important;
     border: 2Px solid rgba($color: $secondary-text-rgb, $alpha: 0.2);
+    border-radius: 0px;
   }
 
   .el-input-group__prepend{
@@ -77,7 +78,7 @@ body {
     &:focus {
       background-color: none;
     }
-    border-radius: 2px;
+    border-radius: 0px;
   }
 
   .el-button--primary {
