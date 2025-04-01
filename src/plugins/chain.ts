@@ -13,20 +13,45 @@ import { Metamask } from "@/providers/MetaSnap";
 import { chainJson } from "@/utils/chain";
 import { MetaMaskProvider } from "@/providers/metamask";
 import { SubstrateProvider } from "@/providers/substrate";
-import store from '../store';
+import store from '@/store';
+import { getNetworkLatency } from "@/utils/net";
 
 // 区块链链接
 export let chainIndexer = 'https://xiaobai.asyou.me:30006/gql'
 export let dkgUrl = 'https://xiaobai.asyou.me:31001/gql'
 
+export async function chainNetPing():Promise<number> {
+  const chainNodes = chainUrls();
+  const results = await Promise.all(chainNodes.map(node => getNetworkLatency(getChainHttpApi(node.url)+"node/network")));
+  const rs = results.map((v,i)=>{
+    return {i:i,v:v}
+  } ).filter((result:any) => result.v != null)
+
+
+
+  return rs[Math.floor(Math.random() * rs.length)].i
+}
+
+export const chainUrls = () => {
+  return [
+    {
+      name: 'TEST-HK',
+      url: 'wss://paseo.asyou.me/ws',
+      env: "paseo"
+    },
+    {
+      name: 'TEST-CHINA',
+      url: 'wss://china.asyou.me:89/ws',
+      env: "paseo"
+    },
+  ]
+}
+
 export let chainUrl = () => {
-  if (localStorage.getItem("env") == "dev") {
-    return "wss://xiaobai.asyou.me:30001/ws"
+  if (!store.state.chainUrl) {
+    return JSON.parse(window.localStorage.getItem("chainUrl")||"{}").url;
   }
-  if (localStorage.getItem("env") == "paseo") {
-    return 'wss://paseo.asyou.me/ws'
-  }
-  return 'wss://paseo.asyou.me/ws'
+  return store.state.chainUrl.url
 }
 
 export let getChainHttpApi = (url: string) => {
@@ -59,7 +84,7 @@ const chainHttpClient = {
 
   multi_query: async (pallet: string, storageItem: string, keys: unknown[]) => {
     let ps = [encodeURIComponent(JSON.stringify(keys))];
-    const response = await axios.get(getChainHttpApi(chainUrl())+ "pallets/" + pallet + "/storage/multi_query/" + storageItem, {
+    const response = await axios.get(getChainHttpApi(chainUrl()) + "pallets/" + pallet + "/storage/multi_query/" + storageItem, {
       params: { keys: ps },
       paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
     })

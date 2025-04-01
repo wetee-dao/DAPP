@@ -4,20 +4,12 @@
       <ul v-for="(item, index) in lists">
         <li class="left_one" >
           <a href="javascript:void(0);">
-            <!-- <span class="icon" v-html="item.icon"></span> -->
             {{ item.name }}
           </a>
         </li>
       </ul>
     </div>
     <div class="right" @click="(e: any) => e.stopPropagation()">
-      <!-- <el-input
-        class="search"
-        placeholder="请输入内容"
-        prefix-icon="el-icon-search"
-        v-model="input"
-        clearable
-      ></el-input> -->
       <div class="right_list">
         <div :key="index" v-for="(item, index) in lists">
           <div @click="toUri(sub.url)" :key="sub.name" v-for="sub in search(item.sub)">

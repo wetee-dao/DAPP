@@ -30,11 +30,19 @@
       <div :class="theme == 'light' ? 'active' : ''" @click="setTheme('light')"><i class="icon select-icon">&#xe6bd;</i>
       </div>
     </div>
-    <div class="header-box flex network-box">
-      <div class="node-name">MAIN
-        <Network class="network" />
-      </div>
-    </div>
+
+    <el-popover popper-class="network-select" placement="bottom-end" trigger="hover">
+      <template #reference>
+        <div class="header-box flex network-box">
+          <div class="node-name">
+            {{ network.name }}<Network class="network" />
+          </div>
+        </div>
+      </template>
+      <template #default>
+        <NetworkSelect />
+      </template>
+    </el-popover>
 
     <el-dropdown class="account" placement="bottom-end" :teleported="false" v-if="user.addr != null && isShow">
       <div class="header-box flex">
@@ -90,6 +98,7 @@ import HeaderNav from "./headerNav.vue";
 import Identicon from "./identicon.vue";
 import Logo from "./icons/logo.vue";
 import Network from "./network.vue";
+import NetworkSelect from "./network-select.vue";
 import { ss58toHex } from "@/utils/chain";
 import { getProject } from "@/apis/project";
 
@@ -101,6 +110,7 @@ const pkey = ref(0);
 const user = ref(store.state.userInfo);
 const isShow = ref(store.state.currentPath != "/login");
 const theme = ref(store.state.theme);
+const network = ref(store.state.chainUrl);
 const paths = ref<any[]>([]);
 const LogoText = ref("");
 watch(() => store.state.theme, (newVal, _) => {
@@ -267,12 +277,14 @@ const setTheme = (t: string) => {
   align-items: center;
   background-color: rgba($secondary-text-rgb, 0.06);
   margin-right: 4Px;
+  position: relative;
+  cursor: pointer;
 }
 
 .node-name {
-  font-size: 14px;
-  height: 14px;
-  line-height: 14px;
+  font-size: 12px;
+  height: 12px;
+  line-height: 12px;
   display: inline-flex;
   align-items: center;
 }
@@ -434,6 +446,10 @@ const setTheme = (t: string) => {
   }
 }
 
+.network-select{
+  width: 250px;
+}
+
 @media screen and (max-width: 992px) {
   .header-box {
     max-width: 288px;
@@ -467,5 +483,14 @@ const setTheme = (t: string) => {
   .network-box {
     display: none !important;
   }
+}
+</style>
+
+<style lang="scss">
+.network-select{
+  width: 250px !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  border: none !important;
 }
 </style>

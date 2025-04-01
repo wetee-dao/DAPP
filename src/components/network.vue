@@ -65,14 +65,15 @@ ul li:nth-child(4) {
   left: 3em;
 }
 
-// ul li:nth-child(5) {
-//     height: 3em;
-//     left: 4em;
-// }
-
-// ul li:nth-child(6) {
-//     height: 3.5em;
-//     left: 5em;
-// }
+.pop {
+  width: 100%;
+  position: fixed;
+  left: 0;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.8);
+  height: calc(100% - 75px);
+  z-index: 99;
+  top: 55px;
+}
 </style>
    

@@ -92,12 +92,9 @@ import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import { Wallet, getWallets } from "@talismn/connect-wallets";
 
-import { SubstrateProvider } from "@/providers/substrate";
-import { MetaMaskProvider } from "@/providers/metamask";
-import { Metamask, setCustomChain } from "@/providers/MetaSnap";
+import { Metamask } from "@/providers/MetaSnap";
 import { Loading } from "@/plugins/pop";
 import useGlobelProperties from "@/plugins/globel";
-import { chainUrl, checkMetaData, getMetaData } from "@/plugins/chain";
 import { ss58toHex } from "@/utils/chain";
 import { keyring, shortAddress } from "@/utils/chain";
 
@@ -106,7 +103,6 @@ const router = useRouter();
 const enabled = ref(false);
 const polkadotAccounts = ref<any[]>(store.state.account);
 const LoginShow = ref<any>(null);
-const global = useGlobelProperties();
 const supportedWallets: Wallet[] = getWallets().sort(
   (w1: Wallet, w2: Wallet) => {
     const w1index = w1.installed ? 0 : 1;

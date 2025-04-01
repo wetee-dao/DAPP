@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeUnmount, onMounted } from "vue";
 import { useStore } from "vuex";
 import en from 'element-plus/es/locale/lang/en'
 
@@ -33,6 +33,7 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
+
 });
 </script>
 

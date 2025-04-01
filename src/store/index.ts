@@ -1,8 +1,8 @@
 import { createStore } from 'vuex'
 let userInfo = {}
 let keypair: any = {}
-let token: string = "";
 let theme: string = "";
+let chainUrl: any = null;
 if (window.localStorage.getItem("userInfo")) {
   userInfo = JSON.parse(window.localStorage.getItem("userInfo") || "{}")
 }
@@ -11,6 +11,9 @@ if (window.localStorage.getItem("keypair")) {
 }
 if (window.localStorage.getItem("theme")) {
   theme = window.localStorage.getItem("theme") || "";
+}
+if (window.localStorage.getItem("chainUrl")) {
+  chainUrl = window.localStorage.getItem("chainUrl") ? JSON.parse(window.localStorage.getItem("chainUrl")||"{}"): null;
 }
 
 const store = createStore({
@@ -22,6 +25,7 @@ const store = createStore({
     isLoginShow: false,
     keypair: keypair,
     scale: 1,
+    chainUrl: chainUrl,
   },
   mutations: {
     // 第一个参数：默认传入store对象的state
@@ -46,6 +50,9 @@ const store = createStore({
     },
     setKeypair(state, payload) {
       state.keypair = payload
+    },
+    setChainUrl(state, payload) {
+      state.chainUrl = payload
     },
   },
   actions: {
@@ -79,7 +86,11 @@ const store = createStore({
     setTheme(context, param) {
       window.localStorage.setItem("theme", param);
       context.commit('setTheme', param)
-    }
+    },
+    setChainUrl(context, param) {
+      window.localStorage.setItem("chainUrl", JSON.stringify(param));
+      context.commit('setChainUrl', param)
+    },
   },
   modules: {
   }
