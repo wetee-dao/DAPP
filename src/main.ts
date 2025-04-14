@@ -30,21 +30,27 @@ ChartJS.register(
   Legend
 )
 
-chainNetPing().then((index) => {
-  console.log("index ",index)
-  store.dispatch("setChainUrl", chainUrls()[index])
+const m = () => {
   const app = createApp({
     setup() {
-      // provide(DefaultApolloClient, apolloClient);
+
     },
     render: () => h(App)
   });
-  
+
   app.use(pop)
     .use(chain)
     .use(store)
     .use(router)
     .mount('#mainApp');
-})
+}
 
-
+if (store.state.chainUrl) {
+  m()
+  chainNetPing()
+} else {
+  chainNetPing().then((index) => {
+    store.dispatch("setChainUrl", chainUrls()[index])
+    m()
+  })
+}

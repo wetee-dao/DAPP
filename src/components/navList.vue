@@ -1,22 +1,24 @@
 <template>
   <div class="navList" @click="closeClick">
-    <div class="left" @click="(e: any) => e.stopPropagation()">
-      <ul v-for="(item, index) in lists">
-        <li class="left_one" >
-          <a href="javascript:void(0);">
-            {{ item.name }}
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div class="right" @click="(e: any) => e.stopPropagation()">
-      <div class="right_list">
-        <div :key="index" v-for="(item, index) in lists">
-          <div @click="toUri(sub.url)" :key="sub.name" v-for="sub in search(item.sub)">
-            <div class="icon">
-              <Picon :icon="sub.icon" />
-            </div>        
-            {{ sub.name }}
+    <div class="wrap">
+      <div class="left" @click="(e: any) => e.stopPropagation()">
+        <ul v-for="(item, index) in lists">
+          <li class="left_one" >
+            <a href="javascript:void(0);">
+              {{ item.name }}
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="right" @click="(e: any) => e.stopPropagation()">
+        <div class="right_list">
+          <div :key="index" v-for="(item, index) in lists">
+            <div @click="toUri(sub.url)" :key="sub.name" v-for="sub in search(item.sub)">
+              <div class="icon">
+                <Picon :icon="sub.icon" />
+              </div>        
+              {{ sub.name }}
+            </div>
           </div>
         </div>
       </div>
@@ -65,15 +67,19 @@ export default defineComponent({
   width: 100%;
   position: fixed;
   left: 0;
-  display: flex;
   background-color: rgba(0, 0, 0, 0.8);
   height: calc(100% - 75px);
   z-index: 99;
   top: 55px;
 }
 
-.left {
+.wrap{
+  display: flex;
+  height: 100%;
   background-color: $primary-bg;
+}
+
+.left {
   width: 140px;
 
   ul {
@@ -92,7 +98,7 @@ export default defineComponent({
 
     .left_one {
       font-weight: bold;
-      background-color: $secondary-bg;
+      background-color: rgba($secondary-bg-rgb, 0.6);
       font-size: 18px;
 
       .icon {
@@ -106,7 +112,7 @@ export default defineComponent({
 .right {
   height: 100%;
   width: 250px;
-  background-color: $secondary-bg;
+  background-color: rgba($secondary-bg-rgb, 0.6);
   padding: 15px 20px;
 
   .search {

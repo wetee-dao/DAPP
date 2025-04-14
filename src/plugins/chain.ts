@@ -23,12 +23,13 @@ export let dkgUrl = 'https://xiaobai.asyou.me:31001/gql'
 export async function chainNetPing():Promise<number> {
   const chainNodes = chainUrls();
   const results = await Promise.all(chainNodes.map(node => getNetworkLatency(getChainHttpApi(node.url)+"node/network")));
+  let pings:any = {}
   const rs = results.map((v,i)=>{
+    pings[i] = v;
     return {i:i,v:v}
   } ).filter((result:any) => result.v != null)
 
-
-
+  store.dispatch("setPins", pings)
   return rs[Math.floor(Math.random() * rs.length)].i
 }
 

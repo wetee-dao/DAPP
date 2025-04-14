@@ -26,6 +26,7 @@ const store = createStore({
     keypair: keypair,
     scale: 1,
     chainUrl: chainUrl,
+    setPins: {},
   },
   mutations: {
     // 第一个参数：默认传入store对象的state
@@ -54,6 +55,9 @@ const store = createStore({
     setChainUrl(state, payload) {
       state.chainUrl = payload
     },
+    setPins(state, payload) {
+      state.setPins = payload
+    }
   },
   actions: {
     // 提供了修改state的方法
@@ -79,7 +83,6 @@ const store = createStore({
     setKeypair(context, param) {
       let keypair = context.state.keypair;
       keypair[param.address] = param.mnemonic;
-      console.log(keypair)
       window.localStorage.setItem("keypair", JSON.stringify(keypair));
       context.commit('setKeypair', keypair)
     },
@@ -88,9 +91,16 @@ const store = createStore({
       context.commit('setTheme', param)
     },
     setChainUrl(context, param) {
-      window.localStorage.setItem("chainUrl", JSON.stringify(param));
+      if (!param) {
+        window.localStorage.removeItem("chainUrl");
+      }else{
+        window.localStorage.setItem("chainUrl", JSON.stringify(param));
+      }
       context.commit('setChainUrl', param)
     },
+    setPins(context, param) {
+      context.commit('setPins', param)
+    }
   },
   modules: {
   }

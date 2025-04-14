@@ -207,7 +207,7 @@ const setTheme = (t: string) => {
   top: 0;
   left: 0;
   z-index: 100;
-  border-bottom: 2Px solid rgba($secondary-text-rgb, 0.08);
+  border-bottom: 1Px solid rgba($secondary-text-rgb, 0.08);
   background-image: radial-gradient(transparent 1px, $primary-bg 1px);
   background-size: 4px 4px;
   backdrop-filter: saturate(50%) blur(4px);
@@ -222,6 +222,7 @@ const setTheme = (t: string) => {
   height: 16px;
   width: 16px;
   margin-left: 25px;
+  margin-right: 2px;
   overflow: hidden;
 }
 
@@ -279,21 +280,22 @@ const setTheme = (t: string) => {
   margin-right: 4Px;
   position: relative;
   cursor: pointer;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .node-name {
   font-size: 12px;
   height: 12px;
   line-height: 12px;
-  display: inline-flex;
   align-items: center;
+  display: flex;
 }
 
 .network {
   margin-left: 6px;
 }
 
-// 改原有框架样式
 .header-input {
   flex: 1;
   height: 40px;
@@ -308,7 +310,6 @@ const setTheme = (t: string) => {
 }
 
 .header-user-box {
-  // border-left: 2px solid $line-color;
   height: 20px;
 
   .el-dropdown {
