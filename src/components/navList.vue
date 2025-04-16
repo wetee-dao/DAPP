@@ -2,7 +2,7 @@
   <div class="navList" @click="closeClick">
     <div class="wrap">
       <div class="left" @click="(e: any) => e.stopPropagation()">
-        <ul v-for="(item, index) in lists">
+        <ul v-for="(item, _index) in lists">
           <li class="left_one" >
             <a href="javascript:void(0);">
               {{ item.name }}
@@ -68,15 +68,17 @@ export default defineComponent({
   position: fixed;
   left: 0;
   background-color: rgba(0, 0, 0, 0.8);
-  height: calc(100% - 75px);
+  height: calc(100% - 60px);
   z-index: 99;
-  top: 55px;
+  top: 60px;
 }
 
 .wrap{
   display: flex;
   height: 100%;
+  width: 410px;
   background-color: $primary-bg;
+  border-right: 1PX solid rgba($secondary-text-rgb, 0.08);
 }
 
 .left {
@@ -98,7 +100,7 @@ export default defineComponent({
 
     .left_one {
       font-weight: bold;
-      background-color: rgba($secondary-bg-rgb, 0.6);
+      background-color: rgba($secondary-bg-rgb, 1);
       font-size: 18px;
 
       .icon {
@@ -111,8 +113,8 @@ export default defineComponent({
 
 .right {
   height: 100%;
-  width: 250px;
-  background-color: rgba($secondary-bg-rgb, 0.6);
+  flex: 1;
+  background-color:rgba($secondary-bg-rgb, 1);
   padding: 15px 20px;
 
   .search {

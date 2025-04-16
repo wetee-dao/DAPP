@@ -143,7 +143,7 @@ const getList = async () => {
 
   .projectItem {
     background-color: rgba($primary-bg-rgb, 1);
-    border: 1Px solid rgba($secondary-text-rgb, 0.17);
+    border: 1Px solid rgba($secondary-text-rgb, 0.125);
     display: flex;
     align-items: center;
     padding: 0px 20px;

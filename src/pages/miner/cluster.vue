@@ -203,7 +203,7 @@ onMounted(async () => {
   justify-content: flex-start;
 
   .clusterItem {
-    border: 2Px solid rgba($primary-text-rgb, 0.3);
+    border: 1Px solid rgba($primary-text-rgb, 0.125);
     display: flex;
     flex-direction: column;
     align-items: flex-start;

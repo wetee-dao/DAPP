@@ -219,10 +219,10 @@ const setTheme = (t: string) => {
 }
 
 .header-logo {
-  height: 16px;
-  width: 16px;
+  height: 18px;
+  width: 18px;
   margin-left: 25px;
-  margin-right: 2px;
+  margin-right: 3px;
   overflow: hidden;
 }
 
@@ -251,13 +251,13 @@ const setTheme = (t: string) => {
   text-transform: uppercase;
   margin-left: 1px;
   margin-right: 3px;
-  font-size: 18px;
+  font-size: 20px;
   font-family: "pixel-font";
   letter-spacing: 2px;
   color: $primary-text;
 
   .t {
-    margin-left: 4px;
+    margin-left: 3px;
   }
 
   .select-icon {
