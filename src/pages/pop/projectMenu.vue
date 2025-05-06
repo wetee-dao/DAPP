@@ -46,7 +46,7 @@ const mlist = ref(props.ps.item.Type == "INK" ? [
   },
   {
     title: "Stop",
-    icon: "&#xe641;",
+    icon: "&#xe623;",
     cmd: "stop",
     color: "#e42537",
     display: () => {
