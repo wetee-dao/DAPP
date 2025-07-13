@@ -4,27 +4,27 @@ export interface insType {
   name: string;
   icon: string;
   url: string;
+  module: string;
 }
 
-export default [{
-  name: "DAPPS",
-  icon: "&#xe613;",
-  sub: <insType[]>[
-    { 
-      name: "TEE Cloud", 
-      icon: "cloud",
-      url: "/cloud", 
-    },
-    { 
-      name: "TEE Miner", 
-      icon: "miner",
-      url: "/miner", 
-    },
-    { 
-      name: "TEE App Builder", 
-      icon: "builder",
-      url: "/builder", 
-    },
-  ],
-}]
+export default <insType[]>[
+  {
+    name: "CLOUD",
+    icon: "cloud",
+    url: "/cloud",
+    module: "cloud",
+  },
+  {
+    name: "MINER",
+    icon: "miner",
+    url: "/miner",
+    module: "miner",
+  },
+  {
+    name: "BUILDER",
+    icon: "builder",
+    url: "/builder",
+    module: "builder",
+  },
+]
 

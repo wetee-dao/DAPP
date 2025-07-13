@@ -36,11 +36,12 @@ const list = ref([{
   name: "GPU Compute service",
   type: "gpu",
   icon: "&#xe649;"
-}, {
-  name: "Smart Contract",
-  type: "ink",
-  icon: "&#xe663;"
 }])
+// {
+//   name: "Smart Contract",
+//   type: "ink",
+//   icon: "&#xe663;"
+// }
 
 const closeClick = () => {
   props.close();

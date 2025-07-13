@@ -1,6 +1,6 @@
 @use "../common/theme"  as *;
 
-$size: 14;
+$size: 11;
 
 .menu-box {
   border-right: 2px solid #ffffff0f;
@@ -10,7 +10,7 @@ $size: 14;
 }
 
 .menu-item {
-  width: #{$size*2.2}px;
+  width: #{$size*2}px;
   height: #{$size*0.2}px;
   border-radius: #{$size*0.125}px;
   background-color: $primary-text;
@@ -22,7 +22,7 @@ $size: 14;
 }
 
 .menu-item:nth-child(2) {
-  width: #{$size*1.9}px;
+  width: #{$size*1.7}px;
 }
 
 .menu-item-out:nth-child(1) {

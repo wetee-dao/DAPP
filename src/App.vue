@@ -44,6 +44,7 @@ onBeforeUnmount(() => {
   overflow-x: hidden;
   overflow-y: auto;
   visibility: hidden;
+  padding-left: 130px;
 }
 
 #mainNav {
@@ -56,12 +57,12 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-image: linear-gradient(
+  /* background-image: linear-gradient(
     170deg,
     rgba(0,0,0,0) 55%,
     rgba(255, 255, 255, 0.06) 90%,
     rgba(255, 255, 255, 0.09) 100%
-  );
+  ); */
 }
 
 #subview {

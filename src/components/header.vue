@@ -1,7 +1,7 @@
 <template>
   <div class="header-wrap flex" v-show="isShow" key="header">
     <div class="header-left" @click="menuClick">
-      <!--<div class="menu-list">
+      <!-- <div class="menu-list">
         <div :class="isFirst
         ? 'menu-item'
         : menuShow
@@ -13,8 +13,9 @@
         <Logo />
       </div>
       <div class="cur-service">
-        <div class="t" v-for="item in LogoText.split(' ')">{{ item }}</div>
-        <i class="icon select-icon">&#xe600;</i>
+        <div class="t">eTEE</div>
+        <!-- <div class="t" v-for="item in LogoText.split(' ')">{{ item }}</div> -->
+        <!-- <i class="icon select-icon">&#xe600;</i> -->
       </div>
     </div>
 
@@ -77,14 +78,13 @@
       </template>
     </el-dropdown>
   </div>
-  <NavList v-show="menuShow && isShow" @closeClick="closeClick" />
+  <NavList :key="module" :module="module" @closeClick="closeClick" />
   <div class="logo-bg" v-show="isShow" :showName="true">
     <div class="header-logo" @click="home">
       <Logo />
     </div>
     <div class="cur-service">
-      <div class="t" v-for="item in LogoText.split(' ')">{{ item }}</div>
-      <div class="block">IE</div>
+      <div class="t">eTEE</div>
     </div>
   </div>
 </template>
@@ -93,8 +93,8 @@
 import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import NavList from "./navList.vue";
-import HeaderNav from "./headerNav.vue";
+import NavList from "./nav-list.vue";
+import HeaderNav from "./header-nav.vue";
 import Identicon from "./identicon.vue";
 import Logo from "./icons/logo.vue";
 import Network from "./network.vue";
@@ -112,7 +112,7 @@ const isShow = ref(store.state.currentPath != "/login");
 const theme = ref(store.state.theme);
 const network = ref(store.state.chainUrl);
 const paths = ref<any[]>([]);
-const LogoText = ref("");
+const module = ref("");
 watch(() => store.state.theme, (newVal, _) => {
   theme.value = newVal
 })
@@ -140,14 +140,7 @@ const computePath = async (p: string) => {
     pathPre = pathPre + "/" + path
   }
 
-  if (ps[0] == "cloud") {
-    LogoText.value = "TEE Cloud"
-  } else if (ps[0] == "miner") {
-    LogoText.value = "TEE Miner"
-  } else if (ps[0] == "builder") {
-    LogoText.value = "TEE Builder"
-  }
-
+  module.value = ps[0];
   paths.value = cpaths;
   pkey.value = pkey.value + 1;
 };
@@ -215,14 +208,14 @@ const setTheme = (t: string) => {
 }
 
 .menu-list {
-  margin: 0 auto;
+  margin: 0 0px 0 20px;
 }
 
 .header-logo {
   height: 18px;
   width: 18px;
-  margin-left: 25px;
-  margin-right: 3px;
+  // margin-left: 10px;
+  margin-right: 7px;
   overflow: hidden;
 }
 
@@ -232,9 +225,13 @@ const setTheme = (t: string) => {
 
 .header-left {
   height: 100%;
+  width: 130px;
+  border-right: 1Px solid rgba($secondary-text-rgb, 0.09);
   display: flex;
   align-items: center;
   cursor: pointer;
+  margin-right: 16px;
+  justify-content: center;
 }
 
 .header-box {
@@ -244,16 +241,14 @@ const setTheme = (t: string) => {
 }
 
 .cur-service {
-  padding: 0px 5px 0px 0px;
   display: flex;
   flex-direction: row;
   align-items: center;
   text-transform: uppercase;
-  margin-left: 1px;
-  margin-right: 3px;
-  font-size: 20px;
+  margin-right: -12px;
+  font-size: 22px;
   font-family: "pixel-font";
-  letter-spacing: 2px;
+  letter-spacing: 5px;
   color: $primary-text;
 
   .t {
@@ -430,13 +425,15 @@ const setTheme = (t: string) => {
 .logo-bg {
   position: fixed !important;
   top: 18px !important;
-  left: 8.5px !important;
+  left: 4px !important;
   display: flex;
   align-items: center;
   transform: scale(1.25);
+  width: 120px;
+  justify-content: center;
 
   .cur-service {
-    letter-spacing: -2px;
+    letter-spacing: 2px;
     align-items: center;
     position: relative;
     top: 0.5px;

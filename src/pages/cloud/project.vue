@@ -54,9 +54,16 @@
           <div class="mask-text"><i class="icon">&#xe649;</i> GPU Service</div>
         </div>
       </div>
-      <div class="empty" v-if="apps.length == 0">Nothing was ever here, let us begin to create a world.</div>
+      <div class="empty" v-if="apps.length == 0">
+        Nothing was ever here, let us begin to create a world.<br/><br/>
+        <el-button size="large" plain @click="AddPop()">
+          <el-icon class="el-icon--left">
+            <Plus />
+          </el-icon>&nbsp;Create new app
+        </el-button>
+      </div>
     </div>
-    <div class="right" v-if="currentProject == null">
+    <!-- <div class="right" v-if="currentProject == null">
       <div class="btns">
         <el-button size="large" plain @click="AddPop()">
           <el-icon class="el-icon--left">
@@ -88,7 +95,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <Detail v-if="currentProject != null" :close="() => currentProject = null" :openTag="tag" :info="currentProject" />
     <div class="plus" @click="AddPop()"><i class="icon">&#xe604;</i></div>
   </div>
@@ -121,7 +128,7 @@ const apps = ref<any[]>([]);
 const events = ref<any[]>([]);
 const currentProject = ref<any>(null);
 const tag = ref("metrics");
-const pid = route.params.id.toString();
+const pid = store.state.userInfo.addr;
 const theme = ref(store.state.theme);
 watch(() => store.state.theme, (newVal, _) => {
   theme.value = newVal

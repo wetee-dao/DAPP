@@ -4,14 +4,14 @@ import _ from 'lodash';
 
 const routes: Array<RouteRecordRaw> = [
     { path: '/', redirect: '/cloud' },
+    // {
+    //     path: '/cloud',
+    //     name: 'Cloud',
+    //     meta: { needLogin: true },
+    //     component: () => import('../pages/cloud/list.vue')
+    // },
     {
         path: '/cloud',
-        name: 'Cloud',
-        meta: { needLogin: true },
-        component: () => import('../pages/cloud/list.vue')
-    },
-    {
-        path: '/cloud/:id',
         name: 'CloudDetail',
         meta: { needLogin: true },
         component: () => import('../pages/cloud/project.vue')
