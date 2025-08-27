@@ -64,9 +64,11 @@
           </li>
         </ul>
         <div class="space"></div>
-        <el-button size="large" type="primary" @click="toAdd()">
-          Upload Now &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
-        </el-button>
+        <div class="deploy-btn">
+          <el-button size="large" type="primary" @click="toAdd()">
+            Deploy Now &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
+          </el-button>
+        </div>
       </div>
 
       <el-form class="form" ref="formRef">

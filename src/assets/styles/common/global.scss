@@ -81,8 +81,12 @@ body {
     border-radius: 0px;
   }
 
+  .el-input__prefix{
+    color: rgba($secondary-text-rgb, $alpha: 0.8);
+  }
+
   .el-button--primary {
-    background: rgba($primary-text-rgb, 0.6);
+    background: rgba($primary-text-rgb, 0.9);
     color: $primary-bg;
     border: none;
 
@@ -102,7 +106,7 @@ body {
     width: 80%;
     height: 42px;
     line-height: 42px;
-    font-size: 16px;
+    font-size: 13px;
   }
 
   .el-popper {

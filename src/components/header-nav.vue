@@ -28,7 +28,7 @@ const closeClick = (i:number) => {
 
 .headerNav {
   border-radius: 4px;
-  color: rgba($secondary-text-rgb,0.6);
+  color: rgba($secondary-text-rgb,1);
   // font-weight: bold;
   // color: rgba($primary-text-rgb,0.3);
   padding: 0 5px;

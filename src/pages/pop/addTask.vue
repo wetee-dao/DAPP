@@ -2,7 +2,7 @@
   <div class="service" @click="closeClick">
     <div @click="(e: any) => e.stopPropagation()">
       <div class="title">
-        <i class="icon">&#xe77c;</i>Create Confidential Task
+        <i class="icon">&#xe77c;</i>Deploy Confidential Task
         <i class="icon right" @click="closeClick">&#xe604;</i>
       </div>
       <el-form class="form" ref="formRef">

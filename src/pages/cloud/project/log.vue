@@ -56,7 +56,7 @@ onMounted(() => {
   padding: 10px 32px;
 
   .log-item {
-    background-color: rgba($gray-bg, 0.06);
+    background-color: rgba($gray-bg-rgb, 0.06);
     border-radius: 6px;
     margin-bottom: 10px;
     display: flex;

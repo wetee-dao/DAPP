@@ -32,37 +32,34 @@ const strength = computed(() => {
 <style lang="scss" scoped>
 ul {
   position: relative;
-  width: 3.8em;
   height: 2em;
   font-size: 5px;
 }
 
 li {
-  width: 0.5em;
-  position: absolute;
+  width: 0.3em;
+  margin-left: 0.4em;
   bottom: 0;
   border-radius: 1em;
   background: rgba($primary-text-rgb, 1);
+  display: inline-block;
 }
 
 ul li:nth-child(1) {
   height: 0.8em;
-  left: 0px;
+  margin-left: 0em;
 }
 
 ul li:nth-child(2) {
   height: 1.2em;
-  left: 1em;
 }
 
 ul li:nth-child(3) {
   height: 1.6em;
-  left: 2em;
 }
 
 ul li:nth-child(4) {
   height: 2em;
-  left: 3em;
 }
 
 .pop {

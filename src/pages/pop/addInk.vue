@@ -29,9 +29,11 @@
           </li>
         </ul>
         <div class="space"></div>
-        <el-button size="large" type="primary" @click="toAdd()">
-          Deploy Now &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
-        </el-button>
+        <div class="deploy-btn">
+          <el-button size="large" type="primary" @click="toAdd()">
+            Deploy Now &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
+          </el-button>
+        </div>
       </div>
 
       <el-form class="form" ref="formRef">
@@ -404,7 +406,7 @@ const toAdd = async () => {
   height: 100%;
   display: flex;
   align-items: center;
-  border-left: 2px solid rgba($gray-bg, 0.2);
+  border-left: 2px solid rgba($gray-bg-rgb, 0.2);
   padding-left: 12px;
   cursor: pointer;
 }

@@ -74,7 +74,7 @@ const dateTime = (value: any) => {
   .title {
     margin-top: 15px;
     padding: 10px 15px;
-    background-color: rgba($gray-bg, 0.1);
+    background-color: rgba($gray-bg-rgb, 0.1);
     border-radius: 6px;
   }
 
@@ -84,7 +84,7 @@ const dateTime = (value: any) => {
 
   .report {
     margin-top: 10px;
-    background-color: rgba($gray-bg, 0.1);
+    background-color: rgba($gray-bg-rgb, 0.1);
     border-radius: 6px;
 
     .hash {

@@ -91,7 +91,7 @@ const doAction = (item: any) => {
     background-color: $primary-bg;
     width: 200px;
     position: absolute;
-    border: 2px solid rgba($gray-bg, 0.1);
+    border: 2px solid rgba($gray-bg-rgb, 0.1);
     display: flex;
     flex-direction: column;
     padding: 10px 0;

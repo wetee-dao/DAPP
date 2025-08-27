@@ -3,6 +3,9 @@
     <Cloud v-if="icon === 'cloud'" class="logo-icon"/>
     <Miner v-if="icon === 'miner'" class="logo-icon" />
     <Builder v-if="icon === 'builder'" class="logo-icon" />
+    <MPC v-if="icon === 'mpc'" class="logo-icon" />
+    <Bridge v-if="icon === 'bridge'" class="logo-icon" />
+    <Store v-if="icon === 'store'" class="logo-icon" />
 </div>
 </template>
 
@@ -10,6 +13,10 @@
 import { ref } from 'vue';
 import Cloud from "./cloud.vue";
 import Miner from "./miner.vue";
+import Builder from "./builder.vue";
+import MPC from "./MPC.vue";
+import Bridge from './bridge.vue';
+import Store from './store.vue';
 const props = defineProps(["icon"])
 const icon = ref(props.icon);
 </script>

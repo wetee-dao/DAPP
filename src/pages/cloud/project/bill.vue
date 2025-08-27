@@ -34,7 +34,7 @@ onMounted(() => {
     font-size: 16px;
     color: $secondary-text;
     margin-top: 10px;
-    background-color: rgba($gray-bg, 0.06);
+    background-color: rgba($gray-bg-rgb, 0.06);
     padding: 20px;
     border-radius: 10px;
     display: flex;

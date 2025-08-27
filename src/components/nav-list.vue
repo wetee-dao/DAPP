@@ -10,7 +10,8 @@
         </ul>
       </div> -->
     <div class="list">
-      <div :class="item.module==props.module?'active':''" @click="toUri(item.url)" :key="item.name" v-for="(item, index) in lists">
+      <div :class="item.module == props.module ? 'active' : ''" @click="toUri(item.url)" :key="item.name"
+        v-for="(item, index) in lists">
         <div class="icon">
           <Picon :icon="item.icon" />
         </div>
@@ -50,8 +51,9 @@ const toUri = (f: string) => {
   height: calc(100% - 60px);
   z-index: 99;
   top: 60px;
+  width: 9.8rem;
   border-right: 1Px solid rgba($secondary-text-rgb, 0.09);
-  background-color: rgba($primary-bg-rgb, 1);
+  box-sizing: border-box;
 
   .search {
     margin-bottom: 20px;
@@ -60,28 +62,29 @@ const toUri = (f: string) => {
   .list {
     display: flex;
     flex-direction: column;
-    width: 130px;
+    width: 100%;
     margin-top: 10px;
 
     >div {
       border: 0;
       display: flex;
-      font-size: 14px;
-      line-height: 14px;
+      font-size: 15px;
+      line-height: 16px;
       cursor: pointer;
-      padding: 15px 0px;
+      padding: 14px 0px;
       flex-direction: row;
       align-items: center;
       color: rgba($secondary-text-rgb, 1);
       // font-weight: 700;
-      justify-content: center;
+      justify-content: left;
+      padding-left: 18px;
 
       .icon {
-        width: 22px;
-        height: 22px;
-        margin-right: 5px;
-        opacity: 0.9;
-        margin-left: -4px;
+        width: 19px;
+        height: 19px;
+        margin-right: 8px;
+        // margin-left: -4px;
+        display: block;
 
         :deep(path) {
           fill: rgba($secondary-text-rgb, 0.8);
@@ -90,22 +93,24 @@ const toUri = (f: string) => {
 
       &.active {
         color: $primary-text;
-        background-color: rgba($primary-bg-rgb, 0.1);
+        // background-color: rgba($secondary-text-rgb, 0.06);
         position: relative;
+        font-weight: bold;
 
-        &::after,&::before{
-          content: "";
-          position: absolute;
-          left: 0;
-          top: calc(50% - 2px);
-          width: 4px;
-          height: 4px;
-          background-color: rgba($primary-text-rgb, 1);
-        }
-        &::before{
-          left: auto;
-          right: 0;
-        }
+        // &::after,&::before{
+        //   content: "";
+        //   position: absolute;
+        //   left: 6px;
+        //   top: calc(50% - 2px);
+        //   width: 4px;
+        //   height: 4px;
+        //   background-color: rgba($primary-text-rgb, 1);
+        // }
+
+        // &::before{
+        //   left: auto;
+        //   right: 0;
+        // }
 
         .icon {
           opacity: 1;
@@ -115,19 +120,19 @@ const toUri = (f: string) => {
           }
         }
 
-        .left,.right {
-          position: absolute;
-          left: 1px;
-          top: 50%;
-          width: 6px;
-          height: 1px;
-          background-color: rgba($primary-text-rgb, 0.6);
-        }
+        // .left,.right {
+        //   position: absolute;
+        //   left: 1px;
+        //   top: 50%;
+        //   width: 8px;
+        //   height: 1px;
+        //   background-color: rgba($primary-text-rgb, 0.6);
+        // }
 
-        .right {
-          right: 1px;
-          left: auto;
-        }
+        // .right {
+        //   right: 1px;
+        //   left: auto;
+        // }
       }
     }
   }

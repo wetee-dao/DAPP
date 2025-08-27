@@ -151,7 +151,7 @@ const GetTEEInfo = async (item: any) => {
   height: calc(100vh - 89px);
   position: relative;
   margin-top: 85px;
-  border: 3Px solid rgba($gray-bg, 0.1);
+  border: 3Px solid rgba($gray-bg-rgb, 0.1);
   border-bottom: 0;
   border-right: 0;
   display: flex;
@@ -213,7 +213,7 @@ const GetTEEInfo = async (item: any) => {
 
 .loader-wrapper {
   margin-top: 20px;
-  border-top: 2px solid rgba($gray-bg, 0.1);
+  border-top: 2px solid rgba($gray-bg-rgb, 0.1);
 }
 
 .box {
@@ -226,7 +226,7 @@ const GetTEEInfo = async (item: any) => {
     padding: 0 33px;
 
     &::after {
-      background-color: rgba($gray-bg, 0.1);
+      background-color: rgba($gray-bg-rgb, 0.1);
     }
   }
 

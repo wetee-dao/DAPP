@@ -14,7 +14,7 @@
     border-top-left-radius: 2px;
     overflow: hidden;
     background-color: $primary-bg;
-    border: 6px solid rgba($gray-bg, 0.15);
+    border: 6px solid rgba($gray-bg-rgb, 0.15);
     width: calc(100vw - 52px);
     height: calc(100vh - 80px);
     left: 20px;
@@ -28,7 +28,7 @@
 
 .title {
   padding: 30px 25px;
-  border-bottom: 2px solid rgba($gray-bg, 0.1);
+  border-bottom: 2px solid rgba($gray-bg-rgb, 0.1);
   font-size: 20px;
   line-height: 1;
   font-weight: bold;
@@ -58,8 +58,6 @@
   border: 2PX solid rgba($secondary-text-rgb, 0.2);
   border-radius: 0px;
   margin: 0px 24px 0px 24px;
-  padding-right: 2px;
-  height: 45px;
 
   .tabs {
     height: 100%;
@@ -100,15 +98,14 @@
     .active {
       position: relative;
       color: $primary-text;
-      font-size: 16px;
 
       &:before {
-        content: '';
+        content: ' ';
         position: absolute;
-        left: 20%;
-        bottom: 0px;
-        width: 60%;
-        height: 3px;
+        bottom: 8px;
+        left: calc(50% - 3px);
+        width: 6px;
+        height: 2px;
         background: $primary-text;
       }
     }
@@ -137,6 +134,10 @@
     :deep(.el-select__wrapper){
       border-radius: 0;
     }
+  }
+
+  .deploy-btn{
+    margin: 3px;
   }
 }
 

@@ -9,9 +9,9 @@ declare module 'vue' {
   export interface GlobalComponents {
     ArgInput: typeof import('./src/components/inkform/ArgInput.vue')['default']
     Bool: typeof import('./src/components/inkform/Bool.vue')['default']
+    Bridge: typeof import('./src/components/icons/bridge.vue')['default']
     Builder: typeof import('./src/components/icons/builder.vue')['default']
     Cloud: typeof import('./src/components/icons/cloud.vue')['default']
-    Container: typeof import('./src/components/icons/Container.vue')['default']
     ElAnchor: typeof import('element-plus/es')['ElAnchor']
     ElAnchorLink: typeof import('element-plus/es')['ElAnchorLink']
     ElAutocomplete: typeof import('element-plus/es')['ElAutocomplete']
@@ -51,6 +51,7 @@ declare module 'vue' {
     LoadingBox: typeof import('./src/components/loading-box.vue')['default']
     Logo: typeof import('./src/components/icons/logo.vue')['default']
     Miner: typeof import('./src/components/icons/miner.vue')['default']
+    MPC: typeof import('./src/components/icons/MPC.vue')['default']
     NavList: typeof import('./src/components/nav-list.vue')['default']
     Network: typeof import('./src/components/network.vue')['default']
     NetworkSelect: typeof import('./src/components/network-select.vue')['default']
@@ -58,6 +59,7 @@ declare module 'vue' {
     Picon: typeof import('./src/components/icons/picon.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Store: typeof import('./src/components/icons/store.vue')['default']
     SvgIcon: typeof import('./src/components/svg-icon.vue')['default']
   }
 }

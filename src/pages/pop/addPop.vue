@@ -3,7 +3,7 @@
     <div @click="(e: any) => e.stopPropagation()">
       <div class="title">
         <!-- <i class="icon">&#xe613;</i> -->
-        Create
+        Deploy
         <i class="icon right" @click="closeClick">&#xe604;</i>
       </div>
       <div class="list">
@@ -100,7 +100,7 @@ i {
     border-radius: 2px;
     overflow: hidden;
     background-color: $primary-bg;
-    border: 6px solid rgba($gray-bg, 0.08);
+    border: 6px solid rgba($gray-bg-rgb, 0.13);
     max-width: 500px;
     width: 80%;
     position: absolute;
@@ -112,7 +112,7 @@ i {
 
 .title {
   padding: 20px 30px;
-  border-bottom: 2px solid rgba($gray-bg, 0.1);
+  border-bottom: 2px solid rgba($gray-bg-rgb, 0.1);
   font-size: 18px;
   line-height: 18px;
 
@@ -137,7 +137,7 @@ i {
     align-items: center;
 
     &.active {
-      background-color: rgba($gray-bg, 0.1);
+      background-color: rgba($gray-bg-rgb, 0.1);
     }
 
     .icon {

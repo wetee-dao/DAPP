@@ -27,7 +27,8 @@ $btn-color: #0bafff; // 按钮蓝
 $btn-bg-color: #e6f7ff; // 按钮背景蓝
 
 // 背景色
-$gray-bg: #949494;
+$gray-bg: var(--g-gray-bg);
+$gray-bg-rgb: var(--g-gray-bg-rgb);
 
 // 圆角
 $radius-1: 0px

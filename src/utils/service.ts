@@ -9,19 +9,37 @@ export interface insType {
 
 export default <insType[]>[
   {
-    name: "CLOUD",
+    name: "Cloud",
     icon: "cloud",
     url: "/cloud",
     module: "cloud",
   },
   {
-    name: "MINER",
+    name: "Bridge",
+    icon: "bridge",
+    url: "/bridge",
+    module: "bridge",
+  },
+  {
+    name: "Storage",
+    icon: "store",
+    url: "/store",
+    module: "store",
+  },
+  {
+    name: "MPC",
+    icon: "mpc",
+    url: "/mpc",
+    module: "mpc",
+  },
+  {
+    name: "Miner",
     icon: "miner",
     url: "/miner",
     module: "miner",
   },
   {
-    name: "BUILDER",
+    name: "Builder",
     icon: "builder",
     url: "/builder",
     module: "builder",

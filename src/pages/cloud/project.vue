@@ -59,7 +59,7 @@
         <el-button size="large" plain @click="AddPop()">
           <el-icon class="el-icon--left">
             <Plus />
-          </el-icon>&nbsp;Create new app
+          </el-icon>&nbsp;Deploy new app
         </el-button>
       </div>
     </div>

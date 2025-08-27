@@ -78,7 +78,7 @@
       </template>
     </el-dropdown>
   </div>
-  <NavList :key="module" :module="module" @closeClick="closeClick" />
+  <NavList v-show="isShow" :key="module" :module="module" @closeClick="closeClick" />
   <div class="logo-bg" v-show="isShow" :showName="true">
     <div class="header-logo" @click="home">
       <Logo />
@@ -200,7 +200,7 @@ const setTheme = (t: string) => {
   top: 0;
   left: 0;
   z-index: 100;
-  border-bottom: 1Px solid rgba($secondary-text-rgb, 0.08);
+  border-bottom: 1Px solid rgba($secondary-text-rgb, 0.1);
   background-image: radial-gradient(transparent 1px, $primary-bg 1px);
   background-size: 4px 4px;
   backdrop-filter: saturate(50%) blur(4px);
@@ -211,27 +211,20 @@ const setTheme = (t: string) => {
   margin: 0 0px 0 20px;
 }
 
-.header-logo {
-  height: 18px;
-  width: 18px;
-  // margin-left: 10px;
-  margin-right: 7px;
-  overflow: hidden;
-}
-
 .header-space {
   flex: 1;
 }
 
 .header-left {
   height: 100%;
-  width: 130px;
+  width: 9.8rem;
   border-right: 1Px solid rgba($secondary-text-rgb, 0.09);
   display: flex;
   align-items: center;
   cursor: pointer;
-  margin-right: 16px;
-  justify-content: center;
+  padding-left: 20px;
+  box-sizing: border-box;
+  margin-right: 15px;
 }
 
 .header-box {
@@ -240,15 +233,23 @@ const setTheme = (t: string) => {
   justify-content: space-between;
 }
 
+.header-logo {
+  height: 20px;
+  width: 20px;
+  margin-right: 5px;
+  overflow: hidden;
+}
+
 .cur-service {
   display: flex;
   flex-direction: row;
   align-items: center;
   text-transform: uppercase;
   margin-right: -12px;
-  font-size: 22px;
+  font-size: 23px;
+  margin-top: 1.5px;
   font-family: "pixel-font";
-  letter-spacing: 5px;
+  letter-spacing: 3px;
   color: $primary-text;
 
   .t {
@@ -424,16 +425,16 @@ const setTheme = (t: string) => {
 
 .logo-bg {
   position: fixed !important;
-  top: 18px !important;
-  left: 4px !important;
+  top: 17px !important;
+  left: 0px !important;
   display: flex;
   align-items: center;
-  transform: scale(1.25);
+  transform: scale(1.2);
   width: 120px;
   justify-content: center;
 
   .cur-service {
-    letter-spacing: 2px;
+    // letter-spacing: 5px;
     align-items: center;
     position: relative;
     top: 0.5px;

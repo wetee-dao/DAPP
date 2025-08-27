@@ -2,7 +2,7 @@
   <div class="service" @click="closeClick">
     <div @click="(e) => e.stopPropagation()">
       <div class="title no-border">
-        <i class="icon">&#xe649;</i>Create GPU Compute service
+        <i class="icon">&#xe649;</i>Deploy GPU Compute service
         <i class="icon right" @click="closeClick">&#xe604;</i>
       </div>
       <div class="toolbar">
@@ -41,9 +41,11 @@
           </li>
         </ul>
         <div class="space"></div>
-        <el-button size="large" type="primary" @click="toAdd()">
-          Deploy Now &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
-        </el-button>
+        <div class="deploy-btn">
+          <el-button size="large" type="primary" @click="toAdd()">
+            Deploy Now &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
+          </el-button>
+        </div>
       </div>
 
       <el-form class="form" ref="formRef">

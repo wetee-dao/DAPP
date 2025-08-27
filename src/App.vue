@@ -44,7 +44,7 @@ onBeforeUnmount(() => {
   overflow-x: hidden;
   overflow-y: auto;
   visibility: hidden;
-  padding-left: 130px;
+  padding-left: 150px;
 }
 
 #mainNav {
