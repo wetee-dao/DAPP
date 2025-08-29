@@ -183,7 +183,7 @@ import { ElNotification, FormInstance } from "element-plus";
 import { getUrlParams } from "@/utils/pop";
 import { Delete } from '@element-plus/icons-vue'
 import { validFormArray } from "./utils";
-import { $getChainProvider } from "@/plugins/chain";
+import { $getTxProvider } from "@/plugins/chain";
 
 const pid = getUrlParams("project_id");
 
@@ -282,7 +282,7 @@ const closeClick = () => {
 };
 
 const toAdd = async (item: any) => {
-  await $getChainProvider(async (chain): Promise<void> => {
+  await $getTxProvider(async (chain): Promise<void> => {
     if (!chain.client) {
       return;
     }

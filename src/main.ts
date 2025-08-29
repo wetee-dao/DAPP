@@ -4,7 +4,7 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import pop from './plugins/pop';
-import chain, { chainNetPing, chainUrls } from './plugins/chain';
+import chain, { chainNetPing, initQueryApi } from './plugins/chain';
 import './assets/styles/common/reset.scss';
 import './assets/styles/common/global.scss';
 import 'element-plus/theme-chalk/dark/css-vars.css'
@@ -45,12 +45,15 @@ const m = () => {
     .mount('#mainApp');
 }
 
-if (store.state.chainUrl) {
+if (store.state.chainId) {
+  initQueryApi(store.state.chainId)
   m()
+
   chainNetPing()
 } else {
-  chainNetPing().then((index) => {
-    store.dispatch("setChainUrl", chainUrls()[index])
+  chainNetPing().then((id) => {
+    store.dispatch("setChainId", id)
+    initQueryApi(id)
     m()
   })
 }

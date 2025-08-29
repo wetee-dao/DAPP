@@ -18,9 +18,9 @@
 import { inject, onMounted, onUnmounted, ref } from 'vue';
 import { Line } from 'vue-chartjs'
 import { debounce } from '@/utils/debounce';
-import { $getChainProvider, chainUrl, getChainHttp } from "@/plugins/chain"
+import { $getTxProvider } from "@/plugins/chain"
 import { GetWetrics } from '@/apis/detail';
-import { getHttpApi } from '@/plugins/chain';
+import { $getQueryApi } from '@/plugins/chain';
 const props = defineProps(["info","clusterInfo"])
 
 const info = ref<any>(props.info)
@@ -47,7 +47,7 @@ const options = ref({
 })
 
 onMounted(() => {
-  $getChainProvider(async (chain): Promise<void> => {
+  $getTxProvider(async (chain): Promise<void> => {
     const api = chain.client!
     const ty = api.createType('WorkType', info.value.Type);
     const wid = { id: info.value.Nid, wtype: ty }
@@ -105,7 +105,7 @@ onMounted(() => {
         }
       })
     } else {
-      getHttpApi().entries("worker","proofsOfWork",[wid]).then((res: any) => {
+      $getQueryApi().entries("worker","proofsOfWork",[wid]).then((res: any) => {
         let labels: string[] = []
         let cpuData: number[] = []
         let memData: number[] = []
@@ -162,7 +162,7 @@ onMounted(() => {
 
     window.addEventListener('resize', resetChartDebounce)
     resetChart()
-  },getChainHttp(chainUrl()),true);
+  },true);
 
 })
 

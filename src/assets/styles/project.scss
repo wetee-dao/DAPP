@@ -44,7 +44,7 @@
   overflow-y: auto;
   height: calc(100vh - 85px);
   padding-top: 85px;
-  padding-right: 20px !important;
+  padding-right: 10px !important;
   text-align: left;
   flex: 1;
 
@@ -53,7 +53,7 @@
   }
 
   &.thin_box {
-    padding-right: 20px !important;
+    padding-right: 10px !important;
 
     .pod {
       width: 100% !important;
@@ -72,9 +72,18 @@
     align-items: flex-start;
     padding: 10px 10px 0 10px;
     background-color: rgba($primary-bg-rgb, 0.9);
-    border: 2Px solid rgba($primary-text-rgb, 0.3);
+    border: 1Px solid rgba($secondary-text-rgb, 0.08);
     position: relative;
     text-align: left;
+
+    &.add{
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding-bottom: 10px;
+      font-size: 18px;
+    }
 
     &.active {
       border: 2Px solid rgba($primary-text-rgb, 0.7);

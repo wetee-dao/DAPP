@@ -2,7 +2,7 @@ import { createStore } from 'vuex'
 let userInfo = {}
 let keypair: any = {}
 let theme: string = "";
-let chainUrl: any = null;
+let chainId: any = null;
 if (window.localStorage.getItem("userInfo")) {
   userInfo = JSON.parse(window.localStorage.getItem("userInfo") || "{}")
 }
@@ -12,8 +12,8 @@ if (window.localStorage.getItem("keypair")) {
 if (window.localStorage.getItem("theme")) {
   theme = window.localStorage.getItem("theme") || "";
 }
-if (window.localStorage.getItem("chainUrl")) {
-  chainUrl = window.localStorage.getItem("chainUrl") ? JSON.parse(window.localStorage.getItem("chainUrl")||"{}"): null;
+if (window.localStorage.getItem("chainId")) {
+  chainId = window.localStorage.getItem("chainId") ? JSON.parse(window.localStorage.getItem("chainId")||"{}"): null;
 }
 
 const store = createStore({
@@ -25,7 +25,7 @@ const store = createStore({
     isLoginShow: false,
     keypair: keypair,
     scale: 1,
-    chainUrl: chainUrl,
+    chainId: chainId,
     setPins: {},
   },
   mutations: {
@@ -52,8 +52,8 @@ const store = createStore({
     setKeypair(state, payload) {
       state.keypair = payload
     },
-    setChainUrl(state, payload) {
-      state.chainUrl = payload
+    setChainId(state, payload) {
+      state.chainId = payload
     },
     setPins(state, payload) {
       state.setPins = payload
@@ -90,13 +90,13 @@ const store = createStore({
       window.localStorage.setItem("theme", param);
       context.commit('setTheme', param)
     },
-    setChainUrl(context, param) {
+    setChainId(context, param) {
       if (!param) {
-        window.localStorage.removeItem("chainUrl");
+        window.localStorage.removeItem("chainId");
       }else{
-        window.localStorage.setItem("chainUrl", JSON.stringify(param));
+        window.localStorage.setItem("chainId", JSON.stringify(param));
       }
-      context.commit('setChainUrl', param)
+      context.commit('setChainId', param)
     },
     setPins(context, param) {
       context.commit('setPins', param)

@@ -93,7 +93,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getHttpApi } from "@/plugins/chain";
+import { $getQueryApi } from "@/plugins/chain";
 import { ref, onMounted, inject } from "vue";
 import { useStore } from "vuex";
 
@@ -103,14 +103,14 @@ const contracts = ref<any[]>([]);
 const crs = ref<any[]>([]);
 
 const getClusters = async (user: string) => {
-  const cList = await getHttpApi().entries("worker","k8sClusters",[]);
+  const cList = await $getQueryApi().entries("worker","k8sClusters",[]);
   console.log(cList);
   let cs: any[] = [];
   cList.forEach((c: any) => {
     cs.push(c.value);
   });
 
-  const crList = await getHttpApi().entries("worker","crs",[]);
+  const crList = await $getQueryApi().entries("worker","crs",[]);
   let crsCur: any[] = [];
   crList.forEach((c: any) => {
     crsCur.push(c.value);
@@ -118,7 +118,7 @@ const getClusters = async (user: string) => {
 
   let contractCur: any[] = [];
   for (let i = 0; i < cList.length; i++) {
-    const contractWrap = await getHttpApi().entries("worker","clusterContracts",[cs[i].id]);
+    const contractWrap = await $getQueryApi().entries("worker","clusterContracts",[cs[i].id]);
     let  clusterContracts = []
     for (let j = 0; j < contractWrap.length; j++) {
       clusterContracts.push(contractWrap[j][1])

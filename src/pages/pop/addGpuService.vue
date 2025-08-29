@@ -217,7 +217,7 @@ import { Delete, Close } from '@element-plus/icons-vue';
 import { getUrlParams } from "@/utils/pop";
 import { validFormArray } from "./utils";
 import { deepCopy } from "@/utils/object";
-import { $getChainProvider } from "@/plugins/chain";
+import { $getTxProvider } from "@/plugins/chain";
 
 const pid = getUrlParams("project_id");
 const props = defineProps(["router", "store", "close", "app"])
@@ -302,7 +302,7 @@ const closeClick = () => {
 
 const toAdd = async () => {
   containers.value[curContainer.value] = deepCopy(form.value)
-  await $getChainProvider(async (chain): Promise<void> => {
+  await $getTxProvider(async (chain): Promise<void> => {
     if (!chain.client) {
       return;
     }

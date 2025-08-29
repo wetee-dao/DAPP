@@ -68,8 +68,8 @@ const toUri = (f: string) => {
     >div {
       border: 0;
       display: flex;
-      font-size: 15px;
-      line-height: 16px;
+      font-size: 16px;
+      line-height: 18px;
       cursor: pointer;
       padding: 14px 0px;
       flex-direction: row;
@@ -77,11 +77,11 @@ const toUri = (f: string) => {
       color: rgba($secondary-text-rgb, 1);
       // font-weight: 700;
       justify-content: left;
-      padding-left: 18px;
+      padding-left: 16px;
 
       .icon {
-        width: 19px;
-        height: 19px;
+        width: 22px;
+        height: 22px;
         margin-right: 8px;
         // margin-left: -4px;
         display: block;

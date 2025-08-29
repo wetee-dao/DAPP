@@ -1,7 +1,7 @@
 <template>
     <ul class="pop">
-        <li v-for="(item, index) in list" class="flex" @click="select(index)" :key="index">
-            <i v-if="curr.url == item.url" class="icon active">&#xe692;</i>{{ item.name }}
+        <li v-for="(item, index) in chainNodes" class="flex" @click="select(index)" :key="index">
+            <i v-if="curr == item.chainId" class="icon active">&#xe692;</i>{{ item.name }}
             <div class="space"></div>
             <div class="ping">{{ping[index]}} ms</div>
         </li>
@@ -9,20 +9,19 @@
 </template>
 
 <script lang="ts" setup>
-import { chainUrls } from '@/plugins/chain';
+import { chainNodes } from '@/plugins/chain';
 import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
 
 const store = useStore();
-const list: any[] = chainUrls()
-const curr = ref(store.state.chainUrl)
+const curr = ref(store.state.chainId)
 const ping = ref(store.state.setPins)
 watch(() => store.state.setPins, (newVal, _) => {
     ping.value = newVal
 })
 
 const select = (index: number) => {
-    store.dispatch("setChainUrl", list[index])
+    store.dispatch("setChainUrl", chainNodes[index])
     window.location.reload()
 }
 </script>

@@ -1,4 +1,4 @@
-import { getHttpApi } from "@/plugins/chain";
+import { $getQueryApi } from "@/plugins/chain";
 import { deepCopy } from "@/utils/object";
 import { ChainHexToString } from "@/utils/strings";
 
@@ -16,7 +16,7 @@ export const getProjectList = async (user: string, refresh: boolean = false) => 
         return projectList!;
     }
 
-    const pList = await getHttpApi().entries("project","proxyProjects",[user])
+    const pList = await $getQueryApi().entries("project","proxyProjects",[user])
     let datas = [
         {
             ...deepCopy(defaultProject),

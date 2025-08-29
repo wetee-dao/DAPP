@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getHttpApi } from "@/plugins/chain";
+import { $getQueryApi } from "@/plugins/chain";
 import { ss58toHex } from "@/utils/chain";
 import { hexToString } from "@polkadot/util";
 
@@ -84,7 +84,7 @@ export async function GetClusterInfo(cluster: number) {
     return JSON.parse(clusterInfo)
   }
 
-  const info = await getHttpApi().query("worker","k8sClusters",[cluster])
+  const info = await $getQueryApi().query("worker","k8sClusters",[cluster])
   window.localStorage.setItem("cluster_" + cluster, JSON.stringify(info))
   return info
 }

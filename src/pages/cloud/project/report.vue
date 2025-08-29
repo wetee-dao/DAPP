@@ -30,7 +30,7 @@
 import { inject, onMounted, ref } from 'vue';
 import dayjs from "dayjs";
 import { GetTeeReport } from "@/apis/dkg";
-import { $getChainProvider, chainUrl, getChainHttp } from "@/plugins/chain"
+import { $getTxProvider, chainUrl } from "@/plugins/chain"
 
 const props = defineProps(["info", "service", "clusterInfo"])
 const info = ref<any>(props.info)
@@ -47,14 +47,14 @@ const TEEType: any = {
 
 onMounted(async () => {
   ddns.value = props.clusterInfo.ip[0].domain
-  await $getChainProvider(async (chain): Promise<void> => {
+  await $getTxProvider(async (chain): Promise<void> => {
     const api = chain.client!
     const ty = api.createType('WorkType', info.value.Type);
     const wid = { id: info.value.Nid, wtype: ty }
 
     const reportC = await api.query.worker.reportOfWork(wid)
     reportHash.value = reportC.toHuman()
-  },getChainHttp(chainUrl()),true);
+  },true);
 })
 
 const verifyTeeReport = async () => {

@@ -22,9 +22,9 @@
         <el-tab-pane label="TEE report" name="sgxReport" lazy>
           <Report :info="info" :service="service" :clusterInfo="clusterInfo" />
         </el-tab-pane>
-        <!-- <el-tab-pane label="Settings" name="settings" lazy>
+        <el-tab-pane label="Settings" name="settings" lazy>
           <TEESetting :info="info" :clusterInfo="clusterInfo" />
-        </el-tab-pane> -->
+        </el-tab-pane>
       </el-tabs>
     </div>
     <div v-if="loader == 2" class="box" :key="info.Id">
@@ -51,7 +51,7 @@ import InkCall from "./inkCall.vue"
 import InkMeta from "./inkMeta.vue"
 import TEESetting from "./teeSetting.vue";
 import loadingBox from "@/components/loading-box.vue";
-import { $getChainProvider, chainUrl, getChainHttp } from "@/plugins/chain";
+import { $getTxProvider } from "@/plugins/chain";
 import { GetClusterInfo, GetServices } from "@/apis/detail";
 import { hexToString } from "@polkadot/util";
 
@@ -119,26 +119,27 @@ const GetInfo = async (item: any) => {
 }
 
 const GetTEEInfo = async (item: any) => {
-  await $getChainProvider(async (chain): Promise<void> => {
-    const api = chain.client!
-    const ty = api.createType('WorkType', item.Type); 
-    const wid = { id: item.Nid, wtype: ty }
-    const cidList = await api.query.worker.workContractState.entries(wid)
-    let cid:any = null;
-    cidList.forEach(async ([key, _]) => {
-      cid = key.toHuman()
-    })
+  loader.value = 1
+  // await $getTxProvider(async (chain): Promise<void> => {
+  //   const api = chain.client!
+  //   const ty = api.createType('WorkType', item.Type); 
+  //   const wid = { id: item.Nid, wtype: ty }
+  //   const cidList = await api.query.worker.workContractState.entries(wid)
+  //   let cid:any = null;
+  //   cidList.forEach(async ([key, _]) => {
+  //     cid = key.toHuman()
+  //   })
 
-    let cinfo = await GetClusterInfo(parseInt(cid[1]))
-    cinfo.ip[0].domain = hexToString(cinfo.ip[0].domain)
-    ddns.value = cinfo.ip[0].domain
-    clusterInfo.value = cinfo
-    loader.value = 1
+  //   let cinfo = await GetClusterInfo(parseInt(cid[1]))
+  //   cinfo.ip[0].domain = hexToString(cinfo.ip[0].domain)
+  //   ddns.value = cinfo.ip[0].domain
+  //   clusterInfo.value = cinfo
+  //   loader.value = 1
 
-    GetServices(parseInt(cid[1]), item).then((d) => {
-      service.value = d as any[]
-    })
-  },getChainHttp(chainUrl()),true);
+  //   GetServices(parseInt(cid[1]), item).then((d) => {
+  //     service.value = d as any[]
+  //   })
+  // },true);
 }
 </script>
 
@@ -146,12 +147,12 @@ const GetTEEInfo = async (item: any) => {
 .detail {
   overflow: hidden;
   background-color: $secondary-bg;
-  min-width: calc(100vw - 350px);
-  max-width: calc(100vw - 350px);
+  min-width: calc(100vw - 500px);
+  max-width: calc(100vw - 500px);
   height: calc(100vh - 89px);
   position: relative;
   margin-top: 85px;
-  border: 3Px solid rgba($gray-bg-rgb, 0.1);
+  border: 1Px solid rgba($gray-bg-rgb, 0.1);
   border-bottom: 0;
   border-right: 0;
   display: flex;
@@ -213,7 +214,7 @@ const GetTEEInfo = async (item: any) => {
 
 .loader-wrapper {
   margin-top: 20px;
-  border-top: 2px solid rgba($gray-bg-rgb, 0.1);
+  border-top: 1Px solid rgba($gray-bg-rgb, 0.1);
 }
 
 .box {

@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <div class="insList" v-for="(item, index) in msg" :key="index">
@@ -32,6 +31,7 @@ interface culation {
   created_at: string;
   type: string;
 }
+
 export default {
   name: "insList",
   props: {
@@ -46,9 +46,9 @@ export default {
     const textClick = (item: any) => {
       router.push(
         "/app_chain/blockInfo/list?app_id=" +
-          item.id +
-          "&org_id=" +
-          store.state.userInfo.org_id
+        item.id +
+        "&org_id=" +
+        store.state.userInfo.org_id
       );
     };
     return {
@@ -60,7 +60,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .insList {
   box-sizing: border-box;
   width: 100%;
@@ -93,6 +92,7 @@ export default {
 
 .left {
   flex: 1;
+
   div:first-of-type {
     width: 48px;
     height: 48px;
@@ -123,6 +123,7 @@ export default {
 
 .center {
   width: 350px;
+
   p:first-of-type {
     color: $light-block;
     font-size: 15px;

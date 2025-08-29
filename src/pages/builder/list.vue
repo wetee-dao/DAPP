@@ -50,7 +50,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { getNumstrfromChain, getSS5842 } from "@/utils/chain";
-import { getHttpApi } from "@/plugins/chain";
+import { $getQueryApi } from "@/plugins/chain";
 const global = useGlobelProperties()
 
 const store = useStore();
@@ -75,7 +75,7 @@ onMounted(async () => {
 });
 
 const getList = async () => {
-  const appsIds = await getHttpApi().entries("store", "accountApps", [store.state.userInfo.addr])
+  const appsIds = await $getQueryApi().entries("store", "accountApps", [store.state.userInfo.addr])
   const ids = appsIds.map((item: any) => {
     return getNumstrfromChain(item.keys[1])
   })
@@ -85,13 +85,13 @@ const getList = async () => {
     return
   }
 
-  const appsList = await getHttpApi().multi_query("store", "apps", ids)
+  const appsList = await $getQueryApi().multi_query("store", "apps", ids)
   apps.value = appsList;
 
   let cversions: any = {}
   for (let i = 0; i < ids.length; i++) {
     const item = ids[i]
-    const appsVersion = await getHttpApi().entries("store", "versionLists", [item])
+    const appsVersion = await $getQueryApi().entries("store", "versionLists", [item])
     cversions[item] = appsVersion.map((version: any) => {
       let v = version.value
       return {

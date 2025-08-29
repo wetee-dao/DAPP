@@ -1,173 +1,81 @@
 import { ApiPromise, HttpProvider, WsProvider } from "@polkadot/api"
-import { base64Encode } from "@polkadot/util-crypto";
-import { getSpecTypes } from '@polkadot/types-known';
-import type { Injected, MetadataDef } from '@polkadot/extension-inject/types';
-import { formatBalance, isNumber } from "@polkadot/util";
-import axios from "axios";
 //@ts-ignore
-import qs from "qs";
 import { Loading } from "./pop";
-import { SubmittableExtrinsic } from "@polkadot/api/types";
 import { getWallets, Wallet } from "@talismn/connect-wallets";
 import { Metamask } from "@/providers/MetaSnap";
 import { chainJson } from "@/utils/chain";
-import { MetaMaskProvider } from "@/providers/metamask";
+import { MetaMaskProvider } from "@/providers/eth";
 import { SubstrateProvider } from "@/providers/substrate";
 import store from '@/store';
 import { getNetworkLatency } from "@/utils/net";
+import { WalletWrap } from "@/providers";
+import { ElNotification } from "element-plus";
+import { SubstrateQuery } from "@/apis/chains/substrate";
+import { Api } from "@/apis/chains";
 
 // 区块链链接
 export let chainIndexer = 'https://xiaobai.asyou.me:30006/gql'
 export let dkgUrl = 'https://xiaobai.asyou.me:31001/gql'
 
-export async function chainNetPing():Promise<number> {
-  const chainNodes = chainUrls();
-  const results = await Promise.all(chainNodes.map(node => getNetworkLatency(getChainHttpApi(node.url)+"node/network")));
-  let pings:any = {}
-  const rs = results.map((v,i)=>{
+// 获取链节点的ping
+export async function chainNetPing(): Promise<string> {
+  const results = await Promise.all(chainNodes.map(node => getNetworkLatency(node.queryUrl + "node/network")));
+
+  let pings: any = {}
+  const rs = results.map((v, i) => {
     pings[i] = v;
-    return {i:i,v:v}
-  } ).filter((result:any) => result.v != null)
+    return { i: i, v: v }
+  }).filter((result: any) => result.v != null)
 
   store.dispatch("setPins", pings)
-  return rs[Math.floor(Math.random() * rs.length)].i
+  return chainNodes[rs[Math.floor(Math.random() * rs.length)].i].chainId
 }
 
-export const chainUrls = () => {
-  return [
-    {
-      name: 'TEST-LOCAL',
-      url: 'ws://192.168.110.205:9944',
-      env: "local"
-    },
-    // {
-    //   name: 'TEST-CHINA',
-    //   url: 'wss://china.asyou.me:89/ws',
-    //   env: "paseo"
-    // },
-  ]
-}
-
-export let chainUrl = () => {
-  if (!store.state.chainUrl) {
-    return JSON.parse(window.localStorage.getItem("chainUrl")||"{}").url;
-  }
-  return store.state.chainUrl.url
-}
-
-export let getChainHttpApi = (url: string) => {
-  return url.replace('ws', 'http').replace("ws", "")
-}
-
-export let getChainHttp = (url: string) => {
-  return url.replace('ws', 'http')
-}
-
-// chain http client
-const chainHttpClient = {
-  // 查询链上状态
-  query: async (pallet: string, storageItem: string, keys: unknown[]) => {
-    const response = await axios.get(getChainHttpApi(chainUrl()) + "pallets/" + pallet + "/storage/" + storageItem, {
-      params: { keys: keys },
-      paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
-    })
-    return response.data.value
-  },
-
-  // 查询链上状态列表
-  entries: async (pallet: string, storageItem: string, keys: unknown[]) => {
-    const response = await axios.get(getChainHttpApi(chainUrl()) + "pallets/" + pallet + "/storage/entries/" + storageItem, {
-      params: { keys: keys },
-      paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
-    })
-    return response.data.values
-  },
-
-  multi_query: async (pallet: string, storageItem: string, keys: unknown[]) => {
-    let ps = [encodeURIComponent(JSON.stringify(keys))];
-    const response = await axios.get(getChainHttpApi(chainUrl()) + "pallets/" + pallet + "/storage/multi_query/" + storageItem, {
-      params: { keys: ps },
-      paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
-    })
-    return response.data.values
-  },
-
-  double_multi_query: async (pallet: string, storageItem: string, k1: unknown, keys: unknown[]) => {
-    let ps = [k1, JSON.stringify(keys)];
-    const response = await axios.get(getChainHttpApi(chainUrl()) + "pallets/" + pallet + "/storage/multi_query/" + storageItem, {
-      params: { keys: ps },
-      paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
-    })
-    return response.data.values
-  },
-
-  // 查询lastblock
-  lastBlock: async () => {
-    const response = await axios.get(getChainHttpApi(chainUrl()) + "blocks/head/header?finalized=false")
-    return response.data
+// 链节点
+class ChainNode {
+  name: string;
+  type: string;
+  chainId: string;
+  chainUrl: string;
+  queryUrl: string;
+  constructor(name: string, type: string, chainId: string, chainUrl: string, queryUrl: string) {
+    this.name = name
+    this.type = type
+    this.chainId = chainId
+    this.chainUrl = chainUrl
+    this.queryUrl = queryUrl
   }
 }
 
-export type onCallFn = (result: any) => void;
+// 链节点列表
+export const chainNodes: ChainNode[] = [
+  {
+    name: 'DEV-LOCAL',
+    chainId: "dev-local",
+    type: "substrate",
+    chainUrl: 'wss://xiaobai.asyou.me:30001/ws',
+    queryUrl: 'https://xiaobai.asyou.me:30001/',
+  },
+]
 
-// 链对象封装
-export interface ChainWrap {
-  client: ApiPromise | undefined;
-  signAndSend: (tx: SubmittableExtrinsic<'promise'>, signer: string, onSeccess: onCallFn, onError: onCallFn) => Promise<void>;
-  proxysignAndSend: (tx: SubmittableExtrinsic<'promise'>, ProjectId: string, signer: string, onSeccess: onCallFn, onError: onCallFn) => Promise<void>;
-  close: () => void;
-}
-
-// 获取 http query api
-export const getHttpApi = () => {
-  return chainHttpClient
-}
-
-// 检测是否支持当前链
-export async function checkMetaData(api: ApiPromise, ext: Injected): Promise<boolean> {
-  const cmeta = (await ext.metadata!.get()).find((m) => m.genesisHash === api.genesisHash.toHex() && m.specVersion == api.runtimeVersion.specVersion.toNumber())
-
-  if (cmeta) {
-    return true
+// 获取当前链节点
+export const CurrentChainNode = () => {
+  const chainId = store.state.chainId
+  let c = chainNodes.find(node => node.chainId == chainId)
+  if (!c) {
+    c = chainNodes[0]
   }
-
-  const meta = await getMetaData(api)
-  return await ext.metadata!.provide(meta as MetadataDef)
+  return c
 }
 
-// 获取元数据
-export async function getMetaData(api: ApiPromise) {
-  let chainInfo = await api.rpc.system.chain()
-  const chainName = chainInfo.toHuman()
-
-  const meta = {
-    chain: chainName,
-    chainType: 'substrate',
-    color: undefined,
-    genesisHash: api.genesisHash.toHex(),
-    icon: "",
-    metaCalls: base64Encode(api.runtimeMetadata.asCallsOnly.toU8a()),
-    specVersion: api.runtimeVersion.specVersion.toNumber(),
-    ss58Format: isNumber(api.registry.chainSS58)
-      ? api.registry.chainSS58
-      : 42,
-    tokenDecimals: (api.registry.chainDecimals)[0],
-    tokenSymbol: (api.registry.chainTokens || formatBalance.getDefaults().unit)[0],
-    types: getSpecTypes(api.registry, chainName, api.runtimeVersion.specName, api.runtimeVersion.specVersion) as unknown as Record<string, string>
-  }
-
-  return meta as MetadataDef
-}
-
-// 获取链对象
-export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>, url: string | undefined = undefined, isTry: boolean = false): Promise<void> => {
+// 获取交易对象
+export const $getTxProvider = async (run: (chain: WalletWrap) => Promise<void>, isTry: boolean = false): Promise<void> => {
   const userInfo: any = store.state.userInfo
-
   const loading = !isTry ? Loading("Connecting to chain...") : { close: () => { } }
 
-  let chain = undefined;
-  const curl = url || chainUrl();
-  console.log("chain url:", curl);
+  let wallet = undefined;
+  const curl = CurrentChainNode().chainUrl;
+
   try {
     const provider = curl.startsWith("ws") ? new WsProvider(curl) : new HttpProvider(curl);
     const api = await ApiPromise.create({
@@ -175,103 +83,138 @@ export const $getChainProvider = async (run: (chain: ChainWrap) => Promise<void>
       types: chainJson,
     });
 
-    // await api.rpc.chain.getFinalizedHead();
-    if (userInfo && userInfo.provider) {
-      if (userInfo.provider == "metamask") {
-        try {
-          const MataMaskSnap = await Metamask.enable!("WeTEE")
-          chain = new MetaMaskProvider(MataMaskSnap)
-
-          chain.snap = MataMaskSnap
-        } catch (e) {
-          throw e;
-        }
-      } else if (userInfo.provider == "substrate") {
-        if (userInfo.type == "keyring") {
-          chain = new SubstrateProvider()
-        } else {
-          const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === userInfo.wallet);
-          if (!wallet) {
-            throw new Error("polkadot.js " + userInfo.wallet + " not installed");
-          }
-          chain = new SubstrateProvider()
-        }
-      }
-    } else {
-      chain = new SubstrateProvider();
+    if (!userInfo || !userInfo.provider) {
+      ElNotification({
+        title: 'Error',
+        message: 'Please connect wallet first',
+        type: 'error',
+      })
+      throw new Error("Please connect wallet first");
     }
 
-    chain!.client = api;
+    // await api.rpc.chain.getFinalizedHead();
+    if (userInfo.provider == "metamask") {
+      try {
+        const MataMaskSnap = await Metamask.enable!("WeTEE")
+        wallet = new MetaMaskProvider(MataMaskSnap)
+
+        wallet.snap = MataMaskSnap
+      } catch (e) {
+        throw e;
+      }
+    } else if (userInfo.provider == "substrate") {
+      if (userInfo.type == "keyring") {
+        wallet = new SubstrateProvider()
+      } else {
+        const wallet_ins: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === userInfo.wallet);
+        if (!wallet_ins) {
+          throw new Error("polkadot.js " + userInfo.wallet + " not installed");
+        }
+        wallet = new SubstrateProvider()
+      }
+    }
+
+    wallet!.client = api;
     loading.close();
 
-    await run(chain!);
-    chain?.close();
+    await run(wallet!);
+    wallet?.close();
   } catch (e) {
     loading.close();
-    chain?.close();
+    wallet?.close();
     console.log("chain connect error :", e);
   }
 }
 
-export const getConfig = (): any => {
-  if (localStorage.getItem("env") == "dev") {
-    return {
-      "Tokens": {
-        "DEV": [
-          "0"
-        ],
-      },
-      "TokensAmount": {
-        "DEV_0": async (api: ApiPromise, addr: string) => {
-          let account: any = (await api.query.system.account(addr)).toHuman()
-          return account.data;
-        },
-      },
-      "Chains": {
-        "0": {
-          name: "DEV",
-          icon: "/imgs/vStaking/DEV.svg",
-          api: "wss://paseo-rpc.dwellir.com",
-          isParent: true,
-        },
-      }
-    }
+export const initQueryApi = (chainId: string) => {
+  let node = chainNodes.find(node => node.chainId == chainId)
+  if (!node) {
+    node = chainNodes[0]
   }
-
-
-  return {
-    "Tokens": {
-      "PAS": [
-        "0"
-      ],
-      "vDOT": [
-        "2030"
-      ],
-    },
-    "TokensAmount": {
-      "PAS_0": async (api: ApiPromise, addr: string) => {
-        let account: any = (await api.query.system.account(addr)).toHuman()
-        return account.data;
-      },
-      "vDOT_2030": (api: ApiPromise) => { },
-    },
-    "Chains": {
-      "0": {
-        name: "Paseo",
-        icon: "/imgs/vStaking/PAS.svg",
-        api: "wss://paseo-rpc.dwellir.com",
-        isParent: true,
-      },
-      "2030": {
-        name: "Biforst",
-        icon: "/imgs/chainBifrost.svg",
-        api: "wss://bifrost-rpc.paseo.liebi.com/ws",
-        isParent: false,
-      }
-    }
-  }
-
+  SubstrateQuery.init(node.queryUrl, node.chainUrl)
 }
+
+// 获取查询对象
+export const $getQueryApi = (): Api => {
+  const userInfo: any = store.state.userInfo
+  const node = CurrentChainNode()
+  if (!userInfo || !userInfo.provider) {
+    ElNotification({
+      title: 'Error',
+      message: 'Please connect wallet first',
+      type: 'error',
+    })
+    throw new Error("Please connect wallet first");
+  }
+
+  switch (userInfo.provider) {
+    case "metamask":
+      return SubstrateQuery;
+    case "substrate":
+      return SubstrateQuery;
+    default:
+      break;
+  }
+
+  throw new Error("chain not found");
+}
+
+// export const getConfig = (): any => {
+//   if (localStorage.getItem("env") == "dev") {
+//     return {
+//       "Tokens": {
+//         "DEV": [
+//           "0"
+//         ],
+//       },
+//       "TokensAmount": {
+//         "DEV_0": async (api: ApiPromise, addr: string) => {
+//           let account: any = (await api.query.system.account(addr)).toHuman()
+//           return account.data;
+//         },
+//       },
+//       "Chains": {
+//         "0": {
+//           name: "DEV",
+//           icon: "/imgs/vStaking/DEV.svg",
+//           api: "wss://paseo-rpc.dwellir.com",
+//           isParent: true,
+//         },
+//       }
+//     }
+//   }
+//   return {
+//     "Tokens": {
+//       "PAS": [
+//         "0"
+//       ],
+//       "vDOT": [
+//         "2030"
+//       ],
+//     },
+//     "TokensAmount": {
+//       "PAS_0": async (api: ApiPromise, addr: string) => {
+//         let account: any = (await api.query.system.account(addr)).toHuman()
+//         return account.data;
+//       },
+//       "vDOT_2030": (api: ApiPromise) => { },
+//     },
+//     "Chains": {
+//       "0": {
+//         name: "Paseo",
+//         icon: "/imgs/vStaking/PAS.svg",
+//         api: "wss://paseo-rpc.dwellir.com",
+//         isParent: true,
+//       },
+//       "2030": {
+//         name: "Biforst",
+//         icon: "/imgs/chainBifrost.svg",
+//         api: "wss://bifrost-rpc.paseo.liebi.com/ws",
+//         isParent: false,
+//       }
+//     }
+//   }
+// }
 
 // vue 插件入口
 export default {

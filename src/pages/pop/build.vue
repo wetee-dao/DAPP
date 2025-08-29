@@ -228,7 +228,7 @@ import { Delete, Close } from '@element-plus/icons-vue';
 import { getUrlParams } from "@/utils/pop";
 import { chainToContainer, validAppArray } from "./utils";
 import { deepCopy } from "@/utils/object";
-import { $getChainProvider, getHttpApi } from "@/plugins/chain";
+import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
 import { getNumstrfromChain } from "@/utils/chain";
 import { hexToString } from "@polkadot/util";
 
@@ -309,7 +309,7 @@ const toAdd = async () => {
     return
   }
 
-  await $getChainProvider(async (chain): Promise<void> => {
+  await $getTxProvider(async (chain): Promise<void> => {
     if (!chain.client) {
       return;
     }
@@ -393,10 +393,10 @@ const getInfo = async () => {
     return
   }
   let id = parseInt(mod)
-  const app = await getHttpApi().query("store", "apps", [id])
+  const app = await $getQueryApi().query("store", "apps", [id])
   name.value = hexToString(app.name)
 
-  const appsVersion = await getHttpApi().entries("store", "versionLists", [id])
+  const appsVersion = await $getQueryApi().entries("store", "versionLists", [id])
   const versions = appsVersion.map((version: any) => {
     let v = version.value
     return {

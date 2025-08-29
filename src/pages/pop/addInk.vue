@@ -153,7 +153,7 @@ import { BN_ZERO } from "@polkadot/util";
 import { InstantiateData, createInstantiateTx, formatProofSize, formatRefTime, getGasLimit, getStorageDepositLimit, transformUserInput } from "@/utils/ink";
 import { Balance } from "@polkadot/types/interfaces";
 import { randomAsHex } from "@polkadot/util-crypto";
-import { $getChainProvider } from "@/plugins/chain";
+import { $getTxProvider } from "@/plugins/chain";
 
 const pid = getUrlParams("project_id");
 const props = defineProps(["router", "store", "close", "app"])
@@ -198,7 +198,7 @@ const uploadFile = async (options: UploadRequestOptions): Promise<XMLHttpRequest
   })
 
   let api: ApiPromise | undefined = undefined;
-  await $getChainProvider(async (chain): Promise<void> => {
+  await $getTxProvider(async (chain): Promise<void> => {
     api = chain.client
   }, undefined, true);
   const cabi = new Abi(data, api!.registry.getChainProperties());
@@ -251,7 +251,7 @@ const onConstructorChange = (index: number) => {
 }
 
 const dryTry = async () => {
-  await $getChainProvider(async (chain): Promise<void> => {
+  await $getTxProvider(async (chain): Promise<void> => {
     const api = chain.client!
 
     const accountId = props.store.state.userInfo.addr
@@ -328,7 +328,7 @@ const closeClick = () => {
 };
 
 const toAdd = async () => {
-  await $getChainProvider(async (chain): Promise<void> => {
+  await $getTxProvider(async (chain): Promise<void> => {
     const api = chain.client!
     const accountId = props.store.state.userInfo.addr
 

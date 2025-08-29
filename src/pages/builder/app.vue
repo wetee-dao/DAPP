@@ -32,7 +32,7 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { getNumstrfromChain } from "@/utils/chain";
-import { $getChainProvider, getHttpApi } from "@/plugins/chain";
+import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
 import { hexToString } from "@polkadot/util";
 import { ElMessageBox, ElNotification } from "element-plus";
 const global = useGlobelProperties()
@@ -62,7 +62,7 @@ const deploy = () => {
 const stop = async () => {
     ElMessageBox.confirm('Are you sure to stop this app?', {})
         .then(async () => {
-            await $getChainProvider(async (chain): Promise<void> => {
+            await $getTxProvider(async (chain): Promise<void> => {
                 if (!chain.client) {
                     return;
                 }
@@ -96,9 +96,9 @@ onMounted(async () => {
 });
 
 const getInfo = async () => {
-    app.value = await getHttpApi().query("store", "apps", [id])
+    app.value = await $getQueryApi().query("store", "apps", [id])
 
-    const appsVersion = await getHttpApi().entries("store", "versionLists", [id])
+    const appsVersion = await $getQueryApi().entries("store", "versionLists", [id])
     versions.value = appsVersion.map((version: any) => {
         let v = version.value
         return {
@@ -108,7 +108,7 @@ const getInfo = async () => {
         };
     }).reverse()
 
-    appStaking.value = await getHttpApi().query("store", "appStakings", [id])
+    appStaking.value = await $getQueryApi().query("store", "appStakings", [id])
 }
 </script>
 

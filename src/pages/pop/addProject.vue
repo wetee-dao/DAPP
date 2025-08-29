@@ -38,7 +38,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import { ElNotification } from "element-plus";
-import { $getChainProvider, getHttpApi } from "@/plugins/chain";
+import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
 
 const props = defineProps(["router", "store", "close", "app"])
 
@@ -53,7 +53,7 @@ const closeClick = () => {
 };
 
 const toAdd = async () => {
-  await $getChainProvider(async (chain): Promise<void> => {
+  await $getTxProvider(async (chain): Promise<void> => {
     if (!form.name) {
       ElNotification({
         title: 'Error',

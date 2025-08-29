@@ -36,7 +36,7 @@
       <template #reference>
         <div class="header-box flex network-box">
           <div class="node-name">
-            {{ network.name }}<Network class="network" />
+            <div>{{ network.name }}</div><Network class="network" />
           </div>
         </div>
       </template>
@@ -101,6 +101,7 @@ import Network from "./network.vue";
 import NetworkSelect from "./network-select.vue";
 import { ss58toHex } from "@/utils/chain";
 import { getProject } from "@/apis/project";
+import { CurrentChainNode } from "@/plugins/chain";
 
 const router = useRouter();
 const store = useStore();
@@ -110,7 +111,7 @@ const pkey = ref(0);
 const user = ref(store.state.userInfo);
 const isShow = ref(store.state.currentPath != "/login");
 const theme = ref(store.state.theme);
-const network = ref(store.state.chainUrl);
+const network = ref(CurrentChainNode());
 const paths = ref<any[]>([]);
 const module = ref("");
 watch(() => store.state.theme, (newVal, _) => {
@@ -201,7 +202,7 @@ const setTheme = (t: string) => {
   left: 0;
   z-index: 100;
   border-bottom: 1Px solid rgba($secondary-text-rgb, 0.1);
-  background-image: radial-gradient(transparent 1px, $primary-bg 1px);
+  background-image: radial-gradient(transparent 1px, rgba($primary-bg-rgb, 0.9) 1.5px);
   background-size: 4px 4px;
   backdrop-filter: saturate(50%) blur(4px);
   align-items: center;
@@ -218,6 +219,7 @@ const setTheme = (t: string) => {
 .header-left {
   height: 100%;
   width: 9.8rem;
+  min-width: 9.8rem;
   border-right: 1Px solid rgba($secondary-text-rgb, 0.09);
   display: flex;
   align-items: center;
@@ -236,7 +238,7 @@ const setTheme = (t: string) => {
 .header-logo {
   height: 20px;
   width: 20px;
-  margin-right: 5px;
+  margin-right: 4px;
   overflow: hidden;
 }
 
@@ -281,11 +283,11 @@ const setTheme = (t: string) => {
 }
 
 .node-name {
-  font-size: 12px;
-  height: 12px;
-  line-height: 12px;
   align-items: center;
   display: flex;
+  &>div{
+    font-size: 12px;
+  }
 }
 
 .network {
@@ -426,15 +428,15 @@ const setTheme = (t: string) => {
 .logo-bg {
   position: fixed !important;
   top: 17px !important;
-  left: 0px !important;
+  left: -2px !important;
   display: flex;
   align-items: center;
-  transform: scale(1.2);
+  transform: scale(1.15);
   width: 120px;
   justify-content: center;
 
   .cur-service {
-    // letter-spacing: 5px;
+    letter-spacing: 2.2px;
     align-items: center;
     position: relative;
     top: 0.5px;

@@ -1,10 +1,14 @@
-import { checkMetaData, type onCallFn } from "@/plugins/chain";
+import { getSpecTypes } from '@polkadot/types-known';
 import { Loading } from "@/plugins/pop";
 import { keyring } from "@/utils/chain";
 import { ApiPromise } from "@polkadot/api";
 import type { SubmittableExtrinsic } from "@polkadot/api/types";
+import { Injected, MetadataDef } from "@polkadot/extension-inject/types";
+import { formatBalance, isNumber } from "@polkadot/util";
+import { base64Encode } from "@polkadot/util-crypto";
 import { type Wallet, getWallets } from "@talismn/connect-wallets";
 import { ElNotification } from "element-plus";
+import { onCallFn } from '.';
 
 // Substrate 交易对象
 export class SubstrateProvider {
@@ -30,7 +34,7 @@ export class SubstrateProvider {
       await wallet!.enable("WeTEE");
 
       // 检查元数据版本
-      await checkMetaData(this.client!,wallet!.extension)
+      await checkMetaData(this.client!, wallet!.extension)
       const account = (await wallet!.getAccounts()).find(account => account.address === signer);
       if (!account) {
         ElNotification({
@@ -48,7 +52,7 @@ export class SubstrateProvider {
     return new Promise(async (resolve, reject) => {
       try {
         // @ts-ignore
-        const unsub = await tx.signAndSend(...ps, ({ events = [], status,dispatchError }: any) => {
+        const unsub = await tx.signAndSend(...ps, ({ events = [], status, dispatchError }: any) => {
           if (dispatchError) {
             let error = "";
             if (dispatchError.isModule) {
@@ -66,12 +70,12 @@ export class SubstrateProvider {
               message: error,
               type: 'error',
             })
-  
+
             onError(error);
             reject()
             return
           }
-  
+
           if (status.isInBlock) {
             console.log(`Transaction included at blockHash ${status.asInBlock}`);
             loading.close();
@@ -103,7 +107,7 @@ export class SubstrateProvider {
   // 提交代理交易
   proxysignAndSend = async (tx: SubmittableExtrinsic<'promise'>, ProjectId: string, signer: string, onSeccess: onCallFn, onError: onCallFn) => {
     // 构建代理交易
-    const proxyTx = ProjectId&&ProjectId != "-1" ? this.client!.tx.project.proxyCall(
+    const proxyTx = ProjectId && ProjectId != "-1" ? this.client!.tx.project.proxyCall(
       parseInt(ProjectId),
       tx,
     ) : tx;
@@ -115,4 +119,40 @@ export class SubstrateProvider {
     this.client?.disconnect();
     this.unsubscribe && this.unsubscribe();
   }
+}
+
+
+// 检测是否支持当前链
+const checkMetaData = async (api: ApiPromise, ext: Injected) => {
+  const cmeta = (await ext.metadata!.get()).find((m) => m.genesisHash === api.genesisHash.toHex() && m.specVersion == api.runtimeVersion.specVersion.toNumber())
+  if (cmeta) {
+    return true
+  }
+
+  const meta = await getMetaData(api)
+  return await ext.metadata!.provide(meta as MetadataDef)
+}
+
+// 获取元数据
+const getMetaData = async (api: ApiPromise) => {
+  let chainInfo = await api.rpc.system.chain()
+  const chainName = chainInfo.toHuman()
+
+  const meta = {
+    chain: chainName,
+    chainType: 'substrate',
+    color: undefined,
+    genesisHash: api.genesisHash.toHex(),
+    icon: "",
+    metaCalls: base64Encode(api.runtimeMetadata.asCallsOnly.toU8a()),
+    specVersion: api.runtimeVersion.specVersion.toNumber(),
+    ss58Format: isNumber(api.registry.chainSS58)
+      ? api.registry.chainSS58
+      : 42,
+    tokenDecimals: (api.registry.chainDecimals)[0],
+    tokenSymbol: (api.registry.chainTokens || formatBalance.getDefaults().unit)[0],
+    types: getSpecTypes(api.registry, chainName, api.runtimeVersion.specName, api.runtimeVersion.specVersion) as unknown as Record<string, string>
+  }
+
+  return meta as MetadataDef
 }
