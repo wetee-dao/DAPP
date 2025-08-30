@@ -4,11 +4,13 @@ import { keyring } from "@/utils/chain";
 import { ApiPromise } from "@polkadot/api";
 import type { SubmittableExtrinsic } from "@polkadot/api/types";
 import { Injected, MetadataDef } from "@polkadot/extension-inject/types";
-import { formatBalance, isNumber } from "@polkadot/util";
+import { BN, formatBalance, isNumber, u8aToHex } from "@polkadot/util";
 import { base64Encode } from "@polkadot/util-crypto";
 import { type Wallet, getWallets } from "@talismn/connect-wallets";
 import { ElNotification } from "element-plus";
 import { onCallFn } from '.';
+import { getGasLimit } from '@/utils/ink';
+import { Registry } from '@polkadot/types/types';
 
 // Substrate 交易对象
 export class SubstrateProvider {
@@ -16,8 +18,24 @@ export class SubstrateProvider {
   client: ApiPromise | undefined;
   unsubscribe: any;
 
+  // 构建inkcall
+  buildCall = async (data: any): Promise<any> => {
+    const registry = this.client!.registry
+    const payValue = registry.createType('Balance', new BN(data.params.payValue));
+    const proofSize = new BN(data.gasRequired.proofSize.replaceAll(",", ""));
+    const refTime = new BN(data.gasRequired.refTime.replaceAll(",", ""));
+    const gasLimit = getGasLimit(true, refTime, proofSize, registry)
+
+    console.log(data.params.contract)
+    console.log(gasLimit?.toHuman())
+    console.log(getPredictedCharge(data.storageDeposit, registry)?.toHuman())
+    console.log(data.params.inputData)
+    
+    return this.client!.tx.revive.call(data.params.contract, payValue, gasLimit, getPredictedCharge(data.storageDeposit, registry), data.params.inputData)
+  }
+
   // 提交交易
-  signAndSend = async (tx: SubmittableExtrinsic<'promise'>, signer: string, onSeccess: onCallFn, onError: onCallFn): Promise<void> => {
+  signAndSend = async (tx: any, signer: string, onSeccess: onCallFn, onError: onCallFn): Promise<void> => {
     let keypair = JSON.parse(window.localStorage.getItem("keypair") || "{}")
     let ps = [];
     if (keypair[signer]) {
@@ -105,7 +123,7 @@ export class SubstrateProvider {
   }
 
   // 提交代理交易
-  proxysignAndSend = async (tx: SubmittableExtrinsic<'promise'>, ProjectId: string, signer: string, onSeccess: onCallFn, onError: onCallFn) => {
+  proxysignAndSend = async (tx: any, ProjectId: string, signer: string, onSeccess: onCallFn, onError: onCallFn) => {
     // 构建代理交易
     const proxyTx = ProjectId && ProjectId != "-1" ? this.client!.tx.project.proxyCall(
       parseInt(ProjectId),
@@ -155,4 +173,14 @@ const getMetaData = async (api: ApiPromise) => {
   }
 
   return meta as MetadataDef
+}
+
+export function getPredictedCharge(dryRun: Record<string, string>, registry: Registry) {
+  const keys = Object.keys(dryRun);
+  const key = keys[0];
+  if (key == 'Charge') {
+    console.log(dryRun[key])
+    return registry.createType('Balance', new BN(dryRun[key].replaceAll(",", "")))
+  }
+  return null
 }

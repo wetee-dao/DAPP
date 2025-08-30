@@ -36,6 +36,18 @@ html.light {
 body {
   color: $secondary-text;
 
+  .no-border-input{
+    .el-input__wrapper,
+    .el-select .el-input.is-focus .el-input__wrapper,
+    .el-select .el-input:hover .el-input__wrapper,
+    .el-select .el-input .el-input__wrapper.is-focus,
+    .el-select__wrapper,
+    .el-select__wrapper.is-focused,
+    .el-textarea__inner {
+      border: none;
+    }
+  }
+
   .el-input__wrapper,
   .el-select .el-input.is-focus .el-input__wrapper,
   .el-select .el-input:hover .el-input__wrapper,
@@ -69,6 +81,7 @@ body {
     background: $primary-bg;
     border: 2px solid rgba($color: $secondary-text-rgb, $alpha: 0.1);
     color: $secondary-text;
+    border-radius: 2px;
 
     &:hover {
       border: 2px solid rgba($color: $primary-text-rgb, $alpha: 0.4);
@@ -78,7 +91,6 @@ body {
     &:focus {
       background-color: none;
     }
-    border-radius: 0px;
   }
 
   .el-input__prefix{

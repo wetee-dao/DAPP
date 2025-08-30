@@ -3,7 +3,10 @@
     <div @click="(e) => e.stopPropagation()">
       <div class="title no-border">
         <i class="icon">&#xe649;</i>Deploy GPU Compute service
-        <i class="icon right" @click="closeClick">&#xe604;</i>
+        <div class="space"></div>
+        <div class="close-btn" @click="closeClick">
+          <i class="icon right">&#xe604;</i>
+        </div>
       </div>
       <div class="toolbar">
         <ul class="tabs">

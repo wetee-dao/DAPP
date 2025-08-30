@@ -44,7 +44,7 @@
   overflow-y: auto;
   height: calc(100vh - 85px);
   padding-top: 85px;
-  padding-right: 10px !important;
+  padding-right: 15px !important;
   text-align: left;
   flex: 1;
 
@@ -64,7 +64,7 @@
   }
 
   .pod {
-    margin: 0px 20px 20px 0px;
+    margin: 0px 20px 10px 0px;
     box-sizing: border-box;
     display: inline-flex;
     float: left;
@@ -487,33 +487,33 @@
   }
 }
 
-@media screen and (min-width: 570px) and (max-width: 730px) {
-  .right {
-    display: none;
-  }
+// @media screen and (min-width: 570px) and (max-width: 730px) {
+//   .right {
+//     display: none;
+//   }
 
-  .plus {
-    display: flex;
-  }
+//   .plus {
+//     display: flex;
+//   }
 
-  .data {
-    padding-right: 0px;
+//   .data {
+//     padding-right: 0px;
 
-    .pod {
-      min-width: calc(50% - 13px);
-      max-width: calc(50% - 13px);
-    }
+//     .pod {
+//       min-width: calc(50% - 13px);
+//       max-width: calc(50% - 13px);
+//     }
 
-    .pod:nth-child(2n) {
-      margin-right: 0;
-    }
-  }
-}
+//     .pod:nth-child(2n) {
+//       margin-right: 0;
+//     }
+//   }
+// }
 
-@media screen and (min-width: 729px) and (max-width: 961px) {
+@media screen and (max-width: 961px) {
   .pod {
     min-width: 100%;
-    margin-right: 0;
+    margin-right: 0 !important;
   }
 }
 

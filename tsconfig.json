@@ -25,7 +25,7 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue"
-  ],
+, "../substrate-api-sidecar/projectMenu.vue"  ],
   "exclude": [
     "node_modules",
     "./node_modules",

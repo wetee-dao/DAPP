@@ -16,8 +16,8 @@
           <Picon :icon="item.icon" />
         </div>
         {{ item.name }}
-        <div class="left"></div>
-        <div class="right"></div>
+        <!-- <div class="left"></div>
+        <div class="right"></div> -->
       </div>
     </div>
   </div>
@@ -71,18 +71,16 @@ const toUri = (f: string) => {
       font-size: 16px;
       line-height: 18px;
       cursor: pointer;
-      padding: 14px 0px;
+      padding: 14px 0px 14px 16px;
       flex-direction: row;
       align-items: center;
       color: rgba($secondary-text-rgb, 1);
-      // font-weight: 700;
       justify-content: left;
-      padding-left: 16px;
 
       .icon {
         width: 22px;
         height: 22px;
-        margin-right: 8px;
+        margin-right: 5px;
         // margin-left: -4px;
         display: block;
 
@@ -94,8 +92,8 @@ const toUri = (f: string) => {
       &.active {
         color: $primary-text;
         // background-color: rgba($secondary-text-rgb, 0.06);
-        position: relative;
-        font-weight: bold;
+        // position: relative;
+        // font-weight: bold;
 
         // &::after,&::before{
         //   content: "";

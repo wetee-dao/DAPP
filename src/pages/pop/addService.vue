@@ -1,19 +1,28 @@
 <template>
   <div class="service" @click="closeClick">
     <div @click="(e) => e.stopPropagation()">
-      <div class="title no-border">
+      <div class="title">
         <i class="icon">&#xe701;</i>Deploy Confidential Service
-        <i class="icon right" @click="closeClick">&#xe604;</i>
+        <div class="space"></div>
+        <div class="deploy-btn">
+          <el-button size="large" type="primary" @click="toAdd()">
+            Deploy Now
+          </el-button>
+        </div>
+        &nbsp;&nbsp;
+        <div class="close-btn" @click="closeClick">
+          <i class="icon right">&#xe604;</i>
+        </div>
       </div>
       <div class="toolbar">
         <ul class="tabs">
           <li class="tab-item template">
-            <el-autocomplete @select="handleTempApp" v-model="curTemp" :fetch-suggestions="querySearch"
+            <!-- <el-autocomplete @select="handleTempApp" v-model="curTemp" :fetch-suggestions="querySearch"
               placeholder="Select app template">
               <template #prefix>
                 <i class="icon">&#xe680;</i>
               </template>
-              <template #default="{ item }">
+<template #default="{ item }">
                 <div class="input-app" :key="item.name">
                   <img class="icon" :src="item.icon" />
                   <div class="app-box">
@@ -22,10 +31,15 @@
                   </div>
                 </div>
               </template>
-              <template #suffix>
+<template #suffix>
                 <i class="icon select">&#xe809;</i>
               </template>
-            </el-autocomplete>
+</el-autocomplete> -->
+            <el-select class="no-border-input" v-model="teeVersion" @change="TeeVersionChange"
+              placeholder="Select tee version">
+              <el-option label="TEE type: Intel SGX" value="SGX" />
+              <el-option label="TEE type: Intel TDX/AMD SEV" value="CVM" />
+            </el-select>
           </li>
           <li :class="curContainer == 0 ? 'tab-item active' : 'tab-item'" @click="activeContainer(0)">
             <div class="tab-title">Main container</div>
@@ -37,18 +51,15 @@
               <Close />
             </el-icon>
           </li>
-          <li class="tab-item no-border" v-if="containers[0].teeVersion == 'CVM'" @click="addContainer">
+          <li class="tab-item no-border" v-if="teeVersion == 'CVM'" @click="addContainer">
             <div class="tab-title"><span class="icon">&#xe604;</span>&nbsp;Add container</div>
           </li>
         </ul>
-        <div class="space"></div>
-        <div class="deploy-btn">
-          <el-button size="large" type="primary" @click="toAdd()">
-            Deploy Now &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
-          </el-button>
-        </div>
-      </div>
 
+      </div>
+      <div class="notice" v-if="teeVersion == 'SGX'"><span class="sgx-warning">Notice: SGX only supports Ego and
+          Gramine,
+          Multiple containers not supported.</span></div>
       <el-form class="form" ref="formRef">
         <div class="form-box" ref="containerRef">
           <div class="box-step" id="f0">
@@ -57,12 +68,9 @@
               BaseSetting
             </div>
             <div class="form-context-box" v-show="curContainer == 0">
-              <div class="form-sub-title">TEE type &nbsp;<span class="sgx-warning">{{ form.teeVersion == "SGX"?"Notice: SGX only supports Ego and Gramine":"" }}</span></div>
+              <div class="form-sub-title">Name</div>
               <div class="form-input-box">
-                <el-select v-model="form.teeVersion" @change="TeeVersionChange" placeholder="Select tee version">
-                  <el-option label="Intel SGX" value="SGX" />
-                  <el-option label="Intel TDX/AMD SEV" value="CVM" />
-                </el-select>
+                <el-input v-model="name" placeholder="Service name"></el-input>
               </div>
             </div>
             <div class="form-context-box">
@@ -73,12 +81,6 @@
                     <i class="icon">&#xf18e;</i>
                   </template>
                 </el-input>
-              </div>
-            </div>
-            <div class="form-context-box" v-show="curContainer == 0">
-              <div class="form-sub-title">Name</div>
-              <div class="form-input-box">
-                <el-input v-model="form.name" placeholder="Service name"></el-input>
               </div>
             </div>
             <div class="form-context-box">
@@ -96,7 +98,7 @@
             <div class="form-context-box" v-show="curContainer == 0">
               <div class="form-sub-title">Level</div>
               <div class="form-input-box">
-                <el-slider v-model="form.level" :max="8" show-input show-stops />
+                <el-slider v-model="level" :max="8" show-input show-stops />
               </div>
             </div>
           </div>
@@ -235,7 +237,6 @@ const handleClick = (e: MouseEvent) => {
 const temps = (window as any).extTemps().filter((v: any) => v.create_type == "service")
 const curTemp = ref<string>("")
 const defaultContainer = {
-  teeVersion: "",
   image: "",
   cpu: 1000,
   memory: 800,
@@ -244,8 +245,10 @@ const defaultContainer = {
   commandPrefix: "SH",
   command: "",
   env: [],
-  level: 1,
 }
+const name = ref<string>("")
+const level = ref<number>(1)
+const teeVersion = ref<string>("CVM")
 const curContainer = ref<any>(0)
 const containers = ref<any[]>([deepCopy(defaultContainer)])
 const form = ref<any>(deepCopy(defaultContainer))
@@ -310,44 +313,33 @@ const closeClick = () => {
 
 const toAdd = async () => {
   containers.value[curContainer.value] = deepCopy(form.value)
-
-  await $getTxProvider(async (chain): Promise<void> => {
+  await $getTxProvider(async (chain, builder): Promise<void> => {
     if (!chain.client) {
       return;
     }
     const client = chain.client;
 
-    let mainData: any = {}
     let validDatas: any[] = []
     let envs: any[] = []
     for (var i = 0; i < containers.value.length; i++) {
       const c = containers.value[i]
       const validData = validFormArray(client, c, i)
       if (!validData.ok) return;
-      if (i == 0) {
-        mainData = {
-          name: c.name,
-          level: c.level,
-          teeVersion: c.teeVersion,
-          ...validData.data,
-        }
-      } else {
-        validDatas.push(validData.data)
-      }
+      // if (i == 0) {
+      //   mainData = {
+      //     name: c.name,
+      //     level: c.level,
+      //     ...validData.data,
+      //   }
+      // } else {
+      validDatas.push(validData.data)
+      // }
       envs.push(...validData.data.env)
       console.log(envs)
     }
 
     const signer = props.store.state.userInfo.addr;
-    if (mainData.teeVersion == "") {
-      ElNotification({
-        title: "Error",
-        message: "TEE version is required",
-        type: "error",
-      })
-      return
-    }
-    if (mainData.name == "") {
+    if (name.value == "") {
       ElNotification({
         title: "Error",
         message: "Container name is required",
@@ -355,41 +347,29 @@ const toAdd = async () => {
       })
       return
     }
+    if (teeVersion.value == "") {
+      ElNotification({
+        title: "Error",
+        message: "TEE version is required",
+        type: "error",
+      })
+      return
+    }
 
     try {
-      const none = new Option(client.registry, "Vec<u8>", null);
-      const u128None = new Option(client.registry, "u128", null);
-      const tx = client.tx.app.create(
-        mainData.name,
-        u128None,
-        mainData.image,
-        "",
-        "",
-        "{}",
-        mainData.port,
-        mainData.command,
-        envs,
-        none,
-        mainData.cpu,
-        mainData.memory,
-        mainData.disk,
-        validDatas.map((v: any) => {
-          return {
-            image: v.image,
-            command: v.command,
-            port: v.port,
-            cr: {
-              cpu: v.cpu,
-              mem: v.memory,
-              disk: v.disk,
-              gpu: 0
-            }
-          }
-        }),
-        mainData.level,
-        client.createType('TEEVersion', mainData.teeVersion),
+      const dry = await builder.createPod(
+        name.value,
+        "CPU",
+        teeVersion.value,
+        validDatas,
+        0,
+        level.value,
+        BigInt(0),
+        "0" 
       )
 
+      const tx = await chain.buildCall(dry)
+      console.log(tx)
       await chain.proxysignAndSend(tx, pid!, signer, () => {
         props.close();
       }, () => { })

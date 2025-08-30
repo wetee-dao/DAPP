@@ -4,8 +4,8 @@ import { ApiPromise } from "@polkadot/api";
 import type { SubmittableExtrinsic } from "@polkadot/api/types";
 import type { SignerPayloadJSON } from "@polkadot/types/types";
 import type { Injected } from "@polkadot/extension-inject/types";
-import { checkMetaData, type onCallFn } from "@/plugins/chain";
 import { ElNotification } from "element-plus";
+import { onCallFn } from ".";
 
 // MetaMask 交易对象
 export class MetaMaskProvider {
@@ -17,6 +17,10 @@ export class MetaMaskProvider {
 
   constructor(s: Injected) {
     this.snap = s;
+  }
+  
+  buildCall = async (data: any): Promise<any> => {
+
   }
 
   // 提交交易

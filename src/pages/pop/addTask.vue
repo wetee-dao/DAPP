@@ -3,7 +3,10 @@
     <div @click="(e: any) => e.stopPropagation()">
       <div class="title">
         <i class="icon">&#xe77c;</i>Deploy Confidential Task
-        <i class="icon right" @click="closeClick">&#xe604;</i>
+        <div class="space"></div>
+        <div class="close-btn" @click="closeClick">
+          <i class="icon right">&#xe604;</i>
+        </div>
       </div>
       <el-form class="form" ref="formRef">
         <div class="form-box" ref="containerRef">

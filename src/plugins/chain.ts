@@ -10,8 +10,8 @@ import store from '@/store';
 import { getNetworkLatency } from "@/utils/net";
 import { WalletWrap } from "@/providers";
 import { ElNotification } from "element-plus";
-import { SubstrateQuery } from "@/apis/chains/substrate";
-import { Api } from "@/apis/chains";
+import { Ink } from "@/providers/chains/ink";
+import { ChainInterface } from "@/providers/chains";
 
 // 区块链链接
 export let chainIndexer = 'https://xiaobai.asyou.me:30006/gql'
@@ -68,8 +68,17 @@ export const CurrentChainNode = () => {
   return c
 }
 
+// 初始化 API
+export const initChainApi = (chainId: string) => {
+  let node = chainNodes.find(node => node.chainId == chainId)
+  if (!node) {
+    node = chainNodes[0]
+  }
+  Ink.init(node.queryUrl, node.chainUrl)
+}
+
 // 获取交易对象
-export const $getTxProvider = async (run: (chain: WalletWrap) => Promise<void>, isTry: boolean = false): Promise<void> => {
+export const $getTxProvider = async (run: (chain: WalletWrap, builder: ChainInterface) => Promise<void>, isTry: boolean = false): Promise<void> => {
   const userInfo: any = store.state.userInfo
   const loading = !isTry ? Loading("Connecting to chain...") : { close: () => { } }
 
@@ -117,7 +126,9 @@ export const $getTxProvider = async (run: (chain: WalletWrap) => Promise<void>, 
     wallet!.client = api;
     loading.close();
 
-    await run(wallet!);
+    const callBuilder = $getQueryApi()
+
+    await run(wallet!, callBuilder);
     wallet?.close();
   } catch (e) {
     loading.close();
@@ -126,18 +137,9 @@ export const $getTxProvider = async (run: (chain: WalletWrap) => Promise<void>, 
   }
 }
 
-export const initQueryApi = (chainId: string) => {
-  let node = chainNodes.find(node => node.chainId == chainId)
-  if (!node) {
-    node = chainNodes[0]
-  }
-  SubstrateQuery.init(node.queryUrl, node.chainUrl)
-}
-
 // 获取查询对象
-export const $getQueryApi = (): Api => {
+export const $getQueryApi = (): ChainInterface => {
   const userInfo: any = store.state.userInfo
-  const node = CurrentChainNode()
   if (!userInfo || !userInfo.provider) {
     ElNotification({
       title: 'Error',
@@ -149,14 +151,19 @@ export const $getQueryApi = (): Api => {
 
   switch (userInfo.provider) {
     case "metamask":
-      return SubstrateQuery;
+      return Ink;
     case "substrate":
-      return SubstrateQuery;
+      return Ink;
     default:
       break;
   }
 
-  throw new Error("chain not found");
+  ElNotification({
+    title: 'Error',
+    message: 'wallet ' + userInfo.provider + ' not support',
+    type: 'error',
+  })
+  throw new Error("wallet " + userInfo.provider + " not support");
 }
 
 // export const getConfig = (): any => {

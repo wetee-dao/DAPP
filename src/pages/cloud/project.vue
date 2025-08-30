@@ -55,10 +55,11 @@
         </div>
       </div>
 
-      <div key="add" class="pod add" @click="AddPop()">
+      <div v-if="currentProject == null && apps.length != 0" key="add" class="pod add" @click="AddPop()">
         <el-icon class="el-icon--left">
           <Plus />
-        </el-icon><div>Deploy new app</div>
+        </el-icon>
+        <div>Deploy new app</div>
       </div>
 
       <div class="empty" v-if="apps.length == 0">
@@ -258,16 +259,9 @@ onUnmounted(() => {
 });
 
 const getList = async (pid: string) => {
-  const list = await $getQueryApi().pods({
-    start: null,
-    size: 1000,
-  })
-
-  console.log(list)
-
+  const list = await $getQueryApi().pods(null, 1000)
   let newList: any[] = []
   list.forEach((v: any) => {
-    console.log(v)
     newList.push({
       Id: v[0],
       Nid: v[0],
@@ -281,9 +275,6 @@ const getList = async (pid: string) => {
       Status: 1,
     });
   });
-
-  console.log(newList)
-
   apps.value = newList;
 };
 
