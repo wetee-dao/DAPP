@@ -10,7 +10,7 @@
         </ul>
       </div> -->
     <div class="list">
-      <div :class="item.module == props.module ? 'active' : ''" @click="toUri(item.url)" :key="item.name"
+      <div :class="item.module == props.module ? 'active' : '' + (item.disabled ? ' disabled' : '')" @click="toUri(item)" :key="item.name"
         v-for="(item, index) in lists">
         <div class="icon">
           <Picon :icon="item.icon" />
@@ -26,7 +26,7 @@
 <script lang="ts" setup>
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
-import service from "../utils/service";
+import service, { insType } from "../utils/service";
 
 const router = useRouter();
 const input = ref("");
@@ -39,8 +39,11 @@ const search = (list: any) => {
   );
 };
 
-const toUri = (f: string) => {
-  router.push(f);
+const toUri = (item: insType) => {
+  if (item.disabled) {
+    return;
+  }
+  router.push(item.url);
 };
 </script>
 
@@ -131,6 +134,10 @@ const toUri = (f: string) => {
         //   right: 1px;
         //   left: auto;
         // }
+      }
+
+      &.disabled{
+        opacity: 0.4;
       }
     }
   }

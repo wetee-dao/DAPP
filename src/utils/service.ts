@@ -5,6 +5,7 @@ export interface insType {
   icon: string;
   url: string;
   module: string;
+  disabled: boolean;
 }
 
 export default <insType[]>[
@@ -27,22 +28,24 @@ export default <insType[]>[
     module: "store",
   },
   {
-    name: "MPC",
-    icon: "mpc",
-    url: "/mpc",
-    module: "mpc",
-  },
-  {
     name: "Miner",
     icon: "miner",
     url: "/miner",
     module: "miner",
   },
   {
+    name: "MPC",
+    icon: "mpc",
+    url: "/mpc",
+    module: "mpc",
+    disabled: true,
+  },
+  {
     name: "Builder",
     icon: "builder",
     url: "/builder",
     module: "builder",
+    disabled: true,
   },
 ]
 

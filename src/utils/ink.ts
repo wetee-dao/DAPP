@@ -9,6 +9,7 @@ import { Abi, BlueprintPromise, CodePromise } from '@polkadot/api-contract';
 import { SubmittableExtrinsic } from '@polkadot/api/types';
 import { randomAsU8a } from '@polkadot/util-crypto';
 import { Bytes } from '@polkadot/types';
+import { getInitValue } from './initValue';
 
 export type UIStorageDeposit = {
     value?: Balance;
@@ -51,6 +52,17 @@ export function getPredictedCharge(dryRun: UIStorageDeposit) {
         : null;
 }
 
+export function fromArgs(registry: Registry, accounts: any[], args: AbiParam[]): Record<string, unknown> {
+    const result: Record<string, unknown> = {};
+
+    args?.forEach(({ name, type }) => {
+        result[name] = getInitValue(registry, accounts, type);
+    });
+
+    return result;
+}
+
+
 export function transformUserInput(
     registry: Registry,
     messageArgs: any[],
@@ -58,9 +70,11 @@ export function transformUserInput(
 ): unknown[] {
     return messageArgs.map(({ name, type: { type } }) => {
         const value = values ? values[name] : null;
-
         if (type === 'Balance') {
             return registry.createType('Balance', value);
+        }
+        if (type === 'U256') {
+            return registry.createType('U256', value);
         }
 
         return value;

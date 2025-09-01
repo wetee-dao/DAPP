@@ -7,10 +7,11 @@ import { Injected, MetadataDef } from "@polkadot/extension-inject/types";
 import { BN, formatBalance, isNumber, u8aToHex } from "@polkadot/util";
 import { base64Encode } from "@polkadot/util-crypto";
 import { type Wallet, getWallets } from "@talismn/connect-wallets";
-import { ElNotification } from "element-plus";
+import { ElMessageBox, ElNotification } from "element-plus";
 import { onCallFn } from '.';
 import { getGasLimit } from '@/utils/ink';
 import { Registry } from '@polkadot/types/types';
+import { h } from 'vue';
 
 // Substrate 交易对象
 export class SubstrateProvider {
@@ -19,18 +20,34 @@ export class SubstrateProvider {
   unsubscribe: any;
 
   // 构建inkcall
-  buildCall = async (data: any): Promise<any> => {
+  buildInkCall = async (data: any): Promise<any> => {
     const registry = this.client!.registry
     const payValue = registry.createType('Balance', new BN(data.params.payValue));
     const proofSize = new BN(data.gasRequired.proofSize.replaceAll(",", ""));
     const refTime = new BN(data.gasRequired.refTime.replaceAll(",", ""));
     const gasLimit = getGasLimit(true, refTime, proofSize, registry)
 
-    console.log(data.params.contract)
-    console.log(gasLimit?.toHuman())
-    console.log(getPredictedCharge(data.storageDeposit, registry)?.toHuman())
-    console.log(data.params.inputData)
-    
+    const confirm = await ElMessageBox({
+      title: 'Gas Notice',
+      message: h('p', { style: 'font-size: 16px' }, [
+        h('span', null, 'This transaction will cost '),
+        h('i', { style: 'color: teal' }, getPredictedCharge(data.storageDeposit, registry)?.toHuman()?.toString()),
+        h('span', null, ', Continue?'),
+      ]),
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Continue',
+      cancelButtonText: 'Cancel',
+    })
+    if (!confirm) {
+      ElNotification({
+        title: 'Error',
+        message: 'Cancel ink tx',
+        type: 'error',
+      })
+      return
+    }
+
     return this.client!.tx.revive.call(data.params.contract, payValue, gasLimit, getPredictedCharge(data.storageDeposit, registry), data.params.inputData)
   }
 
@@ -179,7 +196,6 @@ export function getPredictedCharge(dryRun: Record<string, string>, registry: Reg
   const keys = Object.keys(dryRun);
   const key = keys[0];
   if (key == 'Charge') {
-    console.log(dryRun[key])
     return registry.createType('Balance', new BN(dryRun[key].replaceAll(",", "")))
   }
   return null

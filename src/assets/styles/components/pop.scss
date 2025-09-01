@@ -27,7 +27,7 @@
 }
 
 .title {
-  padding: 30px 25px;
+  padding: 30px 21px;
   border-bottom: 2px solid rgba($gray-bg-rgb, 0.1);
   font-size: 20px;
   line-height: 1;
@@ -43,19 +43,18 @@
   }
 
   .close-btn {
-    background-color: rgba($accent-color, 0.8);
-    padding: 8.6px;
+    background-color: rgba($accent-color, 0.4);
+    padding: 4px;
     border-radius: 2px;
+    // margin-right: -13px;
     .right {
       float: right;
       display: block;
       transform: rotate(45deg);
       cursor: pointer;
-      font-size: 22px;
-      position: relative;
-      right: 1px;
-      top: 2px;
-      color: $primary-bg;
+      font-size: 24px;
+      // color: $primary-bg;
+      color: $secondary-text;
       font-weight: bold;
     }
   }
@@ -67,7 +66,7 @@
   align-items: center;
   border: 2PX solid rgba($secondary-text-rgb, 0.2);
   border-radius: 0px;
-  margin: 15px 24px 0px 24px;
+  margin: 15px 19px 0px 19px;
 
   .tabs {
     height: 100%;
@@ -217,7 +216,7 @@
   }
 
   .box-step {
-    padding: 15px 220px 0px 24px;
+    padding: 15px 220px 0px 19px;
     position: relative;
 
     &>div:last-child {
@@ -249,7 +248,7 @@
       width: 2PX;
       background-color: rgba($color: $secondary-text-rgb, $alpha: 0.1);
       position: absolute;
-      left: 45px;
+      left: 35px;
       top: 55px;
     }
   }

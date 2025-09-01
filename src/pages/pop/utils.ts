@@ -41,10 +41,9 @@ export function validFormArray(client: any, form: any, index: number): any {
     if (form.command.length > 0) {
         let kv: any = {}
         kv[form.commandPrefix] = form.command;
-        console.log(kv)
-        command = client.createType('Command', kv);
+        command = kv;
     } else {
-        command = client.createType('Command', { "NONE": null });
+        command = { "NONE": null };
     }
 
     let env = [];
@@ -72,13 +71,8 @@ export function validFormArray(client: any, form: any, index: number): any {
             }
 
             let kv: any = {}
-            kv[val.prefix] = val.key;
-            const key = client.createType('EnvKey', kv);
-            env.push({
-                index: index,
-                k: key,
-                v: val.value
-            });
+            kv[val.prefix] = [val.key, val.value]
+            env.push(kv);
         }
     }
 
@@ -97,11 +91,9 @@ export function validFormArray(client: any, form: any, index: number): any {
 
             let kv: any = {}
             kv[val.prefix] = val.value;
-            const p = client.createType('Service', kv);
-            port.push(p);
+            port.push(kv);
         }
     }
-
 
     let disk = [];
     if (form.disk.length > 0) {
@@ -124,7 +116,7 @@ export function validFormArray(client: any, form: any, index: number): any {
                 return { ok: false };
             }
 
-            const path = client.createType('DiskClass', { 'SSD': val.key });
+            const path = { 'SSD': val.key };
             disk.push({
                 path,
                 size: parseInt(val.value) * 1024,
@@ -136,10 +128,13 @@ export function validFormArray(client: any, form: any, index: number): any {
         ok: true,
         data: {
             image: form.image,
-            cpu: form.cpu,
-            memory: form.memory,
+            cr: {
+                cpu: form.cpu,
+                mem: form.memory,
+                disk,
+                gpu: form.gpu,
+            },
             command,
-            disk,
             env,
             port,
         }
@@ -276,7 +271,7 @@ export function chainToContainer(form: any): any {
     // port: [],
     return {
         image: form.i,
-        cpu:  parseInt(getNumstrfromChain(form.cpu)),
+        cpu: parseInt(getNumstrfromChain(form.cpu)),
         memory: parseInt(getNumstrfromChain(form.memory)),
         commandPrefix: "SH",
         command: "",

@@ -125,7 +125,7 @@ i {
 
 .list {
   display: flex;
-  padding: 18px 15px;
+  padding: 18px 15px 22px 15px;
   flex-direction: column;
 
   >div {

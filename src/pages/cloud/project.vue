@@ -142,10 +142,9 @@ watch(() => store.state.theme, (newVal, _) => {
 
 const iconStatus = ref<Record<number, string>>({
   0: "&#xe60b;",
-  1: "&#xe60b;",
+  1: "&#xe669;",
   2: "&#xe623;",
-  3: "&#xe669;",
-  4: "&#xe60b;",
+  3: "&#xe623;",
 });
 
 const eventStatus = ref<Record<string, string>>({
@@ -161,11 +160,10 @@ const eventMsg = ref<Record<string, string>>({
 });
 
 const textStatus = ref<Record<number, string>>({
-  0: "waiting",
-  1: "deploying",
-  2: "stoped",
-  3: "runing",
-  4: "waiting",
+  0: "deploying",
+  1: "runing",
+  2: "error",
+  3: "stoped",
 });
 
 const OpenDetail = (item: any, t: string) => {
@@ -200,10 +198,11 @@ const showPenu = (e: MouseEvent, item: any) => {
         OpenDetail(item, cmd)
         break;
       case "stop":
-        await $getTxProvider(async (chain): Promise<void> => {
-          const sty = chain.client!.createType('WorkType', item.Type);
-          const swid = { id: item.Nid, wtype: sty }
-          const tx = chain.client!.tx.worker.workStop(swid)
+        await $getTxProvider(async (chain, builder): Promise<void> => {
+          const dry = await builder.stopPod(
+            item.Id
+          )
+          const tx = await chain.buildInkCall(dry)
           await chain.proxysignAndSend(tx, projectid!, signer, () => {
             ElNotification({
               title: 'Notice',
@@ -216,18 +215,12 @@ const showPenu = (e: MouseEvent, item: any) => {
         });
         break;
       case "restart":
-        await $getTxProvider(async (chain): Promise<void> => {
-          const ty = chain.client!.createType('WorkType', item.Type);
-          const wid = { id: item.Nid, wtype: ty }
-          let txre = null
-          if (item.Type == "APP") {
-            txre = chain.client!.tx.app.restart(wid.id)
-          } else if (item.Type == "TASK") {
-            txre = chain.client!.tx.task.rerun(wid.id)
-          } else {
-            txre = chain.client!.tx.gpu.restart(wid.id)
-          }
-          await chain.proxysignAndSend(txre, projectid!, signer, () => {
+        await $getTxProvider(async (chain, builder): Promise<void> => {
+          const dry = await builder.restartPod(
+            item.Id
+          )
+          const tx = await chain.buildInkCall(dry)
+          await chain.proxysignAndSend(tx, projectid!, signer, () => {
             ElNotification({
               title: 'Notice',
               message: "Application restart successfully",
@@ -272,7 +265,7 @@ const getList = async (pid: string) => {
       Name: v[1].name,
       Image: v[2][0][1].image,
       StartBlock: v[1].startBlock,
-      Status: 1,
+      Status: v[3],
     });
   });
   apps.value = newList;
@@ -316,7 +309,7 @@ const shortImage = (image: string) => {
   }
 
   .status1 {
-    color: #cea94c !important;
+    color: #5a936a !important;
   }
 
   .status2 {
@@ -324,11 +317,7 @@ const shortImage = (image: string) => {
   }
 
   .status3 {
-    color: #5a936a !important;
-  }
-
-  .status4 {
-    color: #343330 !important;
+    color: #b6631a !important;
   }
 }
 </style>

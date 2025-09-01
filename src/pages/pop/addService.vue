@@ -5,11 +5,11 @@
         <i class="icon">&#xe701;</i>Deploy Confidential Service
         <div class="space"></div>
         <div class="deploy-btn">
-          <el-button size="large" type="primary" @click="toAdd()">
+          <el-button type="primary" @click="toAdd()">
             Deploy Now
           </el-button>
         </div>
-        &nbsp;&nbsp;
+        &nbsp;
         <div class="close-btn" @click="closeClick">
           <i class="icon right">&#xe604;</i>
         </div>
@@ -320,22 +320,11 @@ const toAdd = async () => {
     const client = chain.client;
 
     let validDatas: any[] = []
-    let envs: any[] = []
     for (var i = 0; i < containers.value.length; i++) {
       const c = containers.value[i]
       const validData = validFormArray(client, c, i)
       if (!validData.ok) return;
-      // if (i == 0) {
-      //   mainData = {
-      //     name: c.name,
-      //     level: c.level,
-      //     ...validData.data,
-      //   }
-      // } else {
       validDatas.push(validData.data)
-      // }
-      envs.push(...validData.data.env)
-      console.log(envs)
     }
 
     const signer = props.store.state.userInfo.addr;
@@ -347,6 +336,7 @@ const toAdd = async () => {
       })
       return
     }
+
     if (teeVersion.value == "") {
       ElNotification({
         title: "Error",
@@ -356,30 +346,21 @@ const toAdd = async () => {
       return
     }
 
-    try {
-      const dry = await builder.createPod(
-        name.value,
-        "CPU",
-        teeVersion.value,
-        validDatas,
-        0,
-        level.value,
-        BigInt(0),
-        "0" 
-      )
+    console.log(validDatas)
+    const dry = await builder.createPod(
+      name.value,
+      "CPU",
+      teeVersion.value,
+      validDatas,
+      0,
+      level.value,
+      BigInt(0),
+    )
 
-      const tx = await chain.buildCall(dry)
-      console.log(tx)
-      await chain.proxysignAndSend(tx, pid!, signer, () => {
-        props.close();
-      }, () => { })
-    } catch (e: any) {
-      ElNotification({
-        title: 'Error',
-        message: "" + e.toString(),
-        type: 'error',
-      })
-    }
+    const tx = await chain.buildInkCall(dry)
+    await chain.proxysignAndSend(tx, pid!, signer, () => {
+      props.close();
+    }, () => { })
   });
 };
 

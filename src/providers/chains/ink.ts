@@ -2,12 +2,14 @@ import axios from "axios";
 //@ts-ignore
 import qs from "qs";
 import { Abi } from "@polkadot/api-contract";
-import { u8aToHex, hexToU8a, u8aWrapBytes, BN } from '@polkadot/util';
-import { Bytes, createType } from '@polkadot/types';
+import { u8aToHex, BN, hexToU8a } from '@polkadot/util';
+import { Bytes } from '@polkadot/types';
 import { AnyJson, Registry, TypeDef } from "@polkadot/types/types";
-import { format } from "path";
+import { ElNotification } from "element-plus";
+import { getInitValue } from "@/utils/initValue";
+import { AbiParam } from "@polkadot/api-contract/types";
+import { transformUserInput } from "@/utils/ink";
 import { ApiPromise, HttpProvider } from "@polkadot/api";
-import { chainJson } from "@/utils/chain";
 
 class InkApi {
     cloudAbi: Abi | undefined
@@ -28,10 +30,6 @@ class InkApi {
 
     init(queryUrl: string, chainUrl: string) {
         this.queryUrl = queryUrl
-        // this.api = await ApiPromise.create({
-        //     provider: new HttpProvider(chainUrl.replace("wss://", "https://").replace("ws://", "http://")),
-        //     types: chainJson,
-        // });
     }
 
     // list pods
@@ -42,7 +40,6 @@ class InkApi {
         })
     }
 
-
     // create pod
     async createPod(
         name: string,
@@ -52,82 +49,84 @@ class InkApi {
         region_id: number,
         level: number,
         worker_id: bigint,
-        payValue: string,
     ) {
         return await this.ink_builder(this.cloudContract, "createPod", {
             name: name,
-            pod_type: pod_type,
-            tee_type: tee_type,
+            podType: pod_type,
+            teeType: tee_type,
             containers: containers,
-            region_id: region_id,
+            regionId: region_id,
             level: level,
-            worker_id: worker_id,
-        }, payValue)
+            workerId: worker_id,
+        }, "0")
+    }
+
+    // restart pod
+    async restartPod(podId: string) {
+        return await this.ink_builder(this.cloudContract, "restartPod", {
+            podId: new BN(podId)
+        }, "0")
+    }
+
+    // stop pod
+    async stopPod(podId: string) {
+        return await this.ink_builder(this.cloudContract, "stopPod", {
+            podId: new BN(podId)
+        }, "0")
     }
 
     // query ink
     async ink_query(contract: string, method: string, args: Record<string, unknown>) {
-        let abi = await this.initContract(contract)
-        const methodAbi = abi.messages.find(item => item.method === method)
-        if (!methodAbi) {
-            throw new Error("method not found")
-        }
-
-        let userInfo = this.getCallerInfo()
-        let inputData = methodAbi.toU8a(transformUserInput(abi.registry, methodAbi.args, args));
-        inputData = formatInputData(inputData)
-        const response = await axios.get(this.queryUrl + "contracts/ink/" + contract + "/dry-run", {
-            params: { caller: userInfo.addr, inputData: u8aToHex(inputData), payValue: "0" },
-            paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
-        })
-
-        let resp = response.data.result
-        if (!resp || resp["Err"]) {
-            throw new Error("Chain error")
-        }
-
-        if (resp.Ok.flags.bits == "1") {
-            throw new Error("Contract reverted")
-        }
-
-        let data = decodeReturnValue(methodAbi.returnType, resp.Ok.data, abi!.registry) as any
-        if (!data || data["Err"]) {
-            throw new Error("Contract reverted")
-        }
-
-        if (data["Ok"]) {
-            data = data.Ok
-        }
-
-        return data
+        const data = await this.ink_builder(contract, method, args, "0")
+        return data.dry
     }
 
     // build inkcall params
     async ink_builder(contract: string, method: string, args: Record<string, unknown>, payValue: string) {
-        let abi = await this.initContract(contract)
+        const abi = await this.initContract(contract)
         const methodAbi = abi.messages.find(item => item.method === method)
         if (!methodAbi) {
             throw new Error("method not found")
         }
 
-        let userInfo = this.getCallerInfo()
+        const userInfo = this.getCallerInfo()
         let inputData = methodAbi.toU8a(transformUserInput(abi!.registry, methodAbi.args, args));
-        inputData = formatInputData(inputData)
         const response = await axios.get(this.queryUrl + "contracts/ink/" + contract + "/dry-run", {
             params: { caller: userInfo.addr, inputData: u8aToHex(inputData), payValue: payValue },
             paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
         })
-
-        let resp = response.data.result
-        if (resp.Ok.flags.bits == "1") {
-            throw new Error("Contract reverted")
+        // const response = await this.tryRun(contract, userInfo.addr, u8aToHex(inputData), payValue)
+        if (response.data.result.Err) {
+            ElNotification({
+                title: 'Error',
+                message: JSON.stringify(response.data.result.Err),
+                type: 'error',
+                duration: 5000,
+            })
+            throw new Error(response.data.error)
         }
 
+        const resp = response.data.result
         let data = decodeReturnValue(methodAbi.returnType, resp.Ok.data, abi!.registry) as any
-        if (!data || data["Err"]) {
-            throw new Error("Contract dry run reverted")
+        if (resp.Ok.flags.bits == "1") {
+            ElNotification({
+                title: 'Error',
+                message: "Ink contract call failed with contract error: " + data.Ok.Err,
+                type: 'error',
+                duration: 5000,
+            })
+            throw new Error("Ink contract call failed with contract error: " + data.Ok.Err)
         }
 
+        if (!data || data["Err"]) {
+            ElNotification({
+                title: 'Error',
+                message: "Ink contract dry run reverted: " + data["Err"],
+                type: 'error',
+                duration: 5000,
+            })
+            throw new Error("Ink contract dry run reverted: " + data["Err"])
+        }
         if (data["Ok"]) {
             data = data.Ok
         }
@@ -190,8 +189,26 @@ class InkApi {
 
         return userInfo
     }
-}
 
+    // async tryRun(address: string, caller: string, inputData: any, payValue: string) {
+    //     const api = await ApiPromise.create({
+    //         provider: new HttpProvider("https://xiaobai.asyou.me:30001/ws"),
+    //     });
+
+    //     const dryRunResult: any = await api.call.reviveApi.call(
+    //         caller,
+    //         address,
+    //         api.registry.createType('Balance', BigInt(payValue)),
+    //         null,
+    //         null,
+    //         inputData? hexToU8a(inputData): '',
+    //     )
+
+    //     return {
+    //         data: dryRunResult.toHuman(),
+    //     }
+    // }
+}
 
 function decodeReturnValue(
     returnType: TypeDef | null | undefined,
@@ -212,28 +229,10 @@ function getReturnTypeName(type: TypeDef | null | undefined) {
     return type?.lookupName || type?.type || '';
 }
 
-function transformUserInput(
-    registry: Registry,
-    messageArgs: any[],
-    values?: Record<string, unknown>,
-): unknown[] {
-    return messageArgs.map(({ name, type: { type } }) => {
-        const value = values ? values[name] : null;
-        if (type === 'Balance') {
-            return registry.createType('Balance', value);
-        }
-        if (type === 'U256') {
-            return registry.createType('U256', value);
-        }
-        return value;
-    });
-}
-
 function formatInputData(arr: Uint8Array): Uint8Array {
     if (arr.length === 0) {
         return arr;
     }
-
     const newArr = new Uint8Array(arr.length - 1);
     newArr.set(arr.subarray(1));
     return newArr;
