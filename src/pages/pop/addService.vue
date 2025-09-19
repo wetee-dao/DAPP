@@ -357,7 +357,7 @@ const toAdd = async () => {
       BigInt(0),
     )
 
-    const tx = await chain.buildInkCall(dry)
+    const tx = await chain.buildCall(dry)
     await chain.proxysignAndSend(tx, pid!, signer, () => {
       props.close();
     }, () => { })

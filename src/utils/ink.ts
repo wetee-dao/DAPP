@@ -1,3 +1,7 @@
+/* eslint-disable header/header */
+// Copyright 2017-2021 @polkadot/react-params authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
 import type { Compact, UInt } from '@polkadot/types-codec';
 import { AbiParam, BlueprintOptions } from '@polkadot/api-contract/types';
 import { Balance, WeightV2 } from '@polkadot/types/interfaces';

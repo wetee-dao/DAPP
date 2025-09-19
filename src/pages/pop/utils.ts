@@ -128,12 +128,10 @@ export function validFormArray(client: any, form: any, index: number): any {
         ok: true,
         data: {
             image: form.image,
-            cr: {
-                cpu: form.cpu,
-                mem: form.memory,
-                disk,
-                gpu: form.gpu,
-            },
+            cpu: form.cpu,
+            mem: form.memory,
+            disk,
+            gpu: form.gpu,
             command,
             env,
             port,

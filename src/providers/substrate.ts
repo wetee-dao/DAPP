@@ -20,7 +20,7 @@ export class SubstrateProvider {
   unsubscribe: any;
 
   // 构建inkcall
-  buildInkCall = async (data: any): Promise<any> => {
+  buildCall = async (data: any): Promise<any> => {
     const registry = this.client!.registry
     const payValue = registry.createType('Balance', new BN(data.params.payValue));
     const proofSize = new BN(data.gasRequired.proofSize.replaceAll(",", ""));
@@ -48,7 +48,13 @@ export class SubstrateProvider {
       return
     }
 
-    return this.client!.tx.revive.call(data.params.contract, payValue, gasLimit, getPredictedCharge(data.storageDeposit, registry), data.params.inputData)
+    return this.client!.tx.revive.call(
+      data.params.contract, 
+      payValue, 
+      gasLimit, 
+      getPredictedCharge(data.storageDeposit, registry), 
+      data.params.inputData
+    )
   }
 
   // 提交交易

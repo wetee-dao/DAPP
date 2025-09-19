@@ -202,7 +202,7 @@ const showPenu = (e: MouseEvent, item: any) => {
           const dry = await builder.stopPod(
             item.Id
           )
-          const tx = await chain.buildInkCall(dry)
+          const tx = await chain.buildCall(dry)
           await chain.proxysignAndSend(tx, projectid!, signer, () => {
             ElNotification({
               title: 'Notice',
@@ -219,7 +219,7 @@ const showPenu = (e: MouseEvent, item: any) => {
           const dry = await builder.restartPod(
             item.Id
           )
-          const tx = await chain.buildInkCall(dry)
+          const tx = await chain.buildCall(dry)
           await chain.proxysignAndSend(tx, projectid!, signer, () => {
             ElNotification({
               title: 'Notice',
@@ -259,7 +259,12 @@ const getList = async (pid: string) => {
       Id: v[0],
       Nid: v[0],
       Type: v[1].ptype,
-      Cr: v[2][0][1].cr,
+      Cr: {
+        cpu: v[2][0][1].cpu,
+        mem: v[2][0][1].memory,
+        disk: v[2][0][1].disk,
+        gpu: v[2][0][1].gpu,
+      },
       // ContractId: value.contractId,
       // ProjectId: value.creator,
       Name: v[1].name,

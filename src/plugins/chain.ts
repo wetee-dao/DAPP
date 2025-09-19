@@ -128,7 +128,7 @@ export const $getTxProvider = async (run: (chain: WalletWrap, builder: ChainInte
 
     const callBuilder = $getQueryApi()
 
-    await run(wallet!, callBuilder);
+    await run(wallet as WalletWrap, callBuilder);
     wallet?.close();
   } catch (e) {
     loading.close();

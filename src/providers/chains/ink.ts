@@ -2,14 +2,11 @@ import axios from "axios";
 //@ts-ignore
 import qs from "qs";
 import { Abi } from "@polkadot/api-contract";
-import { u8aToHex, BN, hexToU8a } from '@polkadot/util';
+import { u8aToHex, BN } from '@polkadot/util';
 import { Bytes } from '@polkadot/types';
 import { AnyJson, Registry, TypeDef } from "@polkadot/types/types";
 import { ElNotification } from "element-plus";
-import { getInitValue } from "@/utils/initValue";
-import { AbiParam } from "@polkadot/api-contract/types";
 import { transformUserInput } from "@/utils/ink";
-import { ApiPromise, HttpProvider } from "@polkadot/api";
 
 class InkApi {
     cloudAbi: Abi | undefined
@@ -77,6 +74,7 @@ class InkApi {
 
     // query ink
     async ink_query(contract: string, method: string, args: Record<string, unknown>) {
+        // console.log("ink_query", contract, method, args)
         const data = await this.ink_builder(contract, method, args, "0")
         return data.dry
     }
@@ -96,15 +94,6 @@ class InkApi {
             paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
         })
         // const response = await this.tryRun(contract, userInfo.addr, u8aToHex(inputData), payValue)
-        if (response.data.result.Err) {
-            ElNotification({
-                title: 'Error',
-                message: JSON.stringify(response.data.result.Err),
-                type: 'error',
-                duration: 5000,
-            })
-            throw new Error(response.data.error)
-        }
 
         const resp = response.data.result
         let data = decodeReturnValue(methodAbi.returnType, resp.Ok.data, abi!.registry) as any
@@ -113,9 +102,20 @@ class InkApi {
                 title: 'Error',
                 message: "Ink contract call failed with contract error: " + data.Ok.Err,
                 type: 'error',
-                duration: 5000,
+                duration: 15000,
             })
             throw new Error("Ink contract call failed with contract error: " + data.Ok.Err)
+        }
+
+        console.log(response.data)
+        if (response.data.result.Err) {
+            ElNotification({
+                title: 'Error',
+                message: response.data.result.Err,
+                type: 'error',
+                duration: 15000,
+            })
+            throw new Error(response.data.error)
         }
 
         if (!data || data["Err"]) {
@@ -123,7 +123,7 @@ class InkApi {
                 title: 'Error',
                 message: "Ink contract dry run reverted: " + data["Err"],
                 type: 'error',
-                duration: 5000,
+                duration: 15000,
             })
             throw new Error("Ink contract dry run reverted: " + data["Err"])
         }
@@ -135,7 +135,7 @@ class InkApi {
             dry: data,
             params: {
                 contract: contract,
-                inputData: u8aToHex(inputData),
+                inputData: inputData,
                 payValue: payValue.toString(),
             },
             gasConsumed: response.data.gasConsumed,
@@ -239,9 +239,9 @@ function formatInputData(arr: Uint8Array): Uint8Array {
 }
 
 export const Ink = new InkApi({
-    cloudContract: "0x72381a1a0c2858fa134b89b72b054bcb51f80a6a",
+    cloudContract: "0x9a9feea1162aa52a6433fa4623d431c2610c0c49",
     cloudAbiUrl: "contract/cloud.json",
-    subnetContract: "0xb506e4c44ebbddc38440368f9b86d33b75a0784f",
+    subnetContract: "0x3dc0fb5b561202c45e2caa96fe1a011e6e7520f3",
     subnetAbiUrl: "contract/subnet.json",
 })
 
