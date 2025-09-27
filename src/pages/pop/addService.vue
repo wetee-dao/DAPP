@@ -149,31 +149,7 @@
             </div>
           </div>
 
-          <div class="box-step" id="f3">
-            <div class="classTitle"><i class="icon">&#xe66d;</i>NetWorkSetting</div>
-            <div class="form-table-box">
-              <div class="flex" :key="index" v-for="(item, index) in form.port">
-                <el-input type="number" v-model="item.value" :min="0" :max="65535"
-                  placeholder="container port: 0 - 65535">
-                  <template #prepend>
-                    <el-select v-model="item.prefix" placeholder="Select" style="width: 170px">
-                      <el-option label="TCP to expose" value="Tcp" />
-                      <el-option label="UDP to expose" value="Udp" />
-                      <el-option label="TCP in project" value="ProjectTcp" />
-                      <el-option label="UDP in project" value="ProjectUdp" />
-                    </el-select>
-                  </template>
-                </el-input>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <el-button size="large" type="danger" circle :icon="Delete" @click="removeItem('port', index)" />
-              </div>
-              <el-button size="large" @click="addItem('port')">
-                <span class="icon">&#xe604;</span>&nbsp;&nbsp;Add&nbsp;&nbsp;
-              </el-button>
-            </div>
-          </div>
-
-          <div class="box-step last-step" id="f4">
+          <div class="box-step" id="f3" v-if="teeVersion != 'SGX'">
             <div class="classTitle"><i class="icon">&#xe645;</i>StorageSetting</div>
             <div class="form-table-box">
               <div class="flex" :key="index" v-for="(item, index) in form.disk">
@@ -200,6 +176,30 @@
             </div>
           </div>
 
+          <div class="box-step last-step" id="f4">
+            <div class="classTitle"><i class="icon">&#xe66d;</i>NetWorkSetting</div>
+            <div class="form-table-box">
+              <div class="flex" :key="index" v-for="(item, index) in form.port">
+                <el-input type="number" v-model="item.value" :min="0" :max="65535"
+                  placeholder="container port: 0 - 65535">
+                  <template #prepend>
+                    <el-select v-model="item.prefix" placeholder="Select" style="width: 170px">
+                      <el-option label="TCP to expose" value="Tcp" />
+                      <el-option label="UDP to expose" value="Udp" />
+                      <el-option label="TCP in project" value="ProjectTcp" />
+                      <el-option label="UDP in project" value="ProjectUdp" />
+                    </el-select>
+                  </template>
+                </el-input>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <el-button size="large" type="danger" circle :icon="Delete" @click="removeItem('port', index)" />
+              </div>
+              <el-button size="large" @click="addItem('port')">
+                <span class="icon">&#xe604;</span>&nbsp;&nbsp;Add&nbsp;&nbsp;
+              </el-button>
+            </div>
+          </div>
+
           <div class="margin-end-30"></div>
 
           <el-anchor class="form-anchor" :container="containerRef" direction="vertical" type="default" :bound="200"
@@ -207,8 +207,8 @@
             <el-anchor-link class="form-anchor-item" href="#f0" title="BaseSetting" />
             <el-anchor-link class="form-anchor-item" href="#f1" title="CommandSetting" />
             <el-anchor-link class="form-anchor-item" href="#f2" title="EnvironmentSetting" v-show="curContainer == 0" />
-            <el-anchor-link class="form-anchor-item" href="#f3" title="NetWorkSetting" />
-            <el-anchor-link class="form-anchor-item" href="#f4" title="StorageSetting" />
+            <el-anchor-link class="form-anchor-item" href="#f3" title="StorageSetting" />
+            <el-anchor-link class="form-anchor-item" href="#f4" title="NetWorkSetting" />
           </el-anchor>
         </div>
       </el-form>

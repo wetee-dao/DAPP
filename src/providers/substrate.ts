@@ -146,10 +146,10 @@ export class SubstrateProvider {
   }
 
   // 提交代理交易
-  proxysignAndSend = async (tx: any, ProjectId: string, signer: string, onSeccess: onCallFn, onError: onCallFn) => {
+  proxysignAndSend = async (tx: any, caller: string, signer: string, onSeccess: onCallFn, onError: onCallFn) => {
     // 构建代理交易
-    const proxyTx = ProjectId && ProjectId != "-1" ? this.client!.tx.project.proxyCall(
-      parseInt(ProjectId),
+    const proxyTx = caller && caller != "-1" ? this.client!.tx.project.proxyCall(
+      parseInt(caller),
       tx,
     ) : tx;
 

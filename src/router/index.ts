@@ -12,9 +12,21 @@ const routes: Array<RouteRecordRaw> = [
     // },
     {
         path: '/cloud',
-        name: 'CloudDetail',
+        name: 'Cloud Container',
         meta: { needLogin: true },
         component: () => import('../pages/cloud/project.vue')
+    },
+    {
+        path: '/secret',
+        name: 'Secret Data',
+        meta: { needLogin: true },
+        component: () => import('../pages/cloud/secret.vue')
+    },
+    {
+        path: '/disk',
+        name: 'Disk Data',
+        meta: { needLogin: true },
+        component: () => import('../pages/cloud/disk.vue')
     },
     {
         path: '/login',

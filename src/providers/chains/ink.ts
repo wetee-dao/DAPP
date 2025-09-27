@@ -2,11 +2,12 @@ import axios from "axios";
 //@ts-ignore
 import qs from "qs";
 import { Abi } from "@polkadot/api-contract";
-import { u8aToHex, BN } from '@polkadot/util';
+import { u8aToHex, BN, hexToU8a, u8aConcat } from '@polkadot/util';
 import { Bytes } from '@polkadot/types';
 import { AnyJson, Registry, TypeDef } from "@polkadot/types/types";
 import { ElNotification } from "element-plus";
-import { transformUserInput } from "@/utils/ink";
+import { toH160Address, transformUserInput } from "@/utils/ink";
+import { ApiPromise, HttpProvider, Keyring } from "@polkadot/api";
 
 class InkApi {
     cloudAbi: Abi | undefined
@@ -34,6 +35,43 @@ class InkApi {
         return await this.ink_query(this.cloudContract, "userPods", {
             start: start,
             size: size
+        })
+    }
+
+    // list secrets
+    async secrets(addr: string, start: null | number, size: number) {
+        const keyring = new Keyring();
+        const ethAddr = toH160Address(keyring.decodeAddress(addr))
+        const list = await this.ink_query(this.cloudContract, "userSecrets", {
+            user: ethAddr,
+            start: start,
+            size: size
+        })
+
+        return list.map((item: any) => {
+            return {
+                id: item[0],
+                key: item[1].k,
+                hash: item[1].hash,
+            }
+        })
+    }
+
+    // list disks
+    async disks(addr: string, start: null | number, size: number) {
+        const keyring = new Keyring();
+        const ethAddr = toH160Address(keyring.decodeAddress(addr))
+        const list = await this.ink_query(this.cloudContract, "userDisks", {
+            user: ethAddr,
+            start: start,
+            size: size
+        })
+
+        return list.map((item: any) => {
+            return {
+                id: item[0],
+                data: item[1],
+            }
         })
     }
 
@@ -72,6 +110,31 @@ class InkApi {
         }, "0")
     }
 
+    async createSecret(key: string, value: string) {
+        return await this.ink_builder(this.cloudContract, "initSecret", {
+            key: key,
+        }, "0")
+    }
+
+    async deleteSecret(id: string) {
+        return await this.ink_builder(this.cloudContract, "delSecret", {
+            index: id,
+        }, "0")
+    }
+
+    async createDisk(key: string, size: number) {
+        return await this.ink_builder(this.cloudContract, "initDisk", {
+            key: key,
+            size: size,
+        }, "0")
+    }
+
+    async deleteDisk(id: string) {
+        return await this.ink_builder(this.cloudContract, "delDisk", {
+            diskId: new BN(id),
+        }, "0")
+    }
+
     // query ink
     async ink_query(contract: string, method: string, args: Record<string, unknown>) {
         // console.log("ink_query", contract, method, args)
@@ -84,31 +147,58 @@ class InkApi {
         const abi = await this.initContract(contract)
         const methodAbi = abi.messages.find(item => item.method === method)
         if (!methodAbi) {
+            ElNotification({
+                title: 'Error',
+                message: "Ink contract method not found: " + method,
+                type: 'error',
+                duration: 15000,
+            })
             throw new Error("method not found")
         }
 
         const userInfo = this.getCallerInfo()
-        let inputData = methodAbi.toU8a(transformUserInput(abi!.registry, methodAbi.args, args));
-        const response = await axios.get(this.queryUrl + "contracts/ink/" + contract + "/dry-run", {
-            params: { caller: userInfo.addr, inputData: u8aToHex(inputData), payValue: payValue },
-            paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
-        })
-        // const response = await this.tryRun(contract, userInfo.addr, u8aToHex(inputData), payValue)
+        const params = transformUserInput(abi!.registry, methodAbi.args, args)
 
-        const resp = response.data.result
+        // const inputData = methodAbi.toU8a(transformUserInput(abi!.registry, methodAbi.args, args));
+        // const response = await axios.get(this.queryUrl + "contracts/ink/" + contract + "/dry-run", {
+        //     params: { caller: userInfo.addr, inputData: u8aToHex(inputData), payValue: payValue },
+        //     paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
+        // })
+
+        let inputData = null
+        // if (method == "delDisk") {
+        //     inputData = methodAbi.toU8a(transformUserInput(abi!.registry, methodAbi.args, args));
+        // } else {
+            const paramsU8a = methodAbi.args.map(({ type: { lookupName, type } }, index) => {
+                const p = abi.registry.createType(lookupName || type, params[index]).toU8a()
+                if (type == "Address") {
+                    return p.slice(1)
+                }
+                return p
+            })
+            inputData = u8aConcat(abi.registry.createType('ContractSelector', methodAbi.selector).toU8a(), ...paramsU8a)
+        // }
+
+        console.log("ink_builder contract", contract)
+        console.log("            abi args", methodAbi.args)
+        console.log("                args", transformUserInput(abi!.registry, methodAbi.args, args))
+        console.log("            hex args", u8aToHex(inputData))
+
+        const response = await this.tryRun(contract, userInfo.addr, u8aToHex(inputData), payValue)
+
+        const resp = response.result
         let data = decodeReturnValue(methodAbi.returnType, resp.Ok.data, abi!.registry) as any
         if (resp.Ok.flags.bits == "1") {
             ElNotification({
                 title: 'Error',
-                message: "Ink contract call failed with contract error: " + data.Ok.Err,
+                message: "Ink contract call failed with contract error: " + data.Err,
                 type: 'error',
                 duration: 15000,
             })
-            throw new Error("Ink contract call failed with contract error: " + data.Ok.Err)
+            throw new Error("Ink contract call failed with contract error: " + data.Err)
         }
 
-        console.log(response.data)
-        if (response.data.result.Err) {
+        if (response.result.Err) {
             ElNotification({
                 title: 'Error',
                 message: response.data.result.Err,
@@ -135,12 +225,12 @@ class InkApi {
             dry: data,
             params: {
                 contract: contract,
-                inputData: inputData,
+                inputData: u8aToHex(inputData),
                 payValue: payValue.toString(),
             },
-            gasConsumed: response.data.gasConsumed,
-            gasRequired: response.data.gasRequired,
-            storageDeposit: response.data.storageDeposit,
+            gasConsumed: response.gasConsumed,
+            gasRequired: response.gasRequired,
+            storageDeposit: response.storageDeposit,
         }
     }
 
@@ -190,24 +280,31 @@ class InkApi {
         return userInfo
     }
 
-    // async tryRun(address: string, caller: string, inputData: any, payValue: string) {
-    //     const api = await ApiPromise.create({
-    //         provider: new HttpProvider("https://xiaobai.asyou.me:30001/ws"),
-    //     });
+    async tryRun(address: string, caller: string, inputData: any, payValue: string) {
+        const api = await ApiPromise.create({
+            provider: new HttpProvider("https://xiaobai.asyou.me:30001/ws"),
+        });
 
-    //     const dryRunResult: any = await api.call.reviveApi.call(
-    //         caller,
-    //         address,
-    //         api.registry.createType('Balance', BigInt(payValue)),
-    //         null,
-    //         null,
-    //         inputData? hexToU8a(inputData): '',
-    //     )
+        const dryRunResult: any = await api.call.reviveApi.call(
+            caller,
+            address,
+            api.registry.createType('Balance', BigInt(payValue)),
+            null,
+            null,
+            inputData ? inputData : '',
+        )
 
-    //     return {
-    //         data: dryRunResult.toHuman(),
-    //     }
-    // }
+        let dryRunResultJson = dryRunResult.toHuman();
+        const result = dryRunResult.result;
+        if (result.isErr && result.asErr.isModule) {
+            const moduleError = api.registry.findMetaError(result.asErr.asModule)
+            dryRunResultJson.result = {
+                "Err": moduleError.section + " pallet error " + moduleError.name + ", " + moduleError.docs.join("  ")
+            }
+        }
+
+        return dryRunResultJson
+    }
 }
 
 function decodeReturnValue(
@@ -239,9 +336,9 @@ function formatInputData(arr: Uint8Array): Uint8Array {
 }
 
 export const Ink = new InkApi({
-    cloudContract: "0x9a9feea1162aa52a6433fa4623d431c2610c0c49",
-    cloudAbiUrl: "contract/cloud.json",
-    subnetContract: "0x3dc0fb5b561202c45e2caa96fe1a011e6e7520f3",
+    subnetContract: "0x2e742be01bdf3bbcefe63f8af2378a97bf95ea9f",
     subnetAbiUrl: "contract/subnet.json",
+    cloudContract: "0x5765744fc3f8cb0ddc9d9e542a8db4ac40889687",
+    cloudAbiUrl: "contract/cloud.json",
 })
 

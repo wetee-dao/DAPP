@@ -34,6 +34,17 @@ export default {
       return openPop(app, router, store, c, "addProject", {}, close)
     };
 
+    app.config.globalProperties.$AddSecret = (router: Object, store: Object, close: Function) => {
+      const c = defineAsyncComponent(() => import('../pages/pop/addSecret.vue'));
+      return openPop(app, router, store, c, "addSecret", {}, close)
+    };
+
+    app.config.globalProperties.$AddDisk = (router: Object, store: Object, close: Function) => {
+      const c = defineAsyncComponent(() => import('../pages/pop/addDisk.vue'));
+      return openPop(app, router, store, c, "addDisk", {}, close)
+    };
+
+
     app.config.globalProperties.$ProjectSetting = (router: Object, store: Object, close: Function) => {
       const c = defineAsyncComponent(() => import('../pages/pop/projectSetting.vue'));
       return openPop(app, router, store, c, "projectSetting", {}, close)

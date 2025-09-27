@@ -26,6 +26,7 @@
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.10",
     "element-plus": "^2.9.3",
+    "ethers": "^6.15.0",
     "identicon.js": "^2.3.3",
     "postcss-comment": "^2.0.0",
     "postcss-import": "^16.0.1",

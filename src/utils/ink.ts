@@ -6,13 +6,14 @@ import type { Compact, UInt } from '@polkadot/types-codec';
 import { AbiParam, BlueprintOptions } from '@polkadot/api-contract/types';
 import { Balance, WeightV2 } from '@polkadot/types/interfaces';
 import { Registry } from '@polkadot/types/types';
-import { BN_ZERO, compactAddLength, isNumber, u8aToU8a } from '@polkadot/util';
+import { BN_ZERO, compactAddLength, isNumber, stringToU8a, u8aToU8a } from '@polkadot/util';
 import BN from 'bn.js';
 import { ApiPromise } from '@polkadot/api';
 import { Abi, BlueprintPromise, CodePromise } from '@polkadot/api-contract';
 import { SubmittableExtrinsic } from '@polkadot/api/types';
 import { randomAsU8a } from '@polkadot/util-crypto';
 import { Bytes } from '@polkadot/types';
+import { ethers } from 'ethers';
 import { getInitValue } from './initValue';
 
 export type UIStorageDeposit = {
@@ -240,4 +241,41 @@ export function encodeSalt(salt: Uint8Array | string | null = randomAsU8a()): Ui
         : salt && salt.length
             ? compactAddLength(u8aToU8a(salt))
             : EMPTY_SALT;
+}
+
+/**
+ * Converts an account ID to an Ethereum address (H160)
+ * @param accountId The account ID bytes
+ * @returns The Ethereum address
+ */
+export function toH160Address(accountId: Uint8Array | string): string {
+  // Convert string input to Uint8Array if needed
+  const accountBytes = typeof accountId === 'string' ? stringToU8a(accountId) : accountId;
+
+  // Create a 32-byte buffer and copy account bytes into it
+  const accountBuffer = new Uint8Array(32);
+  accountBuffer.set(accountBytes.slice(0, 32));
+
+  if (isEthDerived(accountBytes)) {
+    // This was originally an eth address
+    // We just strip the 0xEE suffix to get the original address
+    return '0x' + Buffer.from(accountBuffer.slice(0, 20)).toString('hex');
+  } else {
+    // This is an (ed|sr)25519 derived address
+    // Avoid truncating the public key by hashing it first
+    const accountHash = ethers.keccak256(accountBuffer);
+    return '0x' + accountHash.slice(2 + 24, 2 + 24 + 40); // Skip '0x' prefix, then skip 12 bytes, take 20 bytes
+  }
+}
+
+/**
+ * Determines if an account ID is derived from an Ethereum address
+ * @param accountId The account ID bytes
+ * @returns True if the account is derived from an Ethereum address
+ */
+export function isEthDerived(accountId: Uint8Array): boolean {
+  if (accountId.length >= 32) {
+    return accountId[20] === 0xee && accountId[21] === 0xee;
+  }
+  return false;
 }

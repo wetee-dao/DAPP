@@ -16,16 +16,22 @@ export default <insType[]>[
     module: "cloud",
   },
   {
+    name: "Secret",
+    icon: "secret",
+    url: "/secret",
+    module: "secret",
+  },
+  {
+    name: "Disk",
+    icon: "disk",
+    url: "/disk",
+    module: "disk",
+  },
+  {
     name: "Bridge",
     icon: "bridge",
     url: "/bridge",
     module: "bridge",
-  },
-  {
-    name: "Storage",
-    icon: "store",
-    url: "/store",
-    module: "store",
   },
   {
     name: "Miner",

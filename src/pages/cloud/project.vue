@@ -134,7 +134,7 @@ const apps = ref<any[]>([]);
 const events = ref<any[]>([]);
 const currentProject = ref<any>(null);
 const tag = ref("metrics");
-const pid = store.state.userInfo.addr;
+const userAddr = store.state.userInfo.addr;
 const theme = ref(store.state.theme);
 watch(() => store.state.theme, (newVal, _) => {
   theme.value = newVal
@@ -176,7 +176,7 @@ const OpenDetail = (item: any, t: string) => {
 
 const AddPop = () => {
   global.$AddPop(router, store, () => {
-    getList(pid)
+    getList(userAddr)
   })
 };
 
@@ -209,7 +209,7 @@ const showPenu = (e: MouseEvent, item: any) => {
               message: "Application stop successfully",
               type: 'success',
             })
-            getList(pid)
+            getList(userAddr)
           }, () => {
           })
         });
@@ -226,7 +226,7 @@ const showPenu = (e: MouseEvent, item: any) => {
               message: "Application restart successfully",
               type: 'success',
             })
-            getList(pid)
+            getList(userAddr)
           }, () => {
           })
         });
@@ -238,20 +238,20 @@ const showPenu = (e: MouseEvent, item: any) => {
 };
 
 let timerId = setInterval(() => {
-  getList(pid)
-  getEvent(pid)
+  getList(userAddr)
+  getEvent(userAddr)
 }, 60000);
 
 onMounted(async () => {
-  getList(pid)
-  getEvent(pid)
+  getList(userAddr)
+  getEvent(userAddr)
 });
 
 onUnmounted(() => {
   clearInterval(timerId);
 });
 
-const getList = async (pid: string) => {
+const getList = async (userAddr: string) => {
   const list = await $getQueryApi().pods(null, 1000)
   let newList: any[] = []
   list.forEach((v: any) => {
