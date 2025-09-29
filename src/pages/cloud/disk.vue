@@ -7,15 +7,19 @@
                 </el-icon>Create New
             </el-button>
         </div>
-        <el-table v-loading="loading" :element-loading-svg="svg" class="table"
-            element-loading-svg-view-box="-10, -10, 50, 50" :data="disks" style="width: 100%">
+        <el-table v-loading="loading" :element-loading-svg="svgLoading"  class="table"
+            element-loading-svg-view-box="10, 10, 50, 50" :data="disks" style="width: 100%">
             <el-table-column prop="id" label="ID" width="100">
                 <template #default="scope">
                     # {{ scope.row.id }}
                 </template>
             </el-table-column>
             <el-table-column prop="data.SecretSSD[0]" label="Key Name" width="180" />
-            <el-table-column prop="data.SecretSSD[2]" label="Size" width="180" />
+            <el-table-column prop="data.SecretSSD[2]" label="Size" width="180" >
+                <template #default="scope">
+                    {{ scope.row.data.SecretSSD[2] }} <span class="size">GB</span>
+                </template>
+            </el-table-column>
             <el-table-column prop="data.SecretSSD[1]" label="Hash" />
             <el-table-column fixed="right" label="Operations" width="150">
                 <template #default="item">
@@ -36,9 +40,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { Plus } from '@element-plus/icons-vue'
-import { stringToHex } from "@polkadot/util";
-import { getSS5842, ss58toHex } from "@/utils/chain";
-import { getProjectList } from "@/apis/project";
+import { svgLoading } from "@/utils/loading";
 import { $getQueryApi, $getTxProvider } from "@/plugins/chain";
 import { ElNotification } from "element-plus";
 import { getUrlParams } from "@/utils/pop";
@@ -48,19 +50,8 @@ const store = useStore();
 const router = useRouter();
 const projectid = getUrlParams("project_id");
 const userAddr = store.state.userInfo.addr;
-const theme = ref(document.documentElement.getAttribute("class"));
 
 const loading = ref(true)
-const svg = `
-        <path class="path" d="
-          M 30 15
-          L 28 17
-          M 25.61 25.61
-          A 15 15, 0, 0, 1, 15 30
-          A 15 15, 0, 1, 1, 27.99 7.5
-          L 15 15
-        " style="stroke-width: 4px; fill: rgba(0, 0, 0, 0)"/>
-      `
 const disks = ref<any[]>([]);
 
 onMounted(async () => {
@@ -116,7 +107,6 @@ const del = async (item: any) => {
     }
 
     .table {
-        margin-top: 5px;
         background: transparent;
 
         :deep(tr) {
@@ -126,12 +116,19 @@ const del = async (item: any) => {
         :deep(th.el-table__cell) {
             background: transparent;
         }
+
+        .size {
+            // font-size: 12px;
+            // font-weight: bold;
+            color: $primary-text;
+        }
     }
 
     .btns {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
+        margin-bottom: 5px;
     }
 }
 </style>

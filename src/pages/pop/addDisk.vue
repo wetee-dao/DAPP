@@ -19,7 +19,7 @@
         <div class="form-context-box">
           <div class="form-sub-title">Size （GB）</div>
           <div class="form-input-box">
-            <el-slider v-model="form.size" :step="10" :max="1024" show-input />
+            <el-slider v-model="form.size" :step="1" :max="1024" show-input />
           </div>
         </div>
         <div class="form-context-box">

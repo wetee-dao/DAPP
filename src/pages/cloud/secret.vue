@@ -7,7 +7,7 @@
                 </el-icon>Create New
             </el-button>
         </div>
-        <el-table v-loading="loading" :element-loading-svg="svg" class="table"
+        <el-table v-loading="loading" :element-loading-svg="svgLoading" class="table"
             element-loading-svg-view-box="-10, -10, 50, 50" :data="secrets" style="width: 100%">
             <el-table-column prop="id" label="ID" width="100" >
                 <template #default="scope">
@@ -35,9 +35,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { Plus } from '@element-plus/icons-vue'
-import { stringToHex } from "@polkadot/util";
-import { getSS5842, ss58toHex } from "@/utils/chain";
-import { getProjectList } from "@/apis/project";
+import { svgLoading } from "@/utils/loading";
 import { $getQueryApi, $getTxProvider } from "@/plugins/chain";
 import { ElNotification } from "element-plus";
 import { getUrlParams } from "@/utils/pop";
@@ -50,16 +48,6 @@ const userAddr = store.state.userInfo.addr;
 const theme = ref(document.documentElement.getAttribute("class"));
 
 const loading = ref(true)
-const svg = `
-        <path class="path" d="
-          M 30 15
-          L 28 17
-          M 25.61 25.61
-          A 15 15, 0, 0, 1, 15 30
-          A 15 15, 0, 1, 1, 27.99 7.5
-          L 15 15
-        " style="stroke-width: 4px; fill: rgba(0, 0, 0, 0)"/>
-      `
 const secrets = ref<any[]>([]);
 
 onMounted(async () => {
@@ -116,7 +104,6 @@ const del = async (item: any) => {
     }
 
     .table {
-        margin-top: 5px;
         background: transparent;
 
         :deep(tr) {
@@ -132,6 +119,7 @@ const del = async (item: any) => {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
+        margin-bottom: 5px;
     }
 }
 </style>

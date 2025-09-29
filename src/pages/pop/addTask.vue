@@ -12,8 +12,7 @@
         <div class="form-box" ref="containerRef">
           <div class="box-step" id="f0">
             <div class="classTitle">
-              <i class="icon">&#xe6bc;</i>
-              BaseSetting
+              <i class="icon">&#xe6bc;</i>BaseSetting
             </div>
             <div class="form-context-box">
               <div class="form-sub-title">Docker image</div>
@@ -64,8 +63,7 @@
           <!-- </el-row> -->
           <div class="box-step" id="f1">
             <div class="classTitle">
-              <i class="icon">&#xee15;</i>
-              CommandSetting
+              <i class="icon">&#xee15;</i>CommandSetting
             </div>
             <div class="form-table-box">
               <div class="form-sub-title">If no input is provided, default Docker startup parameters will be used.</div>

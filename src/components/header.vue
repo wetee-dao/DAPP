@@ -224,7 +224,7 @@ const setTheme = (t: string) => {
   display: flex;
   align-items: center;
   cursor: pointer;
-  padding-left: 20px;
+  padding-left: 17px;
   box-sizing: border-box;
   margin-right: 15px;
 }

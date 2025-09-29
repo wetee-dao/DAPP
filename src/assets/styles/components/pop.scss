@@ -220,7 +220,7 @@
     position: relative;
 
     &>div:last-child {
-      margin-bottom: -15px;
+      margin-bottom: -5px;
     }
 
     .form-context-box {
@@ -232,6 +232,7 @@
       padding: 0px 0 5px 60px;
       max-width: 900px;
       margin-bottom: 15px;
+      margin-top: -17px;
 
       .flex {
         margin-bottom: 10px;
@@ -264,6 +265,8 @@
     padding: 0 10px 0 0px;
     font-size: 18px;
     position: relative;
+    display: flex;
+    align-items: center;
 
     .icon {
       display: inline-block;

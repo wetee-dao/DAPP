@@ -64,8 +64,7 @@
         <div class="form-box" ref="containerRef">
           <div class="box-step" id="f0">
             <div class="classTitle">
-              <i class="icon">&#xe6bc;</i>
-              BaseSetting
+              <i class="icon">&#xe6bc;</i>BaseSetting
             </div>
             <div class="form-context-box" v-show="curContainer == 0">
               <div class="form-sub-title">Name</div>
@@ -105,8 +104,7 @@
 
           <div class="box-step" id="f1">
             <div class="classTitle">
-              <i class="icon">&#xee15;</i>
-              CommandSetting
+              <i class="icon">&#xee15;</i>CommandSetting  
             </div>
             <div class="form-table-box">
               <div class="form-sub-title">If no input is provided, default Docker startup parameters will be used.</div>
@@ -149,7 +147,7 @@
             </div>
           </div>
 
-          <div class="box-step" id="f3" v-if="teeVersion != 'SGX'">
+          <div class="box-step" id="f3">
             <div class="classTitle"><i class="icon">&#xe645;</i>StorageSetting</div>
             <div class="form-table-box">
               <div class="flex" :key="index" v-for="(item, index) in form.disk">
