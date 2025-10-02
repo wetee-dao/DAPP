@@ -4,7 +4,7 @@ import { keyring } from "@/utils/chain";
 import { ApiPromise } from "@polkadot/api";
 import type { SubmittableExtrinsic } from "@polkadot/api/types";
 import { Injected, MetadataDef } from "@polkadot/extension-inject/types";
-import { BN, formatBalance, isNumber, u8aToHex } from "@polkadot/util";
+import { BN, formatBalance, isNumber, stringToU8a, u8aToHex, u8aWrapBytes } from "@polkadot/util";
 import { base64Encode } from "@polkadot/util-crypto";
 import { type Wallet, getWallets } from "@talismn/connect-wallets";
 import { ElMessageBox, ElNotification } from "element-plus";
@@ -12,6 +12,7 @@ import { onCallFn } from '.';
 import { getGasLimit } from '@/utils/ink';
 import { Registry } from '@polkadot/types/types';
 import { h } from 'vue';
+import { U8aLike } from '@polkadot/util/types';
 
 // Substrate 交易对象
 export class SubstrateProvider {
@@ -49,10 +50,10 @@ export class SubstrateProvider {
     }
 
     return this.client!.tx.revive.call(
-      data.params.contract, 
-      payValue, 
-      gasLimit, 
-      getPredictedCharge(data.storageDeposit, registry), 
+      data.params.contract,
+      payValue,
+      gasLimit,
+      getPredictedCharge(data.storageDeposit, registry),
       data.params.inputData
     )
   }
@@ -154,6 +155,47 @@ export class SubstrateProvider {
     ) : tx;
 
     await this.signAndSend(proxyTx, signer, onSeccess, onError)
+  }
+
+  signMsg = async (msg: U8aLike, signer: string) => {
+    const keypair = JSON.parse(window.localStorage.getItem("keypair") || "{}")
+    const wrapped = u8aWrapBytes(msg);
+
+    if (keypair[signer]) {
+      const pair = keyring.addFromUri(keypair[signer], { name: 'x' }, 'sr25519');
+      return pair.sign(wrapped)
+    }
+
+
+    let userInfo = null
+    if (window.localStorage.getItem("userInfo")) {
+      userInfo = JSON.parse(window.localStorage.getItem("userInfo") || "{}")
+    }
+
+    // 获取钱包
+    const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === userInfo.wallet);
+    await wallet!.enable("WeTEE");
+
+    // 检查元数据版本
+    await checkMetaData(this.client!, wallet!.extension)
+    const account = (await wallet!.getAccounts()).find(account => account.address === signer);
+    if (!account) {
+      ElNotification({
+        title: 'Error',
+        message: 'Account ' + signer + ' not found',
+        type: 'error',
+      })
+      return
+    }
+
+    const walletInjector = account!.wallet!.signer;
+    const signRaw = walletInjector.signRaw;
+    const sig = await signRaw({
+      address: account.address,
+      data: u8aToHex(wrapped),
+      type: 'bytes'
+    });
+    return sig.signature
   }
 
   close() {

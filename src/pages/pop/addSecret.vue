@@ -34,6 +34,8 @@
 import { reactive, ref } from "vue";
 import { ElNotification } from "element-plus";
 import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
+import { SecretRSA, uploadSecret } from "@/apis/secret";
+import JSEncrypt from "jsencrypt";
 
 const props = defineProps(["router", "store", "close", "app"])
 
@@ -75,16 +77,40 @@ const toAdd = async () => {
       })
       return;
     }
-    
+
     const signer = props.store.state.userInfo.addr;
+    const rsa = await SecretRSA()
+    const crypt = new JSEncrypt();
+    crypt.setPublicKey(rsa.secret_rsa);
+    const encrypted = crypt.encrypt(form.value);
+    if (!encrypted) {
+      ElNotification({
+        title: 'Error',
+        message: "Encrypt failed",
+        type: 'error',
+      })
+      return;
+    }
+
+    let id = ""
     await $getTxProvider(async (chain, builder): Promise<void> => {
       const dry = await builder.createSecret(form.key, form.value)
-
       const tx = await chain.buildCall(dry)
       await chain.signAndSend(tx, signer, () => {
         props.close();
       }, () => { })
+
+      ElNotification({
+        title: 'Success',
+        message: "Upload secret success",
+        type: 'success',
       })
+
+      id = dry.dry.Ok
+    })
+
+    const sig = await chain.signMsg(encrypted, signer)
+    await uploadSecret(id, encrypted, sig, signer)
   })
 };
 

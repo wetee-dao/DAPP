@@ -38,12 +38,14 @@ class ChainNode {
   chainId: string;
   chainUrl: string;
   queryUrl: string;
-  constructor(name: string, type: string, chainId: string, chainUrl: string, queryUrl: string) {
+  secretUrl: string;
+  constructor(name: string, type: string, chainId: string, chainUrl: string, queryUrl: string, secretUrl: string) {
     this.name = name
     this.type = type
     this.chainId = chainId
     this.chainUrl = chainUrl
     this.queryUrl = queryUrl
+    this.secretUrl = secretUrl
   }
 }
 
@@ -55,6 +57,7 @@ export const chainNodes: ChainNode[] = [
     type: "substrate",
     chainUrl: 'wss://xiaobai.asyou.me:30001/ws',
     queryUrl: 'https://xiaobai.asyou.me:30001/',
+    secretUrl: 'https://xiaobai.asyou.me:31005/gql',
   },
 ]
 
@@ -75,6 +78,10 @@ export const initChainApi = (chainId: string) => {
     node = chainNodes[0]
   }
   Ink.init(node.queryUrl, node.chainUrl)
+}
+
+export const CurrentSecretUrl = () => {
+  return CurrentChainNode().secretUrl
 }
 
 // 获取交易对象

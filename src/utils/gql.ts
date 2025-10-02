@@ -1,31 +1,27 @@
+import axios from "axios";
+
 export class GraphqlClient {
     baseUrl: string = "";
     constructor(url: string) {
         this.baseUrl = url
     };
     async query(req: any) {
-        let response = await fetch(this.baseUrl, {
+        let headers:any = {
+            'Content-Type': 'application/json',
+        }
+        if (localStorage.getItem('token')) {
+            headers['authorization'] = localStorage.getItem('token') ?? ""
+        }
+        let response = await axios.request({
             method: 'POST',
-            body: JSON.stringify(req),
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': localStorage.getItem('token') ?? "",
-            },
+            data: req,
+            headers: headers,
+            url: this.baseUrl,
         })
-        let data = await response.json()
-        return data.data
+        return response.data.data
     };
     async mut(req: any) {
-        let response = await fetch(this.baseUrl, {
-            method: 'POST',
-            body: JSON.stringify(req),
-            headers: {
-                'Content-Type': 'application/json',
-                'authorization': localStorage.getItem('token') ?? "",
-            },
-        })
-        let data = await response.json()
-        return data.data
+        return this.query(req)
     };
 }
 

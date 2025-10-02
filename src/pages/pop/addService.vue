@@ -250,6 +250,7 @@ const teeVersion = ref<string>("CVM")
 const curContainer = ref<any>(0)
 const containers = ref<any[]>([deepCopy(defaultContainer)])
 const form = ref<any>(deepCopy(defaultContainer))
+const disks = ref<any[]>([]);
 
 const TeeVersionChange = () => {
   containers.value[curContainer.value] = deepCopy(form.value)

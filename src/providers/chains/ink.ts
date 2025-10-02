@@ -1,13 +1,12 @@
 import axios from "axios";
-//@ts-ignore
-import qs from "qs";
 import { Abi } from "@polkadot/api-contract";
 import { u8aToHex, BN, hexToU8a, u8aConcat } from '@polkadot/util';
 import { Bytes } from '@polkadot/types';
 import { AnyJson, Registry, TypeDef } from "@polkadot/types/types";
 import { ElNotification } from "element-plus";
-import { toH160Address, transformUserInput } from "@/utils/ink";
+import { JSEncrypt } from 'jsencrypt';
 import { ApiPromise, HttpProvider, Keyring } from "@polkadot/api";
+import { toH160Address, transformUserInput } from "@/utils/ink";
 
 class InkApi {
     cloudAbi: Abi | undefined
@@ -118,7 +117,7 @@ class InkApi {
 
     async deleteSecret(id: string) {
         return await this.ink_builder(this.cloudContract, "delSecret", {
-            index: id,
+            index: new BN(id),
         }, "0")
     }
 

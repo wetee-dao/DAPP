@@ -16,12 +16,12 @@
             </el-table-column>
             <el-table-column prop="key" label="Secret Name" width="180" />
             <el-table-column prop="hash" label="Hash" />
-            <el-table-column fixed="right" label="Operations" width="150">
+            <el-table-column fixed="right" label="Operations" width="109">
                 <template #default="item">
                     <el-button link type="primary" size="small" @click="show(item.row)">
                         Show
                     </el-button>
-                    <el-button link type="primary" size="small">Edit</el-button>
+                    <!-- <el-button link type="primary" size="small" @click="edit(item.row)">Edit</el-button> -->
                     <el-button link type="primary" size="small" @click="del(item.row)">Del</el-button>
                 </template>
             </el-table-column>
@@ -68,6 +68,14 @@ const add = async () => {
     })
 }
 
+const edit = async (item: any) => {
+    global.$AddSecret(router, store, () => {
+        getList().then((datas: any) => {
+
+        })
+    })
+}
+
 const show = (item: any) => {
     console.log(item)
 }
@@ -76,7 +84,7 @@ const del = async (item: any) => {
     await $getTxProvider(async (chain, builder): Promise<void> => {
         console.log(item.id)
         const signer = store.state.userInfo.addr;
-        const dry = await builder.deleteDisk(
+        const dry = await builder.deleteSecret(
             item.id
         )
         const tx = await chain.buildCall(dry)
