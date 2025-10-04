@@ -113,12 +113,6 @@ const getInfo = async () => {
 </script>
 
 <style lang="scss" scoped>
-.home {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 85px 20px 0;
-}
-
 .logo {
     width: 90px;
     height: 90px;

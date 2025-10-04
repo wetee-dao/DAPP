@@ -3,7 +3,7 @@
     <div id="mainNav">
       <GHeader />
       <!-- 主应用入口 -->
-      <router-view />
+      <router-view class="main-content" />
       <!-- 子应用入口 -->
       <div v-show="$route.fullPath.indexOf('app_') > -1" id="subview" />
     </div>
@@ -44,7 +44,7 @@ onBeforeUnmount(() => {
   overflow-x: hidden;
   overflow-y: auto;
   visibility: hidden;
-  padding-left: 150px;
+  /* padding-left: 150px; */
 }
 
 #mainNav {
@@ -65,7 +65,15 @@ onBeforeUnmount(() => {
   ); */
 }
 
+.main-content{
+  margin-left: 150px;
+  width: calc(100vw - 150px) !important;
+  box-sizing: border-box;
+  padding: 85px 20px 0;
+}
+
 #subview {
+  padding-left: 150px;
   height: calc(100vh - 70px);
 }
 

@@ -166,13 +166,6 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-.home {
-  box-sizing: border-box;
-  padding-top: 75px;
-  width: 100%;
-  padding: 55px 20px 0;
-}
-
 .page-title {
   font-size: 22px;
   line-height: 30px;

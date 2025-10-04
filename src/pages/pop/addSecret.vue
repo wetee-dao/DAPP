@@ -109,6 +109,7 @@ const toAdd = async () => {
       id = dry.dry.Ok
     })
 
+    console.log(encrypted)
     const sig = await chain.signMsg(encrypted, signer)
     await uploadSecret(id, encrypted, sig, signer)
   })

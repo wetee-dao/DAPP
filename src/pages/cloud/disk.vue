@@ -98,10 +98,6 @@ const del = async (item: any) => {
 
 <style lang="scss" scoped>
 .home {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 80px 20px 0;
-
     :deep(.el-loading-mask) {
         background-color: rgba(0, 0, 0, 0.2)
     }
