@@ -25,7 +25,7 @@
           </div>
           <div class="ssd-box" v-if="item.Cr.disk.length > 0">
             <el-tooltip v-for="(disk, index) in item.Cr.disk" effect="light" placement="top-start"
-              :content="'Mounted on ' + disk.path.SSD + ' - ' + (parseInt(disk.size_.replace(',', '')) / 1024) + ' GB'">
+              :content="'Mounted on ' + disk.path">
               <div class="ssd">
                 SSD
                 <div class="ssd-bar"></div>
@@ -118,7 +118,6 @@ import useGlobelProperties from "@/plugins/globel";
 import { ElNotification } from "element-plus";
 
 import { getUrlParams } from "@/utils/pop";
-import { getEvents } from "@/apis/event_indexer";
 import { ss58toHex } from "@/utils/chain";
 import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
 
@@ -239,12 +238,10 @@ const showPenu = (e: MouseEvent, item: any) => {
 
 let timerId = setInterval(() => {
   getList(userAddr)
-  getEvent(userAddr)
 }, 60000);
 
 onMounted(async () => {
   getList(userAddr)
-  getEvent(userAddr)
 });
 
 onUnmounted(() => {
@@ -255,6 +252,7 @@ const getList = async (userAddr: string) => {
   const list = await $getQueryApi().pods(null, 1000)
   let newList: any[] = []
   list.forEach((v: any) => {
+    console.log(v)
     newList.push({
       Id: v[0],
       Nid: v[0],
@@ -273,16 +271,11 @@ const getList = async (userAddr: string) => {
       Status: v[3],
     });
   });
+
+  console.log(newList)
   apps.value = newList;
 };
 
-const getEvent = async (projectId: string) => {
-  const eventRes = await getEvents(projectId)
-  if (events.value.length > 0 && eventRes.list_event.length == events.value.length) {
-    getList(projectId)
-  }
-  events.value = eventRes.list_event;
-};
 
 const shortImage = (image: string) => {
   let images = image.split("/")

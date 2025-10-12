@@ -31,11 +31,12 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
 import { ElNotification } from "element-plus";
-import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
+import { $getTxProvider } from "@/plugins/chain";
 import { SecretRSA, uploadSecret } from "@/apis/secret";
 import JSEncrypt from "jsencrypt";
+import { blake2bHash } from "@/utils/hash";
 
 const props = defineProps(["router", "store", "close", "app"])
 
@@ -93,8 +94,9 @@ const toAdd = async () => {
     }
 
     let id = ""
+    const hash = blake2bHash(form.value, 32)
     await $getTxProvider(async (chain, builder): Promise<void> => {
-      const dry = await builder.createSecret(form.key, form.value)
+      const dry = await builder.createSecret(form.key, "0x" + hash)
       const tx = await chain.buildCall(dry)
       await chain.signAndSend(tx, signer, () => {
         props.close();
@@ -109,9 +111,7 @@ const toAdd = async () => {
       id = dry.dry.Ok
     })
 
-    console.log(encrypted)
-    const sig = await chain.signMsg(encrypted, signer)
-    await uploadSecret(id, encrypted, sig, signer)
+    await uploadSecret(id, encrypted, "0x" + hash, signer)
   })
 };
 

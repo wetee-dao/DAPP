@@ -72,6 +72,9 @@ export function validFormArray(client: any, form: any, index: number): any {
 
             let kv: any = {}
             kv[val.prefix] = [val.key, val.value]
+            if (val.prefix == "Encrypt") {
+                kv[val.prefix] = [val.key, val.id]
+            }
             env.push(kv);
         }
     }
@@ -99,15 +102,15 @@ export function validFormArray(client: any, form: any, index: number): any {
     if (form.disk.length > 0) {
         for (let i = 0; i < form.disk.length; i++) {
             const val = form.disk[i];
-            if (!isValidDiskPathDirectory(val.key) || val.key.length == 0) {
+            if (!isValidDiskPathDirectory(val.path) || val.path.length == 0) {
                 ElNotification({
                     title: 'Error',
-                    message: val.key + " is not a valid mount path",
+                    message: val.path + " is not a valid mount path",
                     type: 'error',
                 })
                 return { ok: false };
             }
-            if (!isNumeric(val.value)) {
+            if (!isNumeric(val.id)) {
                 ElNotification({
                     title: 'Error',
                     message: "Mount size must be int",
@@ -116,11 +119,7 @@ export function validFormArray(client: any, form: any, index: number): any {
                 return { ok: false };
             }
 
-            const path = { 'SSD': val.key };
-            disk.push({
-                path,
-                size: parseInt(val.value) * 1024,
-            });
+            disk.push({ 'path': val.path, id: val.id });
         }
     }
 

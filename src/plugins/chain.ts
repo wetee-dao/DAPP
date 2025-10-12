@@ -13,10 +13,6 @@ import { ElNotification } from "element-plus";
 import { Ink } from "@/providers/chains/ink";
 import { ChainInterface } from "@/providers/chains";
 
-// 区块链链接
-export let chainIndexer = 'https://xiaobai.asyou.me:30006/gql'
-export let dkgUrl = 'https://xiaobai.asyou.me:31001/gql'
-
 // 获取链节点的ping
 export async function chainNetPing(): Promise<string> {
   const results = await Promise.all(chainNodes.map(node => getNetworkLatency(node.queryUrl + "node/network")));

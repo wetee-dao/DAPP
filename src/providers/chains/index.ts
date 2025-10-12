@@ -1,7 +1,7 @@
 export type ChainInterface = {
     pods: (start: null | number, size: number) => Promise<any>
 
-    createSecret: (key: string, value: string) => Promise<any>
+    createSecret: (key: string, hash: string) => Promise<any>
     secrets: (addr: string, start: null | number, size: number) => Promise<any>
     deleteSecret: (id: string) => Promise<any>
 

@@ -29,8 +29,8 @@
 <script setup lang="ts">
 import { inject, onMounted, ref } from 'vue';
 import dayjs from "dayjs";
-import { GetTeeReport } from "@/apis/dkg";
-import { $getTxProvider, chainUrl } from "@/plugins/chain"
+import { GetTeeReport } from "@/apis/secret";
+import { $getTxProvider } from "@/plugins/chain"
 
 const props = defineProps(["info", "service", "clusterInfo"])
 const info = ref<any>(props.info)

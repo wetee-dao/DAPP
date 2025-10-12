@@ -51,7 +51,8 @@ class InkApi {
             return {
                 id: item[0],
                 key: item[1].k,
-                hash: item[1].hash,
+                hash: item[1].hash_,
+                minted: item[1].minted,
             }
         })
     }
@@ -109,9 +110,10 @@ class InkApi {
         }, "0")
     }
 
-    async createSecret(key: string, value: string) {
-        return await this.ink_builder(this.cloudContract, "initSecret", {
+    async createSecret(key: string, hash: string) {
+        return await this.ink_builder(this.cloudContract, "createSecret", {
             key: key,
+            hash: hash,
         }, "0")
     }
 
@@ -122,7 +124,7 @@ class InkApi {
     }
 
     async createDisk(key: string, size: number) {
-        return await this.ink_builder(this.cloudContract, "initDisk", {
+        return await this.ink_builder(this.cloudContract, "createDisk", {
             key: key,
             size: size,
         }, "0")
@@ -335,9 +337,9 @@ function formatInputData(arr: Uint8Array): Uint8Array {
 }
 
 export const Ink = new InkApi({
-    subnetContract: "0x2e742be01bdf3bbcefe63f8af2378a97bf95ea9f",
+    subnetContract: "0x7b6c6a1a8e8dae37a75adc89e353087b44f81a6a",
     subnetAbiUrl: "contract/subnet.json",
-    cloudContract: "0x5765744fc3f8cb0ddc9d9e542a8db4ac40889687",
+    cloudContract: "0xa733e15704ce7ebcc649fb5bcff9dd62a2c510aa",
     cloudAbiUrl: "contract/cloud.json",
 })
 

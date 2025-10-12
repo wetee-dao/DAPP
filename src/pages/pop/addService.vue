@@ -104,7 +104,7 @@
 
           <div class="box-step" id="f1">
             <div class="classTitle">
-              <i class="icon">&#xee15;</i>CommandSetting  
+              <i class="icon">&#xee15;</i>CommandSetting
             </div>
             <div class="form-table-box">
               <div class="form-sub-title">If no input is provided, default Docker startup parameters will be used.</div>
@@ -129,15 +129,25 @@
                 <el-input v-model="item.key" placeholder="key name / file name">
                   <template #prepend>
                     <el-select v-model="item.prefix" placeholder="Select" style="width: 170px">
-                      <el-option label="Environment key" value="Env" />
-                      <el-option label="File path" value="File" />
+                      <el-option label="Public key" value="Env" />
+                      <el-option label="Secret Key" value="Encrypt" />
                     </el-select>
                   </template>
                 </el-input>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <el-input v-model="item.value" placeholder="value name">
+                <el-input v-if="item.prefix == 'Env'" v-model="item.value" placeholder="value name">
                   <template #prepend>value</template>
                 </el-input>
+                <el-select v-if="item.prefix == 'Encrypt'" v-model="item.id" placeholder="select secret">
+                  <template #label="{ label }">
+                    <div v-if="label != null">
+                      <span>#{{ label.id }} {{ label.key }}</span>
+                    </div>
+                  </template>
+                  <el-option :label="s" :value="s.id" v-for="s in secrets">
+                    <span>#{{ s.id }} {{ s.key }}</span>
+                  </el-option>
+                </el-select>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <el-button size="large" type="danger" circle :icon="Delete" @click="removeItem('env', index)" />
               </div>
@@ -150,21 +160,33 @@
           <div class="box-step" id="f3">
             <div class="classTitle"><i class="icon">&#xe645;</i>StorageSetting</div>
             <div class="form-table-box">
-              <div class="flex" :key="index" v-for="(item, index) in form.disk">
-                <el-input v-model="item.key" placeholder="ssd path">
-                  <template #prepend>
-                    <el-select v-model="item.prefix" placeholder="Select" style="width: 100px">
-                      <el-option label="SSD" value="SSD" />
-                    </el-select>
-                  </template>
-                </el-input>
+              <div class="flex" :key="index" v-for="(d, index) in form.disk">
+                <el-input v-model="d.path" placeholder="mount path" />
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <el-input type="number" v-model="item.value" placeholder="ssd size">
-                  <template #prepend>size</template>
-                  <template #append>
-                    GB
+                <el-select v-model="d.id" placeholder="select disk">
+                  <template #label="{ label }">
+                    <div v-if="label.data != null">
+                      <span style="float: left">#{{ label.id }} {{ label.data.SecretSSD[0] }}</span>
+                      <span style="
+                          float: right;
+                          color: var(--el-text-color-secondary);
+                          font-size: 13px;
+                        ">
+                        {{ label.data.SecretSSD[2] }} GB
+                      </span>
+                    </div>
                   </template>
-                </el-input>
+                  <el-option :label="disk" :value="disk.id" v-for="disk in disks">
+                    <span style="float: left">#{{ disk.id }} {{ disk.data.SecretSSD[0] }}</span>
+                    <span style="
+                        float: right;
+                        color: var(--el-text-color-secondary);
+                        font-size: 13px;
+                      ">
+                      {{ disk.data.SecretSSD[2] }} GB
+                    </span>
+                  </el-option>
+                </el-select>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <el-button size="large" type="danger" circle :icon="Delete" @click="removeItem('disk', index)" />
               </div>
@@ -215,14 +237,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { ElNotification, FormInstance } from "element-plus";
 import { Delete, Close } from '@element-plus/icons-vue';
 import { Option } from '@polkadot/types';
 import { getUrlParams } from "@/utils/pop";
 import { validFormArray } from "./utils";
 import { deepCopy } from "@/utils/object";
-import { $getTxProvider } from "@/plugins/chain";
+import { $getQueryApi, $getTxProvider } from "@/plugins/chain";
+import { useStore } from "vuex";
 
 const pid = getUrlParams("project_id");
 const props = defineProps(["router", "store", "close", "app"])
@@ -250,7 +273,22 @@ const teeVersion = ref<string>("CVM")
 const curContainer = ref<any>(0)
 const containers = ref<any[]>([deepCopy(defaultContainer)])
 const form = ref<any>(deepCopy(defaultContainer))
+
+const store = props.store;
+const userAddr = store.state.userInfo.addr;
 const disks = ref<any[]>([]);
+const secrets = ref<any[]>([]);
+
+onMounted(async () => {
+  getList()
+});
+
+const getList = async () => {
+  const slist = await $getQueryApi().secrets(userAddr, null, 1000)
+  const dlist = await $getQueryApi().disks(userAddr, null, 1000)
+  secrets.value = slist
+  disks.value = dlist
+};
 
 const TeeVersionChange = () => {
   containers.value[curContainer.value] = deepCopy(form.value)
@@ -280,22 +318,6 @@ const deleteContainer = (i: number) => {
 
   form.value = containers.value[0]
   curContainer.value = 0
-}
-
-const handleTempApp = (item: any) => {
-  curTemp.value = item.name
-
-  containers.value = deepCopy(item.containers)
-  activeContainer(0)
-}
-
-const querySearch = (queryString: string, cb: any) => {
-  let results = queryString
-    ? temps.filter(createFilter(queryString))
-    : temps
-
-  if (results.length == 0) results = temps
-  cb(results)
 }
 
 const createFilter = (queryString: string) => {
@@ -380,9 +402,8 @@ const addItem = (t: string) => {
       break;
     case 'disk':
       form.value.disk.push({
-        prefix: "SSD",
-        key: "",
-        value: null
+        path: "",
+        id: null
       });
       break;
   }

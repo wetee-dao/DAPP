@@ -15,7 +15,11 @@
                 </template>
             </el-table-column>
             <el-table-column prop="key" label="Secret Name" width="180" />
-            <el-table-column prop="hash" label="Hash" />
+            <el-table-column label="Hash">
+                <template #default="scope">
+                    {{ scope.row.hash }}&nbsp;&nbsp;<span class="action">{{ scope.row.minted ?"Update key":"Init key"}}</span>
+                </template>
+            </el-table-column>
             <el-table-column fixed="right" label="Operations" width="109">
                 <template #default="item">
                     <el-button link type="primary" size="small" @click="show(item.row)">
@@ -45,7 +49,6 @@ const store = useStore();
 const router = useRouter();
 const projectid = getUrlParams("project_id");
 const userAddr = store.state.userInfo.addr;
-const theme = ref(document.documentElement.getAttribute("class"));
 
 const loading = ref(true)
 const secrets = ref<any[]>([]);
@@ -109,6 +112,13 @@ const del = async (item: any) => {
 
     .table {
         background: transparent;
+
+        .action {
+            background: rgba($primary-text-rgb, 0.2);
+            font-weight: bold;
+            cursor: pointer;
+            padding: 1px 4px;
+        }
 
         :deep(tr) {
             background: transparent;

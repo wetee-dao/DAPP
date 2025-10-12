@@ -34,6 +34,7 @@
 import { reactive, ref } from "vue";
 import { ElNotification } from "element-plus";
 import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
+import { initDisk } from "@/apis/secret";
 
 const props = defineProps(["router", "store", "close", "app"])
 
@@ -56,16 +57,39 @@ const toAdd = async () => {
       })
       return;
     }
-    
+
+    let id = ""
     const signer = props.store.state.userInfo.addr;
     await $getTxProvider(async (chain, builder): Promise<void> => {
       const dry = await builder.createDisk(form.key, form.size)
+      console.log(dry)
+      if (!dry.dry.Ok) {
+        ElNotification({
+          title: 'Error',
+          message: "Create disk failed",
+          type: 'error',
+        })
+        throw "Create disk failed";
+      }
 
+      id = dry.dry.Ok
       const tx = await chain.buildCall(dry)
       await chain.signAndSend(tx, signer, () => {
         props.close();
       }, () => { })
-      })
+    })
+
+    if (!id) {
+      return
+    }
+
+    const resp =await initDisk(id, signer)
+    console.log(resp)
+    ElNotification({
+      title: 'Success',
+      message: "Secret disk created",
+      type: 'success',
+    })
   })
 };
 
