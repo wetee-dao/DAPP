@@ -10,11 +10,16 @@ $size: 11;
 }
 
 .menu-item {
-  width: #{$size*2}px;
+  width: #{$size*1.6}px;
   height: #{$size*0.2}px;
   border-radius: #{$size*0.125}px;
-  background-color: $primary-text;
-  margin-bottom: #{$size*0.45}px;
+  // background-color: $primary-text;
+  margin-bottom: #{$size*0.25}px;
+  border: 1Px solid rgba($primary-text-rgb, $alpha: 0.6);
+}
+
+.menu-item:first-child{
+    height: #{$size*0.22}px;
 }
 
 .menu-item:last-child {
@@ -98,7 +103,7 @@ $size: 11;
   }
 
   100% {
-    transform: translateY(#{$size*0.65}px) rotate(45deg);
+    transform: translateY(#{$size*0.56}px) rotate(45deg);
   }
 }
 
@@ -120,6 +125,6 @@ $size: 11;
   }
 
   100% {
-    transform: translateY(-#{$size*0.65}px) rotate(-45deg);
+    transform: translateY(-#{$size*0.56}px) rotate(-45deg);
   }
 }

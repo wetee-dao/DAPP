@@ -4,7 +4,6 @@ import { u8aToHex, BN, hexToU8a, u8aConcat } from '@polkadot/util';
 import { Bytes } from '@polkadot/types';
 import { AnyJson, Registry, TypeDef } from "@polkadot/types/types";
 import { ElNotification } from "element-plus";
-import { JSEncrypt } from 'jsencrypt';
 import { ApiPromise, HttpProvider, Keyring } from "@polkadot/api";
 import { toH160Address, transformUserInput } from "@/utils/ink";
 
@@ -36,6 +35,14 @@ class InkApi {
             size: size
         })
         return pods
+    }
+
+    async podExtInfo(id: string){
+        let pod = await this.ink_query(this.cloudContract, "podExtInfo",{
+            podId: id,
+        })
+
+        return pod
     }
 
     // list secrets

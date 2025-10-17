@@ -21,7 +21,7 @@ import { debounce } from '@/utils/debounce';
 import { $getTxProvider } from "@/plugins/chain"
 import { GetWetrics } from '@/apis/detail';
 import { $getQueryApi } from '@/plugins/chain';
-const props = defineProps(["info","clusterInfo"])
+const props = defineProps(["info", "clusterInfo"])
 
 const info = ref<any>(props.info)
 const cpu = ref<any>(null)
@@ -47,120 +47,172 @@ const options = ref({
 })
 
 onMounted(() => {
-    console.log(props.clusterInfo)
-    // const ty = api.createType('WorkType', info.value.Type);
-    // const wid = { id: info.value.Nid, wtype: ty }
-    // if (info.value.Status == 3) {
-      GetWetrics(props.clusterInfo.id, info.value).then((res: any) => {
-        let labels: string[] = []
-        let cpuData: number[] = []
-        let memData: number[] = []
+  console.log(props.clusterInfo)
+  GetWetrics(props.clusterInfo, info.value).then((res: any) => {
+    let labels: string[] = []
+    let cpuData: number[] = []
+    let memData: number[] = []
 
-        if (res.length >= 30) {
-          res = res.slice(-30)
+    if (res.length >= 30) {
+      res = res.slice(-30)
+    }
+
+    for (let i = 0; i < res.length; i++) {
+      const item = res[i].Cr;
+      let cpu = 0;
+      let mem = 0;
+      for (var key in item) {
+        cpu = cpu + item[key][0]
+        mem = mem + item[key][1]
+      }
+
+      labels.push(res[i].BlockNumber);
+      cpuData.push(cpu)
+      memData.push(mem / 1000)
+    }
+
+    cpu.value = {
+      labels: labels,
+      datasets: [
+        {
+          label: 'CPU(1 Unit = 1/1000 Core)',
+          borderColor: "#50fa82",
+          borderWidth: 1,
+          pointStyle: 'false',
+          backgroundColor: '#50fa82',
+          stepped: true,
+          data: cpuData
         }
-
-        for (let i = 0; i < res.length; i++) {
-          const item = res[i].Cr;
-          let cpu = 0;
-          let mem = 0;
-          for (var key in item) {
-            cpu = cpu + item[key][0]
-            mem = mem + item[key][1]
-          }
-
-          labels.push(res[i].BlockNumber);
-          cpuData.push(cpu)
-          memData.push(mem / 1000)
+      ]
+    }
+    mem.value = {
+      labels: labels,
+      datasets: [
+        {
+          label: 'MEM(GB)',
+          borderColor: "#b46d2e",
+          borderWidth: 1,
+          pointStyle: 'false',
+          backgroundColor: '#b46d2e',
+          stepped: true,
+          data: memData
         }
+      ]
+    }
+  })
+  // const ty = api.createType('WorkType', info.value.Type);
+  // const wid = { id: info.value.Nid, wtype: ty }
+  // if (info.value.Status == 3) {
+  // GetWetrics(props.clusterInfo.id, info.value).then((res: any) => {
+  //   let labels: string[] = []
+  //   let cpuData: number[] = []
+  //   let memData: number[] = []
 
-        cpu.value = {
-          labels: labels,
-          datasets: [
-            {
-              label: 'CPU(1 Unit = 1/1000 Core)',
-              borderColor: "#50fa82",
-              borderWidth: 1,
-              pointStyle: 'false',
-              backgroundColor: '#50fa82',
-              stepped: true,
-              data: cpuData
-            }
-          ]
-        }
-        mem.value = {
-          labels: labels,
-          datasets: [
-            {
-              label: 'MEM(GB)',
-              borderColor: "#b46d2e",
-              borderWidth: 1,
-              pointStyle: 'false',
-              backgroundColor: '#b46d2e',
-              stepped: true,
-              data: memData
-            }
-          ]
-        }
-      })
-    // } else {
-    //   $getQueryApi().entries("worker","proofsOfWork",[wid]).then((res: any) => {
-    //     let labels: string[] = []
-    //     let cpuData: number[] = []
-    //     let memData: number[] = []
+  //   if (res.length >= 30) {
+  //     res = res.slice(-30)
+  //   }
 
-    //     res.sort((a: any, b: any) => {
-    //       const k = a[0].toHuman();
-    //       const k2 = b[0].toHuman();
-    //       return parseInt(k[1].replaceAll(",", "")) - parseInt(k2[1].replaceAll(",", ""));
-    //     });
+  //   for (let i = 0; i < res.length; i++) {
+  //     const item = res[i].Cr;
+  //     let cpu = 0;
+  //     let mem = 0;
+  //     for (var key in item) {
+  //       cpu = cpu + item[key][0]
+  //       mem = mem + item[key][1]
+  //     }
 
-    //     if (res.length >= 30) {
-    //       res = res.slice(-30)
-    //     }
+  //     labels.push(res[i].BlockNumber);
+  //     cpuData.push(cpu)
+  //     memData.push(mem / 1000)
+  //   }
 
-    //     for (let i = 0; i < res.length; i++) {
-    //       const [key, exposure] = res[i];
-    //       const k = key.toHuman();
-    //       const item = exposure.toHuman();
-    //       labels.push(k[1]);
-    //       cpuData.push(item.cr.cpu)
-    //       memData.push(item.cr.mem / 1000)
-    //     }
-        
-    //     cpu.value = {
-    //       labels: labels,
-    //       datasets: [
-    //         {
-    //           label: 'CPU(1 Unit = 1/1000 Core)',
-    //           borderColor: "#50fa82",
-    //           borderWidth: 1,
-    //           pointStyle: 'false',
-    //           backgroundColor: '#50fa82',
-    //           stepped: true,
-    //           data: cpuData
-    //         }
-    //       ]
-    //     }
-    //     mem.value = {
-    //       labels: labels,
-    //       datasets: [
-    //         {
-    //           label: 'MEM(GB)',
-    //           borderColor: "#b46d2e",
-    //           borderWidth: 1,
-    //           pointStyle: 'false',
-    //           backgroundColor: '#b46d2e',
-    //           stepped: true,
-    //           data: memData
-    //         }
-    //       ]
-    //     }
-    //   })
-    // }
+  //   cpu.value = {
+  //     labels: labels,
+  //     datasets: [
+  //       {
+  //         label: 'CPU(1 Unit = 1/1000 Core)',
+  //         borderColor: "#50fa82",
+  //         borderWidth: 1,
+  //         pointStyle: 'false',
+  //         backgroundColor: '#50fa82',
+  //         stepped: true,
+  //         data: cpuData
+  //       }
+  //     ]
+  //   }
+  //   mem.value = {
+  //     labels: labels,
+  //     datasets: [
+  //       {
+  //         label: 'MEM(GB)',
+  //         borderColor: "#b46d2e",
+  //         borderWidth: 1,
+  //         pointStyle: 'false',
+  //         backgroundColor: '#b46d2e',
+  //         stepped: true,
+  //         data: memData
+  //       }
+  //     ]
+  //   }
+  // })
+  // } else {
+  //   $getQueryApi().entries("worker","proofsOfWork",[wid]).then((res: any) => {
+  //     let labels: string[] = []
+  //     let cpuData: number[] = []
+  //     let memData: number[] = []
 
-    window.addEventListener('resize', resetChartDebounce)
-    resetChart()
+  //     res.sort((a: any, b: any) => {
+  //       const k = a[0].toHuman();
+  //       const k2 = b[0].toHuman();
+  //       return parseInt(k[1].replaceAll(",", "")) - parseInt(k2[1].replaceAll(",", ""));
+  //     });
+
+  //     if (res.length >= 30) {
+  //       res = res.slice(-30)
+  //     }
+
+  //     for (let i = 0; i < res.length; i++) {
+  //       const [key, exposure] = res[i];
+  //       const k = key.toHuman();
+  //       const item = exposure.toHuman();
+  //       labels.push(k[1]);
+  //       cpuData.push(item.cr.cpu)
+  //       memData.push(item.cr.mem / 1000)
+  //     }
+
+  //     cpu.value = {
+  //       labels: labels,
+  //       datasets: [
+  //         {
+  //           label: 'CPU(1 Unit = 1/1000 Core)',
+  //           borderColor: "#50fa82",
+  //           borderWidth: 1,
+  //           pointStyle: 'false',
+  //           backgroundColor: '#50fa82',
+  //           stepped: true,
+  //           data: cpuData
+  //         }
+  //       ]
+  //     }
+  //     mem.value = {
+  //       labels: labels,
+  //       datasets: [
+  //         {
+  //           label: 'MEM(GB)',
+  //           borderColor: "#b46d2e",
+  //           borderWidth: 1,
+  //           pointStyle: 'false',
+  //           backgroundColor: '#b46d2e',
+  //           stepped: true,
+  //           data: memData
+  //         }
+  //       ]
+  //     }
+  //   })
+  // }
+
+  window.addEventListener('resize', resetChartDebounce)
+  resetChart()
 })
 
 onUnmounted(() => {
@@ -178,9 +230,9 @@ const resetChart = () => {
   let w = aw / (aw > 600 ? 2 : 1)
   let h = w / 1.5
   document.getElementById('cpu')!.style.minHeight = h + 'px'
-  document.getElementById('cpu')!.style.minWidth = (w-5) + 'px'
+  document.getElementById('cpu')!.style.minWidth = (w - 5) + 'px'
   document.getElementById('mem')!.style.minHeight = h + 'px'
-  document.getElementById('mem')!.style.minWidth = (w-5) + 'px'
+  document.getElementById('mem')!.style.minWidth = (w - 5) + 'px'
   document.getElementById('metrics')!.style.display = aw > 600 ? "flex" : "block"
 }
 </script>

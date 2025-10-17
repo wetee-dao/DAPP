@@ -51,9 +51,7 @@ import InkCall from "./inkCall.vue"
 import InkMeta from "./inkMeta.vue"
 import TEESetting from "./teeSetting.vue";
 import loadingBox from "@/components/loading-box.vue";
-import { $getTxProvider } from "@/plugins/chain";
-import { GetClusterInfo, GetServices } from "@/apis/detail";
-import { hexToString } from "@polkadot/util";
+import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
 
 const props = defineProps(["info", "openTag", "close"])
 const activeName = ref(props.openTag ?? "")
@@ -88,23 +86,28 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 
 onMounted(() => {
   let item = JSON.parse(JSON.stringify(info.value))
-  if (props.openTag == "") {
-    if (info.value.Type == "INK") {
-      activeName.value = "inkCall"
-    } else {
-      activeName.value = "metrics"
-    }
-  }
-  if (item.Type == "INK") {
-    inkInfo.value = item
-    loader.value = 2
-  } else {
-    GetTEEInfo(item)
-  }
+  GetInfo(item)
+  // if (props.openTag == "") {
+  //   if (info.value.Type == "INK") {
+  //     activeName.value = "inkCall"
+  //   } else {
+  //     activeName.value = "metrics"
+  //   }
+  // }
+  // if (item.Type == "INK") {
+  //   inkInfo.value = item
+  //   loader.value = 2
+  // } else {
+  //   GetTEEInfo(item)
+  // }
 })
 
 const GetInfo = async (item: any) => {
   item = JSON.parse(JSON.stringify(item))
+  const podext = await $getQueryApi().podExtInfo(item.Nid)
+  let cinfo = podext[1]
+  cinfo.id = podext[0]
+  clusterInfo.value = cinfo
   // if (item.Type == "INK") {
   //   clusterInfo.value = null
   //   service.value = []
@@ -112,9 +115,9 @@ const GetInfo = async (item: any) => {
   //   activeName.value = "inkCall"
   //   loader.value = 2
   // } else {
-    activeName.value = "metrics"
-    inkInfo.value = null
-    GetTEEInfo(item)
+  activeName.value = "metrics"
+  inkInfo.value = null
+  GetTEEInfo(item)
   // }
 }
 

@@ -3,12 +3,11 @@ import { $getQueryApi } from "@/plugins/chain";
 import { ss58toHex } from "@/utils/chain";
 import { hexToString } from "@polkadot/util";
 
-export async function GetLogs(cluster: number, c: any) {
+export async function GetLogs(cluster: any, c: any) {
   let params = `
     query{
 			work_loglist(
-				work_type: "`+ c.Type + `",
-				work_id: `+ c.Nid + `,
+				pod_id: `+ c.Id + `,
 				page: 1,
 				size: 10,
 			)
@@ -23,12 +22,12 @@ export async function GetLogs(cluster: number, c: any) {
   return JSON.parse(data).reverse()
 }
 
-export async function GetWetrics(cluster: number, c: any) {
+export async function GetWetrics(cluster: any, c: any) {
+  console.log(c)
   let params = `
     query{
 			work_wetriclist(
-				work_type: "`+ c.Type + `",
-				work_id: `+ c.Nid + `,
+				pod_id: `+ c.Id + `,
 				page: 1,
 				size: 60,
 			)
@@ -44,14 +43,13 @@ export async function GetWetrics(cluster: number, c: any) {
   return JSON.parse(data).reverse()
 }
 
-export async function GetServices(cluster: number, c: any) {
+export async function GetServices(cluster: any, c: any) {
   let project_id = ss58toHex(c.ProjectId)
   let params = `
     query{
       work_servicelist(
         project_id:"`+ project_id + `",
-        work_type:"`+ c.Type + `",
-        work_id:`+ c.Nid + `,
+        pod_id:`+ c.Id + `,
       ){
         Type
         Ports{
@@ -73,18 +71,8 @@ export async function GetServices(cluster: number, c: any) {
   return data
 }
 
-export async function GetClusterDns(cluster: number) {
-  const cinfo = await GetClusterInfo(cluster)
-  return hexToString(cinfo.ip[0].domain) + ':' + cinfo.port.replaceAll(",", "")
+export async function GetClusterDns(cinfo: any) {
+  return cinfo.ip.domain + ':30000'
+  // cinfo.port.replaceAll(",", "")
 }
 
-export async function GetClusterInfo(cluster: number) {
-  let clusterInfo = window.localStorage.getItem("cluster_" + cluster)
-  if (clusterInfo) {
-    return JSON.parse(clusterInfo)
-  }
-
-  const info = await $getQueryApi().query("worker","k8sClusters",[cluster])
-  window.localStorage.setItem("cluster_" + cluster, JSON.stringify(info))
-  return info
-}

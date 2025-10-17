@@ -1,22 +1,20 @@
 <template>
   <div class="header-wrap flex" v-show="isShow" key="header">
     <div class="header-left" @click="menuClick">
-      <!-- <div class="menu-list">
+      <div class="menu-list">
         <div :class="isFirst
         ? 'menu-item'
         : menuShow
         ? 'menu-item-active menu-item'
         : 'menu-item menu-item-out'
       " v-for="item in 3" :key="item" />
-      </div> -->
+      </div>
       <div class="header-logo" @click="home">
         <Logo />
       </div>
-      <div class="cur-service">
+      <!-- <div class="cur-service">
         <div class="t">eTEE</div>
-        <!-- <div class="t" v-for="item in LogoText.split(' ')">{{ item }}</div> -->
-        <!-- <i class="icon select-icon">&#xe600;</i> -->
-      </div>
+      </div> -->
     </div>
 
     <HeaderNav :key="pkey" :paths="paths" v-if="paths.length > 0" />
@@ -80,12 +78,20 @@
   </div>
   <NavList v-show="isShow" :key="module" :module="module" @closeClick="closeClick" />
   <div class="logo-bg" v-show="isShow" :showName="true">
+    <div class="menu-list">
+      <div :class="isFirst
+      ? 'menu-item'
+      : menuShow
+      ? 'menu-item-active menu-item'
+      : 'menu-item menu-item-out'
+    " v-for="item in 3" :key="item" />
+    </div>
     <div class="header-logo" @click="home">
-      <Logo />
+      <Logo :fill="true" />
     </div>
-    <div class="cur-service">
+    <!-- <div class="cur-service">
       <div class="t">eTEE</div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -209,7 +215,7 @@ const setTheme = (t: string) => {
 }
 
 .menu-list {
-  margin: 0 0px 0 20px;
+  margin: 0 5px 0 0px;
 }
 
 .header-space {
@@ -236,10 +242,12 @@ const setTheme = (t: string) => {
 }
 
 .header-logo {
-  height: 20px;
-  width: 20px;
+  // height: 50px;
+  width: 50px;
   margin-right: 4px;
   overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
 .cur-service {
@@ -427,12 +435,11 @@ const setTheme = (t: string) => {
 
 .logo-bg {
   position: fixed !important;
-  top: 17px !important;
-  left: -2px !important;
+  top: 20px !important;
+  left: 15px !important;
   display: flex;
   align-items: center;
   transform: scale(1.15);
-  width: 120px;
   justify-content: center;
 
   .cur-service {

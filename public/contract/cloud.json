@@ -1,6 +1,6 @@
 {
   "source": {
-    "hash": "0x2d908ece13089bf36dfa279cc7e26abc105aad6adeaa094b9c2b1d61359e3c11",
+    "hash": "0x737d597e6dd4e69519b27df955cf2982776ef7bb9322a0e5c6505257b6ea9ef8",
     "language": "ink! 6.0.0-alpha",
     "compiler": "rustc 1.88.0",
     "build_info": {
@@ -78,13 +78,13 @@
         "displayName": [
           "ChainExtension"
         ],
-        "type": 150
+        "type": 157
       },
       "hash": {
         "displayName": [
           "Hash"
         ],
-        "type": 149
+        "type": 156
       },
       "maxEventTopics": 4,
       "staticBufferSize": 16384,
@@ -333,7 +333,9 @@
           }
         ],
         "default": false,
-        "docs": [],
+        "docs": [
+          " Mint pod ==> Deduct Resource Usage Fees"
+        ],
         "label": "mint_pod",
         "mutates": true,
         "payable": false,
@@ -652,12 +654,40 @@
       {
         "args": [
           {
+            "label": "pod_id",
+            "type": {
+              "displayName": [
+                "u64"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "default": false,
+        "docs": [
+          " Pod ext info"
+        ],
+        "label": "pod_ext_info",
+        "mutates": false,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 129
+        },
+        "selector": "0xd80935c3"
+      },
+      {
+        "args": [
+          {
             "label": "pod_ids",
             "type": {
               "displayName": [
                 "Vec"
               ],
-              "type": 129
+              "type": 136
             }
           }
         ],
@@ -673,7 +703,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 130
+          "type": 137
         },
         "selector": "0x711ca8a1"
       },
@@ -747,7 +777,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 138
+          "type": 145
         },
         "selector": "0xf1660056"
       },
@@ -784,7 +814,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 141
+          "type": 148
         },
         "selector": "0xae4aafb3"
       },
@@ -821,7 +851,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 143
+          "type": 150
         },
         "selector": "0x23a11a66"
       },
@@ -923,7 +953,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 143
+          "type": 150
         },
         "selector": "0xc44e70a9"
       },
@@ -996,6 +1026,43 @@
         ],
         "default": false,
         "docs": [
+          " Mint disk == pay for disk usage"
+        ],
+        "label": "mint_disk",
+        "mutates": true,
+        "payable": false,
+        "returnType": {
+          "displayName": [
+            "ink",
+            "MessageResult"
+          ],
+          "type": 106
+        },
+        "selector": "0x07093d89"
+      },
+      {
+        "args": [
+          {
+            "label": "user",
+            "type": {
+              "displayName": [
+                "Address"
+              ],
+              "type": 0
+            }
+          },
+          {
+            "label": "disk_id",
+            "type": {
+              "displayName": [
+                "u64"
+              ],
+              "type": 5
+            }
+          }
+        ],
+        "default": false,
+        "docs": [
           " Get disk info"
         ],
         "label": "disk",
@@ -1006,7 +1073,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 145
+          "type": 152
         },
         "selector": "0x5f0b4f4b"
       },
@@ -1052,7 +1119,7 @@
             "ink",
             "MessageResult"
           ],
-          "type": 146
+          "type": 153
         },
         "selector": "0x264737c4"
       },
@@ -5186,22 +5253,12 @@
       "id": 129,
       "type": {
         "def": {
-          "sequence": {
-            "type": 5
-          }
-        }
-      }
-    },
-    {
-      "id": 130,
-      "type": {
-        "def": {
           "variant": {
             "variants": [
               {
                 "fields": [
                   {
-                    "type": 131
+                    "type": 130
                   }
                 ],
                 "index": 0,
@@ -5222,7 +5279,7 @@
         "params": [
           {
             "name": "T",
-            "type": 131
+            "type": 130
           },
           {
             "name": "E",
@@ -5235,12 +5292,47 @@
       }
     },
     {
+      "id": 130,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "None"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 131
+                  }
+                ],
+                "index": 1,
+                "name": "Some"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 131
+          }
+        ],
+        "path": [
+          "Option"
+        ]
+      }
+    },
+    {
       "id": 131,
       "type": {
         "def": {
-          "sequence": {
-            "type": 132
-          }
+          "tuple": [
+            5,
+            132,
+            6
+          ]
         }
       }
     },
@@ -5248,10 +5340,240 @@
       "id": 132,
       "type": {
         "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "name",
+                "type": 6,
+                "typeName": "Vec<u8>"
+              },
+              {
+                "name": "owner",
+                "type": 0,
+                "typeName": "Address"
+              },
+              {
+                "name": "level",
+                "type": 2,
+                "typeName": "u8"
+              },
+              {
+                "name": "region_id",
+                "type": 7,
+                "typeName": "u32"
+              },
+              {
+                "name": "start_block",
+                "type": 7,
+                "typeName": "BlockNumber"
+              },
+              {
+                "name": "stop_block",
+                "type": 122,
+                "typeName": "Option<BlockNumber>"
+              },
+              {
+                "name": "terminal_block",
+                "type": 122,
+                "typeName": "Option<BlockNumber>"
+              },
+              {
+                "name": "p2p_id",
+                "type": 30,
+                "typeName": "AccountId"
+              },
+              {
+                "name": "ip",
+                "type": 133,
+                "typeName": "Ip"
+              },
+              {
+                "name": "port",
+                "type": 7,
+                "typeName": "u32"
+              },
+              {
+                "name": "status",
+                "type": 2,
+                "typeName": "u8"
+              }
+            ]
+          }
+        },
+        "path": [
+          "subnet",
+          "datas",
+          "K8sCluster"
+        ]
+      }
+    },
+    {
+      "id": 133,
+      "type": {
+        "def": {
+          "composite": {
+            "fields": [
+              {
+                "name": "ipv4",
+                "type": 122,
+                "typeName": "Option<u32>"
+              },
+              {
+                "name": "ipv6",
+                "type": 134,
+                "typeName": "Option<u128>"
+              },
+              {
+                "name": "domain",
+                "type": 135,
+                "typeName": "Option<Vec<u8>>"
+              }
+            ]
+          }
+        },
+        "path": [
+          "subnet",
+          "datas",
+          "Ip"
+        ]
+      }
+    },
+    {
+      "id": 134,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "None"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 50
+                  }
+                ],
+                "index": 1,
+                "name": "Some"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 50
+          }
+        ],
+        "path": [
+          "Option"
+        ]
+      }
+    },
+    {
+      "id": 135,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "index": 0,
+                "name": "None"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 6
+                  }
+                ],
+                "index": 1,
+                "name": "Some"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 6
+          }
+        ],
+        "path": [
+          "Option"
+        ]
+      }
+    },
+    {
+      "id": 136,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 5
+          }
+        }
+      }
+    },
+    {
+      "id": 137,
+      "type": {
+        "def": {
+          "variant": {
+            "variants": [
+              {
+                "fields": [
+                  {
+                    "type": 138
+                  }
+                ],
+                "index": 0,
+                "name": "Ok"
+              },
+              {
+                "fields": [
+                  {
+                    "type": 105
+                  }
+                ],
+                "index": 1,
+                "name": "Err"
+              }
+            ]
+          }
+        },
+        "params": [
+          {
+            "name": "T",
+            "type": 138
+          },
+          {
+            "name": "E",
+            "type": 105
+          }
+        ],
+        "path": [
+          "Result"
+        ]
+      }
+    },
+    {
+      "id": 138,
+      "type": {
+        "def": {
+          "sequence": {
+            "type": 139
+          }
+        }
+      }
+    },
+    {
+      "id": 139,
+      "type": {
+        "def": {
           "tuple": [
             5,
             9,
-            133,
+            140,
             7,
             7,
             2
@@ -5260,49 +5582,49 @@
       }
     },
     {
-      "id": 133,
+      "id": 140,
       "type": {
         "def": {
           "sequence": {
-            "type": 134
+            "type": 141
           }
         }
       }
     },
     {
-      "id": 134,
+      "id": 141,
       "type": {
         "def": {
           "tuple": [
             5,
-            135
+            142
           ]
         }
       }
     },
     {
-      "id": 135,
+      "id": 142,
       "type": {
         "def": {
           "tuple": [
             70,
-            136
+            143
           ]
         }
       }
     },
     {
-      "id": 136,
+      "id": 143,
       "type": {
         "def": {
           "sequence": {
-            "type": 137
+            "type": 144
           }
         }
       }
     },
     {
-      "id": 137,
+      "id": 144,
       "type": {
         "def": {
           "variant": {
@@ -5335,7 +5657,7 @@
       }
     },
     {
-      "id": 138,
+      "id": 145,
       "type": {
         "def": {
           "variant": {
@@ -5343,7 +5665,7 @@
               {
                 "fields": [
                   {
-                    "type": 139
+                    "type": 146
                   }
                 ],
                 "index": 0,
@@ -5364,7 +5686,7 @@
         "params": [
           {
             "name": "T",
-            "type": 139
+            "type": 146
           },
           {
             "name": "E",
@@ -5377,17 +5699,17 @@
       }
     },
     {
-      "id": 139,
+      "id": 146,
       "type": {
         "def": {
           "sequence": {
-            "type": 140
+            "type": 147
           }
         }
       }
     },
     {
-      "id": 140,
+      "id": 147,
       "type": {
         "def": {
           "tuple": [
@@ -5398,7 +5720,7 @@
       }
     },
     {
-      "id": 141,
+      "id": 148,
       "type": {
         "def": {
           "variant": {
@@ -5406,7 +5728,7 @@
               {
                 "fields": [
                   {
-                    "type": 142
+                    "type": 149
                   }
                 ],
                 "index": 0,
@@ -5427,7 +5749,7 @@
         "params": [
           {
             "name": "T",
-            "type": 142
+            "type": 149
           },
           {
             "name": "E",
@@ -5440,7 +5762,7 @@
       }
     },
     {
-      "id": 142,
+      "id": 149,
       "type": {
         "def": {
           "variant": {
@@ -5473,7 +5795,7 @@
       }
     },
     {
-      "id": 143,
+      "id": 150,
       "type": {
         "def": {
           "variant": {
@@ -5481,7 +5803,7 @@
               {
                 "fields": [
                   {
-                    "type": 144
+                    "type": 151
                   }
                 ],
                 "index": 0,
@@ -5502,7 +5824,7 @@
         "params": [
           {
             "name": "T",
-            "type": 144
+            "type": 151
           },
           {
             "name": "E",
@@ -5515,7 +5837,7 @@
       }
     },
     {
-      "id": 144,
+      "id": 151,
       "type": {
         "def": {
           "variant": {
@@ -5557,7 +5879,7 @@
       }
     },
     {
-      "id": 145,
+      "id": 152,
       "type": {
         "def": {
           "variant": {
@@ -5565,7 +5887,7 @@
               {
                 "fields": [
                   {
-                    "type": 137
+                    "type": 144
                   }
                 ],
                 "index": 0,
@@ -5586,7 +5908,7 @@
         "params": [
           {
             "name": "T",
-            "type": 137
+            "type": 144
           },
           {
             "name": "E",
@@ -5599,7 +5921,7 @@
       }
     },
     {
-      "id": 146,
+      "id": 153,
       "type": {
         "def": {
           "variant": {
@@ -5607,7 +5929,7 @@
               {
                 "fields": [
                   {
-                    "type": 147
+                    "type": 154
                   }
                 ],
                 "index": 0,
@@ -5628,7 +5950,7 @@
         "params": [
           {
             "name": "T",
-            "type": 147
+            "type": 154
           },
           {
             "name": "E",
@@ -5641,17 +5963,17 @@
       }
     },
     {
-      "id": 147,
+      "id": 154,
       "type": {
         "def": {
           "sequence": {
-            "type": 148
+            "type": 155
           }
         }
       }
     },
     {
-      "id": 148,
+      "id": 155,
       "type": {
         "def": {
           "tuple": [
@@ -5662,7 +5984,7 @@
       }
     },
     {
-      "id": 149,
+      "id": 156,
       "type": {
         "def": {
           "composite": {
@@ -5682,7 +6004,7 @@
       }
     },
     {
-      "id": 150,
+      "id": 157,
       "type": {
         "def": {
           "variant": {}
