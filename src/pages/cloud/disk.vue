@@ -133,7 +133,7 @@ const del = async (item: any) => {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
-        margin-bottom: 5px;
+        // margin-bottom: 5px;
     }
 }
 </style>

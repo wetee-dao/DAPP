@@ -31,10 +31,11 @@ class InkApi {
 
     // list pods
     async pods(start: null | number, size: number) {
-        return await this.ink_query(this.cloudContract, "userPods", {
+        let pods = await this.ink_query(this.cloudContract, "userPods", {
             start: start,
             size: size
         })
+        return pods
     }
 
     // list secrets
@@ -337,9 +338,9 @@ function formatInputData(arr: Uint8Array): Uint8Array {
 }
 
 export const Ink = new InkApi({
-    subnetContract: "0x7b6c6a1a8e8dae37a75adc89e353087b44f81a6a",
+    subnetContract: "0x8cae9e8b063357d407760c78182ea24c37d9d26d",
     subnetAbiUrl: "contract/subnet.json",
-    cloudContract: "0xa733e15704ce7ebcc649fb5bcff9dd62a2c510aa",
+    cloudContract: "0xd9602d94b92f5af709cb95ab159193930d4355f5",
     cloudAbiUrl: "contract/cloud.json",
 })
 

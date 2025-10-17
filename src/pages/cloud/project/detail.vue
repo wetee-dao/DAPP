@@ -11,7 +11,7 @@
       </span>
       <i class="icon right" @click="closeClick">&#xe604;</i>
     </div>
-    <div v-if="loader == 1" class="box" :key="info.Id">
+    <div class="box" :key="info.Id">
       <el-tabs v-model="activeName" id="project-detail-tabs" class="tabs" @tab-click="handleClick">
         <el-tab-pane label="Metrics" name="metrics" lazy>
           <Metrics :info="info" :clusterInfo="clusterInfo" />
@@ -27,7 +27,7 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div v-if="loader == 2" class="box" :key="info.Id">
+    <!-- <div v-if="loader == 2" class="box" :key="info.Id">
       <el-tabs v-model="activeName" id="project-ink-tabs" class="tabs" @tab-click="handleClick">
         <el-tab-pane label="Ink! contract meta" name="inkMeta" lazy>
           <InkMeta :inkInfo="inkInfo" />
@@ -36,7 +36,7 @@
           <InkCall :inkInfo="inkInfo" />
         </el-tab-pane>
       </el-tabs>
-    </div>
+    </div> -->
     <loadingBox class="loader-wrapper" v-if="loader == 0" />
   </div>
 </template>
@@ -73,7 +73,7 @@ const workType: any = {
 watch(() => props.info, (val: any, oldVal: any) => {
   if (val.Nid != oldVal.Nid) {
     info.value = val
-    loader.value = 0
+    // loader.value = 0
     console.log(info)
     GetInfo(val)
   }
@@ -105,17 +105,17 @@ onMounted(() => {
 
 const GetInfo = async (item: any) => {
   item = JSON.parse(JSON.stringify(item))
-  if (item.Type == "INK") {
-    clusterInfo.value = null
-    service.value = []
-    inkInfo.value = item
-    activeName.value = "inkCall"
-    loader.value = 2
-  } else {
+  // if (item.Type == "INK") {
+  //   clusterInfo.value = null
+  //   service.value = []
+  //   inkInfo.value = item
+  //   activeName.value = "inkCall"
+  //   loader.value = 2
+  // } else {
     activeName.value = "metrics"
     inkInfo.value = null
     GetTEEInfo(item)
-  }
+  // }
 }
 
 const GetTEEInfo = async (item: any) => {
@@ -151,7 +151,6 @@ const GetTEEInfo = async (item: any) => {
   max-width: calc(100vw - 500px);
   height: calc(100vh - 89px);
   position: relative;
-  margin-top: 85px;
   border: 1Px solid rgba($gray-bg-rgb, 0.1);
   border-bottom: 0;
   border-right: 0;
@@ -234,7 +233,7 @@ const GetTEEInfo = async (item: any) => {
   :deep(.el-tabs) {
     height: 100%;
     display: flex;
-    flex-direction: column-reverse;
+    // flex-direction: column-reverse;
 
     .el-tabs__content {
       flex: 1;
