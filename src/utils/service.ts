@@ -28,16 +28,17 @@ export default <insType[]>[
     module: "disk",
   },
   {
-    name: "Bridge",
-    icon: "bridge",
-    url: "/bridge",
-    module: "bridge",
-  },
-  {
     name: "Miner",
     icon: "miner",
     url: "/miner",
     module: "miner",
+  },
+  {
+    name: "Bridge",
+    icon: "bridge",
+    url: "/bridge",
+    module: "bridge",
+    disabled: true,
   },
   {
     name: "MPC",

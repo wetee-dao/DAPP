@@ -103,32 +103,32 @@ const contracts = ref<any[]>([]);
 const crs = ref<any[]>([]);
 
 const getClusters = async (user: string) => {
-  const cList = await $getQueryApi().entries("worker","k8sClusters",[]);
-  console.log(cList);
-  let cs: any[] = [];
-  cList.forEach((c: any) => {
-    cs.push(c.value);
-  });
+  // const cList = await $getQueryApi().entries("worker","k8sClusters",[]);
+  // console.log(cList);
+  // let cs: any[] = [];
+  // cList.forEach((c: any) => {
+  //   cs.push(c.value);
+  // });
 
-  const crList = await $getQueryApi().entries("worker","crs",[]);
-  let crsCur: any[] = [];
-  crList.forEach((c: any) => {
-    crsCur.push(c.value);
-  });
+  // const crList = await $getQueryApi().entries("worker","crs",[]);
+  // let crsCur: any[] = [];
+  // crList.forEach((c: any) => {
+  //   crsCur.push(c.value);
+  // });
 
-  let contractCur: any[] = [];
-  for (let i = 0; i < cList.length; i++) {
-    const contractWrap = await $getQueryApi().entries("worker","clusterContracts",[cs[i].id]);
-    let  clusterContracts = []
-    for (let j = 0; j < contractWrap.length; j++) {
-      clusterContracts.push(contractWrap[j][1])
-    }
-    contractCur.push(clusterContracts);
-  }
+  // let contractCur: any[] = [];
+  // for (let i = 0; i < cList.length; i++) {
+  //   const contractWrap = await $getQueryApi().entries("worker","clusterContracts",[cs[i].id]);
+  //   let  clusterContracts = []
+  //   for (let j = 0; j < contractWrap.length; j++) {
+  //     clusterContracts.push(contractWrap[j][1])
+  //   }
+  //   contractCur.push(clusterContracts);
+  // }
 
-  crs.value = crsCur;
-  clusterList.value = cs;
-  contracts.value = contractCur;
+  // crs.value = crsCur;
+  // clusterList.value = cs;
+  // contracts.value = contractCur;
 };
 
 const storeShow = (s: string) => {

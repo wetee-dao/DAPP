@@ -3,15 +3,15 @@
     <div class="login-box">
       <div class="login-left-box">
         <div class="login-img-title">
-          <Logo class="logo-svg" :showName="true" />ETEE
+          <Logo class="logo-svg" :fill="true" />
         </div>
         <div class="login-img-desc">
-          Confidential computing, calculate trustworthy future
+          Trusted Trustless Computing Network
         </div>
       </div>
       <div class="login-right-box">
         <div class="top-logo">
-          <Logo :showName="true" />
+          <Logo :fill="true" />
         </div>
         <div class="login-title">Polkadot Wallet</div>
         <div

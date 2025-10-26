@@ -38,7 +38,6 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { stringToHex } from "@polkadot/util";
 import { getSS5842, ss58toHex } from "@/utils/chain";
-import { getProjectList } from "@/apis/project";
 const global = useGlobelProperties()
 
 const store = useStore();
@@ -52,9 +51,7 @@ const GotoProject = (item: any) => {
 
 const add = () => {
   global.$AddProject(router, store, () => {
-    getProjectList(store.state.userInfo.addr, true).then((datas: any) => {
-      projects.value = datas
-    })
+
   })
 };
 
@@ -69,9 +66,7 @@ const ss58toIcon = (item: any) => {
 }
 
 onMounted(async () => {
-  getProjectList(store.state.userInfo.addr).then((datas: any) => {
-    projects.value = datas
-  })
+
 });
 </script>
 

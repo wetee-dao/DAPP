@@ -14,7 +14,7 @@
                     # {{ scope.row.id }}
                 </template>
             </el-table-column>
-            <el-table-column prop="data.SecretSSD[0]" label="Key Name" width="180" />
+            <el-table-column prop="data.SecretSSD[0]" label="Disk Name" width="180" />
             <el-table-column label="Size" width="180" >
                 <template #default="scope">
                     {{ scope.row.data.SecretSSD[2] }} <span class="size">GB</span>
@@ -22,7 +22,7 @@
             </el-table-column>
             <el-table-column label="Hash">
                 <template #default="scope">
-                    {{ scope.row.data.SecretSSD[1] }}&nbsp;&nbsp;<span class="action">{{ scope.row.data.SecretSSD[1] ?"Update key":"Init key"}}</span>
+                    {{ scope.row.data.SecretSSD[1] }}&nbsp;&nbsp;<span v-if="!scope.row.data.SecretSSD[1]" class="action">Init key</span>
                 </template>
             </el-table-column>
             <el-table-column fixed="right" label="Operations" width="150">

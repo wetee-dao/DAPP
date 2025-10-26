@@ -106,7 +106,6 @@ import Logo from "./icons/logo.vue";
 import Network from "./network.vue";
 import NetworkSelect from "./network-select.vue";
 import { ss58toHex } from "@/utils/chain";
-import { getProject } from "@/apis/project";
 import { CurrentChainNode } from "@/plugins/chain";
 
 const router = useRouter();
@@ -134,10 +133,10 @@ const computePath = async (p: string) => {
     let path = ps[i];
     let name = path
     if (pathPre == "/cloud") {
-      const p = await getProject(user.value.addr, path)
-      if (p != null) {
-        name = p.name.toLowerCase()
-      }
+      // const p = await getProject(user.value.addr, path)
+      // if (p != null) {
+      //   name = p.name.toLowerCase()
+      // }
     }
 
     cpaths.push({

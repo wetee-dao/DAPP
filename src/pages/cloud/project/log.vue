@@ -35,7 +35,7 @@ watch(() => props.activeName, (newValue, oldValue) => {
 })
 
 onMounted(() => {
-  GetLogs(props.clusterInfo.id, info.value).then((res: any) => {
+  GetLogs(props.clusterInfo, info.value).then((res: any) => {
     const ansiUp = new AnsiUp()
     res.map((item: any) => {
       item.Logs = item.Logs.map((m: string) => {

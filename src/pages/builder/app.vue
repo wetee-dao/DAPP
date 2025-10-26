@@ -96,19 +96,19 @@ onMounted(async () => {
 });
 
 const getInfo = async () => {
-    app.value = await $getQueryApi().query("store", "apps", [id])
+    // app.value = await $getQueryApi().query("store", "apps", [id])
 
-    const appsVersion = await $getQueryApi().entries("store", "versionLists", [id])
-    versions.value = appsVersion.map((version: any) => {
-        let v = version.value
-        return {
-            version: version.keys[1],
-            block: getNumstrfromChain(v[1]),
-            value: v[0],
-        };
-    }).reverse()
+    // const appsVersion = await $getQueryApi().entries("store", "versionLists", [id])
+    // versions.value = appsVersion.map((version: any) => {
+    //     let v = version.value
+    //     return {
+    //         version: version.keys[1],
+    //         block: getNumstrfromChain(v[1]),
+    //         value: v[0],
+    //     };
+    // }).reverse()
 
-    appStaking.value = await $getQueryApi().query("store", "appStakings", [id])
+    // appStaking.value = await $getQueryApi().query("store", "appStakings", [id])
 }
 </script>
 

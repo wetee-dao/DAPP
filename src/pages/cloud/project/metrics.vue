@@ -47,7 +47,6 @@ const options = ref({
 })
 
 onMounted(() => {
-  console.log(props.clusterInfo)
   GetWetrics(props.clusterInfo, info.value).then((res: any) => {
     let labels: string[] = []
     let cpuData: number[] = []
@@ -67,7 +66,7 @@ onMounted(() => {
       }
 
       labels.push(res[i].BlockNumber);
-      cpuData.push(cpu)
+      cpuData.push(cpu/10)
       memData.push(mem / 1000)
     }
 
@@ -75,7 +74,7 @@ onMounted(() => {
       labels: labels,
       datasets: [
         {
-          label: 'CPU(1 Unit = 1/1000 Core)',
+          label: 'CPU(%)',
           borderColor: "#50fa82",
           borderWidth: 1,
           pointStyle: 'false',
@@ -249,6 +248,7 @@ const resetChart = () => {
 
   .metrics-item {
     padding: 10Px;
+    overflow: hidden;
   }
 }
 </style>

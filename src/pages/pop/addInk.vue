@@ -144,8 +144,6 @@ import { Close, Upload } from '@element-plus/icons-vue';
 import { getUrlParams } from "@/utils/pop";
 import { deepCopy } from "@/utils/object";
 import { readFileAsync } from "@/utils/dom";
-import { addContractCode } from "@/apis/contract_indexer";
-import { getProjectByID } from "@/apis/project";
 import { Abi } from "@polkadot/api-contract";
 import { AbiConstructor, AbiMessageParam } from "@polkadot/api-contract/types";
 import { ApiPromise } from "@polkadot/api";
@@ -190,17 +188,17 @@ const codeHashUrlParam = ref<string | undefined>(undefined)
 const uploadFile = async (options: UploadRequestOptions): Promise<XMLHttpRequest | Promise<unknown>> => {
   const file = options.file as File;
   const data = await readFileAsync(file)
-  const project = await getProjectByID(props.store.state.userInfo.addr, pid!)
+  // const project = await getProjectByID(props.store.state.userInfo.addr, pid!)
 
-  await addContractCode({
-    project: project.addr,
-    abi: data
-  })
+  // await addContractCode({
+  //   project: project.addr,
+  //   abi: data
+  // })
 
   let api: ApiPromise | undefined = undefined;
   await $getTxProvider(async (chain): Promise<void> => {
     api = chain.client
-  }, undefined, true);
+  }, undefined);
   const cabi = new Abi(data, api!.registry.getChainProperties());
 
   const name = cabi.info.contract.name.toString();
@@ -284,7 +282,7 @@ const dryTry = async () => {
     console.log("gasRequired ", refTime2, proofSize2)
 
     dryRun.value = [refTime, proofSize, refTime2, proofSize2]
-  }, undefined, true);
+  }, undefined);
 }
 
 // export function createConstructorOptions(registry: Registry, data?: AbiConstructor[]): DropdownOption<number>[] {

@@ -75,33 +75,33 @@ onMounted(async () => {
 });
 
 const getList = async () => {
-  const appsIds = await $getQueryApi().entries("store", "accountApps", [store.state.userInfo.addr])
-  const ids = appsIds.map((item: any) => {
-    return getNumstrfromChain(item.keys[1])
-  })
-  if (ids.length == 0) {
-    apps.value = [];
-    versions.value = {};
-    return
-  }
+  // const appsIds = await $getQueryApi().entries("store", "accountApps", [store.state.userInfo.addr])
+  // const ids = appsIds.map((item: any) => {
+  //   return getNumstrfromChain(item.keys[1])
+  // })
+  // if (ids.length == 0) {
+  //   apps.value = [];
+  //   versions.value = {};
+  //   return
+  // }
 
-  const appsList = await $getQueryApi().multi_query("store", "apps", ids)
-  apps.value = appsList;
+  // const appsList = await $getQueryApi().multi_query("store", "apps", ids)
+  // apps.value = appsList;
 
-  let cversions: any = {}
-  for (let i = 0; i < ids.length; i++) {
-    const item = ids[i]
-    const appsVersion = await $getQueryApi().entries("store", "versionLists", [item])
-    cversions[item] = appsVersion.map((version: any) => {
-      let v = version.value
-      return {
-        version: version.keys[1],
-        block: getNumstrfromChain(v[1]),
-        value: v[0][0],
-      };
-    }).reverse()
-  }
-  versions.value = cversions
+  // let cversions: any = {}
+  // for (let i = 0; i < ids.length; i++) {
+  //   const item = ids[i]
+  //   const appsVersion = await $getQueryApi().entries("store", "versionLists", [item])
+  //   cversions[item] = appsVersion.map((version: any) => {
+  //     let v = version.value
+  //     return {
+  //       version: version.keys[1],
+  //       block: getNumstrfromChain(v[1]),
+  //       value: v[0][0],
+  //     };
+  //   }).reverse()
+  // }
+  // versions.value = cversions
 }
 </script>
 

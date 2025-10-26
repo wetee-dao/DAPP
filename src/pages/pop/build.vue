@@ -388,35 +388,35 @@ onMounted(async () => {
 });
 
 const getInfo = async () => {
-  if (!mod) {
-    return
-  }
-  let id = parseInt(mod)
-  const app = await $getQueryApi().query("store", "apps", [id])
-  name.value = hexToString(app.name)
+  // if (!mod) {
+  //   return
+  // }
+  // let id = parseInt(mod)
+  // const app = await $getQueryApi().query("store", "apps", [id])
+  // name.value = hexToString(app.name)
 
-  const appsVersion = await $getQueryApi().entries("store", "versionLists", [id])
-  const versions = appsVersion.map((version: any) => {
-    let v = version.value
-    return {
-      version: version.keys[1],
-      block: getNumstrfromChain(v[1]),
-      value: v[0],
-    };
-  }).reverse()
+  // const appsVersion = await $getQueryApi().entries("store", "versionLists", [id])
+  // const versions = appsVersion.map((version: any) => {
+  //   let v = version.value
+  //   return {
+  //     version: version.keys[1],
+  //     block: getNumstrfromChain(v[1]),
+  //     value: v[0],
+  //   };
+  // }).reverse()
 
-  if (versions.length > 0) {
-    const last = versions[0]
-    version.value = parseInt(last.version) + 1
+  // if (versions.length > 0) {
+  //   const last = versions[0]
+  //   version.value = parseInt(last.version) + 1
 
-    const cs = last.value.map((c: any) => {
-      return chainToContainer(c)
-    })
+  //   const cs = last.value.map((c: any) => {
+  //     return chainToContainer(c)
+  //   })
 
-    console.log(cs)
-    containers.value = cs
-    form.value = cs[0]
-  }
+  //   console.log(cs)
+  //   containers.value = cs
+  //   form.value = cs[0]
+  // }
 }
 </script>
 

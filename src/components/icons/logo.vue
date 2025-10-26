@@ -1,15 +1,5 @@
 <template>
-    <!-- <svg class="logo-icon"viewBox="0 0 358 351" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="logo-g" transform="translate(-89.000000, -92.000000)" fill="#50FA82" fill-rule="nonzero">
-            <g id="编组" transform="translate(89.000000, 92.000000)">
-                <polygon id="三角形" points="3.0582277e-16 181.2749 183.266932 350.59761 0 350.59761"></polygon>
-                <polygon id="路径" points="0 0 8.37384197e-15 128.486056 238.047809 350.59761 357.569721 350.59761 357.569721 170.318725 265.936255 259.960159 241.035857 235.059761 357.569721 115.537849 357.569721 2.98804781 179.282869 175.298805"></polygon>
-            </g>
-        </g>
-    </g>
-</svg> -->
-    <svg :class="'logo-icon ' + (props.fill ? 'fill' : '')" viewBox="0 0 836 299" version="1.1"
+    <svg :class="'logo-icon ' + (fillBorder ? 'fill' : '')" viewBox="0 0 836 299" version="1.1"
         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
             <g id="logo-w" transform="translate(-21.000000, -26.000000)" fill-rule="nonzero" stroke-width="10">
@@ -30,9 +20,13 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue';
+
 const props = defineProps(["fill"])
-// const showName = ref(props.showName)
-// const radius = ref(props.radius)
+const fillBorder = ref(props.fill)
+watch(() => props.fill, (val) => {
+  fillBorder.value = val
+})
 </script>
 
 <style lang='scss' scoped>
@@ -42,23 +36,22 @@ const props = defineProps(["fill"])
     position: relative;
 
     path {
-        // fill: rgba($secondary-text-rgb, 0.8);
-        // fill: $primary-text;
+
         stroke: $primary-text;
     }
 
     polygon {
-        // fill: rgba($secondary-text-rgb, 0.8);
-        // fill: $primary-text;
         stroke: $primary-text;
     }
 
     &.fill {
         path {
+            // fill: rgba($secondary-text-rgb, 0.8);
             fill: $primary-text;
         }
 
         polygon {
+            // fill: rgba($secondary-text-rgb, 0.8);
             fill: $primary-text;
         }
 

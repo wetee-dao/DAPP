@@ -86,7 +86,7 @@ const doAction = (item: any) => {
   z-index: 10;
 
   .menu-list {
-    border-radius: 10px;
+    border-radius: 0px;
     overflow: hidden;
     background-color: $primary-bg;
     width: 200px;

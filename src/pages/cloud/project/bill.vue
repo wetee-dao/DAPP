@@ -18,9 +18,9 @@ const info = ref<any>(props.info)
 const accountData = ref<any>({})
 
 onMounted(() => {
-  $getQueryApi().query("system","account",[info.value.ContractId]).then((res: any) => {
-    accountData.value = res.data
-  })
+  // $getQueryApi().query("system","account",[info.value.ContractId]).then((res: any) => {
+  //   accountData.value = res.data
+  // })
 })
 
 
