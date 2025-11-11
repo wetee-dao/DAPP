@@ -5,29 +5,36 @@
     </div>
     <div id="metrics">
       <div id="cpu" class="metrics-item">
-        <Line v-if="cpu != null" :data="cpu" :options="options" />
+        <Line v-if="cpu != null" :data="cpu" :options="cpuOptions" />
       </div>
       <div id="mem" class="metrics-item">
-        <Line v-if="mem != null" :data="mem" :options="options" />
+        <Line v-if="mem != null" :data="mem" :options="memOptions" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { inject, onMounted, onUnmounted, ref } from 'vue';
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { Line } from 'vue-chartjs'
 import { debounce } from '@/utils/debounce';
-import { $getTxProvider } from "@/plugins/chain"
 import { GetWetrics } from '@/apis/detail';
-import { $getQueryApi } from '@/plugins/chain';
-const props = defineProps(["info", "clusterInfo"])
+import dayjs from 'dayjs';
+const props = defineProps(["info", "clusterInfo", "active"])
 
 const info = ref<any>(props.info)
 const cpu = ref<any>(null)
 const mem = ref<any>(null)
 
-const options = ref({
+watch(() => props.active, (newValue, oldValue) => {
+  if (newValue == "metrics") {
+    nextTick(() => {
+      resetChart()
+    })
+  }
+})
+
+const cpuOptions = ref({
   responsive: true,
   maintainAspectRatio: true,
   aspectRatio: 1.5,
@@ -43,7 +50,44 @@ const options = ref({
         color: '#5e5f5f2e'
       }
     }
-  }
+  },
+  plugins: {
+    tooltip: {
+      callbacks: {
+        label: function (context: any) {
+          return 'cpu: ' + context.parsed.y + "%"
+        }
+      }
+    }
+  },
+})
+
+const memOptions = ref({
+  responsive: true,
+  maintainAspectRatio: true,
+  aspectRatio: 1.5,
+  scales: {
+    y: {
+      grid: {
+        color: '#5e5f5f2e'
+      },
+      min: 0
+    },
+    x: {
+      grid: {
+        color: '#5e5f5f2e'
+      }
+    }
+  },
+  plugins: {
+    tooltip: {
+      callbacks: {
+        label: function (context: any) {
+          return 'memory:  ' + context.parsed.y + "GB"
+        }
+      }
+    }
+  },
 })
 
 onMounted(() => {
@@ -65,8 +109,8 @@ onMounted(() => {
         mem = mem + item[key][1]
       }
 
-      labels.push(res[i].BlockNumber);
-      cpuData.push(cpu/10)
+      labels.push(dayjs(res[i].Time * 1000).format('MM/DD HH:mm'));
+      cpuData.push(cpu / 10)
       memData.push(mem / 1000)
     }
 
@@ -84,11 +128,12 @@ onMounted(() => {
         }
       ]
     }
+
     mem.value = {
       labels: labels,
       datasets: [
         {
-          label: 'MEM(GB)',
+          label: 'Memory(GB)',
           borderColor: "#b46d2e",
           borderWidth: 1,
           pointStyle: 'false',
@@ -247,8 +292,10 @@ const resetChart = () => {
   }
 
   .metrics-item {
+    flex: 1;
     padding: 10Px;
     overflow: hidden;
+    min-width: 600px;
   }
 }
 </style>

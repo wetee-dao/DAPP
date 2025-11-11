@@ -14,7 +14,7 @@
     <div class="box" :key="info.Id">
       <el-tabs v-model="activeName" id="project-detail-tabs" class="tabs" @tab-click="handleClick">
         <el-tab-pane label="Metrics" name="metrics" lazy>
-          <Metrics :info="info" :clusterInfo="clusterInfo" />
+          <Metrics :info="info" :active="activeName" :clusterInfo="clusterInfo" />
         </el-tab-pane>
         <el-tab-pane label="Log" name="log" lazy>
           <Log :activeName="activeName" :info="info" :clusterInfo="clusterInfo" />
