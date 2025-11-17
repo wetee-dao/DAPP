@@ -53,7 +53,7 @@ export const chainNodes: ChainNode[] = [
     type: "substrate",
     chainUrl: 'wss://xiaobai.asyou.me:30001/ws',
     queryUrl: 'https://xiaobai.asyou.me:30001/',
-    secretUrl: 'https://xiaobai.asyou.me:31005/gql',
+    secretUrl: 'https://xiaobai.asyou.me:30115/gql',
   },
 ]
 
