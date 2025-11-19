@@ -52,6 +52,7 @@ import InkMeta from "./inkMeta.vue"
 import TEESetting from "./teeSetting.vue";
 import loadingBox from "@/components/loading-box.vue";
 import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
+import { c } from "vite/dist/node/types.d-aGj9QkWt";
 
 const props = defineProps(["info", "openTag", "close"])
 const activeName = ref(props.openTag ?? "")

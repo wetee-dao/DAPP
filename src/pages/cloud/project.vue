@@ -111,7 +111,7 @@
 
 <script lang="ts" setup>
 import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
-import { Plus } from '@element-plus/icons-vue'
+import { Plus, User } from '@element-plus/icons-vue'
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
 import useGlobelProperties from "@/plugins/globel";
@@ -252,7 +252,7 @@ const getList = async (userAddr: string) => {
   const list = await $getQueryApi().pods(null, 1000)
   let newList: any[] = []
   list.forEach((v: any) => {
-    console.log(v)
+    // console.log(v)
     newList.push({
       Id: v[0],
       Nid: v[0],
@@ -266,13 +266,14 @@ const getList = async (userAddr: string) => {
       // ContractId: value.contractId,
       // ProjectId: value.creator,
       Name: v[1].name,
+      User: v[1].owner,
       Image: v[2][0][1].image,
       StartBlock: v[1].startBlock,
       Status: v[3],
     });
   });
 
-  console.log(newList)
+  // console.log(newList)
   apps.value = newList;
 };
 

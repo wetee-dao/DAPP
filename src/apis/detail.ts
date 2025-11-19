@@ -7,6 +7,7 @@ export async function GetLogs(cluster: any, c: any) {
   let params = `
     query{
 			work_loglist(
+        user:"`+ c.User + `",
 				pod_id: `+ c.Id + `,
 				page: 1,
 				size: 10,
@@ -27,6 +28,7 @@ export async function GetWetrics(cluster: any, c: any) {
   let params = `
     query{
 			work_wetriclist(
+        user:"`+ c.User + `",
 				pod_id: `+ c.Id + `,
 				page: 1,
 				size: 60,
@@ -44,11 +46,11 @@ export async function GetWetrics(cluster: any, c: any) {
 }
 
 export async function GetServices(cluster: any, c: any) {
-  let project_id = ss58toHex(c.ProjectId)
+  let project_id = c.ProjectId
   let params = `
     query{
       work_servicelist(
-        project_id:"`+ project_id + `",
+        user:"`+ project_id + `",
         pod_id:`+ c.Id + `,
       ){
         Type

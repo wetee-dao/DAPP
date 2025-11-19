@@ -97,7 +97,7 @@ onMounted(() => {
     let memData: number[] = []
 
     if (res.length >= 30) {
-      res = res.slice(-30)
+      res = res.slice(-30).reverse()
     }
 
     for (let i = 0; i < res.length; i++) {
