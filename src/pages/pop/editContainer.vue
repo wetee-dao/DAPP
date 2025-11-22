@@ -2,11 +2,11 @@
   <div class="service" @click="closeClick">
     <div @click="(e) => e.stopPropagation()">
       <div class="title">
-        <i class="icon">&#xe701;</i>Deploy Confidential Service
+        Update Container
         <div class="space"></div>
         <div class="deploy-btn">
           <el-button type="primary" @click="toAdd()">
-            Deploy Now
+            Submit to chain
           </el-button>
         </div>
         &nbsp;
@@ -14,63 +14,11 @@
           <i class="icon right">&#xe604;</i>
         </div>
       </div>
-      <div class="toolbar">
-        <ul class="tabs">
-          <li class="tab-item template">
-            <!-- <el-autocomplete @select="handleTempApp" v-model="curTemp" :fetch-suggestions="querySearch"
-              placeholder="Select app template">
-              <template #prefix>
-                <i class="icon">&#xe680;</i>
-              </template>
-<template #default="{ item }">
-                <div class="input-app" :key="item.name">
-                  <img class="icon" :src="item.icon" />
-                  <div class="app-box">
-                    <div class="app-title">{{ item.name }}</div>
-                    <span class="app-desc">{{ item.desc }}</span>
-                  </div>
-                </div>
-              </template>
-<template #suffix>
-                <i class="icon select">&#xe809;</i>
-              </template>
-</el-autocomplete> -->
-            <el-select class="no-border-input" v-model="teeVersion" @change="TeeVersionChange"
-              placeholder="Select tee version">
-              <el-option label="TEE type: Intel SGX" value="SGX" />
-              <el-option label="TEE type: Intel TDX/AMD SEV" value="CVM" />
-            </el-select>
-          </li>
-          <li :class="curContainer == 0 ? 'tab-item active' : 'tab-item'" @click="activeContainer(0)">
-            <div class="tab-title">Main container</div>
-          </li>
-          <li :class="curContainer == (index + 1) ? 'tab-item active' : 'tab-item'" @click="activeContainer(index + 1)"
-            v-for="(_item, index) in containers.filter((_item, index) => index > 0)" :key="index">
-            <div class="tab-title">Side #{{ index + 1 }}</div>
-            <el-icon class="delete-container" @click.stop="deleteContainer(index + 1)">
-              <Close />
-            </el-icon>
-          </li>
-          <li class="tab-item no-border" v-if="teeVersion == 'CVM'" @click="addContainer">
-            <div class="tab-title"><span class="icon">&#xe604;</span>&nbsp;Add container</div>
-          </li>
-        </ul>
-
-      </div>
-      <div class="notice" v-if="teeVersion == 'SGX'"><span class="sgx-warning">Notice: SGX only supports Ego and
-          Gramine,
-          Multiple containers not supported.</span></div>
       <el-form class="form" ref="formRef">
         <div class="form-box" ref="containerRef">
           <div class="box-step" id="f0">
             <div class="classTitle">
               <i class="icon">&#xe6bc;</i>BaseSetting
-            </div>
-            <div class="form-context-box" v-show="curContainer == 0">
-              <div class="form-sub-title">Name</div>
-              <div class="form-input-box">
-                <el-input v-model="name" placeholder="Service name"></el-input>
-              </div>
             </div>
             <div class="form-context-box">
               <div class="form-sub-title">Docker image</div>
@@ -92,12 +40,6 @@
               <div class="form-sub-title">Memory （MB）</div>
               <div class="form-input-box">
                 <el-slider v-model="form.memory" :step="100" :max="32000" show-input />
-              </div>
-            </div>
-            <div class="form-context-box" v-show="curContainer == 0">
-              <div class="form-sub-title">Level</div>
-              <div class="form-input-box">
-                <el-slider v-model="level" :max="8" show-input show-stops />
               </div>
             </div>
           </div>
@@ -248,19 +190,19 @@ import { $getQueryApi, $getTxProvider } from "@/plugins/chain";
 import { useStore } from "vuex";
 
 const pid = getUrlParams("project_id");
-const props = defineProps(["router", "store", "close", "app"])
+const props = defineProps(["router", "store", "close","ps", "app"])
 const containerRef = ref<HTMLElement | null>(null)
 const formRef = ref<FormInstance>()
 const handleClick = (e: MouseEvent) => {
   e.preventDefault()
 }
+console.log(props.ps)
+const container = props.ps.container
 
-const temps = (window as any).extTemps().filter((v: any) => v.create_type == "service")
-const curTemp = ref<string>("")
 const defaultContainer = {
-  image: "",
-  cpu: 1000,
-  memory: 800,
+  image: container.image || "",
+  cpu: parseInt(container.cpu.replaceAll(",", "")) || 1000,
+  memory: parseInt(container.mem.replaceAll(",", "")),
   disk: [],
   port: [],
   commandPrefix: "SH",
@@ -270,8 +212,6 @@ const defaultContainer = {
 const name = ref<string>("")
 const level = ref<number>(1)
 const teeVersion = ref<string>("CVM")
-const curContainer = ref<any>(0)
-const containers = ref<any[]>([deepCopy(defaultContainer)])
 const form = ref<any>(deepCopy(defaultContainer))
 
 const store = props.store;
@@ -290,35 +230,6 @@ const getList = async () => {
   disks.value = dlist
 };
 
-const TeeVersionChange = () => {
-  containers.value[curContainer.value] = deepCopy(form.value)
-}
-
-const addContainer = () => {
-  let oldCs = deepCopy(containers.value)
-  oldCs.push(deepCopy(defaultContainer))
-  containers.value = oldCs
-  activeContainer(oldCs.length - 1)
-}
-
-const activeContainer = (i: number) => {
-  // 保存状态
-  if (curContainer.value != i) {
-    containers.value[curContainer.value] = deepCopy(form.value)
-
-    // 开启新的状态
-    curContainer.value = i
-  }
-
-  form.value = deepCopy(containers.value[i])
-}
-
-const deleteContainer = (i: number) => {
-  containers.value.splice(i, 1)
-
-  form.value = containers.value[0]
-  curContainer.value = 0
-}
 
 const createFilter = (queryString: string) => {
   return (restaurant: any) => {
@@ -333,56 +244,56 @@ const closeClick = () => {
 };
 
 const toAdd = async () => {
-  containers.value[curContainer.value] = deepCopy(form.value)
-  await $getTxProvider(async (chain, builder): Promise<void> => {
-    if (!chain.client) {
-      return;
-    }
-    const client = chain.client;
+//   containers.value[curContainer.value] = deepCopy(form.value)
+//   await $getTxProvider(async (chain, builder): Promise<void> => {
+//     if (!chain.client) {
+//       return;
+//     }
+//     const client = chain.client;
 
-    let validDatas: any[] = []
-    for (var i = 0; i < containers.value.length; i++) {
-      const c = containers.value[i]
-      const validData = validFormArray(client, c, i)
-      if (!validData.ok) return;
-      validDatas.push(validData.data)
-    }
+//     let validDatas: any[] = []
+//     for (var i = 0; i < containers.value.length; i++) {
+//       const c = containers.value[i]
+//       const validData = validFormArray(client, c, i)
+//       if (!validData.ok) return;
+//       validDatas.push(validData.data)
+//     }
 
-    const signer = props.store.state.userInfo.addr;
-    if (name.value == "") {
-      ElNotification({
-        title: "Error",
-        message: "Container name is required",
-        type: "error",
-      })
-      return
-    }
+//     const signer = props.store.state.userInfo.addr;
+//     if (name.value == "") {
+//       ElNotification({
+//         title: "Error",
+//         message: "Container name is required",
+//         type: "error",
+//       })
+//       return
+//     }
 
-    if (teeVersion.value == "") {
-      ElNotification({
-        title: "Error",
-        message: "TEE version is required",
-        type: "error",
-      })
-      return
-    }
+//     if (teeVersion.value == "") {
+//       ElNotification({
+//         title: "Error",
+//         message: "TEE version is required",
+//         type: "error",
+//       })
+//       return
+//     }
 
-    console.log(validDatas)
-    const dry = await builder.createPod(
-      name.value,
-      "CPU",
-      teeVersion.value,
-      validDatas,
-      0,
-      level.value,
-      BigInt(0),
-    )
+//     console.log(validDatas)
+//     const dry = await builder.createPod(
+//       name.value,
+//       "CPU",
+//       teeVersion.value,
+//       validDatas,
+//       0,
+//       level.value,
+//       BigInt(0),
+//     )
 
-    const tx = await chain.buildCall(dry, signer)
-    await chain.proxysignAndSend(tx, pid!, signer, () => {
-      props.close();
-    }, () => { })
-  });
+//     const tx = await chain.buildCall(dry)
+//     await chain.proxysignAndSend(tx, pid!, signer, () => {
+//       props.close();
+//     }, () => { })
+//   });
 };
 
 const addItem = (t: string) => {

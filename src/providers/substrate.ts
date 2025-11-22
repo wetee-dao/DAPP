@@ -1,6 +1,6 @@
 import { getSpecTypes } from '@polkadot/types-known';
 import { Loading } from "@/plugins/pop";
-import { keyring } from "@/utils/chain";
+import { keyring, showToken } from "@/utils/chain";
 import { ApiPromise } from "@polkadot/api";
 import type { SubmittableExtrinsic } from "@polkadot/api/types";
 import { Injected, MetadataDef } from "@polkadot/extension-inject/types";
@@ -21,25 +21,37 @@ export class SubstrateProvider {
   unsubscribe: any;
 
   // 构建inkcall
-  buildCall = async (data: any): Promise<any> => {
+  buildCall = async (data: any, signer: string): Promise<any> => {
     const registry = this.client!.registry
     const payValue = registry.createType('Balance', new BN(data.params.payValue));
     const proofSize = new BN(data.gasRequired.proofSize.replaceAll(",", ""));
     const refTime = new BN(data.gasRequired.refTime.replaceAll(",", ""));
     const gasLimit = getGasLimit(true, refTime, proofSize, registry)
+    const storageDeposit = getPredictedCharge(data.storageDeposit, registry);
+    const tx = this.client!.tx.revive.call(
+      data.params.contract,
+      payValue,
+      gasLimit,
+      storageDeposit,
+      data.params.inputData
+    )
 
+    const feeInfo = await tx.paymentInfo(signer);
+    const decimals = registry.chainDecimals[0];
+    const tokenSymbol = registry.chainTokens[0];
     const confirm = await ElMessageBox({
-      title: 'Gas Notice',
+      title: 'Transaction Notice',
       message: h('p', { style: 'font-size: 16px' }, [
         h('span', null, 'This transaction will cost '),
-        h('i', { style: 'color: teal' }, getPredictedCharge(data.storageDeposit, registry)?.toHuman()?.toString()),
+        h('i', { style: 'color: teal' }, showToken(new BN(feeInfo.partialFee), decimals) + ' ' + tokenSymbol),
         h('span', null, ', Continue?'),
       ]),
       showCancelButton: true,
       showConfirmButton: true,
-      confirmButtonText: 'Continue',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: 'Submit to chain',
+      cancelButtonText: 'Cancel tx',
     })
+
     if (!confirm) {
       ElNotification({
         title: 'Error',
@@ -48,14 +60,6 @@ export class SubstrateProvider {
       })
       return
     }
-
-    return this.client!.tx.revive.call(
-      data.params.contract,
-      payValue,
-      gasLimit,
-      getPredictedCharge(data.storageDeposit, registry),
-      data.params.inputData
-    )
   }
 
   // 提交交易

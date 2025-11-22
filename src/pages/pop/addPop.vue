@@ -50,20 +50,20 @@ const closeClick = () => {
 const toAdd = (item: any) => {
   props.close();
   setTimeout(() => {
-    if (item.type == "service") {
-      props.app!.config.globalProperties.$AddService(props.router, props.store, props.close)
-    } else if (item.type == "task") {
-      props.app!.config.globalProperties.$AddTask(props.router, props.store, props.close)
-    } else if (item.type == "gpu") {
-      props.app!.config.globalProperties.$AddGpuService(props.router, props.store, props.close)
-    } else {
-      props.app!.config.globalProperties.$Addink(props.router, props.store, props.close)
-      // ElNotification({
-      //   title: 'Notice',
-      //   message: "Not support yet",
-      //   type: 'warning',
-      // })
-    }
+    // if (item.type == "service") {
+    props.app!.config.globalProperties.$AddService(props.router, props.store, item.type, props.close)
+    // } else if (item.type == "task") {
+    //   props.app!.config.globalProperties.$AddService(props.router, props.store, props.close)
+    // } else if (item.type == "gpu") {
+    //   props.app!.config.globalProperties.$AddService(props.router, props.store, props.close)
+    // } else {
+    //   props.app!.config.globalProperties.$Addink(props.router, props.store, props.close)
+    //   // ElNotification({
+    //   //   title: 'Notice',
+    //   //   message: "Not support yet",
+    //   //   type: 'warning',
+    //   // })
+    // }
   }, 100);
 };
 
@@ -147,7 +147,7 @@ i {
       line-height: 26px;
     }
 
-    .prefix{
+    .prefix {
       display: inline-block;
       margin-right: 15px;
     }

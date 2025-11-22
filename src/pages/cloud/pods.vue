@@ -175,14 +175,14 @@ const OpenDetail = (item: any, t: string) => {
 };
 
 const AddPop = () => {
-  global.$AddPop(router, store, () => {
+  // global.$AddPop(router, store, () => {
+  //   getList(userAddr)
+  // })
+  global.$AddService(router, store, () => {
     getList(userAddr)
   })
 };
 
-const SettingPop = () => {
-  global.$ProjectSetting(router, store)
-};
 
 const showPenu = (e: MouseEvent, item: any) => {
   e.preventDefault();
@@ -202,7 +202,7 @@ const showPenu = (e: MouseEvent, item: any) => {
           const dry = await builder.stopPod(
             item.Id
           )
-          const tx = await chain.buildCall(dry)
+          const tx = await chain.buildCall(dry, signer)
           await chain.proxysignAndSend(tx, projectid!, signer, () => {
             ElNotification({
               title: 'Notice',
@@ -219,7 +219,7 @@ const showPenu = (e: MouseEvent, item: any) => {
           const dry = await builder.restartPod(
             item.Id
           )
-          const tx = await chain.buildCall(dry)
+          const tx = await chain.buildCall(dry, signer)
           await chain.proxysignAndSend(tx, projectid!, signer, () => {
             ElNotification({
               title: 'Notice',

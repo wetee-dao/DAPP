@@ -84,7 +84,7 @@ const del = async (item: any) => {
         const dry = await builder.deleteDisk(
             item.id
         )
-        const tx = await chain.buildCall(dry)
+        const tx = await chain.buildCall(dry, signer)
         await chain.proxysignAndSend(tx, projectid!, signer, () => {
             ElNotification({
                 title: 'Notice',

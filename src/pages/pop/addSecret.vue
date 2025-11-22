@@ -97,7 +97,7 @@ const toAdd = async () => {
     const hash = blake2bHash(form.value, 32)
     await $getTxProvider(async (chain, builder): Promise<void> => {
       const dry = await builder.createSecret(form.key, "0x" + hash)
-      const tx = await chain.buildCall(dry)
+      const tx = await chain.buildCall(dry, signer)
       await chain.signAndSend(tx, signer, () => {
         props.close();
       }, () => { })

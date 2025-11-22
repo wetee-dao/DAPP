@@ -9,20 +9,25 @@ export default {
       return openPop(app, router, store, AddPop, "addPop", {}, close)
     };
 
-    app.config.globalProperties.$AddService = (router: Object, store: Object, close: Function) => {
+    app.config.globalProperties.$AddService = (router: Object, store: Object, createType: String, close: Function) => {
       const c = defineAsyncComponent(() => import('../pages/pop/addService.vue'));
-      return openPop(app, router, store, c, "addService", {}, close)
+      return openPop(app, router, store, c, "addService", { createType: createType }, close)
     };
 
-    app.config.globalProperties.$AddTask = (router: Object, store: Object, close: Function) => {
-      const c = defineAsyncComponent(() => import('../pages/pop/addTask.vue'));
-      return openPop(app, router, store, c, "addTask", {}, close)
+    app.config.globalProperties.$EditContainer = (router: Object, store: Object,ps: any, close: Function) => {
+      const c = defineAsyncComponent(() => import('../pages/pop/editContainer.vue'));
+      return openPop(app, router, store, c, "editContainer", ps, close)
     };
 
-    app.config.globalProperties.$AddGpuService = (router: Object, store: Object, close: Function) => {
-      const c = defineAsyncComponent(() => import('../pages/pop/addGpuService.vue'));
-      return openPop(app, router, store, c, "addGpuService", {}, close)
-    };
+    // app.config.globalProperties.$AddTask = (router: Object, store: Object, close: Function) => {
+    //   const c = defineAsyncComponent(() => import('../pages/pop/addTask.vue'));
+    //   return openPop(app, router, store, c, "addTask", {}, close)
+    // };
+
+    // app.config.globalProperties.$AddGpuService = (router: Object, store: Object, close: Function) => {
+    //   const c = defineAsyncComponent(() => import('../pages/pop/addGpuService.vue'));
+    //   return openPop(app, router, store, c, "addGpuService", {}, close)
+    // };
 
     app.config.globalProperties.$Addink = (router: Object, store: Object, close: Function) => {
       const c = defineAsyncComponent(() => import('../pages/pop/addInk.vue'));
@@ -50,7 +55,7 @@ export default {
       return openPop(app, router, store, c, "projectSetting", {}, close)
     };
 
-    app.config.globalProperties.$Build = (router: Object, store: Object, ps:any, close: Function) => {
+    app.config.globalProperties.$Build = (router: Object, store: Object, ps: any, close: Function) => {
       const c = defineAsyncComponent(() => import('../pages/pop/build.vue'));
       return openPop(app, router, store, c, "Build", ps, close)
     };
@@ -59,21 +64,21 @@ export default {
       return openPop(app, router, store, ProjectMenu, "projectSetting", { "event": event, "item": item }, close)
     };
 
-    app.config.globalProperties.$Loading = (router: Object, store: Object, ps:any, close: Function) => {
+    app.config.globalProperties.$Loading = (router: Object, store: Object, ps: any, close: Function) => {
       return openPop(app, router, store, LoadingBox, "Loading", ps, close)
     };
   }
 }
 
-export const Loading = (title:string|null): any => {
-  return openPop(null, {}, {}, LoadingBox, "xLoading", {title:title}, () => {
+export const Loading = (title: string | null): any => {
+  return openPop(null, {}, {}, LoadingBox, "xLoading", { title: title }, () => {
 
   })
 };
 
 let pops: any = {};
-window.addEventListener('popstate', function(event) {
-  for(let i in pops){
+window.addEventListener('popstate', function (event) {
+  for (let i in pops) {
     pops[i]?.close()
   }
   pops = {};
@@ -99,19 +104,19 @@ function openPop(app: any, router: Object, store: Object, pop: any, popid: strin
     document.body.removeChild(div)
     delete pops[popid]
   };
-  
+
   let message = createApp(pop, {
     close: closeFn,
     router,
     store,
     app,
-    ps:params
+    ps: params
   })
-  
+
   div.id = popid
   document.body.appendChild(div)
   messageInstance = message.mount("#" + popid)
-  pops[popid] ={
+  pops[popid] = {
     close: closeFn,
     ins: messageInstance
   };

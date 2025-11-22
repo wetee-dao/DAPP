@@ -13,13 +13,13 @@
     </div>
     <div class="box" :key="info.Id">
       <el-tabs v-model="activeName" id="project-detail-tabs" class="tabs" @tab-click="handleClick">
-        <el-tab-pane label="Containers" name="container" lazy>
+        <el-tab-pane label="Deployments" name="container" lazy>
           <Container :info="info" :clusterInfo="clusterInfo" />
         </el-tab-pane>
-        <el-tab-pane label="Monitor" name="monitor" lazy>
+        <el-tab-pane label="Metrics" name="monitor" lazy>
           <Metrics :info="info" :active="activeName" :clusterInfo="clusterInfo" />
         </el-tab-pane>
-        <el-tab-pane label="Log" name="log" lazy>
+        <el-tab-pane label="Logs" name="log" lazy>
           <Log :activeName="activeName" :info="info" :clusterInfo="clusterInfo" />
         </el-tab-pane>
         <el-tab-pane label="TEE report" name="sgxReport" lazy>

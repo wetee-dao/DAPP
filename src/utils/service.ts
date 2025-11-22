@@ -10,7 +10,7 @@ export interface insType {
 
 export default <insType[]>[
   {
-    name: "Container",
+    name: "Service",
     icon: "cloud",
     url: "/cloud",
     module: "cloud",
