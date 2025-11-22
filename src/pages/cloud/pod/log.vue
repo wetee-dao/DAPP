@@ -38,6 +38,7 @@ watch(() => props.activeName, (newValue, oldValue) => {
 onMounted(() => {
   GetLogs(props.clusterInfo, info.value).then((res: any) => {
     const ansiUp = new AnsiUp()
+    res.sort((a: any, b: any) => a.Time - b.Time)
     res = res.filter((item: any) => item && item.Logs && item.Logs.length > 0).map((item: any) => {
       item.Logs = item.Logs.map((m: string) => {
         let msg = ansiUp.ansi_to_html(m)

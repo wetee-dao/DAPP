@@ -40,9 +40,20 @@ const mlist = ref(props.ps.item.Type == "INK" ? [
     cmd: "settings"
   },
   {
+    title: "Start",
+    icon: "&#xe64d;",
+    cmd: "restart",
+    display: () => {
+      return props.ps!.item.Status == 3;
+    }
+  },
+  {
     title: "Restart/Rerun",
     icon: "&#xe64d;",
     cmd: "restart",
+    display: () => {
+      return props.ps!.item.Status == 1;
+    }
   },
   {
     title: "Stop",
@@ -50,7 +61,7 @@ const mlist = ref(props.ps.item.Type == "INK" ? [
     cmd: "stop",
     color: "#e42537",
     display: () => {
-      return props.ps!.item.Status != 2;
+      return props.ps!.item.Status == 1;
     }
   },
 ]);

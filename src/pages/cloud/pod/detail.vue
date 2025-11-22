@@ -13,7 +13,10 @@
     </div>
     <div class="box" :key="info.Id">
       <el-tabs v-model="activeName" id="project-detail-tabs" class="tabs" @tab-click="handleClick">
-        <el-tab-pane label="Metrics" name="metrics" lazy>
+        <el-tab-pane label="Containers" name="container" lazy>
+          <Container :info="info" :clusterInfo="clusterInfo" />
+        </el-tab-pane>
+        <el-tab-pane label="Monitor" name="monitor" lazy>
           <Metrics :info="info" :active="activeName" :clusterInfo="clusterInfo" />
         </el-tab-pane>
         <el-tab-pane label="Log" name="log" lazy>
@@ -21,9 +24,6 @@
         </el-tab-pane>
         <el-tab-pane label="TEE report" name="sgxReport" lazy>
           <Report :info="info" :service="service" :clusterInfo="clusterInfo" />
-        </el-tab-pane>
-        <el-tab-pane label="Settings" name="settings" lazy>
-          <TEESetting :info="info" :clusterInfo="clusterInfo" />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -50,12 +50,13 @@ import Log from "./log.vue"
 import InkCall from "./inkCall.vue"
 import InkMeta from "./inkMeta.vue"
 import TEESetting from "./teeSetting.vue";
+import Container from "./container.vue";
 import loadingBox from "@/components/loading-box.vue";
 import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
 import { c } from "vite/dist/node/types.d-aGj9QkWt";
 
 const props = defineProps(["info", "openTag", "close"])
-const activeName = ref(props.openTag ?? "")
+const activeName = ref(props.openTag ?? "container")
 const info = ref(props.info)
 const inkInfo = ref(null)
 const clusterInfo = ref(null)
@@ -116,7 +117,7 @@ const GetInfo = async (item: any) => {
   //   activeName.value = "inkCall"
   //   loader.value = 2
   // } else {
-  activeName.value = "metrics"
+  // activeName.value = "monitor"
   inkInfo.value = null
   GetTEEInfo(item)
   // }

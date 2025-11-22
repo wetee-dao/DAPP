@@ -3,7 +3,7 @@
     <div :class="'data' + (currentProject != null ? ' thin_box' : '')">
       <div v-for="(item, index) in apps" :id="'project-' + item.Id" :key="index"
         :class="(currentProject != null && item.Id == currentProject.Id) ? 'pod active' : 'pod'"
-        @click="OpenDetail(item, '')" @click.right.native="showPenu($event, item)">
+        @click="OpenDetail(item, 'container')" @click.right.native="showPenu($event, item)">
         <div class="contact" v-if="item.Type == 'INK'">
           <Identicon :key="theme + item.Id" class="identicon" :stroke="0.1"
             :foreground="theme == 'dark' ? [80, 250, 130, 255] : [21, 132, 54, 255]" :background="[255, 255, 255, 0]"
@@ -121,7 +121,8 @@ import { getUrlParams } from "@/utils/pop";
 import { ss58toHex } from "@/utils/chain";
 import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
 
-import Detail from "./project/detail.vue";
+import Detail from "./pod/detail.vue";
+import Container from "./pod/container.vue";
 
 const global = useGlobelProperties()
 const projectid = getUrlParams("project_id");
@@ -270,6 +271,7 @@ const getList = async (userAddr: string) => {
       Image: v[2][0][1].image,
       StartBlock: v[1].startBlock,
       Status: v[3],
+      Containers: v[2],
     });
   });
 

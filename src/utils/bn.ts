@@ -10,6 +10,7 @@ export const BN_TEN = new BN(10);
 export function isNumber(value: unknown): value is number {
     return typeof value === 'number';
 }
+
 export function isBn(value: unknown): value is typeof BN_ZERO {
     return BN.isBN(value);
 }
