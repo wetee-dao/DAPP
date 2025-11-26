@@ -73,7 +73,7 @@ const toAdd = async () => {
       }
 
       id = dry.dry.Ok
-      const tx = await chain.buildCall(dry)
+      const tx = await chain.buildCall(dry, signer)
       await chain.signAndSend(tx, signer, () => {
         props.close();
       }, () => { })
@@ -83,7 +83,7 @@ const toAdd = async () => {
       return
     }
 
-    const resp =await initDisk(id, signer)
+    const resp = await initDisk(id, signer)
     console.log(resp)
     ElNotification({
       title: 'Success',
@@ -96,5 +96,5 @@ const toAdd = async () => {
 </script>
 
 <style lang="scss" scoped>
-@use "../../assets/styles/components/pop.scss";
+@use "../../../assets/styles/components/pop.scss";
 </style>

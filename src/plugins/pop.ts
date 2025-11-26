@@ -10,12 +10,12 @@ export default {
     };
 
     app.config.globalProperties.$AddService = (router: Object, store: Object, createType: String, close: Function) => {
-      const c = defineAsyncComponent(() => import('../pages/pop/addService.vue'));
+      const c = defineAsyncComponent(() => import('../pages/pop/substrate/addService.vue'));
       return openPop(app, router, store, c, "addService", { createType: createType }, close)
     };
 
     app.config.globalProperties.$EditContainer = (router: Object, store: Object,ps: any, close: Function) => {
-      const c = defineAsyncComponent(() => import('../pages/pop/editContainer.vue'));
+      const c = defineAsyncComponent(() => import('../pages/pop/substrate/editContainer.vue'));
       return openPop(app, router, store, c, "editContainer", ps, close)
     };
 
@@ -30,23 +30,23 @@ export default {
     // };
 
     app.config.globalProperties.$Addink = (router: Object, store: Object, close: Function) => {
-      const c = defineAsyncComponent(() => import('../pages/pop/addInk.vue'));
+      const c = defineAsyncComponent(() => import('../pages/pop/substrate/addInk.vue'));
       return openPop(app, router, store, c, "addInk", {}, close)
+    };
+
+    app.config.globalProperties.$AddSecret = (router: Object, store: Object, close: Function) => {
+      const c = defineAsyncComponent(() => import('../pages/pop/substrate/addSecret.vue'));
+      return openPop(app, router, store, c, "addSecret", {}, close)
+    };
+
+    app.config.globalProperties.$AddDisk = (router: Object, store: Object, close: Function) => {
+      const c = defineAsyncComponent(() => import('../pages/pop/substrate/addDisk.vue'));
+      return openPop(app, router, store, c, "addDisk", {}, close)
     };
 
     app.config.globalProperties.$AddProject = (router: Object, store: Object, close: Function) => {
       const c = defineAsyncComponent(() => import('../pages/pop/addProject.vue'));
       return openPop(app, router, store, c, "addProject", {}, close)
-    };
-
-    app.config.globalProperties.$AddSecret = (router: Object, store: Object, close: Function) => {
-      const c = defineAsyncComponent(() => import('../pages/pop/addSecret.vue'));
-      return openPop(app, router, store, c, "addSecret", {}, close)
-    };
-
-    app.config.globalProperties.$AddDisk = (router: Object, store: Object, close: Function) => {
-      const c = defineAsyncComponent(() => import('../pages/pop/addDisk.vue'));
-      return openPop(app, router, store, c, "addDisk", {}, close)
     };
 
 

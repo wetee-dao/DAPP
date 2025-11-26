@@ -27,7 +27,7 @@ function hasNoSpace(input: string) {
     return noSpaceRegex.test(input);
 }
 
-export function validFormArray(client: any, form: any, index: number): any {
+export function validFormArray(form: any): any {
     if (!hasNoSpace(form.image) || form.image.length == 0) {
         ElNotification({
             title: 'Error',
@@ -276,4 +276,23 @@ export function chainToContainer(form: any): any {
         env: form.e,
         port: form.p,
     }
+}
+
+export const parseEnv = (from: any[] = []): any[] => {
+    // return []
+    if (!from || !Array.isArray(from)) return [];
+    return from.map((e: any) => {
+        if (e && e.prefix) {
+            return e
+        }
+
+        console.log(e)
+
+        if (e && e.Encrypt) {
+            return { prefix: "Encrypt", key: e.Encrypt[0], id: e.Encrypt[1] };
+        } else if (e && e.Env) {
+            return { prefix: "Env", key: e.Env[0], value: e.Env[1] };
+        }
+        return null
+    }).filter(v=>v);
 }

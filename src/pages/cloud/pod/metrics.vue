@@ -18,7 +18,7 @@
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { Line } from 'vue-chartjs'
 import { debounce } from '@/utils/debounce';
-import { GetWetrics } from '@/apis/detail';
+import { GetWetrics } from '@/apis/worker';
 import dayjs from 'dayjs';
 const props = defineProps(["info", "clusterInfo", "active"])
 

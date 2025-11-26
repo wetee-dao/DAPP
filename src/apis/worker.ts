@@ -1,7 +1,4 @@
 import axios from "axios";
-import { $getQueryApi } from "@/plugins/chain";
-import { ss58toHex } from "@/utils/chain";
-import { hexToString } from "@polkadot/util";
 
 export async function GetLogs(cluster: any, c: any) {
   let params = `

@@ -225,7 +225,7 @@ import { onMounted, ref } from "vue";
 import { ElNotification, FormInstance } from "element-plus";
 import { Delete, Close } from '@element-plus/icons-vue';
 import { getUrlParams } from "@/utils/pop";
-import { chainToContainer, validAppArray } from "./utils";
+import { chainToContainer, validAppArray } from "./substrate/utils";
 import { deepCopy } from "@/utils/object";
 import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
 import { getNumstrfromChain } from "@/utils/chain";

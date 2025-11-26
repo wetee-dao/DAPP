@@ -40,6 +40,16 @@ class InkApi {
         return pods
     }
 
+    async podInfo(podId: string) {
+        let pods = await this.ink_query(this.cloudContract, "podsByIds", {
+            podIds: [podId]
+        })
+        if (pods.length == 0) {
+            throw Error("pod not found")
+        }
+        return pods[0]
+    }
+
     async podExtInfo(id: string) {
         let pod = await this.ink_query(this.cloudContract, "podExtInfo", {
             podId: id,
@@ -155,6 +165,35 @@ class InkApi {
         }, "0")
     }
 
+    // container
+    async createContainer(podId: string, c: any) {
+        return await this.ink_builder(this.cloudContract, "editContainer", {
+            podId: new BN(podId),
+            containers: [{
+                etype: { INSERT: null },
+                container: c,
+            }]
+        }, "0")
+    }
+    async editContainer(podId: string, cid: string, c: any) {
+        return await this.ink_builder(this.cloudContract, "editContainer", {
+            podId: new BN(podId),
+            containers: [{
+                etype: { UPDATE: new BN(cid) },
+                container: c,
+            }]
+        }, "0")
+    }
+    async delContainer(podId: string, cid: string) {
+        return await this.ink_builder(this.cloudContract, "editContainer", {
+            podId: new BN(podId),
+            containers: [{
+                etype: { REMOVE: new BN(cid) },
+                container: {},
+            }]
+        }, "0")
+    }
+
     // query ink
     async ink_query(contract: string, method: string, args: Record<string, unknown>) {
         // console.log("ink_query", contract, method, args)
@@ -208,7 +247,6 @@ class InkApi {
         console.log("            hex args", u8aToHex(inputData))
 
         const response = await this.tryRun(contract, userInfo.addr, u8aToHex(inputData), payValue)
-        // console.log("ink_builder response", response)
         const resp = response.result
 
         if (resp.Err) {
@@ -221,34 +259,32 @@ class InkApi {
             throw new Error(resp.Err)
         }
 
-        let data = decodeReturnValue(methodAbi.returnType, resp.Ok.data, abi!.registry) as any
+        let retutnData = decodeReturnValue(methodAbi.returnType, resp.Ok.data, abi!.registry) as any
         if (resp.Ok.flags.bits == "1") {
             ElNotification({
                 title: 'Error',
-                message: "Ink contract call failed with contract error: " + data.Err,
+                message: "Ink contract call failed with contract error: " + (retutnData.Err || retutnData.Ok.Err),
                 type: 'error',
                 duration: 15000,
             })
-            throw new Error("Ink contract call failed with contract error: " + data.Err)
+            throw new Error("Ink contract call failed with contract error: " + (retutnData.Err || retutnData.Ok.Err))
         }
 
-
-
-        if (!data || data["Err"]) {
+        if (!retutnData || retutnData["Err"]) {
             ElNotification({
                 title: 'Error',
-                message: "Ink contract dry run reverted: " + data["Err"],
+                message: "Ink contract dry run reverted: " + retutnData["Err"],
                 type: 'error',
                 duration: 15000,
             })
-            throw new Error("Ink contract dry run reverted: " + data["Err"])
+            throw new Error("Ink contract dry run reverted: " + retutnData["Err"])
         }
-        if (data["Ok"]) {
-            data = data.Ok
+        if (retutnData["Ok"]) {
+            retutnData = retutnData.Ok
         }
 
         return {
-            dry: data,
+            dry: retutnData,
             params: {
                 contract: contract,
                 inputData: u8aToHex(inputData),
@@ -362,9 +398,9 @@ function formatInputData(arr: Uint8Array): Uint8Array {
 }
 
 export const Ink = new InkApi({
-    subnetContract: "0x9b28f3d1ce172cde59ae897ff44ec422ffb8f866",
+    subnetContract: "0x12385503bc1eaf1a42836d19f3e68f91b1dc12ba",
     subnetAbiUrl: "contract/subnet.json",
-    cloudContract: "0xd29c342a21f4c4674eea9fbec2399559f892a60e",
+    cloudContract: "0x1ce944cc464f6a7f2e5fb722e55273ae43eac33b",
     cloudAbiUrl: "contract/cloud.json",
 })
 

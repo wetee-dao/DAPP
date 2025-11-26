@@ -4,14 +4,13 @@
       <div class="title">
         Update Container
         <div class="space"></div>
-        <div class="deploy-btn">
-          <el-button type="primary" @click="toAdd()">
+        <div class="right-tool">
+          <div class="deploy-btn" @click="submit()">
             Submit to chain
-          </el-button>
-        </div>
-        &nbsp;
-        <div class="close-btn" @click="closeClick">
-          <i class="icon right">&#xe604;</i>
+          </div>
+          <div class="close-btn" @click="closeClick">
+            <i class="icon right">&#xe604;</i>
+          </div>
         </div>
       </div>
       <el-form class="form" ref="formRef">
@@ -44,7 +43,7 @@
             </div>
           </div>
 
-          <div class="box-step" id="f1">
+          <div class="box-step" id="f1" v-if="teeVersion != 'SGX'">
             <div class="classTitle">
               <i class="icon">&#xee15;</i>CommandSetting
             </div>
@@ -83,10 +82,10 @@
                 <el-select v-if="item.prefix == 'Encrypt'" v-model="item.id" placeholder="select secret">
                   <template #label="{ label }">
                     <div v-if="label != null">
-                      <span>#{{ label.id }} {{ label.key }}</span>
+                      <span>#{{ label }}</span>
                     </div>
                   </template>
-                  <el-option :label="s" :value="s.id" v-for="s in secrets">
+                  <el-option :label="s.id + ' '+s.key" :value="s.id" v-for="s in secrets">
                     <span>#{{ s.id }} {{ s.key }}</span>
                   </el-option>
                 </el-select>
@@ -168,7 +167,7 @@
             @click="handleClick">
             <el-anchor-link class="form-anchor-item" href="#f0" title="BaseSetting" />
             <el-anchor-link class="form-anchor-item" href="#f1" title="CommandSetting" />
-            <el-anchor-link class="form-anchor-item" href="#f2" title="EnvironmentSetting"/>
+            <el-anchor-link class="form-anchor-item" href="#f2" title="EnvironmentSetting" />
             <el-anchor-link class="form-anchor-item" href="#f3" title="StorageSetting" />
             <el-anchor-link class="form-anchor-item" href="#f4" title="NetWorkSetting" />
           </el-anchor>
@@ -180,44 +179,52 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import { ElNotification, FormInstance } from "element-plus";
-import { Delete, Close } from '@element-plus/icons-vue';
-import { Option } from '@polkadot/types';
-import { getUrlParams } from "@/utils/pop";
-import { validFormArray } from "./utils";
+import { FormInstance } from "element-plus";
+import { Delete } from '@element-plus/icons-vue';
 import { deepCopy } from "@/utils/object";
 import { $getQueryApi, $getTxProvider } from "@/plugins/chain";
-import { useStore } from "vuex";
+import { parseEnv, validFormArray } from "./utils";
 
-const pid = getUrlParams("project_id");
-const props = defineProps(["router", "store", "close","ps", "app"])
+const props = defineProps(["router", "store", "close", "ps", "app"])
 const containerRef = ref<HTMLElement | null>(null)
 const formRef = ref<FormInstance>()
-const handleClick = (e: MouseEvent) => {
-  e.preventDefault()
-}
-console.log(props.ps)
+const podId = props.ps.podId
+const id = props.ps.id
+const teeVersion = props.ps.teeVersion
 const container = props.ps.container
-
-const defaultContainer = {
-  image: container.image || "",
-  cpu: parseInt(container.cpu.replaceAll(",", "")) || 1000,
-  memory: parseInt(container.mem.replaceAll(",", "")),
-  disk: [],
-  port: [],
+let defaultContainer: any = {
+  image: "",
+  cpu: 1000,
+  memory: 800,
   commandPrefix: "SH",
   command: "",
+  disk: [],
+  port: [],
   env: [],
 }
-const name = ref<string>("")
-const level = ref<number>(1)
-const teeVersion = ref<string>("CVM")
+
+if (container) {
+  defaultContainer = {
+    image: container.image || "",
+    cpu: parseInt(container.cpu.replaceAll(",", "")) || 1000,
+    memory: parseInt(container.mem.replaceAll(",", "")),
+    commandPrefix: "SH",
+    command: "",
+    disk: container.disk,
+    port: [],
+    env: parseEnv(container.env),
+  }
+}
 const form = ref<any>(deepCopy(defaultContainer))
 
 const store = props.store;
 const userAddr = store.state.userInfo.addr;
 const disks = ref<any[]>([]);
 const secrets = ref<any[]>([]);
+
+const handleClick = (e: MouseEvent) => {
+  e.preventDefault()
+}
 
 onMounted(async () => {
   getList()
@@ -230,71 +237,36 @@ const getList = async () => {
   disks.value = dlist
 };
 
-
-const createFilter = (queryString: string) => {
-  return (restaurant: any) => {
-    return (
-      restaurant.name.toLowerCase().indexOf(queryString.toLowerCase()) === 0
-    )
-  }
-}
-
 const closeClick = () => {
   props.close();
 };
 
-const toAdd = async () => {
-//   containers.value[curContainer.value] = deepCopy(form.value)
-//   await $getTxProvider(async (chain, builder): Promise<void> => {
-//     if (!chain.client) {
-//       return;
-//     }
-//     const client = chain.client;
+const submit = async () => {
+  await $getTxProvider(async (chain, builder): Promise<void> => {
+    const validData = validFormArray(form.value)
+    if (!validData.ok) return;
 
-//     let validDatas: any[] = []
-//     for (var i = 0; i < containers.value.length; i++) {
-//       const c = containers.value[i]
-//       const validData = validFormArray(client, c, i)
-//       if (!validData.ok) return;
-//       validDatas.push(validData.data)
-//     }
+    let dry = null;
+    if (id) {
+      dry = await builder.editContainer(
+        podId,
+        id,
+        validData.data,
+      )
+    } else {
+      dry = await builder.createContainer(
+        podId,
+        validData.data,
+      )
+    }
 
-//     const signer = props.store.state.userInfo.addr;
-//     if (name.value == "") {
-//       ElNotification({
-//         title: "Error",
-//         message: "Container name is required",
-//         type: "error",
-//       })
-//       return
-//     }
-
-//     if (teeVersion.value == "") {
-//       ElNotification({
-//         title: "Error",
-//         message: "TEE version is required",
-//         type: "error",
-//       })
-//       return
-//     }
-
-//     console.log(validDatas)
-//     const dry = await builder.createPod(
-//       name.value,
-//       "CPU",
-//       teeVersion.value,
-//       validDatas,
-//       0,
-//       level.value,
-//       BigInt(0),
-//     )
-
-//     const tx = await chain.buildCall(dry)
-//     await chain.proxysignAndSend(tx, pid!, signer, () => {
-//       props.close();
-//     }, () => { })
-//   });
-};
+    const signer = props.store.state.userInfo.addr;
+    const tx = await chain.buildCall(dry, signer)
+    await chain.proxysignAndSend(tx, "-1", signer, () => {
+      props.close();
+    }, () => { })
+  })
+}
 
 const addItem = (t: string) => {
   switch (t) {
@@ -326,5 +298,5 @@ const removeItem = (t: string, i: number) => {
 </script>
 
 <style lang="scss" scoped>
-@use "../../assets/styles/components/pop.scss";
+@use "../../../assets/styles/components/pop.scss";
 </style>

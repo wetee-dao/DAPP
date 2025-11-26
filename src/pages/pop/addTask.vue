@@ -183,7 +183,7 @@ import { reactive, ref } from "vue";
 import { ElNotification, FormInstance } from "element-plus";
 import { getUrlParams } from "@/utils/pop";
 import { Delete } from '@element-plus/icons-vue'
-import { validFormArray } from "./utils";
+import { validFormArray } from "./substrate/utils";
 import { $getTxProvider } from "@/plugins/chain";
 
 const pid = getUrlParams("project_id");

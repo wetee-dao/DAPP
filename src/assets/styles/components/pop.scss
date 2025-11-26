@@ -42,10 +42,27 @@
     margin-right: 10px;
   }
 
+  .right-tool {
+    display: flex;
+    flex-direction: row;
+    border-radius: 2px;
+    overflow: hidden;
+
+    .deploy-btn {
+      font-size: 14px;
+      padding: 4px 15px;
+      background-color: rgba($primary-text-rgb, 1);
+      color: rgba($primary-bg-rgb, 1);
+      line-height: 25px;
+      cursor: pointer;
+    }
+  }
+
   .close-btn {
     background-color: rgba($accent-color, 0.4);
     padding: 4px;
-    border-radius: 2px;
+    // border-radius: 2px;
+
     // margin-right: -13px;
     .right {
       float: right;
@@ -143,10 +160,6 @@
     :deep(.el-select__wrapper) {
       border-radius: 0;
     }
-  }
-
-  .deploy-btn {
-    margin: 3px;
   }
 }
 
@@ -355,10 +368,6 @@
   :deep(.el-input-number__decrease),
   :deep(.el-input-number__increase) {
     background: transparent;
-  }
-
-  .icon {
-    // color: rgba($color: $primary-text-rgb, $alpha: 0.4);
   }
 }
 

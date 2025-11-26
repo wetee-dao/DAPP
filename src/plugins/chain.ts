@@ -2,7 +2,6 @@ import { ApiPromise, HttpProvider, WsProvider } from "@polkadot/api"
 //@ts-ignore
 import { Loading } from "./pop";
 import { getWallets, Wallet } from "@talismn/connect-wallets";
-import { Metamask } from "@/providers/MetaSnap";
 import { chainJson } from "@/utils/chain";
 import { MetaMaskProvider } from "@/providers/eth";
 import { SubstrateProvider } from "@/providers/substrate";
@@ -10,8 +9,8 @@ import store from '@/store';
 import { getNetworkLatency } from "@/utils/net";
 import { WalletWrap } from "@/providers";
 import { ElNotification } from "element-plus";
-import { Ink } from "@/providers/chains/ink";
-import { ChainInterface } from "@/providers/chains";
+import { Ink } from "@/providers/chainapi/ink";
+import { ChainInterface } from "@/providers/chainapi";
 
 // 获取链节点的ping
 export async function chainNetPing(): Promise<string> {
@@ -107,10 +106,7 @@ export const $getTxProvider = async (run: (chain: WalletWrap, builder: ChainInte
     // await api.rpc.chain.getFinalizedHead();
     if (userInfo.provider == "metamask") {
       try {
-        const MataMaskSnap = await Metamask.enable!("WeTEE")
-        wallet = new MetaMaskProvider(MataMaskSnap)
 
-        wallet.snap = MataMaskSnap
       } catch (e) {
         throw e;
       }

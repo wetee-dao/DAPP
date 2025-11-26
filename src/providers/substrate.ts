@@ -22,6 +22,14 @@ export class SubstrateProvider {
 
   // 构建inkcall
   buildCall = async (data: any, signer: string): Promise<any> => {
+    if (this.client == undefined) {
+      ElNotification({
+        title: 'Error',
+        message: 'chain client not connected',
+        type: 'error',
+      })
+      return
+    }
     const registry = this.client!.registry
     const payValue = registry.createType('Balance', new BN(data.params.payValue));
     const proofSize = new BN(data.gasRequired.proofSize.replaceAll(",", ""));
@@ -58,8 +66,10 @@ export class SubstrateProvider {
         message: 'Cancel ink tx',
         type: 'error',
       })
-      return
+      throw Error('Cancel ink tx')
     }
+
+    return tx
   }
 
   // 提交交易

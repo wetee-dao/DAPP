@@ -14,7 +14,7 @@
     <div class="box" :key="info.Id">
       <el-tabs v-model="activeName" id="project-detail-tabs" class="tabs" @tab-click="handleClick">
         <el-tab-pane label="Deployments" name="container" lazy>
-          <Container :info="info" :clusterInfo="clusterInfo" />
+          <Container v-if="info" :info="info" :clusterInfo="clusterInfo" />
         </el-tab-pane>
         <el-tab-pane label="Metrics" name="monitor" lazy>
           <Metrics :info="info" :active="activeName" :clusterInfo="clusterInfo" />
@@ -22,7 +22,7 @@
         <el-tab-pane label="Logs" name="log" lazy>
           <Log :activeName="activeName" :info="info" :clusterInfo="clusterInfo" />
         </el-tab-pane>
-        <el-tab-pane label="TEE report" name="sgxReport" lazy>
+        <el-tab-pane label="TEE trusted report" name="sgxReport" lazy>
           <Report :info="info" :service="service" :clusterInfo="clusterInfo" />
         </el-tab-pane>
       </el-tabs>
@@ -58,7 +58,6 @@ import { c } from "vite/dist/node/types.d-aGj9QkWt";
 const props = defineProps(["info", "openTag", "close"])
 const activeName = ref(props.openTag ?? "container")
 const info = ref(props.info)
-const inkInfo = ref(null)
 const clusterInfo = ref(null)
 const loader = ref(0)
 const service = ref<any[]>([])
@@ -118,7 +117,6 @@ const GetInfo = async (item: any) => {
   //   loader.value = 2
   // } else {
   // activeName.value = "monitor"
-  inkInfo.value = null
   GetTEEInfo(item)
   // }
 }

@@ -20,7 +20,7 @@
 import { nextTick, onMounted, ref, watch } from 'vue';
 import { AnsiUp } from 'ansi_up';
 import dayjs from 'dayjs';
-import { GetLogs } from '@/apis/detail';
+import { GetLogs } from '@/apis/worker';
 import { scrollToBottom } from '@/utils/dom';
 
 const props = defineProps(["info", "clusterInfo", "activeName"])

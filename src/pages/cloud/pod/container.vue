@@ -8,7 +8,8 @@
             <i class="icon">&#xf18e;</i>&nbsp;&nbsp;{{ c[1].image }}<div class="space"></div>
           </div>
           <div class="resource sub">
-            <i class="icon">&#xe645;</i>&nbsp;&nbsp;CPU: {{ c[1].cpu }} | MEM: {{ c[1].mem }} | GPU: {{ c[1].gpu }}
+            <i class="icon">&#xe645;</i>&nbsp;&nbsp;CPU: {{ parseInt(c[1].cpu.replaceAll(",", "")) / 1000 }} Core &nbsp;
+            MEM: {{ c[1].mem }} MB &nbsp; GPU: {{ c[1].gpu }}
           </div>
         </div>
       </div>
@@ -28,19 +29,25 @@
         <div class="edit" @click="editContainer(c[0], c[1])">
           <i class="icon">&#xe695;</i> Edit
         </div>
-        <div class="delete">
+        <div class="delete" @click="delContainer(c[0])">
           <i class="icon">&#xe68c;</i> Del
         </div>
       </div>
-      <!-- <div class="free">Free:&nbsp;&nbsp;{{ accountData.free }}</div> -->
+    </div>
+    <div class="item" v-if="info.TeeType != 'SGX'" @click="addContainer()">
+      <el-icon class="el-icon--left">
+        <Plus />
+      </el-icon>
+      <div class="add-text">&nbsp;&nbsp;Add new container</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
+import { Plus } from '@element-plus/icons-vue'
 
-import { $getQueryApi } from '@/plugins/chain';
+import { $getQueryApi, $getTxProvider } from '@/plugins/chain';
 import { useStore } from 'vuex';
 import useGlobelProperties from '@/plugins/globel';
 import { useRouter } from 'vue-router';
@@ -76,14 +83,48 @@ const diskInfo = (diskId: string, diskList: any[]) => {
 
 const editContainer = (id: string, container: any) => {
   global.$EditContainer(router, store, {
-    userAddr: userAddr,
+    podId: info.value.Id,
     id: id,
+    userAddr: userAddr,
+    teeVersion: info.value.TeeType,
     container: container,
   }, () => {
-
+    $getQueryApi().podInfo(info.value.Id).then((res: any) => {
+      containers.value = res[2].map((v: any) => {
+        return [v[0], v[1][0]]
+      })
+    })
   })
 }
 
+const addContainer = () => {
+  global.$EditContainer(router, store, {
+    podId: info.value.Id,
+    id: null,
+    userAddr: userAddr,
+    teeVersion: info.value.TeeType,
+  }, () => {
+    $getQueryApi().podInfo(info.value.Id).then((res: any) => {
+      containers.value = res[2].map((v: any) => {
+        return [v[0], v[1][0]]
+      })
+    })
+  })
+}
+
+const delContainer = async (id: string) => {
+  await $getTxProvider(async (chain, builder): Promise<void> => {
+    const dry = await builder.delContainer(
+      info.value.Id,
+      id,
+    )
+
+    const signer = store.state.userInfo.addr;
+    const tx = await chain.buildCall(dry, signer)
+    await chain.proxysignAndSend(tx, "-1", signer, () => {
+    }, () => { })
+  })
+}
 </script>
 
 <style lang='scss' scoped>
@@ -100,6 +141,7 @@ const editContainer = (id: string, container: any) => {
     display: flex;
     flex-direction: row;
     word-break: break-all;
+    cursor: pointer;
 
     .title {
       font-size: 20px;
@@ -140,9 +182,10 @@ const editContainer = (id: string, container: any) => {
       align-items: center;
 
       .ssd-box {
-        height: 80px;
+        height: 70px;
         display: flex;
         flex-direction: row;
+        margin-right: 10px;
       }
 
       .ssd {
@@ -159,8 +202,8 @@ const editContainer = (id: string, container: any) => {
         text-align: center;
 
         .text {
-          font-size: 12px;
-          line-height: 14px;
+          font-size: 10px;
+          line-height: 12px;
           flex: 1;
           display: flex;
           flex-direction: column;
@@ -168,8 +211,8 @@ const editContainer = (id: string, container: any) => {
         }
 
         .ssd-bar {
-          font-size: 14px;
-          line-height: 16px;
+          font-size: 13px;
+          line-height: 14px;
           font-weight: bold;
           width: 100%;
           height: 30%;
@@ -182,13 +225,14 @@ const editContainer = (id: string, container: any) => {
 
       .edit,
       .delete {
-        font-size: 14px;
+        font-size: 15px;
         cursor: pointer;
         color: rgba($primary-text-rgb, 0.8);
         padding: 10px;
+        border-radius: 2px;
 
         .icon {
-          font-size: 16px;
+          font-size: 14px;
         }
 
         &:hover {
@@ -203,6 +247,13 @@ const editContainer = (id: string, container: any) => {
           background-color: rgba($accent-color, 0.05);
         }
       }
+    }
+
+    .add-text {
+      font-size: 16px;
+      height: 16px;
+      line-height: 16px;
+      color: rgba($secondary-text-rgb, 0.7);
     }
   }
 }

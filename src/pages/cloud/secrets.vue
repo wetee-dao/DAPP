@@ -8,7 +8,7 @@
             </el-button>
         </div>
         <el-table v-loading="loading" :element-loading-svg="svgLoading" class="table"
-            element-loading-svg-view-box="-10, -10, 50, 50" :data="secrets" style="width: 100%">
+            element-loading-svg-view-box="-10, -10, 50, 50" :data="secrets">
             <el-table-column prop="id" label="ID" width="100" >
                 <template #default="scope">
                     # {{ scope.row.id }}
@@ -90,7 +90,7 @@ const del = async (item: any) => {
         const dry = await builder.deleteSecret(
             item.id
         )
-        const tx = await chain.buildCall(dry)
+        const tx = await chain.buildCall(dry, signer)
         await chain.proxysignAndSend(tx, projectid!, signer, () => {
             ElNotification({
                 title: 'Notice',

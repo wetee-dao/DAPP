@@ -217,7 +217,7 @@ import { ref } from "vue";
 import { ElNotification, FormInstance } from "element-plus";
 import { Delete, Close } from '@element-plus/icons-vue';
 import { getUrlParams } from "@/utils/pop";
-import { validFormArray } from "./utils";
+import { validFormArray } from "./substrate/utils";
 import { deepCopy } from "@/utils/object";
 import { $getTxProvider } from "@/plugins/chain";
 

@@ -24,7 +24,7 @@
             <div class="text" :alt="item.Image">{{ shortImage(item.Image) }}</div>
           </div>
           <div class="ssd-box" v-if="item.Cr.disk.length > 0">
-            <el-tooltip v-for="(disk, index) in item.Cr.disk" effect="light" placement="top-start"
+            <el-tooltip v-for="(disk) in item.Cr.disk" effect="light" placement="top-start"
               :content="'Mounted on ' + disk.path">
               <div class="ssd">
                 SSD
@@ -111,7 +111,7 @@
 
 <script lang="ts" setup>
 import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
-import { Plus, User } from '@element-plus/icons-vue'
+import { Plus } from '@element-plus/icons-vue'
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
 import useGlobelProperties from "@/plugins/globel";
@@ -122,16 +122,13 @@ import { ss58toHex } from "@/utils/chain";
 import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
 
 import Detail from "./pod/detail.vue";
-import Container from "./pod/container.vue";
 
 const global = useGlobelProperties()
 const projectid = getUrlParams("project_id");
 
 const router = useRouter();
-const route = useRoute();
 const store = useStore();
 const apps = ref<any[]>([]);
-const events = ref<any[]>([]);
 const currentProject = ref<any>(null);
 const tag = ref("metrics");
 const userAddr = store.state.userInfo.addr;
@@ -145,18 +142,6 @@ const iconStatus = ref<Record<number, string>>({
   1: "&#xe669;",
   2: "&#xe623;",
   3: "&#xe623;",
-});
-
-const eventStatus = ref<Record<string, string>>({
-  "start": "&#xe64d;",
-  "stop": "&#xe641;",
-  "work_contract_updated": "&#xe62a;",
-});
-
-const eventMsg = ref<Record<string, string>>({
-  "start": "start",
-  "stop": "stop",
-  "work_contract_updated": "TEE verified",
 });
 
 const textStatus = ref<Record<number, string>>({
@@ -175,11 +160,8 @@ const OpenDetail = (item: any, t: string) => {
 };
 
 const AddPop = () => {
-  // global.$AddPop(router, store, () => {
-  //   getList(userAddr)
-  // })
   global.$AddService(router, store, () => {
-    getList(userAddr)
+    getList()
   })
 };
 
@@ -209,7 +191,7 @@ const showPenu = (e: MouseEvent, item: any) => {
               message: "Application stop successfully",
               type: 'success',
             })
-            getList(userAddr)
+            getList()
           }, () => {
           })
         });
@@ -226,7 +208,7 @@ const showPenu = (e: MouseEvent, item: any) => {
               message: "Application restart successfully",
               type: 'success',
             })
-            getList(userAddr)
+            getList()
           }, () => {
           })
         });
@@ -238,22 +220,21 @@ const showPenu = (e: MouseEvent, item: any) => {
 };
 
 let timerId = setInterval(() => {
-  getList(userAddr)
+  getList()
 }, 60000);
 
 onMounted(async () => {
-  getList(userAddr)
+  getList()
 });
 
 onUnmounted(() => {
   clearInterval(timerId);
 });
 
-const getList = async (userAddr: string) => {
+const getList = async () => {
   const list = await $getQueryApi().pods(null, 1000)
   let newList: any[] = []
   list.forEach((v: any) => {
-    // console.log(v)
     newList.push({
       Id: v[0],
       Nid: v[0],
@@ -264,10 +245,9 @@ const getList = async (userAddr: string) => {
         disk: v[2][0][1].disk,
         gpu: v[2][0][1].gpu,
       },
-      // ContractId: value.contractId,
-      // ProjectId: value.creator,
       Name: v[1].name,
       User: v[1].owner,
+      TeeType: v[1].teeType,
       Image: v[2][0][1].image,
       StartBlock: v[1].startBlock,
       Status: v[3],
@@ -275,7 +255,7 @@ const getList = async (userAddr: string) => {
     });
   });
 
-  // console.log(newList)
+  console.log(newList)
   apps.value = newList;
 };
 

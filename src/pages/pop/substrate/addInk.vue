@@ -398,7 +398,7 @@ const toAdd = async () => {
 </script>
 
 <style lang="scss" scoped>
-@use "../../assets/styles/components/pop.scss";
+@use "../../../assets/styles/components/pop.scss";
 
 .upload-btn {
   height: 100%;

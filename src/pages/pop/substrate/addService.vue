@@ -4,14 +4,13 @@
       <div class="title">
         <i class="icon">&#xe701;</i>Deploy Confidential Service
         <div class="space"></div>
-        <div class="deploy-btn">
-          <el-button type="primary" @click="toAdd()">
+        <div class="right-tool">
+          <div class="deploy-btn" @click="toAdd()">
             Deploy Now
-          </el-button>
-        </div>
-        &nbsp;
-        <div class="close-btn" @click="closeClick">
-          <i class="icon right">&#xe604;</i>
+          </div>
+          <div class="close-btn" @click="closeClick">
+            <i class="icon right">&#xe604;</i>
+          </div>
         </div>
       </div>
       <div class="toolbar">
@@ -102,7 +101,7 @@
             </div>
           </div>
 
-          <div class="box-step" id="f1">
+          <div class="box-step" id="f1" v-if="teeVersion != 'SGX'">
             <div class="classTitle">
               <i class="icon">&#xee15;</i>CommandSetting
             </div>
@@ -240,12 +239,10 @@
 import { onMounted, ref } from "vue";
 import { ElNotification, FormInstance } from "element-plus";
 import { Delete, Close } from '@element-plus/icons-vue';
-import { Option } from '@polkadot/types';
 import { getUrlParams } from "@/utils/pop";
 import { validFormArray } from "./utils";
 import { deepCopy } from "@/utils/object";
 import { $getQueryApi, $getTxProvider } from "@/plugins/chain";
-import { useStore } from "vuex";
 
 const pid = getUrlParams("project_id");
 const props = defineProps(["router", "store", "close", "app"])
@@ -343,7 +340,7 @@ const toAdd = async () => {
     let validDatas: any[] = []
     for (var i = 0; i < containers.value.length; i++) {
       const c = containers.value[i]
-      const validData = validFormArray(client, c, i)
+      const validData = validFormArray(c)
       if (!validData.ok) return;
       validDatas.push(validData.data)
     }
@@ -367,7 +364,6 @@ const toAdd = async () => {
       return
     }
 
-    console.log(validDatas)
     const dry = await builder.createPod(
       name.value,
       "CPU",
@@ -415,5 +411,5 @@ const removeItem = (t: string, i: number) => {
 </script>
 
 <style lang="scss" scoped>
-@use "../../assets/styles/components/pop.scss";
+@use "../../../assets/styles/components/pop.scss";
 </style>

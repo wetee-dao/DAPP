@@ -61,7 +61,7 @@ const mlist = ref(props.ps.item.Type == "INK" ? [
     cmd: "stop",
     color: "#e42537",
     display: () => {
-      return props.ps!.item.Status == 1;
+      return props.ps!.item.Status == 0 || props.ps!.item.Status == 1;
     }
   },
 ]);

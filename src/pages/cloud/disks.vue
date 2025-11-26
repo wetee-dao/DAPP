@@ -8,7 +8,7 @@
             </el-button>
         </div>
         <el-table v-loading="loading" :element-loading-svg="svgLoading"  class="table"
-            element-loading-svg-view-box="10, 10, 50, 50" :data="disks" style="width: 100%">
+            element-loading-svg-view-box="10, 10, 50, 50" :data="disks">
             <el-table-column prop="id" label="ID" width="100">
                 <template #default="scope">
                     # {{ scope.row.id }}
