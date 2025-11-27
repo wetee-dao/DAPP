@@ -1,7 +1,7 @@
 <template>
   <div class="report-box">
     <div class="header">
-      <div class="title warning" v-if="info.Status != 3">Service/Task has been stopped,report is out of date</div>
+      <!-- <div class="title warning" v-if="info.Status != 3">Service/Task has been stopped,report is out of date</div> -->
       <div class="report">
         <div class="hash">
           Report HASH:&nbsp;&nbsp;{{ reportHash }}
@@ -27,34 +27,36 @@
 </template>
 
 <script setup lang="ts">
-import { inject, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import dayjs from "dayjs";
 import { GetTeeReport } from "@/apis/secret";
-import { $getTxProvider } from "@/plugins/chain"
+import { $getQueryApi } from "@/plugins/chain"
 
 const props = defineProps(["info", "service", "clusterInfo"])
 const info = ref<any>(props.info)
 const reportHash = ref<any>("")
 const report = ref<any>(null)
-const ddns = ref<any>("")
-// 0: sgx, 1: sev 2: tdx 3: sev-snp
+
+console.log(info.value)
+
+// 0: sgx, 1: cvm
 const TEEType: any = {
   0: "SGX",
-  1: "SEV",
-  2: "TDX",
-  3: "SEV-SNP",
+  1: "CVM",
 }
 
 onMounted(async () => {
-  ddns.value = props.clusterInfo.ip[0].domain
-  await $getTxProvider(async (chain): Promise<void> => {
-    const api = chain.client!
-    const ty = api.createType('WorkType', info.value.Type);
-    const wid = { id: info.value.Nid, wtype: ty }
+  const report = await $getQueryApi().podReport(info.value.Id)
+  reportHash.value = report
+  // ddns.value = props.clusterInfo.ip[0].domain
+  // await $getTxProvider(async (chain): Promise<void> => {
+  //   const api = chain.client!
+  //   const ty = api.createType('WorkType', info.value.Type);
+  //   const wid = { id: info.value.Nid, wtype: ty }
 
-    const reportC = await api.query.worker.reportOfWork(wid)
-    reportHash.value = reportC.toHuman()
-  },true);
+  //   const reportC = await api.query.worker.reportOfWork(wid)
+  //   reportHash.value = reportC.toHuman()
+  // },true);
 })
 
 const verifyTeeReport = async () => {

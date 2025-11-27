@@ -235,9 +235,11 @@ const getList = async () => {
   const list = await $getQueryApi().pods(null, 1000)
   let newList: any[] = []
   list.forEach((v: any) => {
+    // console.log(v)
     newList.push({
       Id: v[0],
       Nid: v[0],
+      Contract: v[1].contract,
       Type: v[1].ptype,
       Cr: {
         cpu: v[2][0][1].cpu,
@@ -255,7 +257,6 @@ const getList = async () => {
     });
   });
 
-  console.log(newList)
   apps.value = newList;
 };
 

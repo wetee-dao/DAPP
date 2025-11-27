@@ -24,6 +24,7 @@ export type ChainInterface = {
     ) => Promise<any>
     stopPod: (podId: string) => Promise<any>
     restartPod: (podId: string) => Promise<any>
+    podReport: (podId: string) => Promise<any>
 
     /// pod container
     createContainer: (podId: string, c: any) => Promise<any>

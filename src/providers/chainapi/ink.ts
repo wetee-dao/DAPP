@@ -58,6 +58,14 @@ class InkApi {
         return pod
     }
 
+    async podReport(id: string) {
+        let pod = await this.ink_query(this.cloudContract, "podReport", {
+            podId: id,
+        })
+
+        return pod
+    }
+
     // list secrets
     async secrets(addr: string, start: null | number, size: number) {
         const keyring = new Keyring();
