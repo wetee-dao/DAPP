@@ -289,7 +289,7 @@ const toAdd = async (item: any) => {
     }
 
     const client = chain.client;
-    const validData = validFormArray(client, form, 0)
+    const validData = validFormArray(form)
     if (!validData.ok) return;
 
     const signer = props.store.state.userInfo.addr;

@@ -315,7 +315,7 @@ const toAdd = async () => {
     let envs: any[] = []
     for (var i = 0; i < containers.value.length; i++) {
       const c = containers.value[i]
-      const validData = validFormArray(client, c, i)
+      const validData = validFormArray(c)
       if (!validData.ok) return;
       if (i == 0) {
         mainData = {
