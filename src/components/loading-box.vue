@@ -17,7 +17,7 @@
 
     .loader {
         width: fit-content;
-        font-family: "letter-font",Serif;
+        font-family: "pixel-font",Serif;
         font-size: 20px;
         letter-spacing: 5px;
         background: linear-gradient(90deg, rgba($secondary-text-rgb, 0.04) 50%, #0000 0) right/200% 100%;

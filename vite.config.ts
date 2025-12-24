@@ -5,6 +5,7 @@ import ElementPlus from 'unplugin-element-plus/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import {createSvgIconsPlugin} from 'vite-plugin-svg-icons'
 
 export default defineConfig({
   base: '/dapp/',
@@ -39,6 +40,10 @@ export default defineConfig({
       useSource: true,
       defaultLocale: 'en',
     }),
+    createSvgIconsPlugin({
+      iconDirs: [path.resolve(process.cwd(), 'src/assets/svg')],
+      symbolId: '[name]'
+    })
   ],
   server: {
     host: true,

@@ -53,7 +53,6 @@ import TEESetting from "./teeSetting.vue";
 import Container from "./container.vue";
 import loadingBox from "@/components/loading-box.vue";
 import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
-import { c } from "vite/dist/node/types.d-aGj9QkWt";
 
 const props = defineProps(["info", "openTag", "close"])
 const activeName = ref(props.openTag ?? "container")
@@ -149,7 +148,7 @@ const GetTEEInfo = async (item: any) => {
 <style lang="scss" scoped>
 .detail {
   overflow: hidden;
-  background-color: $secondary-bg;
+  background-color: rgba($secondary-bg-rgb, 0.35);
   min-width: calc(100vw - 500px);
   max-width: calc(100vw - 500px);
   height: calc(100vh - 89px);

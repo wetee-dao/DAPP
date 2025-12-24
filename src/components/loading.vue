@@ -26,7 +26,7 @@ const title = ref(props.ps.title || "Send transaction to chain");
         margin: 35vh auto auto auto;
         display: flex;
         justify-content: center;
-        font-family: "letter-font",Serif;
+        font-family: "pixel-font",Serif;
         .loader-logo{
             position: relative;
             top: 0;

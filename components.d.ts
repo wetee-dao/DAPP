@@ -52,6 +52,7 @@ declare module 'vue' {
     Loading: typeof import('./src/components/loading.vue')['default']
     LoadingBox: typeof import('./src/components/loading-box.vue')['default']
     Logo: typeof import('./src/components/icons/logo.vue')['default']
+    Logo2: typeof import('./src/components/icons/Logo2.vue')['default']
     Miner: typeof import('./src/components/icons/miner.vue')['default']
     MPC: typeof import('./src/components/icons/MPC.vue')['default']
     NavList: typeof import('./src/components/nav-list.vue')['default']
@@ -64,6 +65,7 @@ declare module 'vue' {
     Secret: typeof import('./src/components/icons/secret.vue')['default']
     Store: typeof import('./src/components/icons/store.vue')['default']
     SvgIcon: typeof import('./src/components/svg-icon.vue')['default']
+    SvgImg: typeof import('./src/components/SvgImg.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

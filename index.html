@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" href="/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WeTEE Cloud</title>
+  <title>PlusWeb2 Cloud</title>
   <script>
     const theme = localStorage.getItem("theme") || "dark"
     document.documentElement.setAttribute("class", theme)
@@ -13,23 +13,24 @@
   <script src="/config/apps.js"></script>
   <style>
     @font-face {
-      font-family: "letter-font";
-      src: url('/fonts/DatDot-Light.woff2') format('woff2'),
-        url('/fonts/DatDot-Light.woff') format('woff'),
-        url('/fonts/DatDot-Light.ttf') format('truetype');
+      font-family: "pixel-font";
+      src: url('/fonts/DatCub-Regular.woff2') format('woff2'),
+        url('/fonts/DatCub-Regular.woff') format('woff'),
+        url('/fonts/DatCub-Regular.ttf') format('truetype');
     }
 
-    @font-face {
+    /* @font-face {
       font-family: "pixel-font";
       src: url('/fonts/fusion-pixel-10px-monospaced-zh_hans.woff2') format('woff2'),
         url('/fonts/fusion-pixel-10px-monospaced-zh_hans.ttf') format('truetype');
-    }
+    } */
 
     html,
     body {
       height: 100%;
       width: 100%;
       overflow: hidden;
+      margin: 0;
       /* //禁止用户复制黏贴 */
       /* // user-select: none; */
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", "Ubuntu";
@@ -50,16 +51,16 @@
     }
 
     html.dark body {
-      background-image: linear-gradient(90deg, rgba(var(--g-secondary-text-rgb), 0.02) 3%, transparent 0),
-        linear-gradient(rgba(var(--g-secondary-text-rgb), 0.02) 3%, transparent 0);
+      /* background-image: linear-gradient(143.28deg,#0000 37.81%,#07656f14 88.77%),linear-gradient(109.18deg,#06421e03 24.55%,#0000008c 45.87%,#00000050 58.82%,#0000 86.5%),linear-gradient(171.51deg,#2d312d33 31.48%,#0526081f 69.53%,#0314051a 93.83%),linear-gradient(#0000007a,#000f0a);
+      background-size: 100% 100%;
+      background-position: center center; */
 
-      /* background-image: repeating-linear-gradient(
-        315deg, rgba(var(--g-secondary-text-rgb), 0.03) 0, 
-        rgba(var(--g-secondary-text-rgb), 0.03) 1px, 
-        transparent 0, 
-        transparent 50%
-      );
-      background-size: 10px 10px; */
+      background-color: var(--g-primary-bg);
+      background-size: 100% 100%;
+      background-position: center center;
+      
+      background-image: linear-gradient(143.28deg,#0000 37.81%,#07656f12 88.77%),linear-gradient(109.18deg,#00131d14 24.55%,#0000008b 45.87%,#00000050 58.82%,#0000 86.5%),linear-gradient(171.51deg,#00240314 31.48%,#0526081f 69.53%,#0314051a 93.83%),linear-gradient(#03071f00,#000);
+      
     }
 
     html.light {
@@ -77,8 +78,8 @@
     }
 
     html.light body {
-      background-image: linear-gradient(90deg, rgba(var(--g-secondary-text-rgb), 0.02) 3%, transparent 0),
-        linear-gradient(rgba(var(--g-secondary-text-rgb), 0.02) 3%, transparent 0);
+      /* background-image: linear-gradient(90deg, rgba(var(--g-secondary-text-rgb), 0.02) 3%, transparent 0),
+        linear-gradient(rgba(var(--g-secondary-text-rgb), 0.02) 3%, transparent 0); */
     }
 
     body {
@@ -107,10 +108,9 @@
 
     .loading-text {
       font-size: 28Px;
-      font-weight: bold;
       line-height: 1;
       color: rgba(var(--g-primary-text-rgb), 1);
-      font-family: "letter-font", Serif;
+      font-family: "pixel-font", Serif;
       width: 180Px;
     }
 
@@ -174,7 +174,7 @@
   <div id="mainApp"></div>
   <div id="loader">
     <div class="loader-logo"></div>
-    <div class="loading-text">Connecting to WeTEE</div>
+    <div class="loading-text">Connecting to PlusWeb2</div>
   </div>
   <script type="module" src="/src/main.ts"></script>
 </body>

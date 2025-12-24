@@ -1,20 +1,21 @@
 <template>
   <div class="header-wrap flex" v-show="isShow" key="header">
     <div class="header-left" @click="menuClick">
-      <div class="menu-list">
+      <!-- <div class="menu-list">
         <div :class="isFirst
         ? 'menu-item'
         : menuShow
         ? 'menu-item-active menu-item'
         : 'menu-item menu-item-out'
       " v-for="item in 3" :key="item" />
+      </div> -->
+      <div class="cur-service">
+        PlusWeb
       </div>
       <div class="header-logo" @click="home">
-        <Logo />
+        <Logo class="icon" :fill="true" />
       </div>
-      <!-- <div class="cur-service">
-        <div class="t">eTEE</div>
-      </div> -->
+      <!-- <SvgImg class="main-chain" name="polkadot_mini"/> -->
     </div>
 
     <HeaderNav :key="pkey" :paths="paths" v-if="paths.length > 0" />
@@ -34,7 +35,8 @@
       <template #reference>
         <div class="header-box flex network-box">
           <div class="node-name">
-            <div>{{ network.name }}</div><Network class="network" />
+            <div>{{ network.name }}</div>
+            <Network class="network" />
           </div>
         </div>
       </template>
@@ -78,20 +80,12 @@
   </div>
   <NavList v-show="isShow" :key="module" :module="module" @closeClick="closeClick" />
   <div class="logo-bg" v-show="isShow" :showName="true">
-    <div class="menu-list">
-      <div :class="isFirst
-      ? 'menu-item'
-      : menuShow
-      ? 'menu-item-active menu-item'
-      : 'menu-item menu-item-out'
-    " v-for="item in 3" :key="item" />
+    <div class="cur-service">
+      PlusWeb3
     </div>
     <div class="header-logo" @click="home">
-      <Logo :fill="true" />
+      <Logo class="icon" :fill="true" />
     </div>
-    <!-- <div class="cur-service">
-      <div class="t">eTEE</div>
-    </div> -->
   </div>
 </template>
 
@@ -102,11 +96,12 @@ import { useStore } from "vuex";
 import NavList from "./nav-list.vue";
 import HeaderNav from "./header-nav.vue";
 import Identicon from "./identicon.vue";
-import Logo from "./icons/logo.vue";
+import Logo from "./icons/Logo2.vue";
 import Network from "./network.vue";
 import NetworkSelect from "./network-select.vue";
 import { ss58toHex } from "@/utils/chain";
 import { CurrentChainNode } from "@/plugins/chain";
+import SvgImg from "./SvgImg.vue";
 
 const router = useRouter();
 const store = useStore();
@@ -241,12 +236,20 @@ const setTheme = (t: string) => {
 }
 
 .header-logo {
-  // height: 50px;
-  width: 50px;
-  margin-right: 4px;
   overflow: hidden;
-  display: flex;
-  align-items: center;
+  padding: 7px 5px;
+  background: #010e04ad;
+  border: 2px solid rgba($primary-text-rgb, 0.2);
+
+  .icon {
+    display: block;
+    height: 14px;
+  }
+}
+
+.main-chain {
+  width: 20px;
+  height: 20px;
 }
 
 .cur-service {
@@ -254,27 +257,29 @@ const setTheme = (t: string) => {
   flex-direction: row;
   align-items: center;
   text-transform: uppercase;
-  margin-right: -12px;
-  font-size: 23px;
-  margin-top: 1.5px;
+  font-size: 20px;
   font-family: "pixel-font";
-  letter-spacing: 3px;
   color: $primary-text;
+  margin-right: 4px;
+  word-spacing: -6px;
+}
 
-  .t {
-    margin-left: 3px;
+.logo-bg {
+  position: fixed !important;
+  top: 13px !important;
+  left: 20px !important;
+  display: flex;
+  align-items: center;
+  transform: scale(1.1);
+  justify-content: center;
+
+  .cur-service {
+    word-spacing: -10px;
+    letter-spacing: -2px;
   }
 
-  .select-icon {
-    font-size: 14px;
-    line-height: 32px;
-    height: 30px;
-    display: flex;
-    fill: $primary-text;
-    margin-left: -2px;
-    display: block;
-    position: relative;
-    top: 0.5Px;
+  .block {
+    margin-left: 4px;
   }
 }
 
@@ -292,7 +297,8 @@ const setTheme = (t: string) => {
 .node-name {
   align-items: center;
   display: flex;
-  &>div{
+
+  &>div {
     font-size: 12px;
   }
 }
@@ -432,28 +438,7 @@ const setTheme = (t: string) => {
   padding: 0 4px;
 }
 
-.logo-bg {
-  position: fixed !important;
-  top: 20px !important;
-  left: 15px !important;
-  display: flex;
-  align-items: center;
-  transform: scale(1.15);
-  justify-content: center;
-
-  .cur-service {
-    letter-spacing: 2.2px;
-    align-items: center;
-    position: relative;
-    top: 0.5px;
-  }
-
-  .block {
-    margin-left: 4px;
-  }
-}
-
-.network-select{
+.network-select {
   width: 250px;
 }
 
@@ -494,7 +479,7 @@ const setTheme = (t: string) => {
 </style>
 
 <style lang="scss">
-.network-select{
+.network-select {
   width: 250px !important;
   padding: 0 !important;
   border-radius: 0 !important;
