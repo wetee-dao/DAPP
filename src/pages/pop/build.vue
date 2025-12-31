@@ -228,7 +228,7 @@ import { getUrlParams } from "@/utils/pop";
 import { chainToContainer, validAppArray } from "./substrate/utils";
 import { deepCopy } from "@/utils/object";
 import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
-import { getNumstrfromChain } from "@/utils/chain";
+import { getNumstrfromChain } from "@/utils/substrate";
 import { hexToString } from "@polkadot/util";
 
 const pid = getUrlParams("project_id");

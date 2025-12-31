@@ -8,8 +8,8 @@
             <i class="icon">&#xf18e;</i>&nbsp;&nbsp;{{ c[1].image }}<div class="space"></div>
           </div>
           <div class="resource sub">
-            <i class="icon">&#xe645;</i>&nbsp;&nbsp;CPU: {{ parseInt(c[1].cpu.replaceAll(",", "")) / 1000 }} Core &nbsp;
-            MEM: {{ c[1].mem }} MB &nbsp; GPU: {{ c[1].gpu }}
+            <i class="icon">&#xe645;</i>&nbsp;&nbsp;cpu: {{ parseInt(c[1].cpu.replaceAll(",", "")) / 1000 }} core &nbsp;
+            mem: {{ c[1].mem }} mb &nbsp; gpu: {{ c[1].gpu }}
           </div>
         </div>
       </div>
@@ -150,10 +150,11 @@ const delContainer = async (id: string) => {
     }
 
     .sub {
-      margin-top: 10px;
+      margin-top: 5px;
       display: flex;
       align-items: center;
       color: rgba($secondary-text-rgb, 0.7);
+      font-size: 14px;
 
       .icon {
         font-size: 14px;
@@ -182,16 +183,16 @@ const delContainer = async (id: string) => {
       align-items: center;
 
       .ssd-box {
-        height: 70px;
+        height: 60px;
         display: flex;
         flex-direction: row;
-        margin-right: 10px;
+        margin-right: 5px;
       }
 
       .ssd {
         height: 100%;
-        width: 60px;
-        margin-right: 8px;
+        width: 50px;
+        margin-right: 5px;
         background: rgba($secondary-text-rgb, 0.1);
         border-radius: 2px;
         border-top-right-radius: 20px;
@@ -211,12 +212,12 @@ const delContainer = async (id: string) => {
         }
 
         .ssd-bar {
-          font-size: 13px;
+          font-size: 12px;
           line-height: 14px;
           font-weight: bold;
           width: 100%;
           height: 30%;
-          background: rgba($primary-text-rgb, 0.5);
+          background: rgba($primary-text-rgb, 0.1);
           display: flex;
           flex-direction: column;
           justify-content: center;
@@ -225,7 +226,7 @@ const delContainer = async (id: string) => {
 
       .edit,
       .delete {
-        font-size: 15px;
+        font-size: 14px;
         cursor: pointer;
         color: rgba($primary-text-rgb, 0.8);
         padding: 10px;

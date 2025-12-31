@@ -13,7 +13,7 @@
     </div>
     <div class="box" :key="info.Id">
       <el-tabs v-model="activeName" id="project-detail-tabs" class="tabs" @tab-click="handleClick">
-        <el-tab-pane label="Deployments" name="container" lazy>
+        <el-tab-pane label="Containers" name="container" lazy>
           <Container v-if="info" :info="info" :clusterInfo="clusterInfo" />
         </el-tab-pane>
         <el-tab-pane label="Metrics" name="monitor" lazy>
@@ -22,10 +22,14 @@
         <el-tab-pane label="Logs" name="log" lazy>
           <Log :activeName="activeName" :info="info" :clusterInfo="clusterInfo" />
         </el-tab-pane>
+        <el-tab-pane label="Bills" name="bill" lazy>
+          <Bill :info="info" :service="service" :clusterInfo="clusterInfo" />
+        </el-tab-pane>
         <el-tab-pane label="TEE trusted report" name="sgxReport" lazy>
           <Report :info="info" :service="service" :clusterInfo="clusterInfo" />
         </el-tab-pane>
       </el-tabs>
+      <loadingBox class="loader-wrapper" v-if="loader == 0" />
     </div>
     <!-- <div v-if="loader == 2" class="box" :key="info.Id">
       <el-tabs v-model="activeName" id="project-ink-tabs" class="tabs" @tab-click="handleClick">
@@ -37,22 +41,20 @@
         </el-tab-pane>
       </el-tabs>
     </div> -->
-    <loadingBox class="loader-wrapper" v-if="loader == 0" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { inject, onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { TabsPaneContext } from "element-plus";
 import Metrics from "./metrics.vue"
 import Report from "./report.vue"
 import Log from "./log.vue"
-import InkCall from "./inkCall.vue"
-import InkMeta from "./inkMeta.vue"
-import TEESetting from "./teeSetting.vue";
 import Container from "./container.vue";
 import loadingBox from "@/components/loading-box.vue";
-import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
+import { $getQueryApi } from "@/plugins/chain";
+import Bill from "./bill.vue";
+import { h160ToAccountId } from "@/utils/substrate_ink";
 
 const props = defineProps(["info", "openTag", "close"])
 const activeName = ref(props.openTag ?? "container")
@@ -71,8 +73,7 @@ const workType: any = {
 watch(() => props.info, (val: any, oldVal: any) => {
   if (val.Nid != oldVal.Nid) {
     info.value = val
-    // loader.value = 0
-    console.log(info)
+
     GetInfo(val)
   }
 })
@@ -87,6 +88,13 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 onMounted(() => {
   let item = JSON.parse(JSON.stringify(info.value))
   GetInfo(item)
+
+  console.log(info.value.Contract)
+  $getQueryApi().contactInfo(info.value.Contract).then((contractInfo)=>{
+    console.log(contractInfo)
+  })
+  
+
   // if (props.openTag == "") {
   //   if (info.value.Type == "INK") {
   //     activeName.value = "inkCall"
@@ -108,6 +116,7 @@ const GetInfo = async (item: any) => {
   let cinfo = podext[1]
   cinfo.id = podext[0]
   clusterInfo.value = cinfo
+  loader.value = 1
   // if (item.Type == "INK") {
   //   clusterInfo.value = null
   //   service.value = []
@@ -121,7 +130,7 @@ const GetInfo = async (item: any) => {
 }
 
 const GetTEEInfo = async (item: any) => {
-  loader.value = 1
+  // loader.value = 1
   // await $getTxProvider(async (chain): Promise<void> => {
   //   const api = chain.client!
   //   const ty = api.createType('WorkType', item.Type); 
@@ -213,16 +222,21 @@ const GetTEEInfo = async (item: any) => {
   }
 }
 
-.loader-wrapper {
-  margin-top: 20px;
-  border-top: 1Px solid rgba($gray-bg-rgb, 0.1);
-}
-
 .box {
   flex: 1;
   display: flex;
   flex-direction: column;
   height: calc(100% - 90px);
+  position: relative;
+
+  .loader-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: 40px;
+    background: #000000cf;
+  }
+
 
   :deep(.el-tabs__nav-wrap) {
     padding: 0 33px;

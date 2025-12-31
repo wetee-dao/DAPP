@@ -1,7 +1,9 @@
 <template>
     <ul class="pop">
         <li v-for="(item, index) in chainNodes" class="flex" @click="select(index)" :key="index">
-            <i v-if="curr == item.chainId" class="icon active">&#xe692;</i>{{ item.name }}
+            <i v-if="curr == item.chainId" class="icon active">&#xe692;</i>
+            <img :src="item.icon"/>
+            {{ item.name }}
             <div class="space"></div>
             <div class="ping">{{ping[index]}} ms</div>
         </li>
@@ -41,6 +43,13 @@ const select = (index: number) => {
 
         &:hover {
             background-color: rgba($secondary-text-rgb, 0.05);
+        }
+
+        img{
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+            margin-right: 5px;
         }
 
         .active {

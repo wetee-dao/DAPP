@@ -148,7 +148,7 @@ import { Abi } from "@polkadot/api-contract";
 import { AbiConstructor, AbiMessageParam } from "@polkadot/api-contract/types";
 import { ApiPromise } from "@polkadot/api";
 import { BN_ZERO } from "@polkadot/util";
-import { InstantiateData, createInstantiateTx, formatProofSize, formatRefTime, getGasLimit, getStorageDepositLimit, transformUserInput } from "@/utils/ink";
+import { InstantiateData, createInstantiateTx, formatProofSize, formatRefTime, getGasLimit, getStorageDepositLimit, transformUserInput } from "@/utils/substrate_ink";
 import { Balance } from "@polkadot/types/interfaces";
 import { randomAsHex } from "@polkadot/util-crypto";
 import { $getTxProvider } from "@/plugins/chain";

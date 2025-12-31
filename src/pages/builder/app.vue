@@ -31,7 +31,7 @@ import useGlobelProperties from "@/plugins/globel";
 import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { getNumstrfromChain } from "@/utils/chain";
+import { getNumstrfromChain } from "@/utils/substrate";
 import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
 import { hexToString } from "@polkadot/util";
 import { ElMessageBox, ElNotification } from "element-plus";

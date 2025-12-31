@@ -5,7 +5,8 @@ import { Bytes } from '@polkadot/types';
 import { AnyJson, Registry, TypeDef } from "@polkadot/types/types";
 import { ElNotification } from "element-plus";
 import { ApiPromise, HttpProvider, Keyring } from "@polkadot/api";
-import { toH160Address, transformUserInput } from "@/utils/ink";
+import { toH160Address, transformUserInput } from "@/utils/substrate_ink";
+import { getBnFromChain, showToken } from "@/utils/substrate";
 
 class InkApi {
     cloudAbi: Abi | undefined
@@ -29,6 +30,34 @@ class InkApi {
     init(queryUrl: string, chainUrl: string) {
         this.queryUrl = queryUrl
         this.chainUrl = chainUrl
+    }
+
+    async nativeBalance(addr: string) {
+        const api = await ApiPromise.create({
+            provider: new HttpProvider(this.chainUrl.replace(/^ws/, 'http')),
+        });
+
+        const account = await api.query.system.account(addr)
+        const data = account.toHuman() as any
+
+        return {
+            name: api.registry.chainTokens[0],
+            value: showToken(getBnFromChain(data.data.free),api.registry.chainDecimals[0])
+        }
+    }
+
+    async contactInfo (h160Addr: string) {
+        const api = await ApiPromise.create({
+            provider: new HttpProvider(this.chainUrl.replace(/^ws/, 'http')),
+        });
+        
+        const account = await api.call.reviveApi.accountId(h160Addr)
+        const balance = await this.nativeBalance(account.toHuman() as string)
+
+        return {
+            ss58: account.toHuman(),
+            balance: balance,
+        }
     }
 
     // list pods
@@ -350,6 +379,7 @@ class InkApi {
         return userInfo
     }
 
+    // try run
     async tryRun(address: string, caller: string, inputData: any, payValue: string) {
         const api = await ApiPromise.create({
             provider: new HttpProvider(this.chainUrl.replace(/^ws/, 'http')),

@@ -68,7 +68,7 @@
 import { inject, onMounted, ref } from 'vue';
 import { Action, ElMessageBox, ElNotification, FormInstance } from 'element-plus';
 import { deepCopy } from '@/utils/object';
-import { formatProofSize, formatRefTime, getGasLimit, getStorageDepositLimit, transformUserInput } from '@/utils/ink';
+import { formatProofSize, formatRefTime, getGasLimit, getStorageDepositLimit, transformUserInput } from '@/utils/substrate_ink';
 import { BN, BN_ZERO, hexToString } from '@polkadot/util';
 import { Abi, ContractPromise } from '@polkadot/api-contract';
 import { AbiMessage, AbiParam, ContractCallOutcome, ContractOptions } from '@polkadot/api-contract/types';

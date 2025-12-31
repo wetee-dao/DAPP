@@ -2,7 +2,7 @@ import { ApiPromise, HttpProvider, WsProvider } from "@polkadot/api"
 //@ts-ignore
 import { Loading } from "./pop";
 import { getWallets, Wallet } from "@talismn/connect-wallets";
-import { chainJson } from "@/utils/chain";
+import { chainJson } from "@/utils/substrate";
 import { MetaMaskProvider } from "@/providers/eth";
 import { SubstrateProvider } from "@/providers/substrate";
 import store from '@/store';
@@ -27,20 +27,33 @@ export async function chainNetPing(): Promise<string> {
 }
 
 // 链节点
-class ChainNode {
+export class ChainNode {
   name: string;
   type: string;
+  icon: string;
   chainId: string;
   chainUrl: string;
   queryUrl: string;
   secretUrl: string;
-  constructor(name: string, type: string, chainId: string, chainUrl: string, queryUrl: string, secretUrl: string) {
+  balances: (addr:string) => any;
+  constructor(
+    name: string,
+    icon: string,
+    type: string,
+    chainId: string,
+    chainUrl: string,
+    queryUrl: string,
+    secretUrl: string,
+    balances: (addr:string) => any
+  ) {
     this.name = name
+    this.icon = icon
     this.type = type
     this.chainId = chainId
     this.chainUrl = chainUrl
     this.queryUrl = queryUrl
     this.secretUrl = secretUrl
+    this.balances = balances
   }
 }
 
@@ -48,11 +61,16 @@ class ChainNode {
 export const chainNodes: ChainNode[] = [
   {
     name: 'DEV-LOCAL',
-    chainId: "dev-local",
     type: "substrate",
+    icon: "/dapp/imgs/wetee.svg",
+    chainId: "dev-local",
     chainUrl: 'wss://xiaobai.asyou.me:30001/ws',
     queryUrl: 'https://xiaobai.asyou.me:30001/',
     secretUrl: 'https://xiaobai.asyou.me:30115/gql',
+    balances: async (addr:string) => {
+      let native = await $getQueryApi().nativeBalance(addr)
+      return [native]
+    },
   },
 ]
 

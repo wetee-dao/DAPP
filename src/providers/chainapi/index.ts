@@ -1,4 +1,8 @@
 export type ChainInterface = {
+    /// get native token blance
+    nativeBalance: (addr:string) => Promise<any>
+    contactInfo: (addr:string) => Promise<any>
+
     /// secret
     createSecret: (key: string, hash: string) => Promise<any>
     secrets: (addr: string, start: null | number, size: number) => Promise<any>

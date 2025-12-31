@@ -11,14 +11,11 @@
       </div>
       <div class="login-right-box">
         <div class="top-logo">
-          <Logo :fill="true" />
+          <Logo class="icon" :fill="true" />
         </div>
         <div class="login-title">Polkadot Wallet</div>
-        <div
-          v-for="(w, index) in supportedWallets"
-          @click="showWallet('Polkadot', w)"
-          :class="w.installed ? 'wallet-box' : 'wallet-box wallet-box-disabled'"
-        >
+        <div v-for="(w, index) in supportedWallets" @click="showWallet('Polkadot', w)"
+          :class="w.installed ? 'wallet-box' : 'wallet-box wallet-box-disabled'">
           <img :src="w.logo.src" alt="Polkadotjs Logo" class="wlogo" />
           <div class="wtext">
             {{ w.title }}
@@ -49,23 +46,11 @@
         <i class="icon right" @click="LoginShow = null">&#xe604;</i>
       </div>
       <div class="login-content">
-        <div
-          :class="
-            item.selected
-              ? 'polkadotjs-account flex active'
-              : 'polkadotjs-account flex'
-          "
-          v-for="(item, index) in polkadotAccounts"
-          @click="polkadotjsSelect(index)"
-        >
-          <Identicon
-            class="uicon"
-            :hash="ss58toHex(item.address)"
-            :padding="0.1"
-            :foreground="[80, 250, 130, 255]"
-            :background="[80, 255, 130, 0]"
-            :size="16"
-          />
+        <div :class="item.selected
+            ? 'polkadotjs-account flex active'
+            : 'polkadotjs-account flex'
+          " v-for="(item, index) in polkadotAccounts" @click="polkadotjsSelect(index)">
+          <img :src="LoginShow.logo.src" class="uicon" />
           <div class="space">
             {{
               item.name.toUpperCase() + " (" + shortAddress(item.address) + ") "
@@ -74,12 +59,8 @@
           <i class="icon">&#xe6d2;</i>
         </div>
       </div>
-      <el-button
-        class="login-btn"
-        :disabled="polkadotAccounts.findIndex((item) => item.selected) == -1"
-        @click="PolkadotLoginIn"
-        >Login</el-button
-      >
+      <el-button class="login-btn" :disabled="polkadotAccounts.findIndex((item) => item.selected) == -1"
+        @click="PolkadotLoginIn">Login</el-button>
     </div>
     <div class="login-pop-mask" v-if="LoginShow != null"></div>
   </div>
@@ -93,9 +74,8 @@ import { ElMessage } from "element-plus";
 import { Wallet, getWallets } from "@talismn/connect-wallets";
 
 import { Loading } from "@/plugins/pop";
-import useGlobelProperties from "@/plugins/globel";
-import { ss58toHex } from "@/utils/chain";
-import { keyring, shortAddress } from "@/utils/chain";
+import { keyring, shortAddress } from "@/utils/substrate";
+import Logo from "@/components/icons/Logo2.vue";
 
 const store = useStore();
 const router = useRouter();
@@ -206,7 +186,7 @@ onMounted(async () => {
     router.push("/");
     return;
   }
-  return () => {};
+  return () => { };
 });
 </script>
 

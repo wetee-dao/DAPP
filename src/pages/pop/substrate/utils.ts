@@ -1,4 +1,4 @@
-import { getNumstrfromChain } from "@/utils/chain";
+import { getNumstrfromChain } from "@/utils/substrate";
 import { ElNotification } from "element-plus";
 
 export function isValidDiskPath(path: string) {

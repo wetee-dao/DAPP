@@ -35,6 +35,7 @@
       <template #reference>
         <div class="header-box flex network-box">
           <div class="node-name">
+            <img :src="network.icon" />
             <div>{{ network.name }}</div>
             <Network class="network" />
           </div>
@@ -45,22 +46,9 @@
       </template>
     </el-popover>
 
-    <el-dropdown class="account" placement="bottom-end" :teleported="false" v-if="user.addr != null && isShow">
-      <div class="header-box flex">
-        <div class="header-user-box flex">
-          <div style="display: flex; align-items: center">
-            <div class="header-user-img">
-              <Identicon :key="theme" :hash="ss58toHex(user.addr)" :padding="0.1"
-                :foreground="theme == 'dark' ? [80, 250, 130, 255] : [21, 132, 54, 255]" :background="[80, 255, 130, 0]"
-                :strokeColor="theme == 'dark' ? [0, 0, 0, 225] : [255, 255, 255, 220]" :stroke="0.2" :size="16" />
-            </div>
-            <div class="header-user-info">
-              <div class="header-user-name">
-                {{ user.name }}
-              </div>
-            </div>
-          </div>
-        </div>
+    <el-dropdown class="balance" placement="bottom-end" :teleported="false" v-if="user.addr != null && isShow">
+      <div>{{balances[0].value}} <span class="unit">{{balances[0].name}}</span>
+        <div class="icon">&#xe68f;</div>
       </div>
       <template #dropdown>
         <el-dropdown-menu>
@@ -77,6 +65,22 @@
         </el-dropdown-menu>
       </template>
     </el-dropdown>
+    <div class="account" placement="bottom-end" :teleported="false" v-if="user.addr != null && isShow">
+      <div class="header-box flex">
+        <div class="header-user-box flex">
+          <div style="display: flex; align-items: center">
+            <div class="header-user-img">
+              <img :src="wallet(user.wallet).logo.src" />
+            </div>
+            <div class="header-user-info">
+              <div class="header-user-name">
+                {{ user.name }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <NavList v-show="isShow" :key="module" :module="module" @closeClick="closeClick" />
   <div class="logo-bg" v-show="isShow" :showName="true">
@@ -95,13 +99,11 @@ import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import NavList from "./nav-list.vue";
 import HeaderNav from "./header-nav.vue";
-import Identicon from "./identicon.vue";
 import Logo from "./icons/Logo2.vue";
 import Network from "./network.vue";
 import NetworkSelect from "./network-select.vue";
-import { ss58toHex } from "@/utils/chain";
-import { CurrentChainNode } from "@/plugins/chain";
-import SvgImg from "./SvgImg.vue";
+import { ChainNode, CurrentChainNode } from "@/plugins/chain";
+import { getWallets, Wallet } from "@talismn/connect-wallets";
 
 const router = useRouter();
 const store = useStore();
@@ -111,12 +113,21 @@ const pkey = ref(0);
 const user = ref(store.state.userInfo);
 const isShow = ref(store.state.currentPath != "/login");
 const theme = ref(store.state.theme);
-const network = ref(CurrentChainNode());
+const network = ref<ChainNode>(CurrentChainNode());
+const balances = ref([{ name: "", value: "" }]);
 const paths = ref<any[]>([]);
 const module = ref("");
 watch(() => store.state.theme, (newVal, _) => {
   theme.value = newVal
 })
+
+const supportedWallets: Wallet[] = getWallets().sort(
+  (w1: Wallet, w2: Wallet) => {
+    const w1index = w1.installed ? 0 : 1;
+    const w2index = w2.installed ? 0 : 1;
+    return w1index - w2index;
+  }
+);
 
 // 计算路径
 const computePath = async (p: string) => {
@@ -161,6 +172,9 @@ watch(store.state, async (newQuestion, oldQuestion) => {
 
 onMounted(() => {
   computePath(store.state.currentPath)
+  network.value.balances(user.value.addr).then((data: any) => {
+    balances.value = data
+  })
 });
 
 const menuClick = () => {
@@ -188,6 +202,12 @@ const setTheme = (t: string) => {
   document.documentElement.setAttribute("class", t);
   window.location.reload();
 };
+
+const wallet = (name: string): Wallet => {
+  return supportedWallets.find((wallet, index) => {
+    return wallet.extensionName == name
+  })!
+}
 </script>
 
 <style lang="scss" scoped>
@@ -238,8 +258,8 @@ const setTheme = (t: string) => {
 .header-logo {
   overflow: hidden;
   padding: 7px 5px;
-  background: #010e04ad;
-  border: 2px solid rgba($primary-text-rgb, 0.2);
+  background: rgba($primary-bg-rgb, 0.9);
+  border: 2px solid rgba($secondary-text-rgb, 0.1);
 
   .icon {
     display: block;
@@ -287,7 +307,7 @@ const setTheme = (t: string) => {
   margin-right: 0px;
   align-items: center;
   background-color: rgba($secondary-text-rgb, 0.06);
-  margin-right: 4Px;
+  margin-right: 6Px;
   position: relative;
   cursor: pointer;
   padding-left: 8px;
@@ -298,8 +318,15 @@ const setTheme = (t: string) => {
   align-items: center;
   display: flex;
 
+  &>img {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-right: 5px;
+  }
+
   &>div {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 
@@ -347,6 +374,12 @@ const setTheme = (t: string) => {
   height: 20px;
   border-radius: 50%;
   flex: none;
+
+  img {
+    margin: 2px;
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .more-item {
@@ -402,16 +435,11 @@ const setTheme = (t: string) => {
   padding-right: 10px;
 }
 
-.balance {
-  margin-right: 15px;
-  font-size: 13px;
-}
-
 .theme {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-right: 4Px;
+  margin-right: 6Px;
 
   >div {
     padding: 5px;
@@ -436,6 +464,27 @@ const setTheme = (t: string) => {
   background-color: rgba($secondary-text-rgb, 0.06);
   margin-right: 21px;
   padding: 0 4px;
+}
+
+.balance {
+  background-color: rgba($secondary-text-rgb, 0.06);
+  padding: 5px 0px 5px 10px;
+  height: 22px;
+  line-height: 22px;
+  margin-right: 2px;
+
+  .unit {
+    display: inline-block;
+    font-weight: bold;
+    opacity: 0.5;
+  }
+
+  .icon {
+    font-size: 12px;
+    display: inline-block;
+    margin-left: 8px;
+    margin-right: 10px;
+  }
 }
 
 .network-select {

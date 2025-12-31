@@ -118,7 +118,7 @@ import useGlobelProperties from "@/plugins/globel";
 import { ElNotification } from "element-plus";
 
 import { getUrlParams } from "@/utils/pop";
-import { ss58toHex } from "@/utils/chain";
+import { ss58toHex } from "@/utils/substrate";
 import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
 
 import Detail from "./pod/detail.vue";

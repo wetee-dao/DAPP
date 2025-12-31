@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps,ref } from "vue";
+import { ref } from "vue";
 const props = defineProps(["ps"])
 const title = ref(props.ps.title || "Send transaction to chain");
 </script>
@@ -36,7 +36,6 @@ const title = ref(props.ps.title || "Send transaction to chain");
             text-align: center;
             color: rgba($primary-text-rgb, 1) ;
             font-size: 22px;
-            font-weight: 600;
             margin-left: 20px;
             line-height: 56px;
         }

@@ -1,6 +1,6 @@
 import { getSpecTypes } from '@polkadot/types-known';
 import { Loading } from "@/plugins/pop";
-import { keyring, showToken } from "@/utils/chain";
+import { keyring, showToken } from "@/utils/substrate";
 import { ApiPromise } from "@polkadot/api";
 import type { SubmittableExtrinsic } from "@polkadot/api/types";
 import { Injected, MetadataDef } from "@polkadot/extension-inject/types";
@@ -9,7 +9,7 @@ import { base64Encode } from "@polkadot/util-crypto";
 import { type Wallet, getWallets } from "@talismn/connect-wallets";
 import { ElMessageBox, ElNotification } from "element-plus";
 import { onCallFn } from '.';
-import { getGasLimit } from '@/utils/ink';
+import { getGasLimit } from '@/utils/substrate_ink';
 import { Registry } from '@polkadot/types/types';
 import { h } from 'vue';
 import { U8aLike } from '@polkadot/util/types';

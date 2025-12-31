@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import { ss58toHex } from '@/utils/chain';
+import { ss58toHex } from '@/utils/substrate';
 import { ref, watch } from 'vue';
 
 const props = defineProps(["arg","value","disabled"])

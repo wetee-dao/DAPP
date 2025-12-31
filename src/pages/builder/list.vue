@@ -49,7 +49,7 @@ import useGlobelProperties from "@/plugins/globel";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
-import { getNumstrfromChain, getSS5842 } from "@/utils/chain";
+import { getNumstrfromChain, getSS5842 } from "@/utils/substrate";
 import { $getQueryApi } from "@/plugins/chain";
 const global = useGlobelProperties()
 
