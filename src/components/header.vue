@@ -46,26 +46,22 @@
       </template>
     </el-popover>
 
-    <el-dropdown class="balance" placement="bottom-end" :teleported="false" v-if="user.addr != null && isShow">
-      <div>{{balances[0].value}} <span class="unit">{{balances[0].name}}</span>
+    <el-dropdown class="balance" placement="bottom-end" :teleported="false" v-if="balances.length > 0 && isShow">
+      <div>
+        {{ balances[0].value }} <span class="unit">{{ balances[0].name }}</span>
         <div class="icon">&#xe68f;</div>
       </div>
       <template #dropdown>
         <el-dropdown-menu>
-          <!-- el-dropdown-item v-for="a in accounts" :key="a.address">
-            <div class="more-item">
-              &nbsp;{{ shortAddress(a.address) }}&nbsp;&nbsp;
-            </div>
-          </el-dropdown-item -->
-          <el-dropdown-item @click="nextOut">
-            <div class="more-item">
-              &nbsp;<span class="icon more-item-icon">&#xe605;</span> Login out&nbsp;&nbsp;&nbsp;
+          <el-dropdown-item >
+            <div>
+              {{ balances[0].value }} <span class="unit">{{ balances[0].name }}</span>
             </div>
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
-    <div class="account" placement="bottom-end" :teleported="false" v-if="user.addr != null && isShow">
+    <el-dropdown class="account" placement="bottom-end" :teleported="false" v-if="balances.length > 0 && isShow">
       <div class="header-box flex">
         <div class="header-user-box flex">
           <div style="display: flex; align-items: center">
@@ -80,7 +76,21 @@
           </div>
         </div>
       </div>
-    </div>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <!-- el-dropdown-item v-for="a in accounts" :key="a.address">
+            <div class="more-item">
+              &nbsp;{{ shortAddress(a.address) }}&nbsp;&nbsp;
+            </div>
+          </el-dropdown-item -->
+          <el-dropdown-item @click="nextOut">
+            <div class="more-item">
+              &nbsp;<span class="icon more-item-icon">&#xe605;</span> Disconnect&nbsp;&nbsp;&nbsp;
+            </div>
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
   </div>
   <NavList v-show="isShow" :key="module" :module="module" @closeClick="closeClick" />
   <div class="logo-bg" v-show="isShow" :showName="true">
@@ -114,7 +124,7 @@ const user = ref(store.state.userInfo);
 const isShow = ref(store.state.currentPath != "/login");
 const theme = ref(store.state.theme);
 const network = ref<ChainNode>(CurrentChainNode());
-const balances = ref([{ name: "", value: "" }]);
+const balances = ref<any[]>([]);
 const paths = ref<any[]>([]);
 const module = ref("");
 watch(() => store.state.theme, (newVal, _) => {

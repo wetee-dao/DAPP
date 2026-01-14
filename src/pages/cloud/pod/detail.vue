@@ -1,7 +1,7 @@
 <template>
   <div class="detail" @click="(e: any) => e.stopPropagation()">
     <div class="title">
-      {{ info.Name }} <span>{{ workType[info.Type as string] }} &nbsp;#{{ info.Nid }}</span>
+      {{ info.Name }} <span>{{ info.Contract}}</span>
       <span :key="ser.id" v-for="ser in service.filter(s => s.Type == 'NodePort')">
         <a target="_blank" :key="port.NodePort"
           :href="(port.Port == 443 ? 'https://' : 'http://') + ddns + ':' + port.NodePort" class="service"
@@ -54,7 +54,6 @@ import Container from "./container.vue";
 import loadingBox from "@/components/loading-box.vue";
 import { $getQueryApi } from "@/plugins/chain";
 import Bill from "./bill.vue";
-import { h160ToAccountId } from "@/utils/substrate_ink";
 
 const props = defineProps(["info", "openTag", "close"])
 const activeName = ref(props.openTag ?? "container")
@@ -234,7 +233,7 @@ const GetTEEInfo = async (item: any) => {
     top: 0;
     left: 0;
     margin-top: 40px;
-    background: #000000cf;
+    background-color: rgba($secondary-bg-rgb, 0.8);
   }
 
 

@@ -27,12 +27,12 @@ export default <insType[]>[
     url: "/disk",
     module: "disk",
   },
-  {
-    name: "Miner",
-    icon: "miner",
-    url: "/miner",
-    module: "miner",
-  },
+  // {
+  //   name: "Miner",
+  //   icon: "miner",
+  //   url: "/miner",
+  //   module: "miner",
+  // },
   {
     name: "Bridge",
     icon: "bridge",
