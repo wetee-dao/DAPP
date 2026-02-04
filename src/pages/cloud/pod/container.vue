@@ -136,7 +136,7 @@ const delContainer = async (id: string) => {
     color: $secondary-text;
     margin-top: 10px;
     background-color: rgba($gray-bg-rgb, 0.06);
-    padding: 20px;
+    padding: 12px 15px;
     border-radius: 2px;
     display: flex;
     flex-direction: row;

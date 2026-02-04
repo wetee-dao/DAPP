@@ -6,9 +6,11 @@ export async function GetLogs(cluster: any, c: any) {
 			work_loglist(
         user:"`+ c.User + `",
 				pod_id: `+ c.Id + `,
-				page: 1,
+				start: "",
 				size: 10,
-			)
+      ){
+        data
+      }
     }
   `
 
@@ -17,7 +19,7 @@ export async function GetLogs(cluster: any, c: any) {
     query: params
   })
   const data = response.data.data.work_loglist
-  return JSON.parse(data).reverse()
+  return JSON.parse(data.data).reverse()
 }
 
 export async function GetWetrics(cluster: any, c: any) {
@@ -27,9 +29,11 @@ export async function GetWetrics(cluster: any, c: any) {
 			work_wetriclist(
         user:"`+ c.User + `",
 				pod_id: `+ c.Id + `,
-				page: 1,
+				start: "",
 				size: 60,
-			)
+			){
+        data
+      }
     }
   `
 
@@ -39,7 +43,7 @@ export async function GetWetrics(cluster: any, c: any) {
   })
 
   const data = response.data.data.work_wetriclist
-  return JSON.parse(data).reverse()
+  return JSON.parse(data.data).reverse()
 }
 
 export async function GetServices(cluster: any, c: any) {

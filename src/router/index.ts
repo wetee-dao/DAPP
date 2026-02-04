@@ -47,6 +47,36 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Builder app',
         component: () => import('../pages/builder/app.vue')
     },
+    {
+        path: '/dao',
+        name: 'DAO',
+        meta: { needLogin: true },
+        redirect: '/dao/proposals'
+    },
+    {
+        path: '/dao/proposals',
+        name: 'DAO Proposals',
+        meta: { needLogin: true },
+        component: () => import('../pages/DAO/proposals.vue')
+    },
+    {
+        path: '/dao/create',
+        name: 'Create Proposal',
+        meta: { needLogin: true },
+        component: () => import('../pages/DAO/createProposal.vue')
+    },
+    {
+        path: '/dao/vote/:id',
+        name: 'Vote Proposal',
+        meta: { needLogin: true },
+        component: () => import('../pages/DAO/voteProposal.vue')
+    },
+    {
+        path: '/dao/members',
+        name: 'DAO Members',
+        meta: { needLogin: true },
+        component: () => import('../pages/DAO/members.vue')
+    },
 ]
 
 const router = createRouter({

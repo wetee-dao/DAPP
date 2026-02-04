@@ -436,9 +436,9 @@ function formatInputData(arr: Uint8Array): Uint8Array {
 }
 
 export const Ink = new InkApi({
-    subnetContract: "0x12385503bc1eaf1a42836d19f3e68f91b1dc12ba",
+    subnetContract: "0xb8f9ef4f91051be98faf0c3b6467d154e510a952",
     subnetAbiUrl: "contract/subnet.json",
-    cloudContract: "0x1ce944cc464f6a7f2e5fb722e55273ae43eac33b",
+    cloudContract: "0xe6ebd5e86e4ee611201cec330810742b799bc97f",
     cloudAbiUrl: "contract/cloud.json",
 })
 

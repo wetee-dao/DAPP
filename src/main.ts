@@ -1,5 +1,6 @@
 import { createApp, h } from 'vue';
-import 'virtual:svg-icons-register'
+import 'virtual:svg-icons-register';
+import 'element-plus/theme-chalk/dark/css-vars.css';
 
 import App from './App.vue';
 import router from './router';
@@ -8,7 +9,6 @@ import pop from './plugins/pop';
 import chain, { chainNetPing, initChainApi } from './plugins/chain';
 import './assets/styles/common/reset.scss';
 import './assets/styles/common/global.scss';
-import 'element-plus/theme-chalk/dark/css-vars.css'
 
 import {
   Chart as ChartJS,

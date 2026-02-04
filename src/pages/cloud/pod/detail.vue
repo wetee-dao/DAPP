@@ -88,12 +88,6 @@ onMounted(() => {
   let item = JSON.parse(JSON.stringify(info.value))
   GetInfo(item)
 
-  console.log(info.value.Contract)
-  $getQueryApi().contactInfo(info.value.Contract).then((contractInfo)=>{
-    console.log(contractInfo)
-  })
-  
-
   // if (props.openTag == "") {
   //   if (info.value.Type == "INK") {
   //     activeName.value = "inkCall"
@@ -156,7 +150,7 @@ const GetTEEInfo = async (item: any) => {
 <style lang="scss" scoped>
 .detail {
   overflow: hidden;
-  background-color: rgba($secondary-bg-rgb, 0.35);
+  // background-color: rgba($secondary-bg-rgb, 0.35);
   min-width: calc(100vw - 500px);
   max-width: calc(100vw - 500px);
   height: calc(100vh - 89px);

@@ -1,8 +1,9 @@
 <template>
   <div class="bill-box">
     <div class="header">
-      <div class="item">Contract account:&nbsp;&nbsp;{{ info.ContractId }}<div class="space"></div>
-        <div class="free">Free:&nbsp;&nbsp;{{ accountData.free }}</div>
+      <div class="item">Contract account:&nbsp;&nbsp;{{ info.Contract }}</div>
+      <div class="item">Substrate account:&nbsp;&nbsp;{{ accountData.ss58 }}<div class="space"></div>
+        <div class="free">Free:&nbsp;&nbsp;{{ accountData.balance.value }} {{ accountData.balance.name }}</div>
       </div>
     </div>
   </div>
@@ -18,9 +19,9 @@ const info = ref<any>(props.info)
 const accountData = ref<any>({})
 
 onMounted(() => {
-  // $getQueryApi().query("system","account",[info.value.ContractId]).then((res: any) => {
-  //   accountData.value = res.data
-  // })
+  $getQueryApi().contactInfo(info.value.Contract).then((res: any) => {
+    accountData.value = res
+  })
 })
 
 </script>
