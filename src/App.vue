@@ -1,6 +1,7 @@
 <template>
   <el-config-provider :locale="en">
     <div id="mainNav">
+      <PixelBg :tileSize="6" :gap="4" :maxOpacity="0.015" :density="0.25" :waveSpeed="0.002" :theme="currentTheme" />
       <GHeader />
       <!-- 主应用入口 -->
       <router-view class="main-content" />
@@ -11,13 +12,15 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, onMounted } from "vue";
+import { onBeforeUnmount, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import en from 'element-plus/es/locale/lang/en'
 
 import GHeader from "./components/header.vue";
+import PixelBg from "./components/anim/PixelBg.vue";
 
 const store = useStore();
+const currentTheme = computed(() => store.state.theme || 'dark');
 if (window.devicePixelRatio) {
   let scale = (window.devicePixelRatio - 1) * 1.4
   store.dispatch("setScale", (scale + 16) / 16);
@@ -57,12 +60,6 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  /* background-image: linear-gradient(
-    170deg,
-    rgba(0,0,0,0) 55%,
-    rgba(255, 255, 255, 0.06) 90%,
-    rgba(255, 255, 255, 0.09) 100%
-  ); */
 }
 
 .main-content{

@@ -60,6 +60,7 @@ declare module 'vue' {
     NetworkSelect: typeof import('./src/components/network-select.vue')['default']
     Option: typeof import('./src/components/inkform/Option.vue')['default']
     Picon: typeof import('./src/components/icons/picon.vue')['default']
+    PixelBg: typeof import('./src/components/anim/PixelBg.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Secret: typeof import('./src/components/icons/secret.vue')['default']

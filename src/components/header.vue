@@ -23,13 +23,13 @@
 
     <!-- <div class="balance">Balance: 1000WTE</div> -->
 
-    <div class="theme">
+    <!-- <div class="theme">
       <div :class="theme == 'dark' || theme == '' ? 'active' : ''" @click="setTheme('dark')"><i
           class="icon select-icon">&#xe60f;</i>
       </div>
       <div :class="theme == 'light' ? 'active' : ''" @click="setTheme('light')"><i class="icon select-icon">&#xe6bd;</i>
       </div>
-    </div>
+    </div> -->
 
     <el-popover popper-class="network-select" placement="bottom-end" trigger="hover">
       <template #reference>
