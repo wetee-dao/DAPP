@@ -27,10 +27,10 @@ const props = withDefaults(defineProps<{
   theme: 'dark',
 })
 
-// Theme-based colors
+// Theme-based colors（很淡很淡的绿色）
 const themeColors: Record<string, string> = {
-  dark: '255,255,255',    // White pixels for dark theme
-  light: '0,0,0',         // Black pixels for light theme
+  dark: '190,235,215',    // 很淡的绿色，用于深色背景
+  light: '180,220,200',   // 淡绿色，用于浅色背景
 }
 
 const currentColor = computed(() => themeColors[props.theme] || themeColors.dark)
@@ -137,7 +137,11 @@ function tick() {
     // Apply edge dynamics - more variation at edges
     const edgeVariation = edgeFactor * edgeBreath * edgeFlicker * 0.4
     targetOpacity *= (1 + edgeVariation)
-    
+
+    // 离右下角越远颜色越淡：加大衰减（平方曲线，更快变淡）
+    const fadeFactor = Math.max(0, 1 - Math.pow(normalizedDist, 2))
+    targetOpacity *= fadeFactor
+
     // Clamp to maxOpacity
     tile.target = Math.min(targetOpacity, props.maxOpacity)
     tile.opacity += (tile.target - tile.opacity) * tile.speed

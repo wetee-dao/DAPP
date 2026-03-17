@@ -175,7 +175,7 @@ const voteRules = {
 const yesVotes = computed(() => {
   return voteList.value
     .filter((v) => v.opinion === 0 && !v.deleted)
-    .reduce((sum, v) => sum.plus(new BN(v.pledge || 0)), new BN(0))
+    .reduce((sum, v) => sum.add(new BN(v.pledge || 0)), new BN(0))
     .toString();
 });
 
@@ -187,7 +187,7 @@ const noVotes = computed(() => {
 });
 
 const totalVotes = computed(() => {
-  return new BN(yesVotes.value).plus(new BN(noVotes.value)).toString();
+  return new BN(yesVotes.value).add(new BN(noVotes.value)).toString();
 });
 
 const approvalRate = computed(() => {
@@ -210,8 +210,8 @@ const formatBalance = (balance: any): string => {
 };
 
 // 获取状态类型
-const getStatusType = (status: PropStatus): string => {
-  const typeMap: Record<PropStatus, string> = {
+const getStatusType = (status: PropStatus): "primary" | "success" | "warning" | "info" | "danger" => {
+  const typeMap: Record<PropStatus, "primary" | "success" | "warning" | "info" | "danger"> = {
     [PropStatus.Pending]: "info",
     [PropStatus.Ongoing]: "warning",
     [PropStatus.Confirming]: "warning",

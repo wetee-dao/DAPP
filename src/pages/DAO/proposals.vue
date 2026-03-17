@@ -140,8 +140,8 @@ const formatBalance = (balance: any): string => {
 };
 
 // 获取状态类型
-const getStatusType = (status: PropStatus): string => {
-  const typeMap: Record<PropStatus, string> = {
+const getStatusType = (status: PropStatus): "primary" | "success" | "warning" | "info" | "danger" => {
+  const typeMap: Record<PropStatus, "primary" | "success" | "warning" | "info" | "danger"> = {
     [PropStatus.Pending]: "info",
     [PropStatus.Ongoing]: "warning",
     [PropStatus.Confirming]: "warning",

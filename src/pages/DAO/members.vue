@@ -147,7 +147,7 @@ const loadBalances = async () => {
       
       const availableBN = new BN(available || "0");
       const lockedBN = new BN(locked || "0");
-      const totalBN = availableBN.plus(lockedBN);
+      const totalBN = availableBN.add(lockedBN);
 
       balances.value[member] = {
         available: availableBN.toString(),
