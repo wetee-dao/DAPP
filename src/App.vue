@@ -1,7 +1,7 @@
 <template>
   <el-config-provider :locale="en">
     <div id="mainNav">
-      <PixelBg :tileSize="6" :gap="4" :maxOpacity="0.015" :density="0.25" :waveSpeed="0.002" :theme="currentTheme" />
+      <PixelBg :tileSize="6" :gap="4" :maxOpacity="0.05" :density="0.25" :waveSpeed="0.002" :theme="currentTheme" />
       <GHeader />
       <!-- 主应用入口 -->
       <router-view class="main-content" />

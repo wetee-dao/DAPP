@@ -19,17 +19,17 @@ const props = withDefaults(defineProps<{
   /** Current theme: 'dark' or 'light' */
   theme?: string
 }>(), {
-  tileSize: 5,
-  gap: 3,
+  tileSize: 10,
+  gap: 5,
   maxOpacity: 0.18,
   waveSpeed: 0.002,
-  density: 0.4,
+  density: 0.38,
   theme: 'dark',
 })
 
 // Theme-based colors（很淡很淡的绿色）
 const themeColors: Record<string, string> = {
-  dark: '190,235,215',    // 很淡的绿色，用于深色背景
+  dark: '190,235,130',    // 很淡的绿色，用于深色背景
   light: '180,220,200',   // 淡绿色，用于浅色背景
 }
 
@@ -121,7 +121,7 @@ function tick() {
     const dx = tile.cx - 1
     const dy = tile.cy - 1
     const distFromOrigin = Math.sqrt(dx * dx + dy * dy)
-    const maxDist = Math.sqrt(2)
+    const maxDist = Math.sqrt(1.3)
     const normalizedDist = distFromOrigin / maxDist
     
     // Base wave animation
@@ -150,20 +150,37 @@ function tick() {
 
 function drawShield(ctx: CanvasRenderingContext2D) {
   const { width, height } = ctx.canvas
-  
-  // Shield size and position (bottom-right corner) - 1/4 of original
+
+  // Shield size and position (bottom-right corner)
   const shieldSize = Math.min(width, height) * 0.03
   const margin = 30
   const centerX = width - margin - shieldSize / 2
   const centerY = height - margin - shieldSize / 2
-  
+
+  ctx.save()
+  ctx.translate(centerX, centerY)
+
+  // 3 层放大扩散圆环：错开相位，深一点绿色
+  const ringColor = '100,160,130'
+  const cycle = 3.5
+  const baseRadius = shieldSize / 2
+  for (let i = 0; i < 3; i++) {
+    const phase = ((time / cycle + i / 3) % 1)
+    const ringScale = 1 + phase * 1.8
+    const ringOpacity = (1 - phase) * 0.14
+    if (ringOpacity > 0.002) {
+      ctx.beginPath()
+      ctx.arc(0, 0, baseRadius * ringScale, 0, Math.PI * 2)
+      ctx.strokeStyle = `rgba(${ringColor},${ringOpacity.toFixed(3)})`
+      ctx.lineWidth = 1
+      ctx.stroke()
+    }
+  }
+
   // Shield opacity (subtle but visible)
   const shieldOpacity = 0.06
   const strokeOpacity = 0.12
-  
-  ctx.save()
-  ctx.translate(centerX, centerY)
-  
+
   // Draw shield shape
   ctx.beginPath()
   const w = shieldSize / 2
