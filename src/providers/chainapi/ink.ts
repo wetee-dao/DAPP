@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Abi } from "@polkadot/api-contract";
-import { u8aToHex, BN, hexToU8a, u8aConcat } from '@polkadot/util';
+import { u8aToHex, BN, u8aConcat } from '@polkadot/util';
 import { Bytes } from '@polkadot/types';
 import { AnyJson, Registry, TypeDef } from "@polkadot/types/types";
 import { ElNotification } from "element-plus";
@@ -258,16 +258,7 @@ class InkApi {
         const userInfo = this.getCallerInfo()
         const params = transformUserInput(abi!.registry, methodAbi.args, args)
 
-        // const inputData = methodAbi.toU8a(transformUserInput(abi!.registry, methodAbi.args, args));
-        // const response = await axios.get(this.queryUrl + "contracts/ink/" + contract + "/dry-run", {
-        //     params: { caller: userInfo.addr, inputData: u8aToHex(inputData), payValue: payValue },
-        //     paramsSerializer: (params) => qs.stringify(params, { arrayFormat: 'brackets' }),
-        // })
-
         let inputData = null
-        // if (method == "delDisk") {
-        //     inputData = methodAbi.toU8a(transformUserInput(abi!.registry, methodAbi.args, args));
-        // } else {
         const paramsU8a = methodAbi.args.map(({ type: { lookupName, type } }, index) => {
             const p = abi.registry.createType(lookupName || type, params[index]).toU8a()
             if (type == "Address") {
@@ -276,7 +267,6 @@ class InkApi {
             return p
         })
         inputData = u8aConcat(abi.registry.createType('ContractSelector', methodAbi.selector).toU8a(), ...paramsU8a)
-        // }
 
         console.log("ink_builder contract", contract)
         console.log("            abi args", methodAbi.args)
@@ -327,8 +317,8 @@ class InkApi {
                 inputData: u8aToHex(inputData),
                 payValue: payValue.toString(),
             },
-            gasConsumed: response.gasConsumed,
-            gasRequired: response.gasRequired,
+            gasConsumed: response.weightConsumed,
+            gasRequired: response.weightRequired,
             storageDeposit: response.storageDeposit,
         }
     }
@@ -412,7 +402,18 @@ function decodeReturnValue(
     data: Bytes,
     registry: Registry,
 ): AnyJson {
-    const returnTypeName = getReturnTypeName(returnType);
+    let returnTypeName = getReturnTypeName(returnType);
+    const resultInkErrSuffix = ', InkPrimitivesLangError>';
+    if (
+        returnTypeName.startsWith('Result<') &&
+        returnTypeName.endsWith(resultInkErrSuffix)
+    ) {
+        returnTypeName = returnTypeName.slice(
+            'Result<'.length,
+            returnTypeName.length - resultInkErrSuffix.length,
+        );
+    }
+
     let r: AnyJson = 'Decoding error';
     try {
         r = returnType ? registry.createTypeUnsafe(returnTypeName, [data]).toHuman() : '()';
