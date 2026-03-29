@@ -3,17 +3,19 @@
 .project {
   box-sizing: border-box;
   flex: 1;
-  padding-left: 20px;
+  padding-left: 8px;
   display: flex;
   padding-right: 0;
 }
 
 .page-title {
-  font-size: 22px;
-  line-height: 30px;
+  font-size: 18px;
+  line-height: 1.4;
   font-weight: 500;
-  padding-bottom: 10px;
-  padding-top: 20px;
+  letter-spacing: 0.04em;
+  color: rgba($secondary-text-rgb, 0.94);
+  padding-bottom: 16px;
+  padding-top: 4px;
 
   .page-title-more {
     display: block;
@@ -43,13 +45,12 @@
   display: block;
   overflow-x: visible;
   overflow-y: auto;
-  height: calc(100vh - 85px);
   padding-right: 15px !important;
   text-align: left;
   flex: 1;
 
   &::-webkit-scrollbar-track {
-    background: rgba($gray-bg-rgb, 0.1);
+    background: transparent;
   }
 
   &.thin_box {
@@ -70,9 +71,9 @@
     float: left;
     height: 125px;
     align-items: flex-start;
-    padding: 10px 10px 0 10px;
-    background-color: rgba($primary-bg-rgb, 0.7);
-    border: 1Px solid rgba($secondary-text-rgb, 0.08);
+    padding: 12px 12px 0 12px;
+    background-color: rgba($secondary-text-rgb, 0.035);
+    border: 1px solid rgba($secondary-text-rgb, 0.065);
     position: relative;
     text-align: left;
 
@@ -93,7 +94,8 @@
     }
 
     &.active {
-      border: 2Px solid rgba($primary-text-rgb, 0.7);
+      border: 1px solid rgba($primary-text-rgb, 0.55);
+      background-color: rgba($primary-text-rgb, 0.04);
     }
 
     .teeApp {
@@ -382,8 +384,8 @@
 
   .avtive {
     flex: 1;
-    border: 1Px solid rgba($secondary-text-rgb, 0.1);
-    background-color: rgba($primary-bg-rgb, 0.7);
+    border: 1px solid rgba($secondary-text-rgb, 0.065);
+    background-color: rgba($secondary-text-rgb, 0.035);
     border-bottom: none;
     display: block;
 
@@ -391,8 +393,9 @@
       height: 50px;
       line-height: 50px;
       padding: 0 15px;
-      font-size: 16px;
-      border-bottom: 1Px solid rgba($secondary-text-rgb, 0.1);
+      font-size: 15px;
+      letter-spacing: 0.02em;
+      border-bottom: 1px solid rgba($secondary-text-rgb, 0.06);
       align-items: center;
       width: 100%;
       box-sizing: border-box;

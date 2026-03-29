@@ -231,10 +231,9 @@ const wallet = (name: string): Wallet => {
   top: 0;
   left: 0;
   z-index: 100;
-  border-bottom: 1Px solid rgba($secondary-text-rgb, 0.1);
-  background-image: radial-gradient(transparent 1px, rgba($primary-bg-rgb, 0.9) 1.5px);
-  background-size: 4px 4px;
-  backdrop-filter: saturate(50%) blur(4px);
+  border-bottom: 1px solid rgba($secondary-text-rgb, 0.055);
+  background-color: rgba($primary-bg-rgb, 0.82);
+  backdrop-filter: blur(18px) saturate(1.08);
   align-items: center;
 }
 
@@ -250,13 +249,13 @@ const wallet = (name: string): Wallet => {
   height: 100%;
   width: 9.8rem;
   min-width: 9.8rem;
-  border-right: 1Px solid rgba($secondary-text-rgb, 0.09);
+  border-right: 1px solid rgba($secondary-text-rgb, 0.05);
   display: flex;
   align-items: center;
   cursor: pointer;
-  padding-left: 17px;
+  padding-left: 20px;
   box-sizing: border-box;
-  margin-right: 15px;
+  margin-right: 18px;
 }
 
 .header-box {
@@ -268,8 +267,8 @@ const wallet = (name: string): Wallet => {
 .header-logo {
   overflow: hidden;
   padding: 7px 5px;
-  background: rgba($primary-bg-rgb, 0.9);
-  border: 2px solid rgba($secondary-text-rgb, 0.1);
+  background: rgba($primary-bg-rgb, 0.55);
+  border: 1px solid rgba($secondary-text-rgb, 0.08);
 
   .icon {
     display: block;
@@ -316,7 +315,7 @@ const wallet = (name: string): Wallet => {
 .network-box {
   margin-right: 0px;
   align-items: center;
-  background-color: rgba($secondary-text-rgb, 0.06);
+  background-color: rgba($secondary-text-rgb, 0.045);
   margin-right: 6Px;
   position: relative;
   cursor: pointer;
@@ -457,7 +456,7 @@ const wallet = (name: string): Wallet => {
     height: 22px;
     cursor: pointer;
     text-align: center;
-    background-color: rgba($secondary-text-rgb, 0.06);
+    background-color: rgba($secondary-text-rgb, 0.045);
 
     i {
       font-size: 16px;
@@ -471,13 +470,13 @@ const wallet = (name: string): Wallet => {
 }
 
 .account {
-  background-color: rgba($secondary-text-rgb, 0.06);
+  background-color: rgba($secondary-text-rgb, 0.045);
   margin-right: 21px;
   padding: 0 4px;
 }
 
 .balance {
-  background-color: rgba($secondary-text-rgb, 0.06);
+  background-color: rgba($secondary-text-rgb, 0.045);
   padding: 5px 0px 5px 10px;
   height: 22px;
   line-height: 22px;

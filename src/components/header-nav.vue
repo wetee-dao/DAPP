@@ -27,32 +27,39 @@ const closeClick = (i:number) => {
 <style lang="scss" scoped>
 
 .headerNav {
-  border-radius: 4px;
-  color: rgba($secondary-text-rgb,1);
-  // font-weight: bold;
-  // color: rgba($primary-text-rgb,0.3);
-  padding: 0 5px;
+  border-radius: 0;
+  color: rgba($secondary-text-rgb, 0.55);
+  padding: 0 8px;
   align-items: center;
+  font-size: 13px;
+  letter-spacing: 0.02em;
 
   &>div {
     display: inline-flex;
     align-items: center;
-    font-size: 16px;
   }
 
-  .px{
-    cursor: pointer;
-    // font-size: 15px;
+  .px {
+    cursor: default;
+    user-select: none;
+    opacity: 0.4;
+    padding: 0 2px;
   }
 
   .p {
     cursor: pointer;
-    // font-size: 15px;
-    margin: 0px 7px;
-    &:hover{
-      text-decoration: underline;
+    margin: 0 6px;
+    color: rgba($secondary-text-rgb, 0.78);
+    transition: color 0.15s ease;
+
+    &:hover {
       color: $primary-text;
     }
+  }
+
+  /* 最后一级为当前页，略强调 */
+  & > div:last-child .p {
+    color: rgba($secondary-text-rgb, 0.9);
   }
 }
 

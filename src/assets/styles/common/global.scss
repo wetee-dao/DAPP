@@ -8,13 +8,14 @@ body {
 }
 
 html.dark {
-  --el-button-bg-color: rgb(21, 26, 25) !important;
-  --el-color-primary-light-3: rgb(21, 26, 25) !important;
-  --el-color-primary-light-5: rgb(21, 26, 25) !important;
-  --el-color-primary-light-7: rgb(21, 26, 25) !important;
-  --el-color-primary-light-8: rgb(21, 26, 25) !important;
-  --el-color-primary-light-9: rgb(21, 26, 25) !important;
-  --el-color-primary-dark-2: rgb(21, 26, 25) !important;
+  /* 与页面底 rgb(12,16,19) 一致，避免按钮/表单发灰绿 */
+  --el-button-bg-color: rgb(12, 16, 19) !important;
+  --el-color-primary-light-3: rgb(12, 16, 19) !important;
+  --el-color-primary-light-5: rgb(12, 16, 19) !important;
+  --el-color-primary-light-7: rgb(12, 16, 19) !important;
+  --el-color-primary-light-8: rgb(12, 16, 19) !important;
+  --el-color-primary-light-9: rgb(12, 16, 19) !important;
+  --el-color-primary-dark-2: rgb(12, 16, 19) !important;
   --el-color-primary: var(--g-primary-text) !important;
 }
 html.light {
@@ -35,6 +36,7 @@ html.light {
 
 body {
   color: $secondary-text;
+  letter-spacing: 0.012em;
 
   .no-border-input{
     .el-input__wrapper,
@@ -57,14 +59,14 @@ body {
   .el-textarea__inner {
     background: transparent;
     box-shadow: none !important;
-    border: 2Px solid rgba($color: $secondary-text-rgb, $alpha: 0.2);
+    border: 1px solid rgba($color: $secondary-text-rgb, $alpha: 0.1);
     border-radius: 0px;
   }
 
   .el-input-group__prepend{
     background: transparent;
     box-shadow: none !important;
-    border: 2Px solid rgba($color: $secondary-text-rgb, $alpha: 0.2);
+    border: 1px solid rgba($color: $secondary-text-rgb, $alpha: 0.1);
     border-right: none;
     box-sizing: border-box;
   }
@@ -72,19 +74,19 @@ body {
   .el-input-group__append{
     background: transparent;
     box-shadow: none !important;
-    border: 2Px solid rgba($color: $secondary-text-rgb, $alpha: 0.2);
+    border: 1px solid rgba($color: $secondary-text-rgb, $alpha: 0.1);
     border-left: none;
     box-sizing: border-box;
   }
 
   .el-button {
     background: $primary-bg;
-    border: 2px solid rgba($color: $secondary-text-rgb, $alpha: 0.1);
+    border: 1px solid rgba($color: $secondary-text-rgb, $alpha: 0.08);
     color: $secondary-text;
     border-radius: 2px;
 
     &:hover {
-      border: 2px solid rgba($color: $primary-text-rgb, $alpha: 0.4);
+      border: 1px solid rgba($color: $primary-text-rgb, $alpha: 0.35);
       color: $secondary-text;
     }
 
@@ -193,8 +195,9 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-  height: 30px;
-  background-color: rgba(59, 73, 70, 0.433);
+  height: 36px;
+  background-color: rgba(var(--g-secondary-text-rgb), 0.12);
+  border-radius: 0;
 }
 
 @font-face {

@@ -10,8 +10,12 @@
         </ul>
       </div> -->
     <div class="list">
-      <div :class="item.module == props.module ? 'active' : '' + (item.disabled ? ' disabled' : '')" @click="toUri(item)" :key="item.name"
-        v-for="(item, index) in lists">
+      <div
+        :class="{ active: item.module === props.module, disabled: item.disabled }"
+        @click="toUri(item)"
+        :key="item.name"
+        v-for="(item, index) in lists"
+      >
         <div class="icon">
           <Picon :icon="item.icon" />
         </div>
@@ -55,8 +59,8 @@ const toUri = (item: insType) => {
   z-index: 99;
   top: 60px;
   width: 9.8rem;
-  border-right: 1Px solid rgba($secondary-text-rgb, 0.09);
   box-sizing: border-box;
+  border-right: 1px solid rgba($secondary-text-rgb, 0.045);
 
   .search {
     margin-bottom: 20px;
@@ -66,78 +70,60 @@ const toUri = (item: insType) => {
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-top: 10px;
+    padding: 12px 0 24px;
+    gap: 2px;
 
-    >div {
-      border: 0;
+    > div {
       display: flex;
-      font-size: 16px;
-      line-height: 18px;
-      cursor: pointer;
-      padding: 14px 0px 14px 16px;
-      flex-direction: row;
       align-items: center;
-      color: rgba($secondary-text-rgb, 1);
-      justify-content: left;
+      cursor: pointer;
+      padding: 15px 20px 15px 18px;
+      flex-direction: row;
+      justify-content: flex-start;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: 0.02em;
+      color: rgba($secondary-text-rgb, 0.48);
+      transition: color 0.2s ease, opacity 0.2s ease;
 
       .icon {
-        width: 22px;
-        height: 22px;
-        margin-right: 5px;
-        // margin-left: -4px;
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
         display: block;
+        flex-shrink: 0;
+        opacity: 0.55;
 
         :deep(path) {
-          fill: rgba($secondary-text-rgb, 0.8);
+          fill: currentColor;
+          transition: opacity 0.2s ease;
+        }
+      }
+
+      @media (hover: hover) {
+        &:hover:not(.disabled):not(.active) {
+          color: rgba($secondary-text-rgb, 0.78);
+
+          .icon {
+            opacity: 0.85;
+          }
         }
       }
 
       &.active {
+        font-weight: 500;
         color: $primary-text;
-        // background-color: rgba($secondary-text-rgb, 0.06);
-        // position: relative;
-        // font-weight: bold;
-
-        // &::after,&::before{
-        //   content: "";
-        //   position: absolute;
-        //   left: 6px;
-        //   top: calc(50% - 2px);
-        //   width: 4px;
-        //   height: 4px;
-        //   background-color: rgba($primary-text-rgb, 1);
-        // }
-
-        // &::before{
-        //   left: auto;
-        //   right: 0;
-        // }
+        letter-spacing: 0.025em;
 
         .icon {
           opacity: 1;
-
-          :deep(path) {
-            fill: $primary-text;
-          }
         }
-
-        // .left,.right {
-        //   position: absolute;
-        //   left: 1px;
-        //   top: 50%;
-        //   width: 8px;
-        //   height: 1px;
-        //   background-color: rgba($primary-text-rgb, 0.6);
-        // }
-
-        // .right {
-        //   right: 1px;
-        //   left: auto;
-        // }
       }
 
-      &.disabled{
-        opacity: 0.4;
+      &.disabled {
+        opacity: 0.32;
+        cursor: not-allowed;
       }
     }
   }

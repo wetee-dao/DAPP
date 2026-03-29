@@ -1,7 +1,7 @@
 <template>
   <el-config-provider :locale="en">
     <div id="mainNav">
-      <PixelBg :tileSize="6" :gap="4" :maxOpacity="0.05" :density="0.25" :waveSpeed="0.002" :theme="currentTheme" />
+      <PixelBg :tileSize="5" :gap="3" :maxOpacity="0.03" :density="0.12" :waveSpeed="0.0015" :theme="currentTheme" />
       <GHeader />
       <!-- 主应用入口 -->
       <router-view class="main-content" />
@@ -66,7 +66,7 @@ onBeforeUnmount(() => {
   margin-left: 150px;
   width: calc(100vw - 150px) !important;
   box-sizing: border-box;
-  padding: 85px 20px 0;
+  padding: 86px 32px 40px;
 }
 
 #subview {

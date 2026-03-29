@@ -21,16 +21,16 @@ const props = withDefaults(defineProps<{
 }>(), {
   tileSize: 10,
   gap: 5,
-  maxOpacity: 0.18,
-  waveSpeed: 0.002,
-  density: 0.38,
+  maxOpacity: 0.14,
+  waveSpeed: 0.0014,
+  density: 0.28,
   theme: 'dark',
 })
 
-// Theme-based colors（很淡很淡的绿色）
+/** 低饱和、贴近底色的「环境光」色，避免霓虹点阵感 */
 const themeColors: Record<string, string> = {
-  dark: '190,235,130',    // 很淡的绿色，用于深色背景
-  light: '180,220,200',   // 淡绿色，用于浅色背景
+  dark: '118, 132, 126',
+  light: '130, 148, 138',
 }
 
 const currentColor = computed(() => themeColors[props.theme] || themeColors.dark)
@@ -85,7 +85,7 @@ function buildGrid(canvas: HTMLCanvasElement) {
         cy: cy,
         opacity: 0,
         target: 0,
-        speed: 0.006 + Math.random() * 0.01,
+        speed: 0.004 + Math.random() * 0.006,
         active: isActive,
         noise: (Math.random() - 0.5) * 2,
         edgeNoise: Math.random(),
@@ -103,12 +103,12 @@ function waveAt(cx: number, cy: number, noise: number, t: number): number {
   const angle = Math.atan2(dy, dx)
 
   const warp =
-    Math.sin(angle * 3 + t * 0.3) * 0.06 +
-    Math.sin(angle * 7 - t * 0.18) * 0.035 +
-    Math.sin(angle * 11 + t * 0.1) * 0.02
+    Math.sin(angle * 3 + t * 0.22) * 0.035 +
+    Math.sin(angle * 5 - t * 0.12) * 0.018 +
+    Math.sin(angle * 8 + t * 0.07) * 0.012
 
-  const distorted = dist + warp + noise * 0.015
-  const phase = (distorted * 2.5 - t * 3) % 2
+  const distorted = dist + warp + noise * 0.01
+  const phase = (distorted * 2.2 - t * 2.35) % 2
   return (Math.sin(phase * Math.PI) + 1) / 2
 }
 
@@ -124,19 +124,15 @@ function tick() {
     const maxDist = Math.sqrt(1.3)
     const normalizedDist = distFromOrigin / maxDist
     
-    // Base wave animation
+    // Base wave：略提高阈值，点亮像素更少、更「呼吸感」
     const wave = waveAt(tile.cx, tile.cy, tile.noise, time)
-    let targetOpacity = wave > 0.38 ? props.maxOpacity * wave : 0
-    
-    // Dynamic edge variation - edges breathe independently
-    // Tiles farther from origin have more edge effect
+    let targetOpacity = wave > 0.46 ? props.maxOpacity * wave : 0
+
     const edgeFactor = normalizedDist * normalizedDist
-    const edgeBreath = Math.sin(time * 2 + tile.edgePhase) * 0.5 + 0.5
-    const edgeFlicker = Math.sin(time * 5 + tile.edgeNoise * 10) * 0.3 + 0.7
-    
-    // Apply edge dynamics - more variation at edges
-    const edgeVariation = edgeFactor * edgeBreath * edgeFlicker * 0.4
-    targetOpacity *= (1 + edgeVariation)
+    const edgeBreath = Math.sin(time * 1.1 + tile.edgePhase) * 0.5 + 0.5
+    const edgeFlicker = Math.sin(time * 2.2 + tile.edgeNoise * 6) * 0.2 + 0.8
+    const edgeVariation = edgeFactor * edgeBreath * edgeFlicker * 0.1
+    targetOpacity *= 1 + edgeVariation
 
     // 离右下角越远颜色越淡：加大衰减（平方曲线，更快变淡）
     const fadeFactor = Math.max(0, 1 - Math.pow(normalizedDist, 2))
@@ -146,6 +142,18 @@ function tick() {
     tile.target = Math.min(targetOpacity, props.maxOpacity)
     tile.opacity += (tile.target - tile.opacity) * tile.speed
   }
+}
+
+/** Shield outline in local coords (origin = shield center). */
+function addShieldOutlinePath(ctx: CanvasRenderingContext2D, w: number, h: number) {
+  ctx.moveTo(0, -h)
+  ctx.bezierCurveTo(w * 0.9, -h, w, -h * 0.6, w, -h * 0.2)
+  ctx.lineTo(w, h * 0.4)
+  ctx.quadraticCurveTo(w * 0.5, h, 0, h * 1.1)
+  ctx.quadraticCurveTo(-w * 0.5, h, -w, h * 0.4)
+  ctx.lineTo(-w, -h * 0.2)
+  ctx.bezierCurveTo(-w, -h * 0.6, -w * 0.9, -h, 0, -h)
+  ctx.closePath()
 }
 
 function drawShield(ctx: CanvasRenderingContext2D) {
@@ -160,14 +168,18 @@ function drawShield(ctx: CanvasRenderingContext2D) {
   ctx.save()
   ctx.translate(centerX, centerY)
 
-  // 3 层放大扩散圆环：错开相位，深一点绿色
-  const ringColor = '100,160,130'
-  const cycle = 3.5
+  const w = shieldSize / 2
+  const h = shieldSize / 2
+
+  // 3 层放大扩散圆环：半径扩得更大，与盾牌区域错开显示
+  const ringColor = '96, 118, 108'
+  const cycle = 4.2
+  const maxRingExpand = 3.2
   const baseRadius = shieldSize / 2
   for (let i = 0; i < 3; i++) {
     const phase = ((time / cycle + i / 3) % 1)
-    const ringScale = 1 + phase * 1.8
-    const ringOpacity = (1 - phase) * 0.14
+    const ringScale = 1 + phase * maxRingExpand
+    const ringOpacity = (1 - phase) * 0.072
     if (ringOpacity > 0.002) {
       ctx.beginPath()
       ctx.arc(0, 0, baseRadius * ringScale, 0, Math.PI * 2)
@@ -177,34 +189,25 @@ function drawShield(ctx: CanvasRenderingContext2D) {
     }
   }
 
-  // Shield opacity (subtle but visible)
-  const shieldOpacity = 0.06
-  const strokeOpacity = 0.12
+  // 挖掉盾牌形状内的波纹，避免圆环与盾牌叠在一起
+  ctx.save()
+  ctx.globalCompositeOperation = 'destination-out'
+  ctx.beginPath()
+  addShieldOutlinePath(ctx, w, h)
+  ctx.fillStyle = '#000'
+  ctx.fill()
+  ctx.restore()
+
+  const shieldOpacity = 0.038
 
   // Draw shield shape
   ctx.beginPath()
-  const w = shieldSize / 2
-  const h = shieldSize / 2
-  
-  // Classic shield: curved top, straight sides, pointed bottom
-  ctx.moveTo(0, -h)                    // Top center
-  ctx.bezierCurveTo(w * 0.9, -h, w, -h * 0.6, w, -h * 0.2)  // Right top curve
-  ctx.lineTo(w, h * 0.4)               // Right side
-  ctx.quadraticCurveTo(w * 0.5, h, 0, h * 1.1)  // Right bottom to point
-  ctx.quadraticCurveTo(-w * 0.5, h, -w, h * 0.4)  // Left bottom
-  ctx.lineTo(-w, -h * 0.2)             // Left side
-  ctx.bezierCurveTo(-w, -h * 0.6, -w * 0.9, -h, 0, -h)  // Left top curve
-  ctx.closePath()
+  addShieldOutlinePath(ctx, w, h)
   
   // Fill with subtle opacity
   ctx.fillStyle = `rgba(${currentColor.value},${shieldOpacity})`
   ctx.fill()
-  
-  // Add stroke for clearer shape
-  ctx.strokeStyle = `rgba(${currentColor.value},${strokeOpacity})`
-  ctx.lineWidth = 1
-  ctx.stroke()
-  
+
   // Draw cross-shaped cutout in the center
   ctx.save()
   ctx.globalCompositeOperation = 'destination-out'
@@ -224,13 +227,24 @@ function drawShield(ctx: CanvasRenderingContext2D) {
   ctx.restore()
 }
 
+/** 中心略压暗、四角略亮，主内容区更干净（阅读区不抢戏） */
+function contentCalmFactor(x: number, y: number, s: number, width: number, height: number): number {
+  const mx = (x + s * 0.5) / width
+  const my = (y + s * 0.5) / height
+  const nd = Math.hypot(mx - 0.5, my - 0.5) / 0.70710678
+  return 0.38 + 0.62 * Math.pow(Math.min(nd, 1), 0.95)
+}
+
 function draw(ctx: CanvasRenderingContext2D) {
   const { width, height } = ctx.canvas
   ctx.clearRect(0, 0, width, height)
   const s = props.tileSize
   for (const tile of tiles) {
-    if (!tile.active || tile.opacity < 0.004) continue
-    ctx.fillStyle = `rgba(${currentColor.value},${tile.opacity.toFixed(3)})`
+    if (!tile.active || tile.opacity < 0.003) continue
+    const calm = contentCalmFactor(tile.x, tile.y, s, width, height)
+    const a = tile.opacity * calm
+    if (a < 0.002) continue
+    ctx.fillStyle = `rgba(${currentColor.value},${a.toFixed(4)})`
     ctx.fillRect(tile.x, tile.y, s, s)
   }
   

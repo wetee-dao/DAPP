@@ -37,17 +37,18 @@
     }
 
     html.dark {
+      /* 主背景与官网一致 */
       --g-primary-bg: rgb(12, 16, 19);
       --g-secondary-bg: rgb(13, 17, 20);
-      --g-primary-text: rgb(80, 250, 130);
-      --g-secondary-text: rgba(220, 220, 220);
-      --g-gray-bg: rgb(148, 148, 148);
+      --g-primary-text: rgb(88, 232, 152);
+      --g-secondary-text: rgb(214, 216, 220);
+      --g-gray-bg: rgb(124, 126, 132);
 
       --g-primary-bg-rgb: 12, 16, 19;
       --g-secondary-bg-rgb: 13, 17, 20;
-      --g-primary-text-rgb: 80, 250, 130;
-      --g-secondary-text-rgb: 220, 220, 220;
-      --g-gray-bg-rgb: 148, 148, 148;
+      --g-primary-text-rgb: 88, 232, 152;
+      --g-secondary-text-rgb: 214, 216, 220;
+      --g-gray-bg-rgb: 124, 126, 132;
     }
 
     html.dark body {
@@ -55,27 +56,29 @@
     }
 
     html.light {
-      --g-primary-bg: rgb(230, 232, 240);
-      --g-secondary-bg: rgb(220, 222, 232);
-      --g-primary-text: rgb(21, 132, 54);
-      --g-secondary-text: rgb(34, 34, 34);
-      --g-gray-bg: rgb(0, 67, 45);
+      /* 浅灰底略偏冷，正文炭灰、主绿略沉一点 */
+      --g-primary-bg: rgb(246, 247, 249);
+      --g-secondary-bg: rgb(235, 236, 240);
+      --g-primary-text: rgb(22, 118, 62);
+      --g-secondary-text: rgb(42, 44, 48);
+      --g-gray-bg: rgb(18, 82, 54);
 
-      --g-primary-bg-rgb: 230, 232, 240;
-      --g-secondary-bg-rgb: 220, 222, 232;
-      --g-primary-text-rgb: 21, 132, 54;
-      --g-secondary-text-rgb: 34, 34, 34;
-      --g-gray-bg-rgb: 0, 67, 45;
+      --g-primary-bg-rgb: 246, 247, 249;
+      --g-secondary-bg-rgb: 235, 236, 240;
+      --g-primary-text-rgb: 22, 118, 62;
+      --g-secondary-text-rgb: 42, 44, 48;
+      --g-gray-bg-rgb: 18, 82, 54;
     }
 
     html.light body {
     }
 
     body {
-      background-position: 0 12px;
-      background-size: 1.4rem 1.4rem;
       background-color: var(--g-primary-bg);
       color: var(--g-primary-text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
 
     #loader {
@@ -151,10 +154,6 @@
         box-shadow: -.5em 0 0 currentcolor;
         background-color: transparent;
       }
-    }
-
-    body {
-      background-color: var(--g-primary-bg);
     }
   </style>
 </head>
