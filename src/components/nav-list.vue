@@ -19,7 +19,7 @@
         <div class="icon">
           <Picon :icon="item.icon" />
         </div>
-        {{ item.name }}
+        {{ getLabel(item) }}
         <!-- <div class="left"></div>
         <div class="right"></div> -->
       </div>
@@ -28,14 +28,20 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import service, { insType } from "../utils/service";
 
 const router = useRouter();
+const { t } = useI18n();
 const input = ref("");
 const lists = ref(service);
 const props = defineProps(["module"])
+
+const getLabel = (item: insType) => {
+  return item.nameKey ? t(item.nameKey) : item.name;
+};
 
 const search = (list: any) => {
   return list.filter(

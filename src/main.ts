@@ -5,6 +5,7 @@ import 'element-plus/theme-chalk/dark/css-vars.css';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import i18n, { setI18nLanguage } from './i18n';
 import pop from './plugins/pop';
 import chain, { chainNetPing, initChainApi } from './plugins/chain';
 import './assets/styles/common/reset.scss';
@@ -32,6 +33,7 @@ ChartJS.register(
 )
 
 const m = () => {
+  setI18nLanguage(store.state.locale);
   const app = createApp({
     setup() {
 
@@ -42,6 +44,7 @@ const m = () => {
   app.use(pop)
     .use(chain)
     .use(store)
+    .use(i18n)
     .use(router)
     .mount('#mainApp');
 }

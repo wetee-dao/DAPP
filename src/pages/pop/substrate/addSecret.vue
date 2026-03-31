@@ -3,7 +3,7 @@
     <div @click="(e: any) => e.stopPropagation()">
       <div class="title">
         <!-- <i class="icon">&#xe675;</i> -->
-        Create Secret data
+        {{ t('secret.createTitle') }}
         <div class="space"></div>
         <div class="close-btn" @click="closeClick">
           <i class="icon right">&#xe604;</i>
@@ -11,19 +11,19 @@
       </div>
       <el-form :model="form" class="form simple-form">
         <div class="form-context-box">
-          <div class="form-sub-title">Secret Key Name</div>
+          <div class="form-sub-title">{{ t('secret.keyName') }}</div>
           <div class="form-input-box">
-            <el-input v-model="form.key" placeholder="Name"></el-input>
+            <el-input v-model="form.key" :placeholder="t('secret.inputName')"></el-input>
           </div>
         </div>
         <div class="form-context-box">
-          <div class="form-sub-title">Secret Data</div>
+          <div class="form-sub-title">{{ t('secret.secretData') }}</div>
           <div class="form-input-box">
-            <el-input type="textarea" v-model="form.value" :rows="6" placeholder="Input secret data"></el-input>
+            <el-input type="textarea" v-model="form.value" :rows="6" :placeholder="t('secret.inputSecretData')"></el-input>
           </div>
         </div>
         <div class="form-context-box">
-          <el-button size="large" type="primary" @click="toAdd">Submit to chain</el-button>
+          <el-button size="large" type="primary" @click="toAdd">{{ t('secret.submitToChain') }}</el-button>
         </div>
       </el-form>
     </div>
@@ -33,12 +33,14 @@
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { ElNotification } from "element-plus";
+import { useI18n } from "vue-i18n";
 import { $getTxProvider } from "@/plugins/chain";
 import { SecretRSA, uploadSecret } from "@/apis/secret";
 import JSEncrypt from "jsencrypt";
 import { blake2bHash } from "@/utils/hash";
 
 const props = defineProps(["router", "store", "close", "app"])
+const { t } = useI18n();
 
 const form = reactive({
   key: '',
@@ -53,8 +55,8 @@ const toAdd = async () => {
   await $getTxProvider(async (chain): Promise<void> => {
     if (!form.key) {
       ElNotification({
-        title: 'Error',
-        message: "Please input name",
+        title: t('common.error'),
+        message: t('secret.pleaseInputName'),
         type: 'error',
       })
       return;
@@ -62,8 +64,8 @@ const toAdd = async () => {
 
     if (!form.value) {
       ElNotification({
-        title: 'Error',
-        message: "Please input description",
+        title: t('common.error'),
+        message: t('secret.pleaseInputDescription'),
         type: 'error',
       })
       return;
@@ -72,8 +74,8 @@ const toAdd = async () => {
     const client = chain.client;
     if (!client) {
       ElNotification({
-        title: 'Error',
-        message: "Please connect to the chain",
+        title: t('common.error'),
+        message: t('secret.pleaseConnectChain'),
         type: 'error',
       })
       return;
@@ -86,8 +88,8 @@ const toAdd = async () => {
     const encrypted = crypt.encrypt(form.value);
     if (!encrypted) {
       ElNotification({
-        title: 'Error',
-        message: "Encrypt failed",
+        title: t('common.error'),
+        message: t('secret.encryptFailed'),
         type: 'error',
       })
       return;
@@ -103,15 +105,16 @@ const toAdd = async () => {
       }, () => { })
 
       ElNotification({
-        title: 'Success',
-        message: "Upload secret success",
+        title: t('common.success'),
+        message: t('secret.uploadSuccess'),
         type: 'success',
       })
 
       id = dry.dry.Ok
     })
 
-    await uploadSecret(id, encrypted, "0x" + hash, signer)
+    const resp = await uploadSecret(id, encrypted, "0x" + hash, signer)
+    // console.log(resp)
   })
 };
 

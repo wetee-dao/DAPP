@@ -4,29 +4,29 @@
             <el-button size="large" plain @click="add()">
                 <el-icon class="el-icon--left">
                     <Plus />
-                </el-icon>Create New
+                </el-icon>{{ t('secret.createNew') }}
             </el-button>
         </div>
         <el-table v-loading="loading" :element-loading-svg="svgLoading" class="table"
             element-loading-svg-view-box="-10, -10, 50, 50" :data="secrets">
-            <el-table-column prop="id" label="ID" width="100" >
+            <el-table-column prop="id" :label="t('secret.id')" width="100" >
                 <template #default="scope">
                     # {{ scope.row.id }}
                 </template>
             </el-table-column>
-            <el-table-column prop="key" label="Secret Name" width="180" />
-            <el-table-column label="Hash">
+            <el-table-column prop="key" :label="t('secret.secretName')" width="180" />
+            <el-table-column :label="t('secret.hash')">
                 <template #default="scope">
-                    {{ scope.row.hash }}&nbsp;&nbsp;<span class="action">{{ scope.row.minted ?"Update key":"Init key"}}</span>
+                    {{ scope.row.hash }}&nbsp;&nbsp;<span class="action">{{ scope.row.minted ? t('secret.updateKey') : t('secret.initKey') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column fixed="right" label="Operations" width="109">
+            <el-table-column fixed="right" :label="t('secret.operations')" width="119">
                 <template #default="item">
                     <el-button link type="primary" size="small" @click="show(item.row)">
-                        Show
+                        {{ t('secret.show') }}
                     </el-button>
                     <!-- <el-button link type="primary" size="small" @click="edit(item.row)">Edit</el-button> -->
-                    <el-button link type="primary" size="small" @click="del(item.row)">Del</el-button>
+                    <el-button link type="primary" size="small" @click="del(item.row)">{{ t('secret.delete') }}</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -38,12 +38,14 @@ import useGlobelProperties from "@/plugins/globel";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
 import { Plus } from '@element-plus/icons-vue'
 import { svgLoading } from "@/utils/loading";
 import { $getQueryApi, $getTxProvider } from "@/plugins/chain";
 import { ElNotification } from "element-plus";
 import { getUrlParams } from "@/utils/pop";
 const global = useGlobelProperties()
+const { t } = useI18n();
 
 const store = useStore();
 const router = useRouter();
@@ -93,8 +95,8 @@ const del = async (item: any) => {
         const tx = await chain.buildCall(dry, signer)
         await chain.proxysignAndSend(tx, projectid!, signer, () => {
             ElNotification({
-                title: 'Notice',
-                message: "Disk delete successfully",
+                title: t('common.notice'),
+                message: t('secret.deleteSuccess'),
                 type: 'success',
             })
             getList()

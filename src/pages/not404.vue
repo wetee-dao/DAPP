@@ -1,14 +1,16 @@
 <template>
-  <div class="tips">Service setup is in progress, please be patient...</div>
+  <div class="tips">{{ t('notFound.setupInProgress') }}</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   name: 'not404',
   components: {},
   setup() {
+    const { t } = useI18n();
     const data = reactive({
       isLoading: false,
       token: ''
@@ -16,6 +18,7 @@ export default defineComponent({
     onMounted(() => { });
 
     return {
+      t,
       ...toRefs(data)
     };
   }

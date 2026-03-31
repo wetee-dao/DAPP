@@ -2,6 +2,7 @@ import { Component } from "vue";
 
 export interface insType {
   name: string;
+  nameKey?: string;
   icon: string;
   url: string;
   module: string;
@@ -11,18 +12,21 @@ export interface insType {
 export default <insType[]>[
   {
     name: "Service",
+    nameKey: "routes.cloud",
     icon: "cloud",
     url: "/cloud",
     module: "cloud",
   },
   {
     name: "Secret",
+    nameKey: "routes.secret",
     icon: "secret",
     url: "/secret",
     module: "secret",
   },
   {
     name: "Disk",
+    nameKey: "routes.disk",
     icon: "disk",
     url: "/disk",
     module: "disk",
@@ -49,6 +53,7 @@ export default <insType[]>[
   },
   {
     name: "Builder",
+    nameKey: "routes.builder",
     icon: "builder",
     url: "/builder",
     module: "builder",

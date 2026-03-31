@@ -3,7 +3,7 @@
     <div @click="(e: any) => e.stopPropagation()">
       <div class="title">
         <!-- <i class="icon">&#xe675;</i> -->
-        Create Secret Disk
+        {{ t('pop.createSecretDisk') }}
         <div class="space"></div>
         <div class="close-btn" @click="closeClick">
           <i class="icon right">&#xe604;</i>
@@ -11,19 +11,19 @@
       </div>
       <el-form :model="form" class="form simple-form">
         <div class="form-context-box">
-          <div class="form-sub-title">Disk Key Name</div>
+          <div class="form-sub-title">{{ t('pop.diskKeyName') }}</div>
           <div class="form-input-box">
-            <el-input v-model="form.key" placeholder="Name"></el-input>
+            <el-input v-model="form.key" :placeholder="t('secret.inputName')"></el-input>
           </div>
         </div>
         <div class="form-context-box">
-          <div class="form-sub-title">Size （GB）</div>
+          <div class="form-sub-title">{{ t('pop.sizeGb') }}</div>
           <div class="form-input-box">
             <el-slider v-model="form.size" :step="1" :max="1024" show-input />
           </div>
         </div>
         <div class="form-context-box">
-          <el-button size="large" type="primary" @click="toAdd">Submit to chain</el-button>
+          <el-button size="large" type="primary" @click="toAdd">{{ t('pop.submitToChain') }}</el-button>
         </div>
       </el-form>
     </div>
@@ -33,10 +33,12 @@
 <script lang="ts" setup>
 import { reactive, ref } from "vue";
 import { ElNotification } from "element-plus";
+import { useI18n } from "vue-i18n";
 import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
 import { initDisk } from "@/apis/secret";
 
 const props = defineProps(["router", "store", "close", "app"])
+const { t } = useI18n();
 
 const form = reactive({
   key: '',
@@ -52,7 +54,7 @@ const toAdd = async () => {
     if (!form.key) {
       ElNotification({
         title: 'Error',
-        message: "Please input name",
+        message: t('secret.pleaseInputName'),
         type: 'error',
       })
       return;
@@ -65,11 +67,11 @@ const toAdd = async () => {
       console.log(dry)
       if (!dry.dry.Ok) {
         ElNotification({
-          title: 'Error',
-          message: "Create disk failed",
+          title: t('common.error'),
+          message: t('pop.createDiskFailed'),
           type: 'error',
         })
-        throw "Create disk failed";
+        throw t('pop.createDiskFailed');
       }
 
       id = dry.dry.Ok
@@ -86,8 +88,8 @@ const toAdd = async () => {
     const resp = await initDisk(id, signer)
     console.log(resp)
     ElNotification({
-      title: 'Success',
-      message: "Secret disk created",
+      title: t('common.success'),
+      message: t('pop.secretDiskCreated'),
       type: 'success',
     })
   })

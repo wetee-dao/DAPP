@@ -24,6 +24,7 @@ export const uploadSecret = async (index: string, value: string, hash: string, s
             )
           }`,
     })
+    console.log(response)
 
     return response
 }

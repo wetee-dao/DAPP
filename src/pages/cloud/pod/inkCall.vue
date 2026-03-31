@@ -4,9 +4,9 @@
       <div class="form-box">
         <el-form class="form" ref="formRef">
           <div class="form-table-box" v-if="messages.length > 0">
-            <div class="form-sub-title">Message to Send</div>
+            <div class="form-sub-title">{{ t('pod.messageToSend') }}</div>
             <div class="form-input-box">
-              <el-select v-model="messageIndex" placeholder="Select contract message" @change="onMessageChange">
+              <el-select v-model="messageIndex" :placeholder="t('pod.selectContractMessage')" @change="onMessageChange">
                 <el-option :label="formatMessageMethod(c)" :value="index" v-for="(c, index) in messages" />
               </el-select>
               <div :class="index == 0 ? 'arg-input first-arg' : 'arg-input'" v-for="(arg, index) in args">
@@ -16,7 +16,7 @@
           </div>
 
           <div class="form-table-box">
-            <div class="form-sub-title">RefTime Limit</div>
+            <div class="form-sub-title">{{ t('pop.refTimeLimit') }}</div>
             <div class="form-input-box">
               <el-input v-model="form.refTime">
               </el-input>
@@ -24,7 +24,7 @@
           </div>
 
           <div class="form-table-box">
-            <div class="form-sub-title">ProofSize Limit</div>
+            <div class="form-sub-title">{{ t('pop.proofSizeLimit') }}</div>
             <div class="form-input-box">
               <el-input v-model="form.proofSize">
               </el-input>
@@ -33,16 +33,16 @@
 
           <div class="form-table-box">
             <el-button size="large" type="primary" @click="onSubmit()">
-              Call contract &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
+              {{ t('pod.callContract') }} &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
             </el-button>
           </div>
         </el-form>
       </div>
 
       <div class="dry-run" direction="vertical">
-        <div class="dry-run-title">Dry-run outcome</div>
+        <div class="dry-run-title">{{ t('pop.dryRunOutcome') }}</div>
         <div class="dry-run-item">
-          -&nbsp; GasConsumed
+          -&nbsp; {{ t('pop.gasConsumed') }}
           <div class="dry-run-tag">
             <div class="t">refTime</div> {{ dryRun[0] }}
           </div>
@@ -51,7 +51,7 @@
           </div>
         </div>
         <div class="dry-run-item">
-          -&nbsp; GasRequired
+          -&nbsp; {{ t('pop.gasRequired') }}
           <div class="dry-run-tag">
             <div class="t">refTime</div> {{ dryRun[2] }}
           </div>
@@ -67,6 +67,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from 'vue';
 import { Action, ElMessageBox, ElNotification, FormInstance } from 'element-plus';
+import { useI18n } from 'vue-i18n';
 import { deepCopy } from '@/utils/object';
 import { formatProofSize, formatRefTime, getGasLimit, getStorageDepositLimit, transformUserInput } from '@/utils/substrate_ink';
 import { BN, BN_ZERO, hexToString } from '@polkadot/util';
@@ -77,6 +78,7 @@ import { useStore } from 'vuex';
 import { ApiPromise } from '@polkadot/api';
 
 const props = defineProps(["inkInfo"])
+const { t } = useI18n();
 const store = useStore();
 const abi = new Abi(props.inkInfo.Abi)
 const messages = ref<AbiMessage[]>(abi.messages)
@@ -180,8 +182,8 @@ const onSubmit = async () => {
   for (const k in argValues.value) {
     if (argValues.value[k] == null) {
       ElNotification({
-        title: 'call error',
-        message: "Contract call arg " + k + " is null",
+        title: t('pop.callError'),
+        message: t('pop.contractArgNull', { name: k }),
         type: 'error',
       })
       return
@@ -217,8 +219,8 @@ const onSubmit = async () => {
     const signer = store.state.userInfo.addr;
     await chain.SignAndSend(ext, signer, () => {
       ElNotification({
-        title: 'Notice',
-        message: "Contract call successfully",
+        title: t('common.notice'),
+        message: t('pod.contractCallSuccess'),
         type: 'success',
       })
     }, () => {
@@ -247,14 +249,14 @@ const onSubmit = async () => {
           r = s
         } catch (e) { }
       }
-      ElMessageBox.alert("Read result: " + r, 'Contract read successfully', {
-        confirmButtonText: "Close",
+      ElMessageBox.alert(t('pod.readResult', { result: r }), t('pod.contractReadSuccess'), {
+        confirmButtonText: t('pod.close'),
         callback: (action: Action) => { },
       })
     } else {
       ElNotification({
-        title: 'Contract call error',
-        message: "Error: " + JSON.stringify(result!.result.asErr.toHuman()),
+        title: t('pod.contractCallError'),
+        message: t('pod.errorPrefix', { error: JSON.stringify(result!.result.asErr.toHuman()) }),
         type: 'error',
       })
     }

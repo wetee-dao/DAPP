@@ -6,26 +6,26 @@
         <a target="_blank" :key="port.NodePort"
           :href="(port.Port == 443 ? 'https://' : 'http://') + ddns + ':' + port.NodePort" class="service"
           v-for="port in ser.Ports" v-show="port.Port != 65535">
-          Server: {{ port.Port }}({{ port.Protocol }})
+          {{ t('pod.serverPort', { port: port.Port, protocol: port.Protocol }) }}
         </a>
       </span>
       <i class="icon right" @click="closeClick">&#xe604;</i>
     </div>
     <div class="box" :key="info.Id">
       <el-tabs v-model="activeName" id="project-detail-tabs" class="tabs" @tab-click="handleClick">
-        <el-tab-pane label="Containers" name="container" lazy>
+        <el-tab-pane :label="t('pod.containers')" name="container" lazy>
           <Container v-if="info" :info="info" :clusterInfo="clusterInfo" />
         </el-tab-pane>
-        <el-tab-pane label="Metrics" name="monitor" lazy>
+        <el-tab-pane :label="t('pod.metrics')" name="monitor" lazy>
           <Metrics :info="info" :active="activeName" :clusterInfo="clusterInfo" />
         </el-tab-pane>
-        <el-tab-pane label="Logs" name="log" lazy>
+        <el-tab-pane :label="t('pod.logs')" name="log" lazy>
           <Log :activeName="activeName" :info="info" :clusterInfo="clusterInfo" />
         </el-tab-pane>
-        <el-tab-pane label="Bills" name="bill" lazy>
+        <el-tab-pane :label="t('pod.bills')" name="bill" lazy>
           <Bill :info="info" :service="service" :clusterInfo="clusterInfo" />
         </el-tab-pane>
-        <el-tab-pane label="TEE trusted report" name="sgxReport" lazy>
+        <el-tab-pane :label="t('pod.teeTrustedReport')" name="sgxReport" lazy>
           <Report :info="info" :service="service" :clusterInfo="clusterInfo" />
         </el-tab-pane>
       </el-tabs>
@@ -47,6 +47,7 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from "vue";
 import { TabsPaneContext } from "element-plus";
+import { useI18n } from "vue-i18n";
 import Metrics from "./metrics.vue"
 import Report from "./report.vue"
 import Log from "./log.vue"
@@ -56,6 +57,7 @@ import { $getQueryApi } from "@/plugins/chain";
 import Bill from "./bill.vue";
 
 const props = defineProps(["info", "openTag", "close"])
+const { t } = useI18n();
 const activeName = ref(props.openTag ?? "container")
 const info = ref(props.info)
 const clusterInfo = ref(null)

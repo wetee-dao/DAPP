@@ -2,19 +2,19 @@
   <div class="dao-proposals">
     <div class="container">
       <div class="header">
-        <h1>提案列表</h1>
+        <h1>{{ t('dao.proposalsTitle') }}</h1>
         <el-button type="primary" @click="goToCreate">
           <el-icon><Plus /></el-icon>
-          发起提案
+          {{ t('dao.createProposal') }}
         </el-button>
       </div>
 
       <!-- 筛选器 -->
       <el-card class="filter-card">
         <el-form :inline="true" :model="filterForm">
-          <el-form-item label="状态筛选">
-            <el-select v-model="filterForm.status" placeholder="全部状态" clearable>
-              <el-option label="全部" value="" />
+          <el-form-item :label="t('dao.statusFilter')">
+            <el-select v-model="filterForm.status" :placeholder="t('dao.allStatus')" clearable>
+              <el-option :label="t('dao.all')" value="" />
               <el-option
                 v-for="status in statusOptions"
                 :key="status.value"
@@ -24,8 +24,8 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="loadProposals">查询</el-button>
-            <el-button @click="resetFilter">重置</el-button>
+            <el-button type="primary" @click="loadProposals">{{ t('dao.query') }}</el-button>
+            <el-button @click="resetFilter">{{ t('dao.reset') }}</el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -38,25 +38,25 @@
           style="width: 100%"
           @row-click="handleRowClick"
         >
-          <el-table-column prop="id" label="提案ID" width="100" />
-          <el-table-column label="状态" width="120">
+          <el-table-column prop="id" :label="t('dao.proposalId')" width="100" />
+          <el-table-column :label="t('dao.status')" width="120">
             <template #default="scope">
               <el-tag :type="getStatusType(scope.row.status)">
-                {{ scope.row.status }}
+                {{ getStatusLabel(scope.row.status) }}
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="合约地址" min-width="200">
+          <el-table-column :label="t('dao.contractAddress')" min-width="200">
             <template #default="scope">
-              {{ scope.row.contract || "DAO合约自身" }}
+              {{ scope.row.contract || t('dao.daoSelfContract') }}
             </template>
           </el-table-column>
-          <el-table-column label="转账金额" width="150">
+          <el-table-column :label="t('dao.transferAmount')" width="150">
             <template #default="scope">
               {{ formatBalance(scope.row.amount) }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="200" fixed="right">
+          <el-table-column :label="t('dao.action')" width="200" fixed="right">
             <template #default="scope">
               <el-button
                 type="primary"
@@ -64,14 +64,14 @@
                 @click.stop="goToVote(scope.row.id)"
                 v-if="scope.row.status === 'Ongoing'"
               >
-                投票
+                {{ t('dao.vote') }}
               </el-button>
               <el-button
                 type="info"
                 size="small"
                 @click.stop="viewDetail(scope.row.id)"
               >
-                详情
+                {{ t('dao.detail') }}
               </el-button>
             </template>
           </el-table-column>
@@ -90,15 +90,16 @@
           />
         </div>
 
-        <el-empty v-if="!loading && proposals.length === 0" description="暂无提案" />
+        <el-empty v-if="!loading && proposals.length === 0" :description="t('dao.noProposals')" />
       </el-card>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from "vue";
+import { computed, ref, onMounted, watch } from "vue";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 import { Plus } from "@element-plus/icons-vue";
 import {
   getProposals,
@@ -108,6 +109,7 @@ import {
 } from "@/apis/dao";
 
 const router = useRouter();
+const { t } = useI18n();
 
 const loading = ref(false);
 const proposals = ref<any[]>([]);
@@ -122,14 +124,26 @@ const pagination = ref({
   size: 20,
 });
 
-const statusOptions = [
-  { label: "待处理", value: PropStatus.Pending },
-  { label: "进行中", value: PropStatus.Ongoing },
-  { label: "确认中", value: PropStatus.Confirming },
-  { label: "已批准", value: PropStatus.Approved },
-  { label: "已拒绝", value: PropStatus.Rejected },
-  { label: "已取消", value: PropStatus.Canceled },
-];
+const statusOptions = computed(() => [
+  { label: t("dao.pending"), value: PropStatus.Pending },
+  { label: t("dao.ongoing"), value: PropStatus.Ongoing },
+  { label: t("dao.confirming"), value: PropStatus.Confirming },
+  { label: t("dao.approved"), value: PropStatus.Approved },
+  { label: t("dao.rejected"), value: PropStatus.Rejected },
+  { label: t("dao.canceled"), value: PropStatus.Canceled },
+]);
+
+const getStatusLabel = (status: PropStatus) => {
+  const labelMap: Record<PropStatus, string> = {
+    [PropStatus.Pending]: t("dao.pending"),
+    [PropStatus.Ongoing]: t("dao.ongoing"),
+    [PropStatus.Confirming]: t("dao.confirming"),
+    [PropStatus.Approved]: t("dao.approved"),
+    [PropStatus.Rejected]: t("dao.rejected"),
+    [PropStatus.Canceled]: t("dao.canceled"),
+  };
+  return labelMap[status] || String(status);
+};
 
 // 格式化余额
 const formatBalance = (balance: any): string => {

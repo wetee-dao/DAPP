@@ -306,9 +306,6 @@ class InkApi {
             })
             throw new Error("Ink contract dry run reverted: " + retutnData["Err"])
         }
-        if (retutnData["Ok"]) {
-            retutnData = retutnData.Ok
-        }
 
         return {
             dry: retutnData,

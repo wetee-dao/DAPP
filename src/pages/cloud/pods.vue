@@ -25,9 +25,9 @@
           </div>
           <div class="ssd-box" v-if="item.Cr.disk.length > 0">
             <el-tooltip v-for="(disk) in item.Cr.disk" effect="light" placement="top-start"
-              :content="'Mounted on ' + disk.path">
+              :content="t('pods.mountedOn', { path: disk.path })">
               <div class="ssd">
-                SSD
+                {{ t('pods.ssd') }}
                 <div class="ssd-bar"></div>
               </div>
             </el-tooltip>
@@ -42,16 +42,16 @@
           <div class="mask-text"><i class="icon">&#xe663;</i> Ink! Contract</div>
         </div> -->
         <div class="mask-bg" v-if="item.Type == 'CPU'">
-          <i class="icon">&#xe649;</i>TEE Service
-          <div class="mask-text"><i class="icon">&#xe701;</i> TEE Service</div>
+          <i class="icon">&#xe649;</i>{{ t('pods.teeService') }}
+          <div class="mask-text"><i class="icon">&#xe701;</i> {{ t('pods.teeService') }}</div>
         </div>
         <div class="mask-bg" v-if="item.Type == 'TASK'">
-          <i class="icon">&#xe649;</i>ITEE Task
-          <div class="mask-text"><i class="icon">&#xe77c;</i> TEE Task</div>
+          <i class="icon">&#xe649;</i>{{ t('pods.teeTask') }}
+          <div class="mask-text"><i class="icon">&#xe77c;</i> {{ t('pods.teeTask') }}</div>
         </div>
         <div class="mask-bg" v-if="item.Type == 'GPU'">
-          <i class="icon">&#xe649;</i>GPU Service
-          <div class="mask-text"><i class="icon">&#xe649;</i> GPU Service</div>
+          <i class="icon">&#xe649;</i>{{ t('pods.gpuService') }}
+          <div class="mask-text"><i class="icon">&#xe649;</i> {{ t('pods.gpuService') }}</div>
         </div>
       </div>
 
@@ -59,15 +59,15 @@
         <el-icon class="el-icon--left">
           <Plus />
         </el-icon>
-        <div>Deploy new app</div>
+        <div>{{ t('pods.deployNewApp') }}</div>
       </div>
 
       <div class="empty" v-if="apps.length == 0">
-        Nothing was ever here, let us begin to create a world.<br /><br />
+        {{ t('pods.empty') }}<br /><br />
         <el-button size="large" plain @click="AddPop()">
           <el-icon class="el-icon--left">
             <Plus />
-          </el-icon>Deploy new app
+          </el-icon>{{ t('pods.deployNewApp') }}
         </el-button>
       </div>
     </div>
@@ -114,6 +114,7 @@ import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { Plus } from '@element-plus/icons-vue'
 import { useRouter, useRoute } from "vue-router";
 import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
 import useGlobelProperties from "@/plugins/globel";
 import { ElNotification } from "element-plus";
 
@@ -124,6 +125,7 @@ import { $getTxProvider, $getQueryApi } from "@/plugins/chain";
 import Detail from "./pod/detail.vue";
 
 const global = useGlobelProperties()
+const { t } = useI18n();
 const projectid = getUrlParams("project_id");
 
 const router = useRouter();
@@ -145,11 +147,19 @@ const iconStatus = ref<Record<number, string>>({
 });
 
 const textStatus = ref<Record<number, string>>({
-  0: "deploying",
-  1: "runing",
-  2: "error",
-  3: "stoped",
+  0: t('pods.statusDeploying'),
+  1: t('pods.statusRunning'),
+  2: t('pods.statusError'),
+  3: t('pods.statusStopped'),
 });
+watch(() => store.state.locale, () => {
+  textStatus.value = {
+    0: t('pods.statusDeploying'),
+    1: t('pods.statusRunning'),
+    2: t('pods.statusError'),
+    3: t('pods.statusStopped'),
+  };
+})
 
 const OpenDetail = (item: any, t: string) => {
   tag.value = t;
@@ -187,8 +197,8 @@ const showPenu = (e: MouseEvent, item: any) => {
           const tx = await chain.buildCall(dry, signer)
           await chain.proxysignAndSend(tx, projectid!, signer, () => {
             ElNotification({
-              title: 'Notice',
-              message: "Application stop successfully",
+              title: t('common.notice'),
+              message: t('pods.appStopSuccess'),
               type: 'success',
             })
             getList()
@@ -204,8 +214,8 @@ const showPenu = (e: MouseEvent, item: any) => {
           const tx = await chain.buildCall(dry, signer)
           await chain.proxysignAndSend(tx, projectid!, signer, () => {
             ElNotification({
-              title: 'Notice',
-              message: "Application restart successfully",
+              title: t('common.notice'),
+              message: t('pods.appRestartSuccess'),
               type: 'success',
             })
             getList()

@@ -18,6 +18,7 @@ export class GraphqlClient {
             headers: headers,
             url: this.baseUrl,
         })
+        console.log(response)
         return response.data.data
     };
     async mut(req: any) {

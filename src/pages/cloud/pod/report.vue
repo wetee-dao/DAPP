@@ -4,20 +4,20 @@
       <!-- <div class="title warning" v-if="info.Status != 3">Service/Task has been stopped,report is out of date</div> -->
       <div class="report">
         <div class="hash">
-          Report HASH:&nbsp;&nbsp;{{ reportHash }}
+          {{ t('pod.reportHash') }}:&nbsp;&nbsp;{{ reportHash }}
           <div class="space"></div>
           <el-button type="primary" @click="verifyTeeReport()">
-            Verify TEE &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
+            {{ t('pod.verifyTee') }} &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
           </el-button>
         </div>
         <div class="body" v-if="report != null">
-          <div class="body-item">TEE TYPE<span></span> {{ TEEType[report.param.TeeType] }}</div>
-          <div class="body-item">Report Time<span></span> {{ dateTime(report.param.Time) }}</div>
-          <div class="body-item">Report Signer<span></span> {{ report.param.Address }}</div>
-          <div class="body-item">Code Signature<span></span> {{ report.report.CodeSignature }}</div>
-          <div class="body-item">Code Signer<span></span> {{ report.report.CodeSigner }}</div>
+          <div class="body-item">{{ t('pod.teeType') }}<span></span> {{ TEEType[report.param.TeeType] }}</div>
+          <div class="body-item">{{ t('pod.reportTime') }}<span></span> {{ dateTime(report.param.Time) }}</div>
+          <div class="body-item">{{ t('pod.reportSigner') }}<span></span> {{ report.param.Address }}</div>
+          <div class="body-item">{{ t('pod.codeSignature') }}<span></span> {{ report.report.CodeSignature }}</div>
+          <div class="body-item">{{ t('pod.codeSigner') }}<span></span> {{ report.report.CodeSigner }}</div>
           <div class="report-data">
-            <span class="report-title">Report Body:</span>
+            <span class="report-title">{{ t('pod.reportBody') }}:</span>
             <div class="body-item">{{ report.param.Report }}</div>
           </div>
         </div>
@@ -29,10 +29,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import dayjs from "dayjs";
+import { useI18n } from 'vue-i18n';
 import { GetTeeReport } from "@/apis/secret";
 import { $getQueryApi } from "@/plugins/chain"
 
 const props = defineProps(["info", "service", "clusterInfo"])
+const { t } = useI18n();
 const info = ref<any>(props.info)
 const reportHash = ref<any>("")
 const report = ref<any>(null)

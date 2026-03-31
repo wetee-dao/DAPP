@@ -2,35 +2,34 @@
   <div class="page-box">
     <div class="item" v-for="c in containers">
       <div class="left">
-        <div class="title">{{ c[0] == '0' ? 'Main container' : 'Side' + c[0] }}</div>
+        <div class="title">{{ c[0] == '0' ? t('pod.mainContainer') : t('pod.sideContainer', { index: c[0] }) }}</div>
         <div>
           <div class="image sub">
             <i class="icon">&#xf18e;</i>&nbsp;&nbsp;{{ c[1].image }}<div class="space"></div>
           </div>
           <div class="resource sub">
-            <i class="icon">&#xe645;</i>&nbsp;&nbsp;cpu: {{ parseInt(c[1].cpu.replaceAll(",", "")) / 1000 }} core &nbsp;
-            mem: {{ c[1].mem }} mb &nbsp; gpu: {{ c[1].gpu }}
+            <i class="icon">&#xe645;</i>&nbsp;&nbsp;{{ t('pod.cpuMemGpu', { cpu: parseInt(c[1].cpu.replaceAll(',', '')) / 1000, mem: c[1].mem, gpu: c[1].gpu }) }}
           </div>
         </div>
       </div>
       <div class="right">
         <div class="ssd-box" v-if="c[1].disk.length > 0">
           <el-tooltip v-for="(disk, index) in c[1].disk" effect="light" placement="top-start"
-            :content="'Mounted on ' + disk.path">
+            :content="t('pod.mountedOn', { path: disk.path })">
             <div class="ssd">
               <div class="text">{{ diskInfo(disk.id, disks).size }}G<br />
                 {{ disk.path }}</div>
               <div class="ssd-bar">
-                SSD
+                {{ t('pod.ssd') }}
               </div>
             </div>
           </el-tooltip>
         </div>
         <div class="edit" @click="editContainer(c[0], c[1])">
-          <i class="icon">&#xe695;</i> Edit
+          <i class="icon">&#xe695;</i> {{ t('pod.edit') }}
         </div>
         <div class="delete" @click="delContainer(c[0])">
-          <i class="icon">&#xe68c;</i> Del
+          <i class="icon">&#xe68c;</i> {{ t('pod.delete') }}
         </div>
       </div>
     </div>
@@ -38,7 +37,7 @@
       <el-icon class="el-icon--left">
         <Plus />
       </el-icon>
-      <div class="add-text">&nbsp;&nbsp;Add new container</div>
+      <div class="add-text">&nbsp;&nbsp;{{ t('pod.addNewContainer') }}</div>
     </div>
   </div>
 </template>
@@ -46,12 +45,14 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { Plus } from '@element-plus/icons-vue'
+import { useI18n } from 'vue-i18n';
 
 import { $getQueryApi, $getTxProvider } from '@/plugins/chain';
 import { useStore } from 'vuex';
 import useGlobelProperties from '@/plugins/globel';
 import { useRouter } from 'vue-router';
 const props = defineProps(["info"])
+const { t } = useI18n();
 
 const store = useStore();
 const global = useGlobelProperties()

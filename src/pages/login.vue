@@ -6,14 +6,14 @@
           <Logo class="logo-svg" :fill="true" />
         </div>
         <div class="login-img-desc">
-          Trusted Trustless Computing Network
+          {{ t('login.slogan') }}
         </div>
       </div>
       <div class="login-right-box">
         <div class="top-logo">
           <Logo class="icon" :fill="true" />
         </div>
-        <div class="login-title">Polkadot Wallet</div>
+        <div class="login-title">{{ t('login.polkadotWallet') }}</div>
         <div v-for="(w, index) in supportedWallets" @click="showWallet('Polkadot', w)"
           :class="w.installed ? 'wallet-box' : 'wallet-box wallet-box-disabled'">
           <img :src="w.logo.src" alt="Polkadotjs Logo" class="wlogo" />
@@ -27,7 +27,7 @@
           <div class="wtext">Demo Login</div>
           <i class="icon">&#xe614;</i>
         </div> -->
-        <div class="login-title">Ethereum Wallet</div>
+        <div class="login-title">{{ t('login.ethereumWallet') }}</div>
         <div class="wallet-box" @click="showWallet('MetaMask', null)">
           <img src="/imgs/metamask.svg" alt="MetaMask Logo" class="wlogo" />
           <div class="wtext">MetaMask</div>
@@ -42,7 +42,7 @@
         <img :src="LoginShow.logo.src" alt="Polkadotjs Logo" class="logo" />{{
           LoginShow.title
         }}
-        Login
+        {{ t('login.login') }}
         <i class="icon right" @click="LoginShow = null">&#xe604;</i>
       </div>
       <div class="login-content">
@@ -60,7 +60,7 @@
         </div>
       </div>
       <el-button class="login-btn" :disabled="polkadotAccounts.findIndex((item) => item.selected) == -1"
-        @click="PolkadotLoginIn">Login</el-button>
+        @click="PolkadotLoginIn">{{ t('login.login') }}</el-button>
     </div>
     <div class="login-pop-mask" v-if="LoginShow != null"></div>
   </div>
@@ -71,6 +71,7 @@ import { ref, onMounted, watch } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
+import { useI18n } from "vue-i18n";
 import { Wallet, getWallets } from "@talismn/connect-wallets";
 
 import { Loading } from "@/plugins/pop";
@@ -79,6 +80,7 @@ import Logo from "@/components/icons/Logo2.vue";
 
 const store = useStore();
 const router = useRouter();
+const { t } = useI18n();
 const enabled = ref(false);
 const polkadotAccounts = ref<any[]>(store.state.account);
 const LoginShow = ref<any>(null);
@@ -128,17 +130,17 @@ const showWallet = async (name: string, wallet: Wallet | null) => {
     }
   } else if (name == "MetaMask") {
     if (!(window as any).ethereum || !(window as any).ethereum.isMetaMask) {
-      ElMessage.warning("请安装 MetaMask 插件");
+      ElMessage.warning(t('login.installMetamask'));
       return;
     }
 
-    const loading = Loading("Connecting to metamask...");
+    const loading = Loading(t('login.connectingMetamask'));
 
     try {
 
     } catch (err) {
       loading.close();
-      ElMessage.warning("MetaMask connect erorr " + JSON.stringify(err));
+      ElMessage.warning(t('login.connectMetamaskError', { error: JSON.stringify(err) }));
       return false;
     }
   }
@@ -159,7 +161,7 @@ const polkadotjsSelect = async (index: number) => {
 const PolkadotLoginIn = async () => {
   let ac = polkadotAccounts.value.find((v: any) => v.selected);
   if (!ac) {
-    ElMessage.error("账户不能为空");
+    ElMessage.error(t('login.accountRequired'));
     return;
   }
 

@@ -2,11 +2,11 @@
   <div class="service" @click="closeClick">
     <div @click="(e) => e.stopPropagation()">
       <div class="title">
-        Update Container
+        {{ t('pop.updateContainer') }}
         <div class="space"></div>
         <div class="right-tool">
           <div class="deploy-btn" @click="submit()">
-            Submit to chain
+            {{ t('pop.submitToChain') }}
           </div>
           <div class="close-btn" @click="closeClick">
             <i class="icon right">&#xe604;</i>
@@ -17,12 +17,12 @@
         <div class="form-box" ref="containerRef">
           <div class="box-step" id="f0">
             <div class="classTitle">
-              <i class="icon">&#xe6bc;</i>BaseSetting
+              <i class="icon">&#xe6bc;</i>{{ t('pop.baseSetting') }}
             </div>
             <div class="form-context-box">
-              <div class="form-sub-title">Docker image</div>
+              <div class="form-sub-title">{{ t('pop.dockerImage') }}</div>
               <div class="form-input-box">
-                <el-input v-model="form.image" placeholder="Docker image">
+                <el-input v-model="form.image" :placeholder="t('pop.dockerImage')">
                   <template #prefix>
                     <i class="icon">&#xf18e;</i>
                   </template>
@@ -30,13 +30,13 @@
               </div>
             </div>
             <div class="form-context-box">
-              <div class="form-sub-title">CPU （1 unit is 1/1000 core）</div>
+              <div class="form-sub-title">{{ t('pop.cpuUnit') }}</div>
               <div class="form-input-box">
                 <el-slider v-model="form.cpu" :step="100" :max="32000" show-input />
               </div>
             </div>
             <div class="form-context-box">
-              <div class="form-sub-title">Memory （MB）</div>
+              <div class="form-sub-title">{{ t('pop.memoryMb') }}</div>
               <div class="form-input-box">
                 <el-slider v-model="form.memory" :step="100" :max="32000" show-input />
               </div>
@@ -45,14 +45,14 @@
 
           <div class="box-step" id="f1" v-if="teeVersion != 'SGX'">
             <div class="classTitle">
-              <i class="icon">&#xee15;</i>CommandSetting
+              <i class="icon">&#xee15;</i>{{ t('pop.commandSetting') }}
             </div>
             <div class="form-table-box">
-              <div class="form-sub-title">If no input is provided, default Docker startup parameters will be used.</div>
+              <div class="form-sub-title">{{ t('pop.commandNotice') }}</div>
               <div class="form-input-box">
-                <el-input v-model="form.command" placeholder="for example:  /usr/sbin/httpd -f httpd.conf">
+                <el-input v-model="form.command" :placeholder="t('pop.commandExample')">
                   <template #prepend>
-                    <el-select v-model="form.commandPrefix" placeholder="Select" style="width: 130px">
+                    <el-select v-model="form.commandPrefix" :placeholder="t('pop.select')" style="width: 130px">
                       <el-option label="/bin/sh" value="SH" />
                       <el-option label="/bin/bash" value="BASH" />
                       <el-option label="/bin/zsh" value="ZSH" />
@@ -64,22 +64,22 @@
           </div>
 
           <div class="box-step" id="f2">
-            <div class="classTitle"><i class="icon">&#xe654;</i>EnvironmentSetting</div>
+            <div class="classTitle"><i class="icon">&#xe654;</i>{{ t('pop.environmentSetting') }}</div>
             <div class="form-table-box">
               <div class="flex" :key="index" v-for="(item, index) in form.env">
-                <el-input v-model="item.key" placeholder="key name / file name">
+                <el-input v-model="item.key" :placeholder="t('pop.keyNameOrFileName')">
                   <template #prepend>
-                    <el-select v-model="item.prefix" placeholder="Select" style="width: 170px">
-                      <el-option label="Public Env" value="Env" />
-                      <el-option label="Secret Env" value="Encrypt" />
+                    <el-select v-model="item.prefix" :placeholder="t('pop.select')" style="width: 170px">
+                      <el-option :label="t('pop.publicEnv')" value="Env" />
+                      <el-option :label="t('pop.secretEnv')" value="Encrypt" />
                     </el-select>
                   </template>
                 </el-input>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <el-input v-if="item.prefix == 'Env'" v-model="item.value" placeholder="value name">
-                  <template #prepend>value</template>
+                <el-input v-if="item.prefix == 'Env'" v-model="item.value" :placeholder="t('pop.valueName')">
+                  <template #prepend>{{ t('pop.value') }}</template>
                 </el-input>
-                <el-select v-if="item.prefix == 'Encrypt'" v-model="item.id" placeholder="select secret">
+                <el-select v-if="item.prefix == 'Encrypt'" v-model="item.id" :placeholder="t('pop.selectSecret')">
                   <template #label="{ label }">
                     <div v-if="label != null">
                       <span>#{{ label }}</span>
@@ -93,18 +93,18 @@
                 <el-button size="large" type="danger" circle :icon="Delete" @click="removeItem('env', index)" />
               </div>
               <el-button size="large" @click="addItem('env')">
-                <span class="icon">&#xe604;</span>&nbsp;&nbsp;Add&nbsp;&nbsp;
+                <span class="icon">&#xe604;</span>&nbsp;&nbsp;{{ t('pop.add') }}&nbsp;&nbsp;
               </el-button>
             </div>
           </div>
 
           <div class="box-step" id="f3">
-            <div class="classTitle"><i class="icon">&#xe645;</i>StorageSetting</div>
+            <div class="classTitle"><i class="icon">&#xe645;</i>{{ t('pop.storageSetting') }}</div>
             <div class="form-table-box">
               <div class="flex" :key="index" v-for="(d, index) in form.disk">
-                <el-input v-model="d.path" placeholder="mount path" />
+                <el-input v-model="d.path" :placeholder="t('pop.mountPath')" />
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <el-select v-model="d.id" placeholder="select disk">
+                <el-select v-model="d.id" :placeholder="t('pop.selectDisk')">
                   <template #label="{ label }">
                     <div v-if="label.data != null">
                       <span style="float: left">#{{ label.id }} {{ label.data.SecretSSD[0] }}</span>
@@ -132,23 +132,23 @@
                 <el-button size="large" type="danger" circle :icon="Delete" @click="removeItem('disk', index)" />
               </div>
               <el-button size="large" @click="addItem('disk')">
-                <span class="icon">&#xe604;</span>&nbsp;&nbsp;Add&nbsp;&nbsp;
+                <span class="icon">&#xe604;</span>&nbsp;&nbsp;{{ t('pop.add') }}&nbsp;&nbsp;
               </el-button>
             </div>
           </div>
 
           <div class="box-step last-step" id="f4">
-            <div class="classTitle"><i class="icon">&#xe66d;</i>NetWorkSetting</div>
+            <div class="classTitle"><i class="icon">&#xe66d;</i>{{ t('pop.networkSetting') }}</div>
             <div class="form-table-box">
               <div class="flex" :key="index" v-for="(item, index) in form.port">
                 <el-input type="number" v-model="item.value" :min="0" :max="65535"
-                  placeholder="container port: 0 - 65535">
+                  :placeholder="t('pop.containerPort')">
                   <template #prepend>
-                    <el-select v-model="item.prefix" placeholder="Select" style="width: 170px">
-                      <el-option label="TCP to expose" value="Tcp" />
-                      <el-option label="UDP to expose" value="Udp" />
-                      <el-option label="TCP in project" value="ProjectTcp" />
-                      <el-option label="UDP in project" value="ProjectUdp" />
+                    <el-select v-model="item.prefix" :placeholder="t('pop.select')" style="width: 170px">
+                      <el-option :label="t('pop.tcpExpose')" value="Tcp" />
+                      <el-option :label="t('pop.udpExpose')" value="Udp" />
+                      <el-option :label="t('pop.tcpProject')" value="ProjectTcp" />
+                      <el-option :label="t('pop.udpProject')" value="ProjectUdp" />
                     </el-select>
                   </template>
                 </el-input>
@@ -156,7 +156,7 @@
                 <el-button size="large" type="danger" circle :icon="Delete" @click="removeItem('port', index)" />
               </div>
               <el-button size="large" @click="addItem('port')">
-                <span class="icon">&#xe604;</span>&nbsp;&nbsp;Add&nbsp;&nbsp;
+                <span class="icon">&#xe604;</span>&nbsp;&nbsp;{{ t('pop.add') }}&nbsp;&nbsp;
               </el-button>
             </div>
           </div>
@@ -165,11 +165,11 @@
 
           <el-anchor class="form-anchor" :container="containerRef" direction="vertical" type="default" :bound="200"
             @click="handleClick">
-            <el-anchor-link class="form-anchor-item" href="#f0" title="BaseSetting" />
-            <el-anchor-link class="form-anchor-item" href="#f1" title="CommandSetting" />
-            <el-anchor-link class="form-anchor-item" href="#f2" title="EnvironmentSetting" />
-            <el-anchor-link class="form-anchor-item" href="#f3" title="StorageSetting" />
-            <el-anchor-link class="form-anchor-item" href="#f4" title="NetWorkSetting" />
+            <el-anchor-link class="form-anchor-item" href="#f0" :title="t('pop.baseSetting')" />
+            <el-anchor-link class="form-anchor-item" href="#f1" :title="t('pop.commandSetting')" />
+            <el-anchor-link class="form-anchor-item" href="#f2" :title="t('pop.environmentSetting')" />
+            <el-anchor-link class="form-anchor-item" href="#f3" :title="t('pop.storageSetting')" />
+            <el-anchor-link class="form-anchor-item" href="#f4" :title="t('pop.networkSetting')" />
           </el-anchor>
         </div>
       </el-form>
@@ -180,12 +180,14 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 import { FormInstance } from "element-plus";
+import { useI18n } from "vue-i18n";
 import { Delete } from '@element-plus/icons-vue';
 import { deepCopy } from "@/utils/object";
 import { $getQueryApi, $getTxProvider } from "@/plugins/chain";
 import { parseEnv, validFormArray } from "./utils";
 
 const props = defineProps(["router", "store", "close", "ps", "app"])
+const { t } = useI18n();
 const containerRef = ref<HTMLElement | null>(null)
 const formRef = ref<FormInstance>()
 const podId = props.ps.podId

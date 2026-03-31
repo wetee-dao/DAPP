@@ -31,6 +31,23 @@
       </div>
     </div> -->
 
+    <el-dropdown class="locale" placement="bottom-end" :teleported="false">
+      <div class="header-box flex locale-box">
+        <div>{{ currentLocaleLabel }}</div>&nbsp;&nbsp;
+        <div class="icon">&#xe68f;</div>
+      </div>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item :disabled="locale === LOCALE_ZH_CN" @click="setLocale(LOCALE_ZH_CN)">
+            {{ t('common.chinese') }}
+          </el-dropdown-item>
+          <el-dropdown-item :disabled="locale === LOCALE_EN_US" @click="setLocale(LOCALE_EN_US)">
+            {{ t('common.english') }}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+
     <el-popover popper-class="network-select" placement="bottom-end" trigger="hover">
       <template #reference>
         <div class="header-box flex network-box">
@@ -85,7 +102,7 @@
           </el-dropdown-item -->
           <el-dropdown-item @click="nextOut">
             <div class="more-item">
-              &nbsp;<span class="icon more-item-icon">&#xe605;</span> Disconnect&nbsp;&nbsp;&nbsp;
+              &nbsp;<span class="icon more-item-icon">&#xe605;</span> {{ t('header.disconnect') }}&nbsp;&nbsp;&nbsp;
             </div>
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -104,9 +121,10 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
 import NavList from "./nav-list.vue";
 import HeaderNav from "./header-nav.vue";
 import Logo from "./icons/Logo2.vue";
@@ -114,9 +132,11 @@ import Network from "./network.vue";
 import NetworkSelect from "./network-select.vue";
 import { ChainNode, CurrentChainNode } from "@/plugins/chain";
 import { getWallets, Wallet } from "@talismn/connect-wallets";
+import { getRouteLabel, LOCALE_EN_US, LOCALE_ZH_CN } from "@/i18n";
 
 const router = useRouter();
 const store = useStore();
+const { t } = useI18n();
 const menuShow = ref(false);
 const isFirst = ref(true);
 const pkey = ref(0);
@@ -127,8 +147,15 @@ const network = ref<ChainNode>(CurrentChainNode());
 const balances = ref<any[]>([]);
 const paths = ref<any[]>([]);
 const module = ref("");
+const locale = computed(() => store.state.locale);
+const currentLocaleLabel = computed(() => (
+  locale.value === LOCALE_ZH_CN ? t('common.chinese') : t('common.english')
+));
 watch(() => store.state.theme, (newVal, _) => {
   theme.value = newVal
+})
+watch(() => store.state.locale, () => {
+  computePath(store.state.currentPath)
 })
 
 const supportedWallets: Wallet[] = getWallets().sort(
@@ -147,7 +174,7 @@ const computePath = async (p: string) => {
 
   for (let i = 0; i < ps.length; i++) {
     let path = ps[i];
-    let name = path
+    let name = getRouteLabel(path)
     if (pathPre == "/cloud") {
       // const p = await getProject(user.value.addr, path)
       // if (p != null) {
@@ -202,9 +229,15 @@ const home = () => {
 
 const nextOut = () => {
   let theme = window.localStorage.getItem("theme");
+  let savedLocale = window.localStorage.getItem("locale");
   window.localStorage.clear();
   window.localStorage.setItem("theme", theme || "dark")
+  window.localStorage.setItem("locale", savedLocale || LOCALE_EN_US)
   router.push("/login");
+};
+
+const setLocale = (nextLocale: string) => {
+  store.dispatch("setLocale", nextLocale);
 };
 
 const setTheme = (t: string) => {
@@ -321,6 +354,18 @@ const wallet = (name: string): Wallet => {
   cursor: pointer;
   padding-left: 8px;
   padding-right: 8px;
+}
+
+.locale {
+  margin-right: 6px;
+}
+
+.locale-box {
+  align-items: center;
+  background-color: rgba($secondary-text-rgb, 0.045);
+  cursor: pointer;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .node-name {

@@ -1,5 +1,5 @@
 <template>
-  <el-config-provider :locale="en">
+  <el-config-provider :locale="elementLocale">
     <div id="mainNav">
       <PixelBg :tileSize="5" :gap="3" :maxOpacity="0.03" :density="0.12" :waveSpeed="0.0015" :theme="currentTheme" />
       <GHeader />
@@ -12,15 +12,32 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, onMounted, computed } from "vue";
+import { onBeforeUnmount, onMounted, computed, watch } from "vue";
 import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
 import en from 'element-plus/es/locale/lang/en'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 
 import GHeader from "./components/header.vue";
 import PixelBg from "./components/anim/PixelBg.vue";
+import { LOCALE_ZH_CN, setI18nLanguage } from "./i18n";
 
 const store = useStore();
+const { locale } = useI18n();
 const currentTheme = computed(() => store.state.theme || 'dark');
+const elementLocale = computed(() => (
+  store.state.locale === LOCALE_ZH_CN ? zhCn : en
+));
+
+watch(
+  () => store.state.locale,
+  (newLocale) => {
+    setI18nLanguage(newLocale);
+    locale.value = newLocale;
+  },
+  { immediate: true }
+);
+
 if (window.devicePixelRatio) {
   let scale = (window.devicePixelRatio - 1) * 1.4
   store.dispatch("setScale", (scale + 16) / 16);

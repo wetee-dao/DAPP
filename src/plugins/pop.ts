@@ -2,6 +2,7 @@ import { createApp, defineAsyncComponent } from "vue"
 import AddPop from '../pages/pop/addPop.vue'
 import LoadingBox from '../components/loading.vue'
 import ProjectMenu from '../pages/pop/projectMenu.vue'
+import i18n from '../i18n'
 
 export default {
   install: function (app: any) {
@@ -112,6 +113,17 @@ function openPop(app: any, router: Object, store: Object, pop: any, popid: strin
     app,
     ps: params
   })
+
+  // Popup components are mounted as standalone apps, so install the
+  // shared i18n instance explicitly for useI18n().
+  message.use(i18n)
+
+  if (app?._context) {
+    Object.assign(message._context.components, app._context.components)
+    Object.assign(message._context.directives, app._context.directives)
+    Object.assign(message.config.globalProperties, app.config.globalProperties)
+    Object.assign(message._context.provides, app._context.provides)
+  }
 
   div.id = popid
   document.body.appendChild(div)

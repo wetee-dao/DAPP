@@ -2,14 +2,14 @@
   <div class="service" @click="closeClick">
     <div @click="(e) => e.stopPropagation()">
       <div class="title no-border">
-        <i class="icon">&#xe663;</i>Create Ink! smart contract
+        <i class="icon">&#xe663;</i>{{ t('pop.createInkContract') }}
         <i class="icon right" @click="closeClick">&#xe604;</i>
       </div>
       <div class="toolbar">
         <ul class="tabs">
           <li class="tab-item template">
             <el-autocomplete @select="handleTempApp" v-model="curTemp" :fetch-suggestions="querySearch"
-              placeholder="Select ink! template">
+              :placeholder="t('pop.selectInkTemplate')">
               <template #prefix>
                 <i class="icon">&#xe680;</i>
               </template>
@@ -31,7 +31,7 @@
         <div class="space"></div>
         <div class="deploy-btn">
           <el-button size="large" type="primary" @click="toAdd()">
-            Deploy Now &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
+            {{ t('pop.deployNow') }} &nbsp;&nbsp;<i class="icon">&#xe62c;</i>
           </el-button>
         </div>
       </div>
@@ -41,12 +41,12 @@
           <div class="box-step" id="f0">
             <div class="classTitle">
               <i class="icon">&#xe6bc;</i>
-              ContractSetting
+              {{ t('pop.contractSetting') }}
             </div>
             <div class="form-context-box">
-              <div class="form-sub-title">Upload the smart contract compilation package (.contract file)</div>
+              <div class="form-sub-title">{{ t('pop.uploadContractPackage') }}</div>
               <div class="form-input-box">
-                <el-input v-model="form.hash" placeholder="Smart contract code">
+                <el-input v-model="form.hash" :placeholder="t('pop.smartContractCode')">
                   <template #prefix>
                     <i class="icon">&#xe645;</i>
                   </template>
@@ -54,7 +54,7 @@
                     <el-upload class="upload-btn" accept=".abi,.contract" :show-file-list="false"
                       :http-request="uploadFile">
                       <span v-if="!form.hash">
-                        Click here to upload new contract&nbsp;&nbsp;
+                        {{ t('pop.clickUploadContract') }}&nbsp;&nbsp;
                       </span>
                       <el-icon :size="22">
                         <Upload />
@@ -65,9 +65,9 @@
               </div>
             </div>
             <div class="form-context-box" v-show="curContract == 0">
-              <div class="form-sub-title">Name</div>
+              <div class="form-sub-title">{{ t('pop.name') }}</div>
               <div class="form-input-box">
-                <el-input v-model="form.name" placeholder="Contract name"></el-input>
+                <el-input v-model="form.name" :placeholder="t('pop.contractName')"></el-input>
               </div>
             </div>
           </div>
@@ -75,13 +75,13 @@
           <div class="box-step" id="f1">
             <div class="classTitle">
               <i class="icon">&#xee15;</i>
-              DeploySetting
+              {{ t('pop.deploySetting') }}
             </div>
 
             <div class="form-table-box" v-if="constructors.length > 0">
-              <div class="form-sub-title">Contract Deployment Constructor</div>
+              <div class="form-sub-title">{{ t('pop.deploymentConstructor') }}</div>
               <div class="form-input-box">
-                <el-select v-model="constructorIndex" placeholder="Select contract constructor"
+                <el-select v-model="constructorIndex" :placeholder="t('pop.selectConstructor')"
                   @change="onConstructorChange">
                   <el-option :label="formatConstructorMethod(c)" :value="index" v-for="(c, index) in constructors" />
                 </el-select>
@@ -92,17 +92,17 @@
             </div>
 
             <div class="form-table-box">
-              <div class="form-sub-title">RefTime Limit</div>
+              <div class="form-sub-title">{{ t('pop.refTimeLimit') }}</div>
               <div class="form-input-box">
-                <el-input v-model="form.refTime" placeholder="for example:  /usr/sbin/httpd -f httpd.conf">
+                <el-input v-model="form.refTime" :placeholder="t('pop.commandExample')">
                 </el-input>
               </div>
             </div>
 
             <div class="form-table-box">
-              <div class="form-sub-title">ProofSize Limit</div>
+              <div class="form-sub-title">{{ t('pop.proofSizeLimit') }}</div>
               <div class="form-input-box">
-                <el-input v-model="form.proofSize" placeholder="for example:  /usr/sbin/httpd -f httpd.conf">
+                <el-input v-model="form.proofSize" :placeholder="t('pop.commandExample')">
                 </el-input>
               </div>
             </div>
@@ -111,9 +111,9 @@
           <div class="margin-end-30"></div>
 
           <div class="dry-run" direction="vertical">
-            <div class="dry-run-title">Dry-run outcome</div>
+            <div class="dry-run-title">{{ t('pop.dryRunOutcome') }}</div>
             <div class="dry-run-item">
-              -&nbsp; GasConsumed
+              -&nbsp; {{ t('pop.gasConsumed') }}
               <div class="dry-run-tag">
                 <div class="t">refTime</div> {{ dryRun[0] }}
               </div>
@@ -122,7 +122,7 @@
               </div>
             </div>
             <div class="dry-run-item">
-              -&nbsp; GasRequired
+              -&nbsp; {{ t('pop.gasRequired') }}
               <div class="dry-run-tag">
                 <div class="t">refTime</div> {{ dryRun[2] }}
               </div>
@@ -140,6 +140,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { ElNotification, FormInstance, UploadRequestOptions } from "element-plus";
+import { useI18n } from "vue-i18n";
 import { Close, Upload } from '@element-plus/icons-vue';
 import { getUrlParams } from "@/utils/pop";
 import { deepCopy } from "@/utils/object";
@@ -155,6 +156,7 @@ import { $getTxProvider } from "@/plugins/chain";
 
 const pid = getUrlParams("project_id");
 const props = defineProps(["router", "store", "close", "app"])
+const { t } = useI18n();
 const formRef = ref<FormInstance>()
 
 const temps: any[] = []
@@ -332,8 +334,8 @@ const toAdd = async () => {
 
     if (abi.value == null) {
       ElNotification({
-        title: 'Error',
-        message: "Please upload the ink! smart contract",
+        title: t('common.error'),
+        message: t('pop.pleaseUploadInk'),
         type: 'error',
       })
       return
@@ -341,8 +343,8 @@ const toAdd = async () => {
 
     if (constructors.value.length == 0) {
       ElNotification({
-        title: 'Error',
-        message: "Constructor not validable",
+        title: t('common.error'),
+        message: t('pop.constructorNotValid'),
         type: 'error',
       })
       return
@@ -351,8 +353,8 @@ const toAdd = async () => {
     for (const k in argValues.value) {
       if (argValues.value[k] == null) {
         ElNotification({
-          title: 'call error',
-          message: "Contract call arg " + k + " is null",
+          title: t('pop.callError'),
+          message: t('pop.contractArgNull', { name: k }),
           type: 'error',
         })
         return

@@ -3,6 +3,7 @@ let userInfo = {}
 let keypair: any = {}
 let theme: string = "";
 let chainId: any = null;
+let locale: string = 'en-US';
 if (window.localStorage.getItem("userInfo")) {
   userInfo = JSON.parse(window.localStorage.getItem("userInfo") || "{}")
 }
@@ -14,6 +15,9 @@ if (window.localStorage.getItem("theme")) {
 }
 if (window.localStorage.getItem("chainId")) {
   chainId = window.localStorage.getItem("chainId") ? JSON.parse(window.localStorage.getItem("chainId")||"{}"): null;
+}
+if (window.localStorage.getItem("locale")) {
+  locale = window.localStorage.getItem("locale") || "en-US";
 }
 
 const store = createStore({
@@ -27,6 +31,7 @@ const store = createStore({
     scale: 1,
     chainId: chainId,
     setPins: {},
+    locale: locale,
   },
   mutations: {
     // 第一个参数：默认传入store对象的state
@@ -57,6 +62,9 @@ const store = createStore({
     },
     setPins(state, payload) {
       state.setPins = payload
+    },
+    setLocale(state, payload) {
+      state.locale = payload
     }
   },
   actions: {
@@ -100,6 +108,10 @@ const store = createStore({
     },
     setPins(context, param) {
       context.commit('setPins', param)
+    },
+    setLocale(context, param) {
+      window.localStorage.setItem("locale", param);
+      context.commit('setLocale', param)
     }
   },
   modules: {
