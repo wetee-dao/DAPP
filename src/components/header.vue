@@ -1,25 +1,15 @@
 <template>
   <div class="header-wrap flex" v-show="isShow" key="header">
-    <div class="header-left" @click="menuClick">
-      <!-- <div class="menu-list">
-        <div :class="isFirst
-        ? 'menu-item'
-        : menuShow
-        ? 'menu-item-active menu-item'
-        : 'menu-item menu-item-out'
-      " v-for="item in 3" :key="item" />
-      </div> -->
+    <!-- <div class="header-left" @click="menuClick">
       <div class="cur-service">
         PlusWeb
       </div>
       <div class="header-logo" @click="home">
         <Logo class="icon" :fill="true" />
       </div>
-      <!-- <SvgImg class="main-chain" name="polkadot_mini"/> -->
-    </div>
+    </div> -->
 
-    <HeaderNav :key="pkey" :paths="paths" v-if="paths.length > 0" />
-    <div class="header-space"></div>
+    <!-- <HeaderNav :key="pkey" :paths="paths" v-if="paths.length > 0" /> -->
 
     <!-- <div class="balance">Balance: 1000WTE</div> -->
 
@@ -110,14 +100,6 @@
     </el-dropdown>
   </div>
   <NavList v-show="isShow" :key="module" :module="module" @closeClick="closeClick" />
-  <div class="logo-bg" v-show="isShow" :showName="true">
-    <div class="cur-service">
-      PlusWeb3
-    </div>
-    <div class="header-logo" @click="home">
-      <Logo class="icon" :fill="true" />
-    </div>
-  </div>
 </template>
 
 <script lang="ts" setup>
@@ -257,14 +239,13 @@ const wallet = (name: string): Wallet => {
 @use "../assets/styles/components/menu.scss" as *;
 
 .header-wrap {
-  width: 100%;
   height: 60px;
   box-sizing: border-box;
   position: fixed;
   top: 0;
-  left: 0;
+  right: 0;
   z-index: 100;
-  border-bottom: 1px solid rgba($secondary-text-rgb, 0.055);
+  // border-bottom: 1px solid rgba($secondary-text-rgb, 0.055);
   background-color: rgba($primary-bg-rgb, 0.82);
   backdrop-filter: blur(18px) saturate(1.08);
   align-items: center;
@@ -280,8 +261,8 @@ const wallet = (name: string): Wallet => {
 
 .header-left {
   height: 100%;
-  width: 9.8rem;
-  min-width: 9.8rem;
+  width: 15.5rem;
+  min-width: 15.5rem;
   border-right: 1px solid rgba($secondary-text-rgb, 0.05);
   display: flex;
   align-items: center;
@@ -324,25 +305,6 @@ const wallet = (name: string): Wallet => {
   color: $primary-text;
   margin-right: 4px;
   word-spacing: -6px;
-}
-
-.logo-bg {
-  position: fixed !important;
-  top: 13px !important;
-  left: 20px !important;
-  display: flex;
-  align-items: center;
-  transform: scale(1.1);
-  justify-content: center;
-
-  .cur-service {
-    word-spacing: -10px;
-    letter-spacing: -2px;
-  }
-
-  .block {
-    margin-left: 4px;
-  }
 }
 
 .network-box {
@@ -516,7 +478,7 @@ const wallet = (name: string): Wallet => {
 
 .account {
   background-color: rgba($secondary-text-rgb, 0.045);
-  margin-right: 21px;
+  margin-right: 30px;
   padding: 0 4px;
 }
 

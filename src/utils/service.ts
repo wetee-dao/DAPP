@@ -3,6 +3,8 @@ import { Component } from "vue";
 export interface insType {
   name: string;
   nameKey?: string;
+  group?: string;
+  groupKey?: string;
   icon: string;
   url: string;
   module: string;
@@ -13,6 +15,8 @@ export default <insType[]>[
   {
     name: "Service",
     nameKey: "routes.cloud",
+    group: "Core",
+    groupKey: "nav.core",
     icon: "cloud",
     url: "/cloud",
     module: "cloud",
@@ -20,6 +24,8 @@ export default <insType[]>[
   {
     name: "Secret",
     nameKey: "routes.secret",
+    group: "Core",
+    groupKey: "nav.core",
     icon: "secret",
     url: "/secret",
     module: "secret",
@@ -27,6 +33,8 @@ export default <insType[]>[
   {
     name: "Disk",
     nameKey: "routes.disk",
+    group: "Core",
+    groupKey: "nav.core",
     icon: "disk",
     url: "/disk",
     module: "disk",
@@ -39,6 +47,8 @@ export default <insType[]>[
   // },
   {
     name: "Bridge",
+    group: "Explore",
+    groupKey: "nav.explore",
     icon: "bridge",
     url: "/bridge",
     module: "bridge",
@@ -46,6 +56,8 @@ export default <insType[]>[
   },
   {
     name: "MPC",
+    group: "Explore",
+    groupKey: "nav.explore",
     icon: "mpc",
     url: "/mpc",
     module: "mpc",
@@ -54,6 +66,8 @@ export default <insType[]>[
   {
     name: "Builder",
     nameKey: "routes.builder",
+    group: "Explore",
+    groupKey: "nav.explore",
     icon: "builder",
     url: "/builder",
     module: "builder",

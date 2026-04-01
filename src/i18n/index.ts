@@ -39,6 +39,13 @@ export const messages = {
     header: {
       disconnect: 'Disconnect'
     },
+    nav: {
+      products: 'Products',
+      plusweb: 'TEE VM',
+      console: 'TEE Claw',
+      core: 'Core',
+      explore: 'Explore'
+    },
     routes: {
       cloud: 'Secret Pod',
       secret: 'Secret',
@@ -318,6 +325,13 @@ export const messages = {
     },
     header: {
       disconnect: '断开连接'
+    },
+    nav: {
+      products: '产品',
+      plusweb: 'TEE VM',
+      console: 'TEE Claw',
+      core: '核心功能',
+      explore: '探索中'
     },
     routes: {
       cloud: '机密容器',

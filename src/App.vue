@@ -80,14 +80,14 @@ onBeforeUnmount(() => {
 }
 
 .main-content{
-  margin-left: 150px;
-  width: calc(100vw - 150px) !important;
+  margin-left: 248px;
+  width: calc(100vw - 248px) !important;
   box-sizing: border-box;
-  padding: 86px 32px 40px;
+  padding: 66px 32px 40px;
 }
 
 #subview {
-  padding-left: 150px;
+  padding-left: 248px;
   height: calc(100vh - 70px);
 }
 
