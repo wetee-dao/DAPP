@@ -391,7 +391,7 @@ onMounted(async () => {
           }
 
           .stat-value {
-            font-size: 20px;
+            font-size: 15px;
             font-weight: 600;
 
             &.yes {

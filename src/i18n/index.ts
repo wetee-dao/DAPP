@@ -34,7 +34,12 @@ export const messages = {
       name: 'Name',
       operations: 'Operations',
       show: 'Show',
-      delete: 'Delete'
+      delete: 'Delete',
+      disabled: 'Disabled',
+      copied: 'Copied to clipboard',
+      copyFailed: 'Copy failed',
+      search: 'Search',
+      noData: 'No data'
     },
     header: {
       disconnect: 'Disconnect'
@@ -305,6 +310,82 @@ export const messages = {
       close: 'Close',
       contractCallError: 'Contract call error',
       errorPrefix: 'Error: {error}'
+    },
+    gov: {
+      governance: 'Governance',
+      overview: 'Overview',
+      referenda: 'Referenda',
+      members: 'Members',
+      tracks: 'Tracks',
+      treasuryTitle: 'Treasury',
+      spends: 'Spends',
+      pageTitle: 'Open Gov',
+      pageSubtitle: 'Decentralized governance for the network',
+      delegate: 'Delegate',
+      subscribe: 'Subscribe',
+      all: 'All',
+      system: 'System',
+      treasury: 'Treasury',
+      others: 'Others',
+      empty: 'No referenda found',
+      statusDeciding: 'Deciding',
+      statusPreparing: 'Preparing',
+      statusExecuted: 'Executed',
+      statusTimedOut: 'Timed Out',
+      statusRejected: 'Rejected',
+      trackMediumSpender: 'Medium Spender'
+    },
+    govOverview: {
+      title: 'Governance Overview',
+      subtitle: 'Overview of DAO governance status',
+      activeProposals: 'Active Proposals',
+      totalMembers: 'Total Members',
+      treasuryBalance: 'Treasury Balance',
+      totalTracks: 'Total Tracks',
+      latestProposals: 'Latest Proposals',
+      recentMembers: 'Recent Members'
+    },
+    govMembers: {
+      title: 'DAO Members',
+      subtitle: 'Manage DAO membership',
+      join: 'Join DAO',
+      leave: 'Leave DAO',
+      totalMembers: 'Total Members',
+      publicJoin: 'Public Join',
+      myBalance: 'My Balance',
+      memberList: 'Member List',
+      you: 'You',
+      joinTitle: 'Join DAO',
+      formBalance: 'Balance to Stake'
+    },
+    govTracks: {
+      title: 'Voting Tracks',
+      subtitle: 'Manage voting tracks configuration',
+      default: 'Default',
+      setDefault: 'Set Default',
+      preparePeriod: 'Prepare Period',
+      decisionPeriod: 'Decision Period',
+      confirmPeriod: 'Confirm Period',
+      decisionDeposit: 'Decision Deposit',
+      maxBalance: 'Max Balance',
+      empty: 'No tracks found'
+    },
+    govSpends: {
+      title: 'Treasury Spends',
+      subtitle: 'Manage treasury spending requests',
+      create: 'Create Spend',
+      to: 'To',
+      amount: 'Amount',
+      track: 'Track',
+      payout: 'Payout',
+      empty: 'No spends found',
+      createTitle: 'Create Spend Request',
+      formTo: 'Recipient Address',
+      formAmount: 'Amount',
+      formTrack: 'Select Track',
+      statusPending: 'Pending',
+      statusPaid: 'Paid',
+      statusExpired: 'Expired'
     }
   },
   [LOCALE_ZH_CN]: {
@@ -321,7 +402,12 @@ export const messages = {
       name: '名称',
       operations: '操作',
       show: '查看',
-      delete: '删除'
+      delete: '删除',
+      disabled: '未启用',
+      copied: '已复制到剪贴板',
+      copyFailed: '复制失败',
+      search: '搜索',
+      noData: '暂无数据'
     },
     header: {
       disconnect: '断开连接'
@@ -592,6 +678,82 @@ export const messages = {
       close: '关闭',
       contractCallError: '合约调用错误',
       errorPrefix: '错误：{error}'
+    },
+    gov: {
+      governance: '治理',
+      overview: '概览',
+      referenda: '公投',
+      members: '成员',
+      tracks: '轨道',
+      treasuryTitle: '国库',
+      spends: '支出',
+      pageTitle: '开放治理',
+      pageSubtitle: '网络去中心化治理',
+      delegate: '委托',
+      subscribe: '订阅',
+      all: '全部',
+      system: '系统',
+      treasury: '国库',
+      others: '其他',
+      empty: '暂无公投',
+      statusDeciding: '投票中',
+      statusPreparing: '准备中',
+      statusExecuted: '已执行',
+      statusTimedOut: '已超时',
+      statusRejected: '已拒绝',
+      trackMediumSpender: '中等支出者'
+    },
+    govOverview: {
+      title: '治理概览',
+      subtitle: 'DAO 治理状态概览',
+      activeProposals: '活跃提案',
+      totalMembers: '成员总数',
+      treasuryBalance: '国库余额',
+      totalTracks: '轨道总数',
+      latestProposals: '最新提案',
+      recentMembers: '最近成员'
+    },
+    govMembers: {
+      title: 'DAO 成员',
+      subtitle: '管理 DAO 成员资格',
+      join: '加入 DAO',
+      leave: '退出 DAO',
+      totalMembers: '成员总数',
+      publicJoin: '公开加入',
+      myBalance: '我的余额',
+      memberList: '成员列表',
+      you: '我',
+      joinTitle: '加入 DAO',
+      formBalance: '质押余额'
+    },
+    govTracks: {
+      title: '投票轨道',
+      subtitle: '管理投票轨道配置',
+      default: '默认',
+      setDefault: '设为默认',
+      preparePeriod: '准备期',
+      decisionPeriod: '决策期',
+      confirmPeriod: '确认期',
+      decisionDeposit: '决定押金',
+      maxBalance: '最大余额',
+      empty: '暂无轨道'
+    },
+    govSpends: {
+      title: '国库支出',
+      subtitle: '管理国库支出申请',
+      create: '创建支出',
+      to: '接收地址',
+      amount: '金额',
+      track: '轨道',
+      payout: '领取',
+      empty: '暂无支出',
+      createTitle: '创建支出申请',
+      formTo: '接收地址',
+      formAmount: '金额',
+      formTrack: '选择轨道',
+      statusPending: '待领取',
+      statusPaid: '已支付',
+      statusExpired: '已过期'
     }
   }
 };

@@ -341,3 +341,51 @@ export async function cancelProposal(proposalId: number): Promise<any> {
     throw error;
   }
 }
+
+// 查询是否允许公开加入
+export async function getPublicJoin(): Promise<boolean> {
+  try {
+    const api = $getQueryApi();
+    const result = await (api as any).ink_query(daoContractAddress, "public_join", {});
+    return result || false;
+  } catch (error: any) {
+    ElNotification({
+      title: "错误",
+      message: "查询公开加入状态失败: " + (error.message || error),
+      type: "error",
+    });
+    throw error;
+  }
+}
+
+// 公开加入DAO
+export async function publicJoin(): Promise<any> {
+  try {
+    const api = $getQueryApi();
+    const result = await (api as any).ink_builder(daoContractAddress, "public_join", {}, "0");
+    return result;
+  } catch (error: any) {
+    ElNotification({
+      title: "错误",
+      message: "公开加入DAO失败: " + (error.message || error),
+      type: "error",
+    });
+    throw error;
+  }
+}
+
+// 退出DAO
+export async function leave(): Promise<any> {
+  try {
+    const api = $getQueryApi();
+    const result = await (api as any).ink_builder(daoContractAddress, "leave", {}, "0");
+    return result;
+  } catch (error: any) {
+    ElNotification({
+      title: "错误",
+      message: "退出DAO失败: " + (error.message || error),
+      type: "error",
+    });
+    throw error;
+  }
+}

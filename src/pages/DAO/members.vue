@@ -2,9 +2,33 @@
   <div class="dao-members">
     <div class="container">
       <div class="header">
-        <h1>成员列表</h1>
-        <div class="header-stats">
-          <el-statistic title="总成员数" :value="members.length" />
+        <h1>{{ t('govMembers.title') }}</h1>
+        <div class="header-actions">
+          <div class="header-stats">
+            <el-statistic :title="t('govMembers.totalMembers')" :value="members.length" />
+          </div>
+          <!-- 加入/退出 DAO 按钮 -->
+          <div class="action-buttons">
+            <template v-if="!isMember">
+              <el-button
+                v-if="publicJoinEnabled"
+                type="primary"
+                :loading="joining"
+                @click="handleJoinDao"
+              >
+                {{ t('govMembers.join') }}
+              </el-button>
+              <el-tag v-else type="info">{{ t('govMembers.publicJoin') }} {{ t('common.disabled') }}</el-tag>
+            </template>
+            <el-button
+              v-else
+              type="danger"
+              :loading="leaving"
+              @click="handleLeaveDao"
+            >
+              {{ t('govMembers.leave') }}
+            </el-button>
+          </div>
         </div>
       </div>
 
@@ -12,7 +36,7 @@
       <el-card class="search-card">
         <el-input
           v-model="searchText"
-          placeholder="搜索成员地址"
+          :placeholder="t('common.search')"
           clearable
           @input="handleSearch"
         >
@@ -43,38 +67,25 @@
                 >
                   <el-icon><DocumentCopy /></el-icon>
                 </el-button>
+                <el-tag v-if="scope.row === currentAddress" size="small" type="success">
+                  {{ t('govMembers.you') }}
+                </el-tag>
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="可用余额" width="150">
-            <template #default="scope">
-              {{ formatBalance(balances[scope.row]?.available || "0") }}
-            </template>
-          </el-table-column>
-          <el-table-column label="锁定余额" width="150">
-            <template #default="scope">
-              {{ formatBalance(balances[scope.row]?.locked || "0") }}
-            </template>
-          </el-table-column>
-          <el-table-column label="总余额" width="150">
+          <el-table-column :label="t('govMembers.myBalance')" width="150">
             <template #default="scope">
               {{ formatBalance(balances[scope.row]?.total || "0") }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="120" fixed="right">
+          <el-table-column label="锁定" width="150">
             <template #default="scope">
-              <el-button
-                type="primary"
-                size="small"
-                @click="viewMemberDetail(scope.row)"
-              >
-                详情
-              </el-button>
+              {{ formatBalance(balances[scope.row]?.locked || "0") }}
             </template>
           </el-table-column>
         </el-table>
 
-        <el-empty v-if="!loading && filteredMembers.length === 0" description="暂无成员" />
+        <el-empty v-if="!loading && filteredMembers.length === 0" :description="t('common.noData')" />
       </el-card>
     </div>
   </div>
@@ -83,6 +94,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+import { useI18n } from "vue-i18n";
 import { Search, DocumentCopy } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 import {
@@ -90,15 +103,31 @@ import {
   getBalance,
   getLockBalance,
   setDaoContractAddress,
+  getDaoContractAddress,
+  getPublicJoin,
 } from "@/apis/dao";
+import { $getTxProvider } from "@/plugins/chain";
 import { BN } from "@polkadot/util";
 
 const router = useRouter();
+const store = useStore();
+const { t } = useI18n();
 
 const loading = ref(false);
 const members = ref<string[]>([]);
 const balances = ref<Record<string, { available: string; locked: string; total: string }>>({});
 const searchText = ref("");
+const publicJoinEnabled = ref(false);
+const joining = ref(false);
+const leaving = ref(false);
+
+// 当前用户地址
+const currentAddress = computed(() => store.state.userInfo?.addr || "");
+
+// 当前用户是否为成员
+const isMember = computed(() => {
+  return members.value.includes(currentAddress.value);
+});
 
 // 过滤后的成员列表
 const filteredMembers = computed(() => {
@@ -167,6 +196,16 @@ const loadBalances = async () => {
   await Promise.all(balancePromises);
 };
 
+// 加载公开加入状态
+const loadPublicJoinStatus = async () => {
+  try {
+    publicJoinEnabled.value = await getPublicJoin();
+  } catch (error) {
+    console.error("加载公开加入状态失败:", error);
+    publicJoinEnabled.value = false;
+  }
+};
+
 // 搜索处理
 const handleSearch = () => {
   // 搜索逻辑已在 computed 中处理
@@ -176,23 +215,85 @@ const handleSearch = () => {
 const copyAddress = async (address: string) => {
   try {
     await navigator.clipboard.writeText(address);
-    ElMessage.success("地址已复制到剪贴板");
+    ElMessage.success(t('common.copied'));
   } catch (error) {
-    ElMessage.error("复制失败");
+    ElMessage.error(t('common.copyFailed'));
   }
 };
 
-// 查看成员详情
-const viewMemberDetail = (address: string) => {
-  // TODO: 可以跳转到成员详情页面
-  ElMessage.info("成员详情功能开发中");
+// 公开加入 DAO
+const handleJoinDao = async () => {
+  try {
+    joining.value = true;
+    
+    await $getTxProvider(async (chain, builder) => {
+      const txData = await (builder as any).ink_builder(
+        getDaoContractAddress(),
+        "public_join",
+        {},
+        "0"
+      );
+      
+      const signer = store.state.userInfo.addr;
+      await chain.signAndSend(
+        await chain.buildCall(txData, signer),
+        signer,
+        () => {
+          ElMessage.success(t('govMembers.join') + " " + t('common.success'));
+          loadMembers();
+        },
+        (error: any) => {
+          console.error("加入DAO失败:", error);
+          ElMessage.error(t('common.error') + ": " + error);
+        }
+      );
+    });
+  } catch (error: any) {
+    ElMessage.error(t('common.error') + ": " + (error.message || error));
+  } finally {
+    joining.value = false;
+  }
+};
+
+// 退出 DAO
+const handleLeaveDao = async () => {
+  try {
+    leaving.value = true;
+    
+    await $getTxProvider(async (chain, builder) => {
+      const txData = await (builder as any).ink_builder(
+        getDaoContractAddress(),
+        "leave",
+        {},
+        "0"
+      );
+      
+      const signer = store.state.userInfo.addr;
+      await chain.signAndSend(
+        await chain.buildCall(txData, signer),
+        signer,
+        () => {
+          ElMessage.success(t('govMembers.leave') + " " + t('common.success'));
+          loadMembers();
+        },
+        (error: any) => {
+          console.error("退出DAO失败:", error);
+          ElMessage.error(t('common.error') + ": " + error);
+        }
+      );
+    });
+  } catch (error: any) {
+    ElMessage.error(t('common.error') + ": " + (error.message || error));
+  } finally {
+    leaving.value = false;
+  }
 };
 
 onMounted(async () => {
   // TODO: 需要根据实际情况设置 DAO 合约地址
   // setDaoContractAddress("0x...");
   
-  await loadMembers();
+  await Promise.all([loadMembers(), loadPublicJoinStatus()]);
 });
 </script>
 
@@ -218,9 +319,21 @@ onMounted(async () => {
       font-weight: 600;
     }
 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
     .header-stats {
       display: flex;
       gap: 24px;
+    }
+
+    .action-buttons {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
   }
 
