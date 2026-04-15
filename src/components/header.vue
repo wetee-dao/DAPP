@@ -249,6 +249,7 @@ const wallet = (name: string): Wallet => {
   background-color: rgba($primary-bg-rgb, 0.82);
   backdrop-filter: blur(18px) saturate(1.08);
   align-items: center;
+  font-size: 11px;
 }
 
 .menu-list {
@@ -276,6 +277,7 @@ const wallet = (name: string): Wallet => {
   padding: 5px 5px;
   height: 22px;
   justify-content: space-between;
+  font-size: 11px;
 }
 
 .header-logo {
@@ -300,7 +302,6 @@ const wallet = (name: string): Wallet => {
   flex-direction: row;
   align-items: center;
   text-transform: uppercase;
-  font-size: 20px;
   font-family: "pixel-font";
   color: $primary-text;
   margin-right: 4px;
@@ -341,9 +342,6 @@ const wallet = (name: string): Wallet => {
     margin-right: 5px;
   }
 
-  &>div {
-    font-size: 14px;
-  }
 }
 
 .network {
@@ -355,7 +353,7 @@ const wallet = (name: string): Wallet => {
   height: 40px;
 
   .el-input__icon {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   :deep(.el-input__wrapper) {
@@ -378,7 +376,7 @@ const wallet = (name: string): Wallet => {
   line-height: 28px;
   text-align: center;
   border-radius: 50%;
-  font-size: 18px;
+  font-size: 14px;
   box-shadow: 0px 10px 14px 0px rgba(10, 4, 60, 0.04);
   flex: none;
   margin-left: 20px;
@@ -404,7 +402,7 @@ const wallet = (name: string): Wallet => {
   flex-direction: row;
   align-items: center;
   margin-right: -10px;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.8;
 }
 
@@ -416,7 +414,7 @@ const wallet = (name: string): Wallet => {
 }
 
 .header-user-name {
-  font-size: 14px;
+  font-size: 12px;
   line-height: 12px;
   font-family: monospace;
   word-break: break-all;
@@ -496,7 +494,7 @@ const wallet = (name: string): Wallet => {
   }
 
   .icon {
-    font-size: 12px;
+    font-size: 11px;
     display: inline-block;
     margin-left: 8px;
     margin-right: 10px;

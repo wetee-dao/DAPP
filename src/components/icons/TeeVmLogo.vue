@@ -1,29 +1,9 @@
 <template>
-  <svg
-    class="teevm-logo"
-    viewBox="0 0 96 96"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden="true"
-  >
-    <g class="pins">
-      <rect x="22" y="8" width="6" height="10" rx="2" />
-      <rect x="44" y="8" width="8" height="10" rx="2" />
-      <rect x="68" y="8" width="6" height="10" rx="2" />
-      <rect x="78" y="22" width="10" height="6" rx="2" />
-      <rect x="78" y="44" width="10" height="8" rx="2" />
-      <rect x="78" y="68" width="10" height="6" rx="2" />
-      <rect x="22" y="78" width="6" height="10" rx="2" />
-      <rect x="44" y="78" width="8" height="10" rx="2" />
-      <rect x="68" y="78" width="6" height="10" rx="2" />
-      <rect x="8" y="22" width="10" height="6" rx="2" />
-      <rect x="8" y="44" width="10" height="8" rx="2" />
-      <rect x="8" y="68" width="10" height="6" rx="2" />
-    </g>
-
-    <rect class="chip-body" x="18" y="18" width="60" height="60" rx="14" />
-    <rect class="chip-core" x="28" y="28" width="40" height="40" rx="10" />
-
-    <path class="vm" d="M32 36H64V43H52V61H44V43H32V36Z" />
+  <svg class="teevm-logo" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+    p-id="12679" width="256" height="256">
+    <path
+      d="M800.20876 826.452936q34.356011 0 62.986021-16.700839t45.330848-45.330848 16.700839-62.986021V275.802423q0-25.767008-9.543337-48.671016t-27.198508-40.55918T847.925443 159.373719t-47.716683-9.543337h-24.812674V125.017707q0-34.356011-17.178006-62.98602t-45.808015-45.330848T649.424045 0H223.79124q-34.356011 0-62.986021 16.700839T115.474371 62.031687 98.773532 125.017707v425.632806q0 34.356011 16.700839 62.98602t45.330848 45.808015 62.986021 17.178006h24.812674v24.812674q0 34.356011 17.178006 62.986021t45.808015 45.330848 62.98602 16.700839h425.632805z m0-75.392358H374.575955q-20.041007 0-34.356011-12.883504T323.996272 706.206897v-29.584343h325.427773q34.356011 0 62.98602-17.178006t45.808015-45.808015 17.178006-62.98602V225.22274h24.812674q19.086673 0 33.401678 12.883504t16.223672 32.924511v430.404473q0 19.086673-12.883504 33.401678T804.980429 751.060578h-4.771669z"
+      p-id="12680"></path>
   </svg>
 </template>
 
@@ -33,23 +13,7 @@
   width: 100%;
   height: 100%;
 
-  .pins {
-    fill: rgba($primary-text-rgb, 0.6);
-  }
-
-  .chip-body {
-    fill: rgba($primary-text-rgb, 0.14);
-    stroke: $primary-text;
-    stroke-width: 4;
-  }
-
-  .chip-core {
-    fill: rgba($primary-text-rgb, 0.04);
-    stroke: rgba($primary-text-rgb, 0.88);
-    stroke-width: 3;
-  }
-
-  .vm {
+  path {
     fill: $primary-text;
   }
 }

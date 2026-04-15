@@ -150,7 +150,7 @@ const toProduct = (product: { disabled?: boolean; url?: string }) => {
 
   .product-group-title {
     width: 100%;
-    padding: 4px 4px 10px;
+    padding: 4px 8px 10px 0px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -231,22 +231,22 @@ const toProduct = (product: { disabled?: boolean; url?: string }) => {
     display: flex;
     flex-direction: column;
     flex: 1;
-    padding: 16px 10px 24px;
-    gap: 16px;
+    padding: 12px 8px 16px;
+    gap: 12px;
     box-sizing: border-box;
   }
 
   .group {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
   }
 
   .group-title {
-    padding: 0 12px 8px;
-    font-size: 11px;
+    padding: 0 13px 15px;
+    font-size: 10px;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     color: rgba($secondary-text-rgb, 0.34);
   }
@@ -256,13 +256,13 @@ const toProduct = (product: { disabled?: boolean; url?: string }) => {
     align-items: center;
     border-radius: 4px;
     cursor: pointer;
-    padding: 14px 12px;
+    padding: 10px 12px;
     flex-direction: row;
     justify-content: flex-start;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 400;
-    line-height: 1.3;
-    letter-spacing: 0.02em;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
     color: rgba($secondary-text-rgb, 0.48);
     transition: color 0.2s ease, opacity 0.2s ease, background-color 0.2s ease;
 
@@ -271,9 +271,9 @@ const toProduct = (product: { disabled?: boolean; url?: string }) => {
     }
 
     .icon {
-      width: 20px;
-      height: 20px;
-      margin-right: 10px;
+      width: 18px;
+      height: 18px;
+      margin-right: 8px;
       display: block;
       flex-shrink: 0;
       opacity: 0.55;
@@ -303,7 +303,7 @@ const toProduct = (product: { disabled?: boolean; url?: string }) => {
     &.active {
       font-weight: 500;
       color: $primary-text;
-      letter-spacing: 0.025em;
+      letter-spacing: 0.012em;
       background-color: rgba($secondary-text-rgb, 0.08);
 
       .icon {

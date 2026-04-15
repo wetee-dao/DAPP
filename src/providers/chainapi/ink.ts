@@ -42,15 +42,15 @@ class InkApi {
 
         return {
             name: api.registry.chainTokens[0],
-            value: showToken(getBnFromChain(data.data.free),api.registry.chainDecimals[0])
+            value: showToken(getBnFromChain(data.data.free), api.registry.chainDecimals[0])
         }
     }
 
-    async contactInfo (h160Addr: string) {
+    async contactInfo(h160Addr: string) {
         const api = await ApiPromise.create({
             provider: new HttpProvider(this.chainUrl.replace(/^ws/, 'http')),
         });
-        
+
         const account = await api.call.reviveApi.accountId(h160Addr)
         const balance = await this.nativeBalance(account.toHuman() as string)
 
@@ -269,7 +269,8 @@ class InkApi {
         inputData = u8aConcat(abi.registry.createType('ContractSelector', methodAbi.selector).toU8a(), ...paramsU8a)
 
         console.log("ink_builder contract", contract)
-        console.log("            abi args", methodAbi.args)
+        console.log("              method", methodAbi.method)
+        console.log("                args", args)
         console.log("                args", transformUserInput(abi!.registry, methodAbi.args, args))
         console.log("            hex args", u8aToHex(inputData))
 
@@ -410,12 +411,14 @@ function decodeReturnValue(
             returnTypeName.length - resultInkErrSuffix.length,
         );
     }
+    console.log("returnTypeName", returnTypeName)
 
     let r: AnyJson = 'Decoding error';
     try {
         r = returnType ? registry.createTypeUnsafe(returnTypeName, [data]).toHuman() : '()';
     } catch (exception) {
         console.error(exception);
+        throw new Error("Decoding error: " + exception);
     }
     return r;
 }
@@ -434,8 +437,8 @@ function formatInputData(arr: Uint8Array): Uint8Array {
 }
 
 export const Ink = new InkApi({
-    subnetContract: "0xe8a6afcf3804b72cf15124e6a1564cfa031ebcd5",
+    subnetContract: "0x496806883725e8544340dd35fe743b3b8af67b19",
     subnetAbiUrl: "contract/subnet.json",
-    cloudContract: "0x50a1d081a1301c1fb8466cf44a643d39126e43fa",
+    cloudContract: "0x9faed02b7624207dc0fedfded4842be33cad4eb3",
     cloudAbiUrl: "contract/cloud.json",
 })
