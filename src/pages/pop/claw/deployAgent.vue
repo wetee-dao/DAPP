@@ -22,6 +22,13 @@
             </div>
 
             <div class="form-context-box">
+              <div class="form-sub-title">{{ t('claw.agentName') }}</div>
+              <div class="form-input-box">
+                <el-input v-model="name" :placeholder="t('claw.agentNamePlaceholder')" />
+              </div>
+            </div>
+
+            <div class="form-context-box">
               <div class="form-sub-title">{{ t('claw.selectAgentType') }}</div>
               <div class="form-input-box">
                 <el-select v-model="agentType">
@@ -29,13 +36,6 @@
                   <el-option label="ZeroClaw" value="zeroclaw" />
                   <el-option label="Hermes-Agent" value="hermes-agent" />
                 </el-select>
-              </div>
-            </div>
-
-            <div class="form-context-box">
-              <div class="form-sub-title">{{ t('claw.agentName') }}</div>
-              <div class="form-input-box">
-                <el-input v-model="name" :placeholder="t('claw.agentNamePlaceholder')" />
               </div>
             </div>
 

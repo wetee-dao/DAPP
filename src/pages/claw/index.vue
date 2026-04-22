@@ -173,6 +173,6 @@ onMounted(() => {
 .empty {
   padding: 18px 0px;
   color: rgba($secondary-text-rgb, 0.62);
-  text-align: center;
+  text-align: left;
 }
 </style>
