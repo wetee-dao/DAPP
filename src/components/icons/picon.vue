@@ -7,6 +7,8 @@
     <Bridge v-if="icon === 'bridge'" class="logo-icon" />
     <Store v-if="icon === 'disk'" class="logo-icon" />
     <Secret v-if="icon === 'secret'" class="logo-icon" />
+    <Claw v-if="icon === 'claw'" class="logo-icon" />
+    <Manage v-if="icon === 'manage'" class="logo-icon" />
 </div>
 </template>
 
@@ -19,6 +21,8 @@ import MPC from "./MPC.vue";
 import Bridge from './bridge.vue';
 import Store from './store.vue';
 import Secret from './secret.vue';
+import Claw from './claw.vue';
+import Manage from './manage.vue';
 
 const props = defineProps(["icon"])
 const icon = ref(props.icon);

@@ -15,6 +15,11 @@ export default {
       return openPop(app, router, store, c, "addService", { createType: createType }, close)
     };
 
+    app.config.globalProperties.$DeployClawAgent = (router: Object, store: Object, ps: any, close: Function) => {
+      const c = defineAsyncComponent(() => import('../pages/pop/claw/deployAgent.vue'));
+      return openPop(app, router, store, c, "deployClawAgent", ps || {}, close)
+    };
+
     app.config.globalProperties.$EditContainer = (router: Object, store: Object,ps: any, close: Function) => {
       const c = defineAsyncComponent(() => import('../pages/pop/substrate/editContainer.vue'));
       return openPop(app, router, store, c, "editContainer", ps, close)

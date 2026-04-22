@@ -23,6 +23,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../pages/cloud/disks.vue')
     },
     {
+        path: '/claw',
+        name: 'TEE Claw',
+        meta: { needLogin: true },
+        component: () => import('../pages/claw/index.vue')
+    },
+    {
         path: '/login',
         name: 'Login',
         component: () => import('../pages/login.vue')

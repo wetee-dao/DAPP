@@ -83,7 +83,7 @@ onBeforeUnmount(() => {
   margin-left: 248px;
   width: calc(100vw - 248px) !important;
   box-sizing: border-box;
-  padding: 66px 32px 40px;
+  padding: 66px 32px 0px;
 }
 
 #subview {

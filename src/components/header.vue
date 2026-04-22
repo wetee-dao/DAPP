@@ -274,7 +274,7 @@ const wallet = (name: string): Wallet => {
 }
 
 .header-box {
-  padding: 5px 5px;
+  padding: 2px 5px;
   height: 22px;
   justify-content: space-between;
   font-size: 11px;
@@ -476,13 +476,13 @@ const wallet = (name: string): Wallet => {
 
 .account {
   background-color: rgba($secondary-text-rgb, 0.045);
-  margin-right: 30px;
+  margin-right: 15px;
   padding: 0 4px;
 }
 
 .balance {
   background-color: rgba($secondary-text-rgb, 0.045);
-  padding: 5px 0px 5px 10px;
+  padding: 2px 0px 2px 10px;
   height: 22px;
   line-height: 22px;
   margin-right: 2px;

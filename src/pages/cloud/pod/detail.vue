@@ -155,7 +155,7 @@ const GetTEEInfo = async (item: any) => {
   // background-color: rgba($secondary-bg-rgb, 0.35);
   min-width: calc(100vw - 500px);
   max-width: calc(100vw - 500px);
-  height: calc(100vh - 89px);
+  // height: calc(100vh - 62px);
   position: relative;
   border: 1Px solid rgba($gray-bg-rgb, 0.1);
   border-bottom: 0;

@@ -16,7 +16,11 @@ const routeNameMap: Record<string, string> = {
   proposals: 'routes.proposals',
   create: 'routes.createProposal',
   members: 'routes.members',
-  vote: 'routes.voteProposal'
+  vote: 'routes.voteProposal',
+  claw: 'routes.claw',
+  openclaw: 'routes.openclaw',
+  zeroclaw: 'routes.zeroclaw',
+  'hermes-agent': 'routes.hermesAgent'
 };
 
 export const messages = {
@@ -48,6 +52,8 @@ export const messages = {
       products: 'Products',
       plusweb: 'TEE VM',
       console: 'TEE Claw',
+      claw: 'Claw',
+      clawAgents: 'Agents',
       core: 'Core',
       explore: 'Explore'
     },
@@ -63,7 +69,37 @@ export const messages = {
       proposals: 'Proposals',
       createProposal: 'Create Proposal',
       voteProposal: 'Vote Proposal',
-      members: 'Members'
+      members: 'Members',
+      claw: 'TEE Claw',
+      openclaw: 'OpenClaw',
+      zeroclaw: 'ZeroClaw',
+      hermesAgent: 'Hermes-Agent'
+    },
+    claw: {
+      pageTitle: 'TEE Claw',
+      managementMenu: 'Agent Management',
+      lead: 'Deploy TEE-protected agent runtimes. Currently supports OpenClaw, ZeroClaw, and Hermes-Agent.',
+      agentsTitle: 'Supported agents',
+      deploy: 'Deploy',
+      deployAgent: 'Deploy agent',
+      baseSetting: 'Base setting',
+      containerVersion: 'Container version',
+      containerVersionPlaceholder: 'e.g. v0.1.0 or sha256:...',
+      initDocs: 'Initialization',
+      soulMdPlaceholder: 'Initialize SOUL.md content (optional)',
+      userMdPlaceholder: 'Initialize USER.md content (optional)',
+      selectAgentType: 'Agent type',
+      agentNamePlaceholder: 'Give this agent a name',
+      openclawDesc: 'OpenClaw agent runtime for TEE deployment.',
+      zeroclawDesc: 'ZeroClaw agent runtime for TEE deployment.',
+      hermesAgentDesc: 'Hermes-Agent runtime for TEE deployment.',
+      agentDescFallback: '{name} runtime for TEE deployment.',
+      deployedAgentTitle: 'Deployed agent',
+      agentName: 'Name',
+      agentType: 'Type',
+      agentImage: 'Image',
+      agentStatus: 'Status',
+      deployPending: 'Deployment for "{name}" will be wired to chain in a follow-up release.'
     },
     login: {
       slogan: 'Trusted Trustless Computing Network',
@@ -416,6 +452,8 @@ export const messages = {
       products: '产品',
       plusweb: 'TEE VM',
       console: 'TEE Claw',
+      claw: 'Claw',
+      clawAgents: 'Agents',
       core: '核心功能',
       explore: '探索中'
     },
@@ -431,7 +469,37 @@ export const messages = {
       proposals: '提案',
       createProposal: '创建提案',
       voteProposal: '提案投票',
-      members: '成员'
+      members: '成员',
+      claw: 'TEE Claw',
+      openclaw: 'OpenClaw',
+      zeroclaw: 'ZeroClaw',
+      hermesAgent: 'Hermes-Agent'
+    },
+    claw: {
+      pageTitle: 'TEE Claw',
+      managementMenu: '智能体管理',
+      lead: '在 TEE 内部署受保护的 Agent 运行时。当前支持 OpenClaw、ZeroClaw 与 Hermes-Agent。',
+      agentsTitle: '已支持的 Agent',
+      deploy: '部署',
+      deployAgent: '部署智能体',
+      baseSetting: '基础设置',
+      containerVersion: '容器版本',
+      containerVersionPlaceholder: '例如：v0.1.0 或 sha256:...',
+      initDocs: '初始化',
+      soulMdPlaceholder: '初始化 SOUL.md 内容（可选）',
+      userMdPlaceholder: '初始化 USER.md 内容（可选）',
+      selectAgentType: '智能体类型',
+      agentNamePlaceholder: '给这个智能体起个名字',
+      openclawDesc: 'OpenClaw Agent 运行时，通过 TEE 部署。',
+      zeroclawDesc: 'ZeroClaw Agent 运行时，通过 TEE 部署。',
+      hermesAgentDesc: 'Hermes-Agent 运行时，通过 TEE 部署。',
+      agentDescFallback: '{name} 运行时，通过 TEE 部署。',
+      deployedAgentTitle: '已部署智能体',
+      agentName: '名称',
+      agentType: '类型',
+      agentImage: '镜像',
+      agentStatus: '状态',
+      deployPending: '「{name}」的链上部署能力将在后续版本中接入。'
     },
     login: {
       slogan: '可信的无信任计算网络',

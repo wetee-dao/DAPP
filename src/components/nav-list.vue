@@ -28,7 +28,7 @@
         <div
           v-for="item in group.items"
           :key="item.name"
-          :class="{ active: item.module === props.module, disabled: item.disabled }"
+          :class="{ active: isItemActive(item), disabled: item.disabled }"
           class="nav-item"
           @click="toUri(item)"
         >
@@ -43,19 +43,87 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 import { useI18n } from "vue-i18n";
 import service, { insType } from "../utils/service";
+import { clawBaseNav } from "../utils/claw-service";
 import Logo2 from "./icons/Logo2.vue";
 import TeeVmLogo from "./icons/TeeVmLogo.vue";
 import TeeClawLogo from "./icons/TeeClawLogo.vue";
+import { $getQueryApi } from "@/plugins/chain";
+import useGlobelProperties from "@/plugins/globel";
 
 const router = useRouter();
+const store = useStore();
+const global = useGlobelProperties();
 const { t } = useI18n();
 const input = ref("");
-const lists = ref(service);
 const props = defineProps(["module"])
+const currentPath = computed(() => store.state.currentPath || "");
+
+const deployedAgents = ref<insType[]>([]);
+
+const lists = computed(() =>
+  props.module === "claw" ? [...clawBaseNav, ...deployedAgents.value] : service
+);
+
+const isClawAgent = (pod: any) => {
+  const type = String(pod?.Type ?? "");
+  if (type !== "TASK") return false;
+  const name = String(pod?.Name ?? "").toLowerCase();
+  const image = String(pod?.Image ?? "").toLowerCase();
+  return (
+    name.includes("claw") ||
+    image.includes("openclaw") ||
+    image.includes("zeroclaw") ||
+    image.includes("hermes") ||
+    image.includes("claw")
+  );
+};
+
+const loadDeployedAgents = async () => {
+  if (props.module !== "claw") return;
+  try {
+    const list = await $getQueryApi().pods(null, 1000);
+    const pods = (list || []).map((v: any) => ({
+      Id: v[0],
+      Name: v[1]?.name,
+      Type: v[1]?.ptype,
+      Image: v[2]?.[0]?.[1]?.image,
+      Status: v[3],
+    }));
+
+    deployedAgents.value = pods
+      .filter(isClawAgent)
+      .map((p: any) => ({
+        name: p.Name || `#${p.Id}`,
+        group: "Agents",
+        groupKey: "nav.clawAgents",
+        icon: "claw",
+        url: "",
+        module: "claw",
+        disabled: false,
+        agentId: p.Id,
+      }));
+  } catch (e) {
+    deployedAgents.value = [];
+  }
+};
+
+onMounted(() => {
+  loadDeployedAgents();
+});
+
+watch(
+  () => props.module,
+  (m) => {
+    if (m === "claw") {
+      loadDeployedAgents();
+    }
+  }
+);
 
 const productItems = computed(() => [
   {
@@ -70,8 +138,8 @@ const productItems = computed(() => [
     key: 'console',
     label: t('nav.console'),
     icon: TeeClawLogo,
-    url: '',
-    active: false,
+    url: '/claw',
+    active: props.module === 'claw',
     disabled: false
   }
 ]);
@@ -108,7 +176,27 @@ const toUri = (item: insType) => {
   if (item.disabled) {
     return;
   }
+  if (props.module === "claw" && item.groupKey === "nav.clawAgents") {
+    global.$DeployClawAgent(router, store, { agentId: (item as any).agentId }, () => {
+      loadDeployedAgents();
+    });
+    return;
+  }
+  if (!item.url) return;
   router.push(item.url);
+};
+
+const isItemActive = (item: insType) => {
+  if (props.module === "claw") {
+    // claw 二级栏目中：
+    // - “智能体管理”(基础菜单 /claw) 需要激活态
+    // - 已部署智能体列表点击弹窗，不走路由激活
+    if (item.url === "/claw") {
+      return currentPath.value === "/claw";
+    }
+    return false;
+  }
+  return currentPath.value.startsWith(item.url);
 };
 
 const toProduct = (product: { disabled?: boolean; url?: string }) => {
@@ -137,8 +225,8 @@ const toProduct = (product: { disabled?: boolean; url?: string }) => {
   }
 
   .product-rail {
-    width: 4.25rem;
-    min-width: 4.25rem;
+    width: 4rem;
+    min-width: 4rem;
     border-right: 1px solid rgba($secondary-text-rgb, 0.050);
     padding: 16px 8px 24px;
     box-sizing: border-box;
@@ -150,7 +238,7 @@ const toProduct = (product: { disabled?: boolean; url?: string }) => {
 
   .product-group-title {
     width: 100%;
-    padding: 4px 8px 10px 0px;
+    padding: 4px 8px 10px 2px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -167,11 +255,19 @@ const toProduct = (product: { disabled?: boolean; url?: string }) => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    padding: 10px 6px;
+    gap: 3px;
+    padding: 5px 6px;
     cursor: pointer;
     color: rgba($secondary-text-rgb, 0.52);
     transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+
+    // 一级菜单图标/文字统一使用同一套样式
+    // 通过 CSS 灰度 + 透明度实现未激活效果
+    .product-icon-inner {
+      filter: grayscale(1);
+      opacity: 0.55;
+      transition: filter 0.2s ease, opacity 0.2s ease;
+    }
 
     @media (hover: hover) {
       &:hover:not(.disabled):not(.active) {
@@ -184,16 +280,22 @@ const toProduct = (product: { disabled?: boolean; url?: string }) => {
       color: $primary-text;
       position: relative;
 
+      .product-icon-inner {
+        filter: none;
+        opacity: 1;
+      }
+
       &::after {
-        content: " ";
+        content: "";
         position: absolute;
-        top: 19%;
-        left: 0;
-        width: 5px;
-        height: 40%;
-        background-color: $primary-text;
-        border-top-right-radius: 4px;
-        border-bottom-right-radius: 4px;
+        top: 50%;
+        left: -1px;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 4px 0 4px 5px;
+        border-color: transparent transparent transparent $primary-text;
       }
     }
 
@@ -205,26 +307,27 @@ const toProduct = (product: { disabled?: boolean; url?: string }) => {
 
   .product-icon {
     width: 40px;
-    height: 40px;
+    // height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
-    background-color: rgba($secondary-text-rgb, 0.06);
+    // border-radius: 4px;
+    // background-color: rgba($secondary-text-rgb, 0.06);
     overflow: hidden;
   }
 
   .product-icon-inner {
-    width: 24px;
-    height: 24px;
+    width: 28px;
+    height: 28px;
     display: block;
   }
 
   .product-name {
-    font-size: 10px;
-    line-height: 1.2;
+    font-size: 12px;
+    line-height: 1.1;
     text-align: center;
     word-break: break-word;
+    width: 30px;
   }
 
   .list {
