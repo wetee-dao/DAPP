@@ -50,9 +50,17 @@ const global = useGlobelProperties();
 const loading = ref(true);
 const deployedAgents = ref<any[]>([]);
 
+const getAgentTypeFromImage = (pod: any) => {
+  const image = String(pod?.Image ?? "").toLowerCase();
+  if (image.includes("openclaw")) return "openclaw";
+  if (image.includes("zeroclaw")) return "zeroclaw";
+  if (image.includes("hermes") && image.includes("agent")) return "hermes-agent";
+  return null;
+};
+
 const isClawAgent = (pod: any) => {
   const type = String(pod?.Type ?? "");
-  if (type !== "TASK") return false;
+  if (type !== "CPU") return false;
   const name = String(pod?.Name ?? "").toLowerCase();
   const image = String(pod?.Image ?? "").toLowerCase();
   return (
@@ -74,6 +82,9 @@ const loadList = async () => {
       Type: v[1]?.ptype,
       Image: v[2]?.[0]?.[1]?.image,
       Status: v[3],
+      AgentType: getAgentTypeFromImage({
+        Image: v[2]?.[0]?.[1]?.image,
+      }),
     }));
     deployedAgents.value = pods.filter(isClawAgent);
   } finally {

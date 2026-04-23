@@ -36,34 +36,34 @@ const store = createStore({
   mutations: {
     // 第一个参数：默认传入store对象的state
     // 第二个参数：组件中commit传入的第二个参数
-    setPath(state, payload) {
+    setPath(state: any, payload: any) {
       state.currentPath = payload
     },
-    setTheme(state, payload) {
+    setTheme(state: any, payload: any) {
       state.theme = payload
     },
-    setLoginShow(state, payload) {
+    setLoginShow(state: any, payload: any) {
       state.isLoginShow = payload
     },
-    setUserInfo(state, payload) {
+    setUserInfo(state: any, payload: any) {
       state.userInfo = payload
     },
-    setAccounts(state, payload) {
+    setAccounts(state: any, payload: any) {
       state.account = payload
     },
-    setScale(state, payload) {
+    setScale(state: any, payload: any) {
       state.scale = payload
     },
-    setKeypair(state, payload) {
+    setKeypair(state: any, payload: any) {
       state.keypair = payload
     },
-    setChainId(state, payload) {
+    setChainId(state: any, payload: any) {
       state.chainId = payload
     },
-    setPins(state, payload) {
+    setPins(state: any, payload: any) {
       state.setPins = payload
     },
-    setLocale(state, payload) {
+    setLocale(state: any, payload: any) {
       state.locale = payload
     }
   },
@@ -72,33 +72,33 @@ const store = createStore({
     // 调用mutations中的方法来修改state(间接修改)
     // 在组件中使用this.$store.dispatch(actions中的方法，数据)
     // actions中的方法再调用store.commit(mutations中的方法，数据)修改state
-    setPath(context, param) {
+    setPath(context: any, param: any) {
       context.commit('setPath', param)
     },
-    setLoginShow(context, param) {
+    setLoginShow(context: any, param: any) {
       context.commit('setLoginShow', param)
     },
-    setUserInfo(context, param) {
+    setUserInfo(context: any, param: any) {
       window.localStorage.setItem("userInfo", JSON.stringify(param));
       context.commit('setUserInfo', param)
     },
-    setAccounts(context, param) {
+    setAccounts(context: any, param: any) {
       context.commit('setAccounts', param)
     },
-    setScale(context, param) {
+    setScale(context: any, param: any) {
       context.commit('setScale', param)
     },
-    setKeypair(context, param) {
+    setKeypair(context: any, param: any) {
       let keypair = context.state.keypair;
       keypair[param.address] = param.mnemonic;
       window.localStorage.setItem("keypair", JSON.stringify(keypair));
       context.commit('setKeypair', keypair)
     },
-    setTheme(context, param) {
+    setTheme(context: any, param: any) {
       window.localStorage.setItem("theme", param);
       context.commit('setTheme', param)
     },
-    setChainId(context, param) {
+    setChainId(context: any, param: any) {
       if (!param) {
         window.localStorage.removeItem("chainId");
       }else{
@@ -106,10 +106,10 @@ const store = createStore({
       }
       context.commit('setChainId', param)
     },
-    setPins(context, param) {
+    setPins(context: any, param: any) {
       context.commit('setPins', param)
     },
-    setLocale(context, param) {
+    setLocale(context: any, param: any) {
       window.localStorage.setItem("locale", param);
       context.commit('setLocale', param)
     }

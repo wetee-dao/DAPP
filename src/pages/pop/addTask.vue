@@ -291,6 +291,7 @@ const toAdd = async (item: any) => {
     const client = chain.client;
     const validData = validFormArray(form)
     if (!validData.ok) return;
+    const payload = validData.data;
 
     const signer = props.store.state.userInfo.addr;
 
@@ -317,12 +318,12 @@ const toAdd = async (item: any) => {
         form.name,
         form.image,
         "{}",
-        validData.port,
-        validData.command,
-        validData.env,
+        payload.port,
+        payload.command,
+        payload.env,
         form.cpu,
         form.memory,
-        validData.disk,
+        payload.disk,
         form.level,
         client.createType('TEEVersion', 'SGX'),
       )
@@ -367,8 +368,8 @@ const addItem = (t: string) => {
   }
 };
 
-const removeItem = (t: string, i: number) => {
-  form[t].splice(i, 1);
+const removeItem = (t: string, i: string | number) => {
+  form[t].splice(Number(i), 1);
 };
 </script>
 

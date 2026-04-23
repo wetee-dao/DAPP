@@ -146,7 +146,7 @@
                   </el-option>
                 </el-select>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <el-button size="large" type="danger" circle :icon="Delete" @click="removeItem('env', index)" />
+                <el-button size="large" type="danger" circle :icon="Delete" @click="removeItem('env', index as number)" />
               </div>
               <el-button size="large" @click="addItem('env')">
                 <span class="icon">&#xe604;</span>&nbsp;&nbsp;{{ t('pop.add') }}&nbsp;&nbsp;
@@ -185,7 +185,7 @@
                   </el-option>
                 </el-select>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <el-button size="large" type="danger" circle :icon="Delete" @click="removeItem('disk', index)" />
+                <el-button size="large" type="danger" circle :icon="Delete" @click="removeItem('disk', index as number)" />
               </div>
               <el-button size="large" @click="addItem('disk')">
                 <span class="icon">&#xe604;</span>&nbsp;&nbsp;{{ t('pop.add') }}&nbsp;&nbsp;
@@ -209,7 +209,7 @@
                   </template>
                 </el-input>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <el-button size="large" type="danger" circle :icon="Delete" @click="removeItem('port', index)" />
+                <el-button size="large" type="danger" circle :icon="Delete" @click="removeItem('port', index as number)" />
               </div>
               <el-button size="large" @click="addItem('port')">
                 <span class="icon">&#xe604;</span>&nbsp;&nbsp;{{ t('pop.add') }}&nbsp;&nbsp;
@@ -405,8 +405,8 @@ const addItem = (t: string) => {
   }
 };
 
-const removeItem = (t: string, i: number) => {
-  form.value[t].splice(i, 1);
+const removeItem = (t: string, i: string | number) => {
+  form.value[t].splice(Number(i), 1);
 };
 </script>
 

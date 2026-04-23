@@ -18,8 +18,8 @@ const emit = defineEmits(['closeClick']);
 const props = defineProps(["paths"])
 const paths = props.paths;
 const router = useRouter();
-const closeClick = (i:number) => {
-  const item = paths[i];
+const closeClick = (i: string | number) => {
+  const item = paths[Number(i)];
   router.push(item.url);
 }
 </script>

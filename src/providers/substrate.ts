@@ -86,12 +86,12 @@ export class SubstrateProvider {
       }
 
       // 获取钱包
-      const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === userInfo.wallet);
+      const wallet: Wallet | undefined = getWallets().find((wallet: any) => wallet.extensionName === userInfo.wallet);
       await wallet!.enable("WeTEE");
 
       // 检查元数据版本
       await checkMetaData(this.client!, wallet!.extension)
-      const account = (await wallet!.getAccounts()).find(account => account.address === signer);
+      const account = (await wallet!.getAccounts()).find((account: any) => account.address === signer);
       if (!account) {
         ElNotification({
           title: 'Error',
@@ -187,12 +187,12 @@ export class SubstrateProvider {
     }
 
     // 获取钱包
-    const wallet: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === userInfo.wallet);
+    const wallet: Wallet | undefined = getWallets().find((wallet: any) => wallet.extensionName === userInfo.wallet);
     await wallet!.enable("WeTEE");
 
     // 检查元数据版本
     await checkMetaData(this.client!, wallet!.extension)
-    const account = (await wallet!.getAccounts()).find(account => account.address === signer);
+    const account = (await wallet!.getAccounts()).find((account: any) => account.address === signer);
     if (!account) {
       ElNotification({
         title: 'Error',

@@ -132,7 +132,7 @@ export const $getTxProvider = async (run: (chain: WalletWrap, builder: ChainInte
       if (userInfo.type == "keyring") {
         wallet = new SubstrateProvider()
       } else {
-        const wallet_ins: Wallet | undefined = getWallets().find(wallet => wallet.extensionName === userInfo.wallet);
+        const wallet_ins: Wallet | undefined = getWallets().find((wallet: any) => wallet.extensionName === userInfo.wallet);
         if (!wallet_ins) {
           throw new Error("polkadot.js " + userInfo.wallet + " not installed");
         }

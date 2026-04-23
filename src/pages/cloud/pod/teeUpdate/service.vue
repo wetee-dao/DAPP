@@ -189,8 +189,8 @@ const addItem = (t: string) => {
     }
 };
 
-const removeItem = (t: string, i: number) => {
-    form.value[t].splice(i, 1);
+const removeItem = (t: string, i: string | number) => {
+    form.value[t].splice(Number(i), 1);
 };
 </script>
 

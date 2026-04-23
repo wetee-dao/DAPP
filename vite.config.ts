@@ -38,7 +38,6 @@ export default defineConfig({
     }),
     ElementPlus({
       useSource: true,
-      defaultLocale: 'en',
     }),
     createSvgIconsPlugin({
       iconDirs: [path.resolve(process.cwd(), 'src/assets/svg')],
