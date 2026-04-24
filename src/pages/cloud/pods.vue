@@ -1,6 +1,10 @@
 <template>
   <div class="project">
-    <div :class="'data' + (currentProject != null ? ' thin_box' : '')">
+    <div
+      v-loading="loading"
+      :class="'data' + (currentProject != null ? ' thin_box' : '')"
+      element-loading-background="rgba(0,0,0,0)"
+    >
       <div v-for="(item, index) in apps" :id="'project-' + item.Id" :key="index"
         :class="(currentProject != null && item.Id == currentProject.Id) ? 'pod active' : 'pod'"
         @click="OpenDetail(item, 'container')" @click.right.native="showPenu($event, item)">
@@ -62,7 +66,7 @@
         <div>{{ t('pods.deployNewApp') }}</div>
       </div>
 
-      <div class="empty" v-if="apps.length == 0">
+      <div class="empty" v-if="!loading && apps.length == 0">
         {{ t('pods.empty') }}<br /><br />
         <el-button size="large" plain @click="AddPop()">
           <el-icon class="el-icon--left">
@@ -131,6 +135,7 @@ const projectid = getUrlParams("project_id");
 const router = useRouter();
 const store = useStore();
 const apps = ref<any[]>([]);
+const loading = ref<boolean>(false);
 const currentProject = ref<any>(null);
 const tag = ref("metrics");
 const userAddr = store.state.userInfo.addr;
@@ -242,32 +247,37 @@ onUnmounted(() => {
 });
 
 const getList = async () => {
-  const list = await $getQueryApi().pods(null, 1000)
-  let newList: any[] = []
-  list.forEach((v: any) => {
-    // console.log(v)
-    newList.push({
-      Id: v[0],
-      Nid: v[0],
-      Contract: v[1].contract,
-      Type: v[1].ptype,
-      Cr: {
-        cpu: v[2][0][1].cpu,
-        mem: v[2][0][1].memory,
-        disk: v[2][0][1].disk,
-        gpu: v[2][0][1].gpu,
-      },
-      Name: v[1].name,
-      User: v[1].owner,
-      TeeType: v[1].teeType,
-      Image: v[2][0][1].image,
-      StartBlock: v[1].startBlock,
-      Status: v[3],
-      Containers: v[2],
+  loading.value = true;
+  try {
+    const list = await $getQueryApi().pods(null, 1000)
+    let newList: any[] = []
+    list.forEach((v: any) => {
+      // console.log(v)
+      newList.push({
+        Id: v[0],
+        Nid: v[0],
+        Contract: v[1].contract,
+        Type: v[1].ptype,
+        Cr: {
+          cpu: v[2][0][1].cpu,
+          mem: v[2][0][1].memory,
+          disk: v[2][0][1].disk,
+          gpu: v[2][0][1].gpu,
+        },
+        Name: v[1].name,
+        User: v[1].owner,
+        TeeType: v[1].teeType,
+        Image: v[2][0][1].image,
+        StartBlock: v[1].startBlock,
+        Status: v[3],
+        Containers: v[2],
+      });
     });
-  });
 
-  apps.value = newList;
+    apps.value = newList;
+  } finally {
+    loading.value = false;
+  }
 };
 
 

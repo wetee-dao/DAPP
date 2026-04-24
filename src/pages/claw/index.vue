@@ -142,12 +142,12 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-top: 15px;
 }
 
 .agent-item {
   background: rgba($primary-bg-rgb, 1);
   border: 1px solid rgba($secondary-text-rgb, 0.12);
-  border-radius: 8px;
   padding: 14px 16px;
   display: flex;
   flex-direction: column;

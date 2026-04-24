@@ -16,7 +16,7 @@ export default {
     };
 
     app.config.globalProperties.$DeployClawAgent = (router: Object, store: Object, ps: any, close: Function) => {
-      const c = defineAsyncComponent(() => import('../pages/pop/claw/deployAgent.vue'));
+      const c = defineAsyncComponent(() => import('../pages/pop/substrate/deployAgent.vue'));
       return openPop(app, router, store, c, "deployClawAgent", ps || {}, close)
     };
 

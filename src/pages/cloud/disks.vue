@@ -25,7 +25,7 @@
                     {{ scope.row.data.SecretSSD[1] }}&nbsp;&nbsp;<span v-if="!scope.row.data.SecretSSD[1]" class="action">{{ t('disk.initKey') }}</span>
                 </template>
             </el-table-column>
-            <el-table-column fixed="right" :label="t('disk.operations')" width="150">
+            <el-table-column fixed="right" :label="t('disk.operations')" width="155">
                 <template #default="item">
                     <el-button link type="primary" size="small" @click="show(item.row)">
                         {{ t('disk.show') }}

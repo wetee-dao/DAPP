@@ -152,15 +152,7 @@ const closeClick = () => {
 };
 
 const deploy = async () => {
-  const pid = getUrlParams("project_id");
-  if (!pid) {
-    ElNotification({
-      title: t("common.error"),
-      message: "project_id is required in url",
-      type: "error",
-    });
-    return;
-  }
+  const pid = getUrlParams("project_id") || "-1";
 
   const tpe = agentType.value;
   const agentName = (name.value || "").trim() || `${tpe}-${Date.now()}`;
@@ -206,7 +198,7 @@ const deploy = async () => {
     );
 
     const tx = await chain.buildCall(dry, signer);
-    await chain.proxysignAndSend(tx, pid!, signer, () => {
+    await chain.proxysignAndSend(tx, pid, signer, () => {
       ElMessage.success(t("common.success"));
       props.close();
     }, () => {

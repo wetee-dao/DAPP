@@ -168,6 +168,14 @@ body {
     --el-dropdown-menu-index: 10;
   }
 
+  /* Dropdown 背景与页面背景一致 */
+  .el-dropdown__popper {
+    .el-dropdown-menu {
+      background-color: $primary-bg !important;
+      border-color: rgba($secondary-text-rgb, 0.12) !important;
+    }
+  }
+
   .el-popper__arrow {
     display: none; 
   }
