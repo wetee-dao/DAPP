@@ -11,7 +11,7 @@ import { ElNotification } from "element-plus";
 import { Ink } from "@/providers/chainapi/ink";
 import { ChainInterface } from "@/providers/chainapi";
 import { setMainChainContracts, getMainChainSubnetContract, getMainChainCloudContract } from "@/config";
-import { saveRpcUrlForChain } from "@/utils/chain_rpc";
+import { matchRpcFromList, saveRpcUrlForChain } from "@/utils/chain_rpc";
 
 
 // 链节点
@@ -94,13 +94,19 @@ export function rebindInkAfterChainSwitch(): void {
  */
 export function applyRpcUrlToNode(node: ChainNode, url: string): void {
   const u = url.trim()
-  if (node.rpcUrls?.length && !node.rpcUrls.includes(u)) return
-  node.chainUrl = u
-  saveRpcUrlForChain(node.chainId, u)
+  const canonical =
+    node.rpcUrls?.length ? matchRpcFromList(u, node.rpcUrls) ?? null : u
+  if (node.rpcUrls?.length && !canonical) return
+  const useUrl = canonical ?? u
+  const prevUrl = node.chainUrl
+  node.chainUrl = useUrl
+  saveRpcUrlForChain(node.chainId, useUrl)
   if (store.state.chainId == node.chainId) {
     initChainApi(node.chainId)
     Ink.subnetContract = getMainChainSubnetContract()
     Ink.cloudContract = getMainChainCloudContract()
+  }
+  if (prevUrl !== useUrl) {
     store.commit('bumpNetworkRpcEpoch')
   }
 }

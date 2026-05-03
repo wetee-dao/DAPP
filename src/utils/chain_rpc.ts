@@ -1,5 +1,19 @@
 const STORAGE_KEY = 'wetee_chain_rpc_by_id'
 
+function normRpc(u: string): string {
+  return u.trim().replace(/\/+$/, '')
+}
+
+/** 与列表项或已保存字符串比对（忽略首尾空白与末尾斜杠） */
+export function sameRpcUrl(a: string, b: string): boolean {
+  return normRpc(a) === normRpc(b)
+}
+
+/** 在 urls 中找到与 saved 等价的项，返回列表中的规范字符串 */
+export function matchRpcFromList(saved: string, urls: string[]): string | undefined {
+  return urls.find((u) => sameRpcUrl(u, saved))
+}
+
 export function pickChainRpcUrl(urls: string[]): string {
   if (!urls?.length) {
     throw new Error('chain_info: urls 为空')
@@ -34,10 +48,18 @@ export function saveRpcUrlForChain(chainId: string, url: string): void {
   }
 }
 
-/** 优先使用本地为该 chainId 保存的 RPC，且必须在 urls 列表内 */
+/** 优先使用本地为该 chainId 保存的 RPC，且必须在 urls 列表内（含宽松匹配） */
 export function resolveRpcUrlForNode(chainId: string, urls: string[]): string {
   const saved = getSavedRpcUrl(chainId)
-  if (saved && urls.some((u) => u === saved)) return saved
+  if (saved) {
+    const exact = urls.find((u) => u === saved)
+    if (exact) return exact
+    const matched = matchRpcFromList(saved, urls)
+    if (matched) {
+      if (matched !== saved) saveRpcUrlForChain(chainId, matched)
+      return matched
+    }
+  }
   return pickChainRpcUrl(urls)
 }
 

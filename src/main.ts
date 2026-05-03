@@ -17,6 +17,7 @@ import {
   type ChainInfoRow,
 } from '@/apis/chain-info';
 import { resolveRpcUrlForNode } from '@/utils/chain_rpc';
+import { iconUrlForChainNetwork } from '@/utils/chain_network_icon';
 import './assets/styles/common/reset.scss';
 import './assets/styles/common/global.scss';
 
@@ -69,12 +70,13 @@ function showBootstrapFatal(message: string, err: unknown) {
 
 function applyChainNodesFromRows(rows: ChainInfoRow[], gqlBase: string) {
   const secretUrl = normalizeSecretGqlUrl(gqlBase)
-  const icon = '/dapp/imgs/wetee.svg'
   const built = rows.map((r, i) => {
     const chainId = rows.length > 1 ? `${r.chain_type}-${i}` : r.chain_type
     const urls = Array.isArray(r.urls) ? [...r.urls] : []
+    const label = r.network_label || r.chain_type
+    const icon = iconUrlForChainNetwork(r.network_label || '', r.chain_type)
     const n = new ChainNode(
-      r.network_label || r.chain_type,
+      label,
       icon,
       'substrate',
       chainId,

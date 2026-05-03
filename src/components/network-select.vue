@@ -1,6 +1,6 @@
 <template>
   <ul class="pop">
-    <template v-for="(item, index) in chainNodes" :key="item.chainId">
+    <template v-for="(item, index) in chainNodes" :key="`${item.chainId}-${rpcUiEpoch}`">
       <li class="chain-block">
         <div class="chain-main flex" @click="selectNetwork(index)">
           <i v-if="curr == item.chainId" class="icon active">&#xe692;</i>
@@ -18,10 +18,10 @@
             v-for="(u, ui) in item.rpcUrls"
             :key="ui"
             class="rpc-item flex"
-            :class="{ 'rpc-item--on': u === item.chainUrl }"
+            :class="{ 'rpc-item--on': sameRpcUrl(u, item.chainUrl) }"
             @click="selectRpc(index, u)"
           >
-            <span class="rpc-mark" v-if="u === item.chainUrl">●</span>
+            <span class="rpc-mark" v-if="sameRpcUrl(u, item.chainUrl)">●</span>
             <span v-else class="rpc-mark rpc-mark--off">○</span>
             <span class="rpc-text" :title="u">{{ shortRpcLabel(u) }}</span>
           </li>
@@ -33,11 +33,16 @@
 
 <script lang="ts" setup>
 import { chainNodes, rebindInkAfterChainSwitch, applyRpcUrlToNode } from '@/plugins/chain';
-import { shortRpcLabel } from '@/utils/chain_rpc';
-import { ref, watch } from 'vue';
+import { shortRpcLabel, sameRpcUrl, matchRpcFromList } from '@/utils/chain_rpc';
+import { ElMessage } from 'element-plus';
+import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 
 const store = useStore();
+const { t } = useI18n();
+/** 与 `applyRpcUrlToNode` 内 bump 联动，否则 `chainNodes` 非响应式时圆点不会更新 */
+const rpcUiEpoch = computed(() => store.state.networkRpcEpoch);
 const curr = ref(store.state.chainId);
 const ping = ref(store.state.setPins);
 watch(() => store.state.setPins, (newVal) => {
@@ -57,9 +62,15 @@ const selectNetwork = async (index: number) => {
 const selectRpc = async (index: number, url: string) => {
   const node = chainNodes[index];
   if (!node) return;
-  applyRpcUrlToNode(node, url);
+  const u = url.trim();
+  if (node.rpcUrls?.length && !matchRpcFromList(u, node.rpcUrls)) {
+    ElMessage.warning(t('header.rpcInvalid'));
+    return;
+  }
+  applyRpcUrlToNode(node, u);
   await store.dispatch('setChainId', node.chainId);
   rebindInkAfterChainSwitch();
+  ElMessage.success(t('header.rpcSaved', { rpc: shortRpcLabel(u) }));
 };
 </script>
 
@@ -124,25 +135,28 @@ const selectRpc = async (index: number, url: string) => {
   list-style: none;
   margin: 0;
   padding: 0 0 8px 0;
-  background-color: rgba($secondary-text-rgb, 0.04);
   border-top: 1px solid rgba($secondary-text-rgb, 0.08);
 }
 
 .rpc-item {
-  padding: 8px 14px 8px 36px;
+  padding: 8px 14px 8px 26px;
   cursor: pointer;
   font-size: 12px;
-  color: rgba($primary-text-rgb, 0.85);
+  color: rgba($secondary-text-rgb, 0.85);
   align-items: center;
   gap: 8px;
 
-  &:hover {
-    background-color: rgba($secondary-text-rgb, 0.08);
-  }
-
   &--on {
-    color: $primary-text;
-    background-color: rgba($secondary-text-rgb, 0.06);
+    .rpc-text {
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: rgba($primary-text-rgb, 0.65);
+    }
+
+    .rpc-mark {
+      color: rgba($primary-text-rgb, 0.65);
+      opacity: 1;
+    }
   }
 }
 
@@ -151,6 +165,7 @@ const selectRpc = async (index: number, url: string) => {
   font-size: 8px;
   line-height: 1;
   opacity: 0.9;
+  color: rgba($primary-text-rgb, 0.55);
 
   &--off {
     opacity: 0.35;

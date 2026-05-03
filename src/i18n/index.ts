@@ -46,7 +46,9 @@ export const messages = {
       noData: 'No data'
     },
     header: {
-      disconnect: 'Disconnect'
+      disconnect: 'Disconnect',
+      rpcSaved: 'Successfully switched to {rpc}',
+      rpcInvalid: 'This URL is not in the RPC list for this network'
     },
     nav: {
       products: 'Products',
@@ -472,7 +474,9 @@ export const messages = {
       noData: '暂无数据'
     },
     header: {
-      disconnect: '断开连接'
+      disconnect: '断开连接',
+      rpcSaved: '切换 {rpc} 成功',
+      rpcInvalid: '该地址不在当前网络的 RPC 列表中'
     },
     nav: {
       products: '产品',

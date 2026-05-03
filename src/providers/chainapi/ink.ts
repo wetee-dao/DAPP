@@ -25,6 +25,9 @@ class InkApi {
     subnetContract: string
     subnetAbiUrl: string
     chainUrl: string
+    /** 与 `chainUrl` 对应的 HTTP(S) RPC，用于复用 `ApiPromise`，避免每次请求重复拉 metadata */
+    private httpApi: ApiPromise | null = null
+    private httpApiRpcUrl = ''
 
     constructor(ps: any) {
         this.cloudContract = ps.cloudContract
@@ -38,10 +41,34 @@ class InkApi {
         this.chainUrl = chainUrl
     }
 
-    async nativeBalance(addr: string) {
+    private httpRpcEndpoint(): string {
+        return this.chainUrl.replace(/^ws/, 'http')
+    }
+
+    /** 同一 RPC URL 复用单个 ApiPromise；URL 变化时断开旧实例再建新的 */
+    private async getHttpApi(): Promise<ApiPromise> {
+        const url = this.httpRpcEndpoint().trim()
+        if (!url) {
+            throw new Error('Ink chainUrl is empty')
+        }
+        if (this.httpApi && this.httpApiRpcUrl === url) {
+            return this.httpApi
+        }
+        if (this.httpApi) {
+            await this.httpApi.disconnect().catch(() => undefined)
+            this.httpApi = null
+            this.httpApiRpcUrl = ''
+        }
         const api = await ApiPromise.create({
-            provider: new HttpProvider(this.chainUrl.replace(/^ws/, 'http')),
-        });
+            provider: new HttpProvider(url),
+        })
+        this.httpApi = api
+        this.httpApiRpcUrl = url
+        return api
+    }
+
+    async nativeBalance(addr: string) {
+        const api = await this.getHttpApi()
 
         const account = await api.query.system.account(addr)
         const data = account.toHuman() as any
@@ -53,9 +80,7 @@ class InkApi {
     }
 
     async contactInfo(h160Addr: string) {
-        const api = await ApiPromise.create({
-            provider: new HttpProvider(this.chainUrl.replace(/^ws/, 'http')),
-        });
+        const api = await this.getHttpApi()
 
         const account = await api.call.reviveApi.accountId(h160Addr)
         const balance = await this.nativeBalance(account.toHuman() as string)
@@ -407,9 +432,7 @@ class InkApi {
 
     // try run
     async tryRun(address: string, caller: string, inputData: any, payValue: string) {
-        const api = await ApiPromise.create({
-            provider: new HttpProvider(this.chainUrl.replace(/^ws/, 'http')),
-        });
+        const api = await this.getHttpApi()
 
         const dryRunResult: any = await api.call.reviveApi.call(
             caller,
