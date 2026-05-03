@@ -5,7 +5,7 @@ export class GraphqlClient {
     constructor(url: string) {
         this.baseUrl = url
     };
-    async query(req: any) {
+    async query<T = any>(req: any): Promise<T> {
         let headers:any = {
             'Content-Type': 'application/json',
         }
@@ -18,11 +18,14 @@ export class GraphqlClient {
             headers: headers,
             url: this.baseUrl,
         })
-        console.log(response)
-        return response.data.data
+        const body = response.data as { errors?: { message: string }[]; data?: unknown }
+        if (body.errors?.length) {
+            throw new Error(body.errors[0].message)
+        }
+        return body.data as T
     };
-    async mut(req: any) {
-        return this.query(req)
+    async mut<T = any>(req: any): Promise<T> {
+        return this.query<T>(req)
     };
 }
 

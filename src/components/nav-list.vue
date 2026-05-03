@@ -362,7 +362,7 @@ const toProduct = (product: { disabled?: boolean; url?: string }) => {
     padding: 10px 12px;
     flex-direction: row;
     justify-content: flex-start;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 1.25;
     letter-spacing: 0.01em;

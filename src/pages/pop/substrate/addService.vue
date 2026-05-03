@@ -97,6 +97,62 @@
                 <el-slider v-model="level" :max="8" show-input show-stops />
               </div>
             </div>
+            <div class="form-context-box" v-show="curContainer == 0">
+              <div class="form-sub-title">{{ t('pop.durationBlocks') }}</div>
+              <div class="form-input-box">
+                <div class="duration-blocks-row">
+                  <el-input-number
+                    v-model="durationBlocks"
+                    :min="1"
+                    :max="4294967295"
+                    :step="100"
+                    controls-position="right"
+                    class="duration-blocks-input"
+                  />
+                  <el-select
+                    v-model="durationQuickPreset"
+                    class="duration-quick-select"
+                    :placeholder="t('pop.durationQuickPresetPlaceholder')"
+                    @change="onDurationQuickPresetChange"
+                  >
+                    <el-option :label="t('pop.durationPresetCustom')" :value="DURATION_QUICK_CUSTOM" />
+                    <el-option :label="t('pop.durationPreset1d')" value="d1" />
+                    <el-option :label="t('pop.durationPreset7d')" value="d7" />
+                    <el-option :label="t('pop.durationPreset1m')" value="m1" />
+                    <el-option :label="t('pop.durationPreset6m')" value="m6" />
+                    <el-option :label="t('pop.durationPreset1y')" value="y1" />
+                  </el-select>
+                </div>
+                <div class="field-hint">{{ t('pop.durationBlocksHint') }}</div>
+                <div class="field-hint">{{ t('pop.durationBlocksHint2s') }}</div>
+              </div>
+            </div>
+            <div class="form-context-box" v-show="curContainer == 0">
+              <div class="form-sub-title">{{ t('pop.payTokenRowTitle') }}</div>
+              <div class="form-input-box">
+                <div class="pay-token-row">
+                  <el-select
+                    v-model="payAsset"
+                    class="pay-token-type-select"
+                    :placeholder="t('pop.payTokenType')"
+                  >
+                    <el-option
+                      v-for="opt in payTokenSelectOptions"
+                      :key="opt.value"
+                      :label="opt.label"
+                      :value="opt.value"
+                    />
+                  </el-select>
+                  <el-input
+                    v-model="prepayAmount"
+                    disabled
+                    readonly
+                    class="pay-token-amount-input"
+                    :placeholder="t('pop.prepayAmountAutoPlaceholder')"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="box-step" id="f1" v-if="teeVersion != 'SGX'">
@@ -234,7 +290,12 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
+import { NATIVE_PAY_ASSET, PAY_TOKEN_OPTIONS } from "@/constants/payTokens";
+import { DURATION_QUICK_CUSTOM } from "@/constants/durationBlocksPreset";
+import { useDurationQuickPreset } from "@/composables/useDurationQuickPreset";
+import { useContractPrepayAutoFill } from "@/composables/useContractPrepayAutoFill";
+import type { PodPrepayEstimateInput } from "@/utils/podContractPrepay";
 import { ElNotification, FormInstance } from "element-plus";
 import { useI18n } from "vue-i18n";
 import { Delete, Close } from '@element-plus/icons-vue';
@@ -246,6 +307,14 @@ import { $getQueryApi, $getTxProvider } from "@/plugins/chain";
 const pid = getUrlParams("project_id");
 const props = defineProps(["router", "store", "close", "app"])
 const { t } = useI18n();
+
+const payTokenSelectOptions = computed(() =>
+  PAY_TOKEN_OPTIONS.map((o) => ({
+    value: o.payAsset,
+    label: t(o.labelKey),
+  })),
+);
+
 const containerRef = ref<HTMLElement | null>(null)
 const formRef = ref<FormInstance>()
 const handleClick = (e: MouseEvent) => {
@@ -258,6 +327,7 @@ const defaultContainer = {
   image: "",
   cpu: 1000,
   memory: 800,
+  gpu: 0,
   disk: [],
   port: [],
   commandPrefix: "SH",
@@ -266,6 +336,13 @@ const defaultContainer = {
 }
 const name = ref<string>("")
 const level = ref<number>(1)
+/** 租用时长（区块数），对应合约 duration_blocks */
+const durationBlocks = ref<number>(43200)
+const { durationQuickPreset, onDurationQuickPresetChange } = useDurationQuickPreset(durationBlocks)
+/** 支付资产 ID（u32），对应合约 pay_asset */
+const payAsset = ref<number>(NATIVE_PAY_ASSET)
+/** 随交易转入的原生代币数量（链上最小单位，整数字符串），用于预付；由租期与资源估算 */
+const prepayAmount = ref<string>("")
 const teeVersion = ref<string>("CVM")
 const curContainer = ref<any>(0)
 const containers = ref<any[]>([deepCopy(defaultContainer)])
@@ -275,6 +352,52 @@ const store = props.store;
 const userAddr = store.state.userInfo.addr;
 const disks = ref<any[]>([]);
 const secrets = ref<any[]>([]);
+
+function diskGbById(id: string | number): bigint {
+  const d = disks.value.find((x: any) => String(x.id) === String(id))
+  const n = d?.data?.SecretSSD?.[2]
+  if (n == null || n === "") return 0n
+  try {
+    return BigInt(Math.max(0, Math.floor(Number(n))))
+  } catch {
+    return 0n
+  }
+}
+
+function getPrepayEstimateInput(): PodPrepayEstimateInput {
+  const teeType = teeVersion.value === "SGX" ? "SGX" : "CVM"
+  const snapshot = containers.value.map((c, idx) =>
+    idx === curContainer.value
+      ? { ...c, cpu: form.value.cpu, memory: form.value.memory, gpu: form.value.gpu ?? 0, disk: form.value.disk ?? [] }
+      : { ...c, gpu: c.gpu ?? 0 },
+  )
+  const containersArg = snapshot.map((c) => ({
+    cpu: Number(c.cpu) || 0,
+    mem: Number(c.memory) || 0,
+    gpu: Number(c.gpu) || 0,
+    disk: (c.disk || []).map((d: any) => ({ id: d.id })),
+  }))
+  return {
+    teeType,
+    level: Math.max(1, Math.min(255, Math.floor(Number(level.value)) || 1)),
+    payAsset: payAsset.value,
+    durationBlocks: Math.max(1, Math.floor(Number(durationBlocks.value)) || 1),
+    containers: containersArg,
+    diskGb: diskGbById,
+  }
+}
+
+useContractPrepayAutoFill(prepayAmount, durationBlocks, payAsset, getPrepayEstimateInput, () => ({
+  level: level.value,
+  tee: teeVersion.value,
+  containers: containers.value.map((c) => ({ cpu: c.cpu, memory: c.memory, gpu: c.gpu, disk: c.disk })),
+  cur: curContainer.value,
+  formCpu: form.value.cpu,
+  formMem: form.value.memory,
+  formGpu: form.value.gpu,
+  formDisk: form.value.disk,
+  disksLen: disks.value.length,
+}))
 
 onMounted(async () => {
   getList()
@@ -364,6 +487,25 @@ const toAdd = async () => {
       return
     }
 
+    if (!durationBlocks.value || durationBlocks.value < 1) {
+      ElNotification({
+        title: t("common.error"),
+        message: t("pop.validateDurationBlocks"),
+        type: "error",
+      })
+      return
+    }
+
+    const prepay = prepayAmount.value.trim()
+    if (!prepay || !/^\d+$/.test(prepay) || BigInt(prepay) <= 0n) {
+      ElNotification({
+        title: t("common.error"),
+        message: t("pop.validatePrepayAmount"),
+        type: "error",
+      })
+      return
+    }
+
     const dry = await builder.createPod(
       name.value,
       "CPU",
@@ -371,7 +513,10 @@ const toAdd = async () => {
       validDatas,
       0,
       level.value,
+      payAsset.value,
       BigInt(0),
+      durationBlocks.value,
+      prepay,
     )
 
     const tx = await chain.buildCall(dry, signer)
@@ -412,4 +557,46 @@ const removeItem = (t: string, i: string | number) => {
 
 <style lang="scss" scoped>
 @use "../../../assets/styles/components/pop.scss";
+
+.field-hint {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--el-text-color-secondary);
+  line-height: 1.4;
+}
+
+.pay-token-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.pay-token-type-select {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+}
+
+.pay-token-amount-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.duration-blocks-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.duration-blocks-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.duration-quick-select {
+  width: 132px;
+  flex-shrink: 0;
+}
 </style>

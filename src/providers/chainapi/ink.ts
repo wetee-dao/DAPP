@@ -7,6 +7,15 @@ import { ElNotification } from "element-plus";
 import { ApiPromise, HttpProvider, Keyring } from "@polkadot/api";
 import { toH160Address, transformUserInput } from "@/utils/substrate_ink";
 import { getBnFromChain, showToken } from "@/utils/substrate";
+import { getMainChainCloudContract, getMainChainSubnetContract } from "@/config";
+import type { PodPrepayEstimateInput } from "@/utils/podContractPrepay";
+import {
+    assetPriceFromInkHuman,
+    mintIntervalFromInkHuman,
+    perMintResourceAbstractU64,
+    runPriceFromInkHuman,
+    totalPrepayPlanckFromContract,
+} from "@/utils/podContractPrepay";
 
 class InkApi {
     cloudAbi: Abi | undefined
@@ -15,7 +24,6 @@ class InkApi {
     cloudAbiUrl: string
     subnetContract: string
     subnetAbiUrl: string
-    queryUrl: string
     chainUrl: string
 
     constructor(ps: any) {
@@ -23,12 +31,10 @@ class InkApi {
         this.cloudAbiUrl = ps.cloudAbiUrl
         this.subnetContract = ps.subnetContract
         this.subnetAbiUrl = ps.subnetAbiUrl
-        this.queryUrl = ""
         this.chainUrl = ""
     }
 
-    init(queryUrl: string, chainUrl: string) {
-        this.queryUrl = queryUrl
+    init(chainUrl: string) {
         this.chainUrl = chainUrl
     }
 
@@ -141,7 +147,7 @@ class InkApi {
         })
     }
 
-    // create pod
+    // create pod（pay_value：随调用转入的原生代币最小单位数量，用于预付；pay_asset：计费资产 ID）
     async createPod(
         name: string,
         pod_type: string,
@@ -149,7 +155,10 @@ class InkApi {
         containers: any[],
         region_id: number,
         level: number,
+        pay_asset: number,
         worker_id: bigint,
+        duration_blocks: number,
+        pay_value: string,
     ) {
         return await this.ink_builder(this.cloudContract, "createPod", {
             name: name,
@@ -158,8 +167,10 @@ class InkApi {
             containers: containers,
             regionId: region_id,
             level: level,
+            payAsset: pay_asset,
             workerId: worker_id,
-        }, "0")
+            durationBlocks: duration_blocks,
+        }, pay_value)
     }
 
     // restart pod
@@ -231,10 +242,45 @@ class InkApi {
         }, "0")
     }
 
+    /**
+     * 按 Subnet（level_price、asset）与 Cloud（mint_interval）估算 create_pod 预付（Planck），与 mint_pod 计费口径一致。
+     */
+    async estimatePodPrepay(input: PodPrepayEstimateInput): Promise<string | null> {
+        const mintDry = await this.ink_query(this.cloudContract, "mintInterval", {}, true)
+        if (mintDry == null) {
+            return null
+        }
+        const mintInterval = mintIntervalFromInkHuman(mintDry)
+        if (!mintInterval) {
+            return null
+        }
+
+        const lpDry = await this.ink_query(this.subnetContract, "levelPrice", { level: input.level }, true)
+        if (lpDry == null) {
+            return null
+        }
+        const lp = runPriceFromInkHuman(lpDry)
+        if (!lp) {
+            return null
+        }
+
+        const assetDry = await this.ink_query(this.subnetContract, "asset", { id: input.payAsset }, true)
+        if (assetDry == null) {
+            return null
+        }
+        const price = assetPriceFromInkHuman(assetDry)
+        if (!price) {
+            return null
+        }
+
+        const abstract = perMintResourceAbstractU64(input.teeType, input.containers, lp, input.diskGb)
+        const total = totalPrepayPlanckFromContract(abstract, price, input.durationBlocks, mintInterval)
+        return total > 0n ? total.toString() : null
+    }
+
     // query ink
-    async ink_query(contract: string, method: string, args: Record<string, unknown>) {
-        // console.log("ink_query", contract, method, args)
-        const data = await this.ink_builder(contract, method, args, "0")
+    async ink_query(contract: string, method: string, args: Record<string, unknown>, silent = false) {
+        const data = await this.ink_builder(contract, method, args, "0", { silent })
         if (data.dry == 'Decoding error') {
             return null
         }
@@ -242,16 +288,29 @@ class InkApi {
     }
 
     // build inkcall params
-    async ink_builder(contract: string, method: string, args: Record<string, unknown>, payValue: string) {
+    async ink_builder(
+        contract: string,
+        method: string,
+        args: Record<string, unknown>,
+        payValue: string,
+        options?: { silent?: boolean },
+    ) {
+        const silent = options?.silent === true
+        const notifyErr = (message: string) => {
+            if (!silent) {
+                ElNotification({
+                    title: 'Error',
+                    message,
+                    type: 'error',
+                    duration: 15000,
+                })
+            }
+        }
+
         const abi = await this.initContract(contract)
         const methodAbi = abi.messages.find(item => item.method === method)
         if (!methodAbi) {
-            ElNotification({
-                title: 'Error',
-                message: "Ink contract method not found: " + method,
-                type: 'error',
-                duration: 15000,
-            })
+            notifyErr("Ink contract method not found: " + method)
             throw new Error("method not found")
         }
 
@@ -278,33 +337,18 @@ class InkApi {
         const resp = response.result
 
         if (resp.Err) {
-            ElNotification({
-                title: 'Error',
-                message: resp.Err,
-                type: 'error',
-                duration: 15000,
-            })
+            notifyErr(String(resp.Err))
             throw new Error(resp.Err)
         }
 
         let retutnData = decodeReturnValue(methodAbi.returnType, resp.Ok.data, abi!.registry) as any
         if (resp.Ok.flags.bits == "1") {
-            ElNotification({
-                title: 'Error',
-                message: "Ink contract call failed with contract error: " + (retutnData.Err || retutnData.Ok.Err),
-                type: 'error',
-                duration: 15000,
-            })
+            notifyErr("Ink contract call failed with contract error: " + (retutnData.Err || retutnData.Ok.Err))
             throw new Error("Ink contract call failed with contract error: " + (retutnData.Err || retutnData.Ok.Err))
         }
 
         if (!retutnData || retutnData["Err"]) {
-            ElNotification({
-                title: 'Error',
-                message: "Ink contract dry run reverted: " + retutnData["Err"],
-                type: 'error',
-                duration: 15000,
-            })
+            notifyErr("Ink contract dry run reverted: " + retutnData["Err"])
             throw new Error("Ink contract dry run reverted: " + retutnData["Err"])
         }
 
@@ -319,12 +363,6 @@ class InkApi {
             gasRequired: response.weightRequired,
             storageDeposit: response.storageDeposit,
         }
-    }
-
-    // query lastblock
-    async lastBlock() {
-        const response = await axios.get(this.queryUrl + "blocks/head/header?finalized=false")
-        return response.data
     }
 
     // init contract
@@ -437,8 +475,8 @@ function formatInputData(arr: Uint8Array): Uint8Array {
 }
 
 export const Ink = new InkApi({
-    subnetContract: "0x496806883725e8544340dd35fe743b3b8af67b19",
+    subnetContract: getMainChainSubnetContract(),
     subnetAbiUrl: "contract/subnet.json",
-    cloudContract: "0x9faed02b7624207dc0fedfded4842be33cad4eb3",
+    cloudContract: getMainChainCloudContract(),
     cloudAbiUrl: "contract/cloud.json",
 })

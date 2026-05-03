@@ -112,7 +112,7 @@ import HeaderNav from "./header-nav.vue";
 import Logo from "./icons/Logo2.vue";
 import Network from "./network.vue";
 import NetworkSelect from "./network-select.vue";
-import { ChainNode, CurrentChainNode } from "@/plugins/chain";
+import { CurrentChainNode } from "@/plugins/chain";
 import { getWallets, Wallet } from "@talismn/connect-wallets";
 import { getRouteLabel, LOCALE_EN_US, LOCALE_ZH_CN } from "@/i18n";
 
@@ -125,7 +125,7 @@ const pkey = ref(0);
 const user = ref(store.state.userInfo);
 const isShow = ref(store.state.currentPath != "/login");
 const theme = ref(store.state.theme);
-const network = ref<ChainNode>(CurrentChainNode());
+const network = computed(() => CurrentChainNode());
 const balances = ref<any[]>([]);
 const paths = ref<any[]>([]);
 const module = ref("");
@@ -138,6 +138,27 @@ watch(() => store.state.theme, (newVal, _) => {
 })
 watch(() => store.state.locale, () => {
   computePath(store.state.currentPath)
+})
+
+function loadHeaderBalances() {
+  const addr = user.value?.addr
+  if (!addr) return
+  CurrentChainNode()
+    .balances(addr)
+    .then((data: any) => {
+      balances.value = data
+    })
+    .catch(() => {
+      balances.value = []
+    })
+}
+
+watch(() => store.state.chainId, () => {
+  loadHeaderBalances()
+})
+
+watch(() => store.state.networkRpcEpoch, () => {
+  loadHeaderBalances()
 })
 
 const supportedWallets: Wallet[] = getWallets().sort(
@@ -191,9 +212,7 @@ watch(store.state, async (newQuestion, oldQuestion) => {
 
 onMounted(() => {
   computePath(store.state.currentPath)
-  network.value.balances(user.value.addr).then((data: any) => {
-    balances.value = data
-  })
+  loadHeaderBalances()
 });
 
 const menuClick = () => {
@@ -274,10 +293,10 @@ const wallet = (name: string): Wallet => {
 }
 
 .header-box {
-  padding: 2px 5px;
+  padding: 2px 2px 2px 0px;
   height: 22px;
   justify-content: space-between;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .header-logo {

@@ -14,11 +14,8 @@
       "dom"
     ],
     "types": ["element-plus/global"],
-    "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "src/*"
-      ]
+      "@/*": ["./src/*"]
     }
   },
   "include": [

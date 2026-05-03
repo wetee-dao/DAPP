@@ -3,6 +3,7 @@ let userInfo = {}
 let keypair: any = {}
 let theme: string = "";
 let chainId: any = null;
+let networkRpcEpoch = 0;
 let locale: string = 'en-US';
 if (window.localStorage.getItem("userInfo")) {
   userInfo = JSON.parse(window.localStorage.getItem("userInfo") || "{}")
@@ -30,6 +31,8 @@ const store = createStore({
     keypair: keypair,
     scale: 1,
     chainId: chainId,
+    /** 仅切换 RPC（chainId 不变）时递增，供 header 等刷新余额 */
+    networkRpcEpoch: networkRpcEpoch,
     setPins: {},
     locale: locale,
   },
@@ -65,6 +68,9 @@ const store = createStore({
     },
     setLocale(state: any, payload: any) {
       state.locale = payload
+    },
+    bumpNetworkRpcEpoch(state: any) {
+      state.networkRpcEpoch = (state.networkRpcEpoch || 0) + 1
     }
   },
   actions: {

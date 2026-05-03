@@ -1,3 +1,5 @@
+import type { PodPrepayEstimateInput } from "@/utils/podContractPrepay"
+
 export type ChainInterface = {
     /// get native token blance
     nativeBalance: (addr:string) => Promise<any>
@@ -24,11 +26,17 @@ export type ChainInterface = {
         containers: any[],
         region_id: number,
         level: number,
+        pay_asset: number,
         worker_id: bigint,
+        duration_blocks: number,
+        pay_value: string,
     ) => Promise<any>
     stopPod: (podId: string) => Promise<any>
     restartPod: (podId: string) => Promise<any>
     podReport: (podId: string) => Promise<any>
+
+    /** 按链上 Subnet/Cloud 配置估算 create_pod 预付（失败时返回 null） */
+    estimatePodPrepay: (input: PodPrepayEstimateInput) => Promise<string | null>
 
     /// pod container
     createContainer: (podId: string, c: any) => Promise<any>

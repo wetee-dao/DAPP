@@ -17,7 +17,10 @@ html.dark {
   --el-color-primary-light-9: rgb(12, 16, 19) !important;
   --el-color-primary-dark-2: rgb(12, 16, 19) !important;
   --el-color-primary: var(--g-primary-text) !important;
+
+  --el-border-width: 0px;
 }
+
 html.light {
   --el-button-bg-color: rgb(239, 239, 239);
   --el-color-primary-light-3: rgb(239, 239, 239);
@@ -59,14 +62,14 @@ body {
   .el-textarea__inner {
     background: transparent;
     box-shadow: none !important;
-    border: 1px solid rgba($color: $secondary-text-rgb, $alpha: 0.1);
+    border: 2px solid rgba($color: $secondary-text-rgb, $alpha: 0.1);
     border-radius: 0px;
   }
 
   .el-input-group__prepend{
     background: transparent;
     box-shadow: none !important;
-    border: 1px solid rgba($color: $secondary-text-rgb, $alpha: 0.1);
+    border: 2px solid rgba($color: $secondary-text-rgb, $alpha: 0.1);
     border-right: none;
     box-sizing: border-box;
   }
@@ -74,19 +77,19 @@ body {
   .el-input-group__append{
     background: transparent;
     box-shadow: none !important;
-    border: 1px solid rgba($color: $secondary-text-rgb, $alpha: 0.1);
+    border: 2px solid rgba($color: $secondary-text-rgb, $alpha: 0.1);
     border-left: none;
     box-sizing: border-box;
   }
 
   .el-button {
     background: $primary-bg;
-    border: 1px solid rgba($color: $secondary-text-rgb, $alpha: 0.08);
+    border: 2px solid rgba($color: $secondary-text-rgb, $alpha: 0.08);
     color: $secondary-text;
-    border-radius: 2px;
+    border-radius: 0px;
 
     &:hover {
-      border: 1px solid rgba($color: $primary-text-rgb, $alpha: 0.35);
+      border: 2px solid rgba($color: $primary-text-rgb, $alpha: 0.35);
       color: $secondary-text;
     }
 

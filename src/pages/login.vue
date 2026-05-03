@@ -77,6 +77,12 @@ import { Wallet, getWallets } from "@talismn/connect-wallets";
 import { Loading } from "@/plugins/pop";
 import { keyring, shortAddress } from "@/utils/substrate";
 import Logo from "@/components/icons/Logo2.vue";
+import { CurrentChainNode } from "@/plugins/chain";
+import {
+  connectApiForReviveCheck,
+  ensureReviveMapAccount,
+  isReviveAccountMapped,
+} from "@/utils/revive_map_account";
 
 const store = useStore();
 const router = useRouter();
@@ -166,6 +172,31 @@ const PolkadotLoginIn = async () => {
   }
 
   const wallet = LoginShow.value;
+  const loading = Loading(t('login.reviveAccountPreparing'));
+  let api: Awaited<ReturnType<typeof connectApiForReviveCheck>> | undefined;
+  try {
+    const node = CurrentChainNode();
+    if (!node?.chainUrl) {
+      throw new Error(t('login.noChainEndpoint'));
+    }
+    api = await connectApiForReviveCheck(node.chainUrl);
+    const mapped = await isReviveAccountMapped(api, ac.address);
+    if (mapped === false) {
+      await ensureReviveMapAccount(api, ac.address);
+    }
+  } catch (e: any) {
+    const msg = e?.message ?? String(e);
+    ElMessage.error(t('login.reviveMapAccountFailed', { error: msg }));
+    return;
+  } finally {
+    loading.close();
+    try {
+      await api?.disconnect();
+    } catch {
+      /* ignore */
+    }
+  }
+
   let userInfo = {
     addr: ac.address,
     name: ac.name,

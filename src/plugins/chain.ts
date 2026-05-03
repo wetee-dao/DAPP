@@ -6,25 +6,13 @@ import { chainJson } from "@/utils/substrate";
 import { MetaMaskProvider } from "@/providers/eth";
 import { SubstrateProvider } from "@/providers/substrate";
 import store from '@/store';
-import { getNetworkLatency } from "@/utils/net";
 import { WalletWrap } from "@/providers";
 import { ElNotification } from "element-plus";
 import { Ink } from "@/providers/chainapi/ink";
 import { ChainInterface } from "@/providers/chainapi";
+import { setMainChainContracts, getMainChainSubnetContract, getMainChainCloudContract } from "@/config";
+import { saveRpcUrlForChain } from "@/utils/chain_rpc";
 
-// 获取链节点的ping
-export async function chainNetPing(): Promise<string> {
-  const results = await Promise.all(chainNodes.map(node => getNetworkLatency(node.queryUrl + "node/network")));
-
-  let pings: any = {}
-  const rs = results.map((v, i) => {
-    pings[i] = v;
-    return { i: i, v: v }
-  }).filter((result: any) => result.v != null)
-
-  store.dispatch("setPins", pings)
-  return chainNodes[rs[Math.floor(Math.random() * rs.length)].i].chainId
-}
 
 // 链节点
 export class ChainNode {
@@ -33,8 +21,12 @@ export class ChainNode {
   icon: string;
   chainId: string;
   chainUrl: string;
-  queryUrl: string;
   secretUrl: string;
+  /** 来自 GraphQL `chain_info`，切换网络时用于更新 Ink 合约地址 */
+  subnetContract?: string;
+  cloudContract?: string;
+  /** `chain_info.urls` 全部 RPC，用户可在二级菜单中切换 */
+  rpcUrls: string[] = [];
   balances: (addr:string) => any;
   constructor(
     name: string,
@@ -42,7 +34,6 @@ export class ChainNode {
     type: string,
     chainId: string,
     chainUrl: string,
-    queryUrl: string,
     secretUrl: string,
     balances: (addr:string) => any
   ) {
@@ -51,28 +42,13 @@ export class ChainNode {
     this.type = type
     this.chainId = chainId
     this.chainUrl = chainUrl
-    this.queryUrl = queryUrl
     this.secretUrl = secretUrl
     this.balances = balances
   }
 }
 
-// 链节点列表
-export const chainNodes: ChainNode[] = [
-  {
-    name: 'DEV-LOCAL',
-    type: "substrate",
-    icon: "/dapp/imgs/wetee.svg",
-    chainId: "dev-local",
-    chainUrl: 'wss://xiaobai.asyou.me:30001/ws',
-    queryUrl: 'https://xiaobai.asyou.me:30001/',
-    secretUrl: 'https://xiaobai.asyou.me:30115/gql',
-    balances: async (addr:string) => {
-      let native = await $getQueryApi().nativeBalance(addr)
-      return [native]
-    },
-  },
-]
+// 链节点列表（启动时由 `main.ts` 根据 GraphQL `chain_info` 填充）
+export const chainNodes: ChainNode[] = []
 
 // 获取当前链节点
 export const CurrentChainNode = () => {
@@ -90,7 +66,43 @@ export const initChainApi = (chainId: string) => {
   if (!node) {
     node = chainNodes[0]
   }
-  Ink.init(node.queryUrl, node.chainUrl)
+  Ink.init(node.chainUrl)
+}
+
+/**
+ * 切换当前网络后：刷新 Ink RPC、主网合约地址（与当前 `ChainNode` 一致）。
+ * 应在 `store.dispatch('setChainId', …)` 之后调用。
+ */
+export function rebindInkAfterChainSwitch(): void {
+  const node = CurrentChainNode()
+  initChainApi(node.chainId)
+  const s = node.subnetContract?.trim()
+  const c = node.cloudContract?.trim()
+  if (s && c) {
+    try {
+      setMainChainContracts(s, c)
+    } catch {
+      /* 非法地址则保留 config 原值 */
+    }
+  }
+  Ink.subnetContract = getMainChainSubnetContract()
+  Ink.cloudContract = getMainChainCloudContract()
+}
+
+/**
+ * 为指定节点切换 RPC（须在 `rpcUrls` 内；列表为空时不校验），写入 localStorage，若当前即该网络则立即 `Ink.init`。
+ */
+export function applyRpcUrlToNode(node: ChainNode, url: string): void {
+  const u = url.trim()
+  if (node.rpcUrls?.length && !node.rpcUrls.includes(u)) return
+  node.chainUrl = u
+  saveRpcUrlForChain(node.chainId, u)
+  if (store.state.chainId == node.chainId) {
+    initChainApi(node.chainId)
+    Ink.subnetContract = getMainChainSubnetContract()
+    Ink.cloudContract = getMainChainCloudContract()
+    store.commit('bumpNetworkRpcEpoch')
+  }
 }
 
 export const CurrentSecretUrl = () => {
