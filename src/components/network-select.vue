@@ -90,6 +90,7 @@ const selectRpc = async (index: number, url: string) => {
 
 .chain-block {
   border-bottom: 1px solid rgba($secondary-text-rgb, 0.12);
+  min-width: 0;
 
   &:last-child {
     border-bottom: none;
@@ -101,6 +102,7 @@ const selectRpc = async (index: number, url: string) => {
   cursor: pointer;
   position: relative;
   align-items: center;
+  min-width: 0;
 
   &:hover {
     background-color: rgba($secondary-text-rgb, 0.06);

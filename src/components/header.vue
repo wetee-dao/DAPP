@@ -42,8 +42,8 @@
       <template #reference>
         <div class="header-box flex network-box">
           <div class="node-name">
-            <img :src="network.icon" />
-            <div>{{ network.name }}</div>
+            <img :src="network.icon" alt="" />
+            <div class="node-name__text" :title="network.name">{{ network.name }}</div>
             <Network class="network" />
           </div>
         </div>
@@ -54,8 +54,10 @@
     </el-popover>
 
     <el-dropdown class="balance" placement="bottom-end" :teleported="false" v-if="balances.length > 0 && isShow">
-      <div>
-        {{ balances[0].value }} <span class="unit">{{ balances[0].name }}</span>
+      <div class="balance-trigger" :title="`${balances[0].value} ${balances[0].name}`">
+        <span class="balance-trigger__value">
+          {{ balances[0].value }} <span class="unit">{{ balances[0].name }}</span>
+        </span>
         <div class="icon">&#xe68f;</div>
       </div>
       <template #dropdown>
@@ -262,8 +264,14 @@ const wallet = (name: string): Wallet => {
   box-sizing: border-box;
   position: fixed;
   top: 0;
+  /* 与侧栏 .navList 15.5rem≈248px 对齐，避免顶栏占满视口导致长文案溢出 */
+  left: 248px;
   right: 0;
   z-index: 100;
+  min-width: 0;
+  max-width: calc(100vw - 248px);
+  overflow-x: auto;
+  overflow-y: hidden;
   // border-bottom: 1px solid rgba($secondary-text-rgb, 0.055);
   background-color: rgba($primary-bg-rgb, 0.82);
   backdrop-filter: blur(18px) saturate(1.08);
@@ -297,6 +305,7 @@ const wallet = (name: string): Wallet => {
   height: 22px;
   justify-content: space-between;
   font-size: 13px;
+  min-width: 0;
 }
 
 .header-logo {
@@ -336,6 +345,9 @@ const wallet = (name: string): Wallet => {
   cursor: pointer;
   padding-left: 8px;
   padding-right: 8px;
+  min-width: 0;
+  flex: 0 1 auto;
+  max-width: min(42vw, 360px);
 }
 
 .locale {
@@ -348,23 +360,39 @@ const wallet = (name: string): Wallet => {
   cursor: pointer;
   padding-left: 10px;
   padding-right: 10px;
+  min-width: 0;
+  flex: 0 1 auto;
+  max-width: 160px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .node-name {
   align-items: center;
   display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
 
   &>img {
     width: 16px;
     height: 16px;
     display: inline-block;
     margin-right: 5px;
+    flex-shrink: 0;
   }
+}
 
+.node-name__text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .network {
   margin-left: 6px;
+  flex-shrink: 0;
 }
 
 .header-input {
@@ -436,7 +464,9 @@ const wallet = (name: string): Wallet => {
   font-size: 12px;
   line-height: 12px;
   font-family: monospace;
-  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   color: rgba($secondary-text-rgb, 0.7);
   font-weight: bold;
 }
@@ -497,6 +527,9 @@ const wallet = (name: string): Wallet => {
   background-color: rgba($secondary-text-rgb, 0.045);
   margin-right: 15px;
   padding: 0 4px;
+  min-width: 0;
+  flex: 0 1 auto;
+  max-width: min(40vw, 320px);
 }
 
 .balance {
@@ -505,6 +538,29 @@ const wallet = (name: string): Wallet => {
   height: 22px;
   line-height: 22px;
   margin-right: 2px;
+  min-width: 0;
+  flex: 0 1 auto;
+  max-width: min(36vw, 280px);
+
+  .balance-trigger {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    max-width: 100%;
+    gap: 4px;
+  }
+
+  .balance-trigger__value {
+    min-width: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .balance-trigger .icon {
+    flex-shrink: 0;
+  }
 
   .unit {
     display: inline-block;

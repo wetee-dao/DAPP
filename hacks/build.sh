@@ -18,6 +18,8 @@ if [ $# -gt 0 ]; then
   TAG="$1.$current"
 fi
 
+export VITE_SECRET_GQL_URL=https://xiaobai.asyou.me:30115
+
 # 编译
 npm run build
 

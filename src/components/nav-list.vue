@@ -334,9 +334,11 @@ const toProduct = (product: { disabled?: boolean; url?: string }) => {
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-width: 0;
     padding: 12px 8px 16px;
     gap: 12px;
     box-sizing: border-box;
+    overflow-x: hidden;
   }
 
   .group {
@@ -352,6 +354,9 @@ const toProduct = (product: { disabled?: boolean; url?: string }) => {
     letter-spacing: 0.12em;
     text-transform: uppercase;
     color: rgba($secondary-text-rgb, 0.34);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .nav-item {
@@ -371,6 +376,10 @@ const toProduct = (product: { disabled?: boolean; url?: string }) => {
 
     .label {
       flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .icon {
